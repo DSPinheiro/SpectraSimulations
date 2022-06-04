@@ -1,0 +1,237 @@
+<--- Calculations for Z= 39 i=1
+<--- Date:31-01-2020
+
+
+<--- The following bounds were found for i=  1
+Min. shelli #    1 Max. shelli #   17
+Min. 2Ji+1=    1 Max. 2Ji+1=   11
+Min. Eigi=    1 Max. Eigi=    4
+Min. shellf #    1 Max. shellf #   17
+Min. shellf2#    0 Max. shellf2#    0
+Min. 2Jf+1=    1 Max. 2Jf+1=   11
+Min. Eigf=    1 Max. Eigf=    4
+
+<--- Calculations for Z= 39 i=2
+<--- Date:31-01-2020
+
+
+<--- The following bounds were found for i=  2
+Min. shelli #    1 Max. shelli #    1
+Min. 2Ji+1=    3 Max. 2Ji+1=    7
+Min. Eigi=    1 Max. Eigi=    2
+Min. shellf #    2 Max. shellf #   17
+Min. shellf2#    2 Max. shellf2#   17
+Min. 2Jf+1=    2 Max. 2Jf+1=   14
+Min. Eigf=    1 Max. Eigf=   23
+
+ <--- The input file is empty! No calculations for picsect.in
+
+<--- Calculations for Z= 39 i=4
+<--- Date:31-01-2020
+
+
+<--- The following bounds were found for i=  4
+Min. shelli #   41 Max. shelli #   57
+Min. 2Ji+1=    2 Max. 2Ji+1=   12
+Min. Eigi=    1 Max. Eigi=    8
+Min. shellf #   42 Max. shellf #  697
+Min. shellf2#    0 Max. shellf2#    0
+Min. 2Jf+1=    2 Max. 2Jf+1=   14
+Min. Eigf=    1 Max. Eigf=   23
+
+<--- Radiative natural (life-time) width
+# 1 K  Width=   2.224352E+00 eV
+# 2 L1 Width=   2.897905E-02 eV
+# 3 L2 Width=   4.197092E-02 eV
+# 4 L3 Width=   6.218169E-02 eV
+# 5 M1 Width=   4.270731E-04 eV
+# 6 M2 Width=   4.640913E-04 eV
+# 7 M3 Width=   4.157965E-04 eV
+# 8 M4 Width=   2.126896E-05 eV
+# 9 M5 Width=   2.034438E-05 eV
+#10 N1 Width=   1.995773E-05 eV
+#11 N2 Width=   1.906130E-06 eV
+#12 N3 Width=   5.261663E-06 eV
+#13 N4 Width=   2.140295E-25 eV
+#17 O1 Width=   6.966713E-18 eV
+
+<--- Radiationless natural (life-time) width
+# 1 K  Width=   1.008752E+00 eV
+
+<--- Satellite natural (life-time) width
+#  41 K1K1 Width=   5.391066E+00 eV
+#  42 K1L1 Width=   2.398246E+00 eV
+#  43 K1L2 Width=   2.123334E+00 eV
+#  44 K1L3 Width=   2.066144E+00 eV
+#  45 K1M1 Width=   2.514023E+00 eV
+#  46 K1M2 Width=   2.252258E+00 eV
+#  47 K1M3 Width=   2.438059E+00 eV
+#  48 K1M4 Width=   1.893844E+00 eV
+#  49 K1M5 Width=   2.175040E+00 eV
+#  50 K1N1 Width=   2.457354E+00 eV
+#  51 K1N2 Width=   2.108743E+00 eV
+#  52 K1N3 Width=   2.334875E+00 eV
+#  53 K1N4 Width=   2.524159E+00 eV
+#  57 K1O1 Width=   2.436436E+00 eV
+
+<--- Fluorescence yields
+# 1 K         Flyield= 6.880E-01
+
+<--- Coster-Kronig yields
+
+<--- Check sum
+# 1 K         FLy+NRy= 1.000E+00
+
+<--- Check sum Branching Ratio (diagram lines)
+# 1 K  2Ji=  2 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 7.073E-01
+# 1 K  2Ji=  4 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.843E-01
+# 1 K  2Ji=  4 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 7.054E-01
+# 1 K  2Ji=  6 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.671E-01
+
+ WARNING: Calculation of satellite line intensities can take some time...
+
+ ... please be patient...
+ ... almost there...
+
+  <--- Check sum Branching Ratio (satellite lines)
+#  41 K1K1 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  41 K1K1 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  42 K1L1 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  1 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  3 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  3 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  3 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  5 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  5 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  5 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  43 K1L2 2Ji=  7 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  1 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  1 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  3 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  5 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  7 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  7 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  44 K1L3 2Ji=  9 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  45 K1M1 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  1 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  3 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  3 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  3 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  5 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  5 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  5 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  46 K1M2 2Ji=  7 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  1 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  1 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  3 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  5 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  7 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  7 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  47 K1M3 2Ji=  9 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  1 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  1 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  1 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  3 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  3 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  3 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  3 Eigi=  8    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  5 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  5 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  5 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  5 Eigi=  8    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  7 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  7 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  7 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  48 K1M4 2Ji=  9 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  1 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  1 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  3 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  5 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  7 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  7 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  7 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  9 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  9 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji=  9 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  49 K1M5 2Ji= 11 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  50 K1N1 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  1 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  3 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  3 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  3 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  5 Eigi=  5    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  5 Eigi=  6    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  5 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  51 K1N2 2Ji=  7 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  1 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  1 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  3 Eigi=  7    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  5 Eigi=  4    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  7 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  7 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  52 K1N3 2Ji=  9 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  53 K1N4 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  3 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  3 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  5 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  5 Eigi=  2    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  5 Eigi=  3    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+#  57 K1O1 2Ji=  7 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 6.880E-01
+
+ Calculations finished!
+ END

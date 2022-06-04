@@ -1,0 +1,91 @@
+<--- Calculations for Z= 30 i=1
+<--- Date:21-03-2017
+
+
+<--- The following bounds were found for i=  1
+Min. shelli #  1 Max. shelli #  9
+Min. 2Ji+1=  2 Max. 2Ji+1=  6
+Min. Eigi=  1 Max. Eigi=  1
+Min. shellf #  2 Max. shellf # 10
+Min. shellf2#  0 Max. shellf2#  0
+Min. 2Jf+1=  2 Max. 2Jf+1=  6
+Min. Eigf=  1 Max. Eigf=  1
+
+<--- Calculations for Z= 30 i=2
+<--- Date:21-03-2017
+
+
+<--- The following bounds were found for i=  2
+Min. shelli #  1 Max. shelli #  7
+Min. 2Ji+1=  2 Max. 2Ji+1=  4
+Min. Eigi=  1 Max. Eigi=  1
+Min. shellf #  2 Max. shellf # 10
+Min. shellf2#  2 Max. shellf2# 10
+Min. 2Jf+1=  1 Max. 2Jf+1=  9
+Min. Eigf=  1 Max. Eigf=  4
+
+ <--- The input file is empty! No calculations for picsect.in
+
+<--- Radiative natural (life-time) width
+# 1 K  Width=   7.994512E-01 eV
+# 2 L1 Width=   6.202398E-03 eV
+# 3 L2 Width=   8.548561E-03 eV
+# 4 L3 Width=   8.483717E-03 eV
+# 5 M1 Width=   4.653885E-05 eV
+# 6 M2 Width=   1.539235E-04 eV
+# 7 M3 Width=   1.433821E-04 eV
+# 8 M4 Width=   1.921920E-14 eV
+# 9 M5 Width=   1.563747E-14 eV
+
+<--- Radiationless natural (life-time) width
+# 1 K  Width=   8.524349E-01 eV
+# 2 L1 Width=   6.837402E+00 eV
+# 3 L2 Width=   7.574550E-01 eV
+# 4 L3 Width=   7.912998E-01 eV
+# 5 M1 Width=   3.842696E+00 eV
+# 6 M2 Width=   3.369426E+00 eV
+# 7 M3 Width=   3.322865E+00 eV
+
+<--- Fluorescence yields
+# 1 K         Flyield= 4.840E-01
+# 2 L1        Flyield= 9.063E-04
+# 3 L2        Flyield= 1.116E-02
+# 4 L3        Flyield= 1.061E-02
+# 5 M1        Flyield= 1.211E-05
+# 6 M2        Flyield= 4.568E-05
+# 7 M3        Flyield= 4.315E-05
+
+<--- Coster-Kronig yields
+# 2 L1 # 3 L2 CKyield= 2.556E-01
+# 2 L1 # 4 L3 CKyield= 6.635E-01
+# 3 L2 # 4 L3 CKyield= 9.724E-03
+# 3 L2 # 8 M4 CKyield= 5.619+175
+# 5 M1 # 6 M2 CKyield= 2.689E-01
+# 5 M1 # 7 M3 CKyield= 4.616E-01
+# 5 M1 # 8 M4 CKyield= 1.850E-01
+# 5 M1 # 9 M5 CKyield= 8.288E-02
+# 6 M2 # 8 M4 CKyield= 8.468E-01
+# 6 M2 # 9 M5 CKyield= 1.528E-01
+# 7 M3 # 8 M4 CKyield= 7.350E-01
+# 7 M3 # 9 M5 CKyield= 2.644E-01
+
+<--- Check sum
+# 1 K         FLy+NRy= 1.000E+00
+# 2 L1        FLy+NRy= 1.000E+00
+# 3 L2        FLy+NRy= 1.000E+00
+# 4 L3        FLy+NRy= 1.000E+00
+# 5 M1        FLy+NRy= 1.000E+00
+# 6 M2        FLy+NRy= 1.000E+00
+# 7 M3        FLy+NRy= 1.000E+00
+
+<--- Check sum Branching Ratio
+# 1 K  2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 4.840E-01
+# 2 L1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 9.063E-04
+# 3 L2 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 1.116E-02
+# 4 L3 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 1.061E-02
+# 5 M1 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 1.211E-05
+# 6 M2 2Ji=  1 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 4.568E-05
+# 7 M3 2Ji=  3 Eigi=  1    Sum(BR)= 1.000E+00 TransYield= 4.315E-05
+
+ Calculations finished!
+ END
