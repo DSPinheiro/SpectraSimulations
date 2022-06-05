@@ -17,17 +17,19 @@ from datetime import datetime
 import time
 import matplotlib.pyplot as plt
 
-dir_path = Path(str(os.getcwd()) + '/')  # os.getcwd retorna a directoria onde o cÃ³digo estÃ¡. Criamos um objecto tipo Path porque permite o programa ser corrido em qq OS
+# os.getcwd retorna a directoria onde o código está. Criamos um objecto tipo Path porque permite o programa ser corrido em qq OS
+dir_path = Path(str(os.getcwd()) + '/')
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f site onde vi sobre isto GRV
 
 # ---------------------------------------------------------------------------------------------------------------
 labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': '3p*', 'M3': '3p', 'M4': '3d*',
              'M5': '3d', 'N1': '4s', 'N2': '4p*', 'N3': '4p', 'N4': '4d*', 'N5': '4d', 'N6': '4f*', 'N7': '4f',
              'O1': '5s', 'O2': '5p*', 'O3': '5p', 'O4': '5d*', 'O5': '5d', 'O6': '5f*', 'O7': '5f', 'O8': '5g*',
-             'O9': '5g', 'P1': '6s'}  # Acho que este dicionÃ¡rio serve sÃ³ para converter notaÃ§Ãµes FALTA: Confirmar com Mauro
+             'O9': '5g', 'P1': '6s'}  # Acho que este dicionário serve só para converter notações FALTA: Confirmar com Mauro
 
 the_dictionary = {
-    "KL\u2081": {"low_level": "K1", "high_level": "L1", "selected_state": False, "readable_name": "KL1"}, #for ionic transitions
+    # for ionic transitions
+    "KL\u2081": {"low_level": "K1", "high_level": "L1", "selected_state": False, "readable_name": "KL1"},
     "K\u03B1\u2081": {"low_level": "K1", "high_level": "L3", "selected_state": False, "readable_name": "Kalpha1"},
     "K\u03B1\u2082": {"low_level": "K1", "high_level": "L2", "selected_state": False, "readable_name": "Kalpha2"},
     "K\u03B2\u2081": {"low_level": "K1", "high_level": "M3", "selected_state": False, "readable_name": "Kbeta1"},
@@ -63,7 +65,7 @@ the_dictionary = {
     "M\u03B1\u2082": {"low_level": "M5", "high_level": "N6", "selected_state": False, "readable_name": "Malpha2"},
     "M\u03B2": {"low_level": "M4", "high_level": "N6", "selected_state": False, "readable_name": "Mbeta"},
     "M\u03B3\u2081": {"low_level": "M3", "high_level": "N5", "selected_state": False, "readable_name": "Mgamma1"},
-}  # DicionÃ¡rio onde estÃ£o guardadas as transiÃ§Ãµes. Cada valor do dicionÃ¡rio Ã© em si um dicionÃ¡rio (Nested dictionaries)
+}  # Dicionário onde estão guardadas as transições. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
 
 
 the_aug_dictionary = {
@@ -112,7 +114,7 @@ the_aug_dictionary = {
     "KM5M5": {"low_level": "K1", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "KM5M5"},
     "KM5N1": {"low_level": "K1", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "KM5N1"},
     "KN1N1": {"low_level": "K1", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "KN1N1"},
-    
+
     "L1L2L2": {"low_level": "L1", "high_level": "L2", "auger_level": "L2", "selected_state": False, "readable_name": "L1L2L2"},
     "L1L2L3": {"low_level": "L1", "high_level": "L2", "auger_level": "L3", "selected_state": False, "readable_name": "L1L2L3"},
     "L1L2M1": {"low_level": "L1", "high_level": "L2", "auger_level": "M1", "selected_state": False, "readable_name": "L1L2M1"},
@@ -149,7 +151,7 @@ the_aug_dictionary = {
     "L1M5M5": {"low_level": "L1", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "L1M5M5"},
     "L1M5N1": {"low_level": "L1", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "L1M5N1"},
     "L1N1N1": {"low_level": "L1", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "L1N1N1"},
-    
+
     "L2L3L3": {"low_level": "L2", "high_level": "L3", "auger_level": "L3", "selected_state": False, "readable_name": "L2L3L3"},
     "L2L3M1": {"low_level": "L2", "high_level": "L3", "auger_level": "M1", "selected_state": False, "readable_name": "L2L3M1"},
     "L2L3M2": {"low_level": "L2", "high_level": "L3", "auger_level": "M2", "selected_state": False, "readable_name": "L2L3M2"},
@@ -178,7 +180,7 @@ the_aug_dictionary = {
     "L2M5M5": {"low_level": "L2", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "L2M5M5"},
     "L2M5N1": {"low_level": "L2", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "L2M5N1"},
     "L2N1N1": {"low_level": "L2", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "L2N1N1"},
-    
+
     "L3M1M1": {"low_level": "L3", "high_level": "M1", "auger_level": "M1", "selected_state": False, "readable_name": "L3M1M1"},
     "L3M1M2": {"low_level": "L3", "high_level": "M1", "auger_level": "M2", "selected_state": False, "readable_name": "L3M1M2"},
     "L3M1M3": {"low_level": "L3", "high_level": "M1", "auger_level": "M3", "selected_state": False, "readable_name": "L3M1M3"},
@@ -200,7 +202,7 @@ the_aug_dictionary = {
     "L3M5M5": {"low_level": "L3", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "L3M5M5"},
     "L3M5N1": {"low_level": "L3", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "L3M5N1"},
     "L3N1N1": {"low_level": "L3", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "L3N1N1"},
-    
+
     "M1M2M2": {"low_level": "M1", "high_level": "M2", "auger_level": "M2", "selected_state": False, "readable_name": "M1M2M2"},
     "M1M2M3": {"low_level": "M1", "high_level": "M2", "auger_level": "M3", "selected_state": False, "readable_name": "M1M2M3"},
     "M1M2M4": {"low_level": "M1", "high_level": "M2", "auger_level": "M4", "selected_state": False, "readable_name": "M1M2M4"},
@@ -216,7 +218,7 @@ the_aug_dictionary = {
     "M1M5M5": {"low_level": "M1", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "M1M5M5"},
     "M1M5N1": {"low_level": "M1", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "M1M5N1"},
     "M1N1N1": {"low_level": "M1", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M1N1N1"},
-    
+
     "M2M3M3": {"low_level": "M2", "high_level": "M3", "auger_level": "M3", "selected_state": False, "readable_name": "M2M3M3"},
     "M2M3M4": {"low_level": "M2", "high_level": "M3", "auger_level": "M4", "selected_state": False, "readable_name": "M2M3M4"},
     "M2M3M5": {"low_level": "M2", "high_level": "M3", "auger_level": "M5", "selected_state": False, "readable_name": "M2M3M5"},
@@ -227,20 +229,20 @@ the_aug_dictionary = {
     "M2M5M5": {"low_level": "M2", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "M2M5M5"},
     "M2M5N1": {"low_level": "M2", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "M2M5N1"},
     "M2N1N1": {"low_level": "M2", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M2N1N1"},
-    
+
     "M3M4M4": {"low_level": "M3", "high_level": "M4", "auger_level": "M4", "selected_state": False, "readable_name": "M3M4M4"},
     "M3M4M5": {"low_level": "M3", "high_level": "M4", "auger_level": "M5", "selected_state": False, "readable_name": "M3M4M5"},
     "M3M4N1": {"low_level": "M3", "high_level": "M4", "auger_level": "N1", "selected_state": False, "readable_name": "M3M4N1"},
     "M3M5M5": {"low_level": "M3", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "M3M5M5"},
     "M3M5N1": {"low_level": "M3", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "M3M5N1"},
     "M3N1N1": {"low_level": "M3", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M3N1N1"},
-    
+
     "M4M5M5": {"low_level": "M4", "high_level": "M5", "auger_level": "M5", "selected_state": False, "readable_name": "M4M5M5"},
     "M4M5N1": {"low_level": "M4", "high_level": "M5", "auger_level": "N1", "selected_state": False, "readable_name": "M4M5N1"},
     "M4N1N1": {"low_level": "M4", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M4N1N1"},
-    
+
     "M5N1N1": {"low_level": "M5", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M5N1N1"},
-}  # DicionÃ¡rio onde estÃ£o guardadas as transiÃ§Ãµes Auger. Cada valor do dicionÃ¡rio Ã© em si um dicionÃ¡rio (Nested dictionaries)
+}  # Dicionário onde estão guardadas as transições Auger. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
 
 chi_sqrd = 0
 
@@ -250,34 +252,41 @@ PCS_augMixValues = []
 NCS_augMixValues = []
 
 # ---------------------------------------------------------------------------------------------------------------
+
+
 def destroy(window):
     window.destroy()
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o para dar nome aos ficheiros a gravar
+# Função para dar nome aos ficheiros a gravar
 def file_namer(simulation_or_fit, fit_time, extension):
-#    dt_string = fit_time.strftime("%d-%m-%Y %H:%M:%S")  # converte a data para string
-    dt_string = fit_time.strftime("%d%m%Y_%H%M%S")  # converte a data para string
-    file_name = simulation_or_fit + '_from_' + dt_string + extension  # Defino o nome conforme seja fit ou simulaÃ§Ã£o,a data e hora e a extensÃ£o desejada
+    #    dt_string = fit_time.strftime("%d-%m-%Y %H:%M:%S")  # converte a data para string
+    # converte a data para string
+    dt_string = fit_time.strftime("%d%m%Y_%H%M%S")
+    # Defino o nome conforme seja fit ou simulação,a data e hora e a extensão desejada
+    file_name = simulation_or_fit + '_from_' + dt_string + extension
     return file_name
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o para gaurdar os dados dos grÃ¡ifocs simulados em excel
+# Função para gaurdar os dados dos gráifocs simulados em excel
 def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, date_and_time):
     print(date_and_time)
-    file_title = file_namer("Simulation",date_and_time,".csv")
-    first_line = ['Energy (eV)']  # Crio aquela que vai ser a primeira linha da matriz. Crio sÃ³ a primeira coluna e depois adiciono as outras
-    
+    file_title = file_namer("Simulation", date_and_time, ".csv")
+    # Crio aquela que vai ser a primeira linha da matriz. Crio só a primeira coluna e depois adiciono as outras
+    first_line = ['Energy (eV)']
+
     if enoffset != 0:
-        first_line += ['Energy Off (eV)'] #adicionar a coluna com o offset de energia calculado
-    
+        # adicionar a coluna com o offset de energia calculado
+        first_line += ['Energy Off (eV)']
+
     if y0 != 0:
-        first_line += ['Intensity Off'] #adicionar a coluna com o offset de energia calculado
-    
+        # adicionar a coluna com o offset de energia calculado
+        first_line += ['Intensity Off']
+
     # ---------------------------------------------------------------------------------------------------------------
-    # Corro o dicionÃ¡rio e se a transiÃ§Ã£o estiver selecionada e tiver dados, adiciono o seu nome Ã  primeira linha. Idem para as satÃ©lites
+    # Corro o dicionário e se a transição estiver selecionada e tiver dados, adiciono o seu nome à primeira linha. Idem para as satélites
     if type_t != 'Auger':
         for index, transition in enumerate(the_dictionary):
             if the_dictionary[transition]["selected_state"]:
@@ -285,53 +294,64 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
                     first_line += [the_dictionary[transition]["readable_name"]]
                 for l, m in enumerate(yfinals[index]):
                     if max(m) != 0:
-                        first_line += [the_dictionary[transition]["readable_name"] + '-' + labeldict[label1[l]]]
+                        first_line += [the_dictionary[transition]
+                                       ["readable_name"] + '-' + labeldict[label1[l]]]
     else:
         for index, transition in enumerate(the_aug_dictionary):
             if the_aug_dictionary[transition]["selected_state"]:
                 if max(yfinal[index]) != 0:
-                    first_line += [the_aug_dictionary[transition]["readable_name"]]
+                    first_line += [the_aug_dictionary[transition]
+                                   ["readable_name"]]
                 for l, m in enumerate(yfinals[index]):
                     if max(m) != 0:
-                        first_line += [the_aug_dictionary[transition]["readable_name"] + '-' + labeldict[label1[l]]]
+                        first_line += [the_aug_dictionary[transition]
+                                       ["readable_name"] + '-' + labeldict[label1[l]]]
     # ---------------------------------------------------------------------------------------------------------------
-    first_line += ['Total']  # Adiciono a ultima coluna que terÃ¡ o total
-    
+    first_line += ['Total']  # Adiciono a ultima coluna que terá o total
+
     if exp_x != None and exp_y != None:
         first_line += ['Exp Energy (eV)', 'Intensity']
-    
+
     if residues_graph != None:
-        first_line += ['Residues (arb. units)', 'std+', 'std-', '', 'red chi 2']
-    
+        first_line += ['Residues (arb. units)', 'std+',
+                       'std-', '', 'red chi 2']
+
     if len(PCS_radMixValues) > 0 or len(NCS_radMixValues) > 0 or len(PCS_augMixValues) > 0 or len(NCS_augMixValues) > 0:
         first_line += ['', 'Charge States', 'Percentage']
-    
+
     if exp_x != None:
-        matrix = [[None for x in range(len(first_line))] for y in range(max(len(xfinal), len(exp_x)))]
+        matrix = [[None for x in range(len(first_line))]
+                  for y in range(max(len(xfinal), len(exp_x)))]
     else:
-        matrix = [[None for x in range(len(first_line))] for y in range(len(xfinal))]  # Crio uma matriz vazia com o numero de colunas= tamanho da primeira linha e o numero de linhas = numero de pontos dos grÃ¡ficos
+        # Crio uma matriz vazia com o numero de colunas= tamanho da primeira linha e o numero de linhas = numero de pontos dos gráficos
+        matrix = [[None for x in range(len(first_line))]
+                  for y in range(len(xfinal))]
     # ---------------------------------------------------------------------------------------------------------------
     #  Preencho a primeira e segunda coluna com os valores de x e x + offset
-    transition_columns = 1  # comeÃ§a no 1 porque a coluna 0 Ã© a dos valores de x. Uso esta variÃ¡vel para ir avanÃ§ando nas colunas
-    
+    # começa no 1 porque a coluna 0 é a dos valores de x. Uso esta variável para ir avançando nas colunas
+    transition_columns = 1
+
     if enoffset != 0:
         for i, x in enumerate(xfinal):
             matrix[i][0] = x
             matrix[i][1] = x + enoffset
-        
+
         transition_columns += 1
     else:
         for i, x in enumerate(xfinal):
             matrix[i][0] = x
     # ---------------------------------------------------------------------------------------------------------------
     # Preencho as colunas dos valores yy
-    for i, y in enumerate(yfinal):  # Corro todas as transiÃ§Ãµes
-        if max(y) != 0 or any(yfinals[i]) != 0:  # Se houver diagrama ou satÃ©lite
-            for row in range(len(y)):  # Corro todos os valores da diagrama e adiciono-os Ã  linha correspondente
+    for i, y in enumerate(yfinal):  # Corro todas as transições
+        # Se houver diagrama ou satélite
+        if max(y) != 0 or any(yfinals[i]) != 0:
+            # Corro todos os valores da diagrama e adiciono-os à linha correspondente
+            for row in range(len(y)):
                 matrix[row][transition_columns] = y[row]
-            if max(y) != 0:  # NÃ£o tenho a certeza que este if Ã© necessÃ¡rio porque acho que jÃ¡ verifiquei isto antes
+            if max(y) != 0:  # Não tenho a certeza que este if é necessário porque acho que já verifiquei isto antes
                 transition_columns += 1
-            for j, ys in enumerate(yfinals[i]):  # Mesma ideia que para a diagrama
+            # Mesma ideia que para a diagrama
+            for j, ys in enumerate(yfinals[i]):
                 if max(ys) != 0:
                     for row in range(len(y)):
                         matrix[row][transition_columns] = ys[row]
@@ -342,12 +362,12 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
         for j in range(len(ytot)):
             matrix[j][transition_columns] = ytot[j]
             matrix[j][transition_columns] = ytot[j] + y0
-    
+
         transition_columns += 1
     else:
         for j in range(len(ytot)):
             matrix[j][transition_columns] = ytot[j]
-    
+
     transition_columns += 1
     # ---------------------------------------------------------------------------------------------------------------
     if exp_x == None and exp_y == None:
@@ -356,7 +376,7 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
         for i in range(len(exp_x)):
             matrix[i][transition_columns] = exp_x[i]
             matrix[i][transition_columns + 1] = exp_y[i]
-    
+
     transition_columns += 2
     # ---------------------------------------------------------------------------------------------------------------
     # Retrieve the residue data from the graph object
@@ -364,15 +384,16 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
         print("No residues calculated. Skipping...")
     else:
         lines = residues_graph.get_lines()
-        sigp, sigm, res = lines[0].get_ydata(), lines[1].get_ydata(), lines[2].get_ydata()
-        
+        sigp, sigm, res = lines[0].get_ydata(
+        ), lines[1].get_ydata(), lines[2].get_ydata()
+
         for i in range(len(exp_x)):
             matrix[i][transition_columns] = res[i]
             matrix[i][transition_columns + 1] = sigp[i]
             matrix[i][transition_columns + 2] = sigm[i]
-    
+
         matrix[0][transition_columns + 4] = chi_sqrd
-        
+
         transition_columns += 5
     # ---------------------------------------------------------------------------------------------------------------
     if type_t != 'Auger':
@@ -380,190 +401,238 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
             idx_p = 0
             idx_n = 0
             for i, cs in enumerate(radiative_files):
-                matrix[i][transition_columns + 1] = cs.split('-intensity_')[1].split('.out')[0] + '_'
-                
+                matrix[i][transition_columns +
+                          1] = cs.split('-intensity_')[1].split('.out')[0] + '_'
+
                 if '+' in cs:
-                    matrix[i][transition_columns + 2] = PCS_radMixValues[idx_p].get()
+                    matrix[i][transition_columns +
+                              2] = PCS_radMixValues[idx_p].get()
                     idx_p += 1
                 else:
-                    matrix[i][transition_columns + 2] = NCS_radMixValues[idx_n].get()
+                    matrix[i][transition_columns +
+                              2] = NCS_radMixValues[idx_n].get()
                     idx_n += 1
     else:
         if len(PCS_augMixValues) > 0 or len(NCS_augMixValues) > 0:
             idx_p = 0
             idx_n = 0
-            
+
             matrix[1][transition_columns + 1] = "Auger Mix Values"
-            
+
             for i, cs in enumerate(auger_files):
-                matrix[i + 1][transition_columns + 1] = cs.split('-augrate_')[1].split('.out')[0] + '_'
-                
+                matrix[i + 1][transition_columns +
+                              1] = cs.split('-augrate_')[1].split('.out')[0] + '_'
+
                 if '+' in cs:
-                    matrix[i + 1][transition_columns + 2] = PCS_augMixValues[idx_p].get()
+                    matrix[i + 1][transition_columns +
+                                  2] = PCS_augMixValues[idx_p].get()
                     idx_p += 1
                 else:
-                    matrix[i + 1][transition_columns + 2] = NCS_augMixValues[idx_n].get()
+                    matrix[i + 1][transition_columns +
+                                  2] = NCS_augMixValues[idx_n].get()
                     idx_n += 1
     # ---------------------------------------------------------------------------------------------------------------
-    matrix = [first_line] + matrix  # Adiciono a linha com os nomes das trnaisÃ§Ãµes Ã  matriz
+    # Adiciono a linha com os nomes das trnaisções à matriz
+    matrix = [first_line] + matrix
     # ---------------------------------------------------------------------------------------------------------------
     # Util para imprimir a matriz na consola e fazer testes
     # for row in matrix:
     #     print(' '.join(map(str, row)))
     # ---------------------------------------------------------------------------------------------------------------
-    # Escrita para o ficheiro. Se for a primeira linha da matriz, abrimos como write, se nÃ£o, abrimos como append porque sÃ³ queremos adicionar ao fim do ficheiro
+    # Escrita para o ficheiro. Se for a primeira linha da matriz, abrimos como write, se não, abrimos como append porque só queremos adicionar ao fim do ficheiro
     for i, item in enumerate(matrix):
         if i == 0:
             with open(file_title, 'w', newline='') as csvfile:
-                w1 = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                w1 = csv.writer(csvfile, delimiter=',',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 w1.writerow(matrix[i])
         else:
             with open(file_title, 'a', newline='') as csvfile2:
-                w1 = csv.writer(csvfile2, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                w1 = csv.writer(csvfile2, delimiter=',',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 w1.writerow(matrix[i])
     messagebox.showinfo("File Saved", "Data file has been saved")
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ãµes que fazem o cÃ¡lculo das riscas a ser plotadas FALTA: Mal explicado e sem comentÃ¡rios nas funÃ§Ãµes em si
+# Funções que fazem o cálculo das riscas a ser plotadas FALTA: Mal explicado e sem comentários nas funções em si
 def G(T, energy, intens, res, width):
     """ Return Gaussian line shape at x with HWHM alpha """
-    y = [0 for j in range(len(T))]  # Criar um vector com o tamanho de T cheio de zeros
+    y = [0 for j in range(
+        len(T))]  # Criar um vector com o tamanho de T cheio de zeros
     for i, l in enumerate(T):
         y[i] = intens * np.sqrt(np.log(2) / np.pi) / (res + width) \
-               * np.exp(-((T[i] - energy) / (res + width)) ** 2 * np.log(2))
+            * np.exp(-((T[i] - energy) / (res + width)) ** 2 * np.log(2))
     return (y)
 
 
 def L(T, energy, intens, res, width):
     """ Return Lorentzian line shape at x with HWHM gamma """
-    y = [0 for j in range(len(T))]  # Criar um vector com o tamanho de T cheio de zeros
+    y = [0 for j in range(
+        len(T))]  # Criar um vector com o tamanho de T cheio de zeros
     for i, l in enumerate(T):
-        y[i] = intens * (0.5 * (width + res) / np.pi) / ((T[i] - energy) ** 2 + (0.5 * (width + res)) ** 2)
+        y[i] = intens * (0.5 * (width + res) / np.pi) / \
+            ((T[i] - energy) ** 2 + (0.5 * (width + res)) ** 2)
         # y[i]=(intens*2*(width+res)) / (np.pi*(4*(T[i]-energy)**2 + (width+res)**2))
     return (y)
 
 
 def V(T, energy, intens, res, width):
     """ Return the Voigt line shape at x with Lorentzian component HWHM gamma and Gaussian component HWHM alpha."""
-    y = [0 for j in range(len(T))]  # Criar um vector com o tamanho de T cheio de zeros
+    y = [0 for j in range(
+        len(T))]  # Criar um vector com o tamanho de T cheio de zeros
     for i, l in enumerate(T):
         sigma = res / np.sqrt(2 * np.log(2))
         y[i] = np.real(intens * wofz(complex(T[i] - energy, width/2) / sigma / np.sqrt(2))) / sigma \
-               / np.sqrt(2 * np.pi)
+            / np.sqrt(2 * np.pi)
     return (y)
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o que corre depois de escolher a opÃ§Ã£o na janela que surge depois da tabela periÃ³dica
+# Função que corre depois de escolher a opção na janela que surge depois da tabela periódica
 def calculate(element, ap, parent):
-    time_of_click = datetime.now()  # Obtenho o a data e hora exacta para dar nome aos ficheiros a gravar
-    # Em versÃµes anteriores recebiamos apenas o z do elemento, mas para poder ter acesso ao nome, recebe-se um vetor com nome e numero
+    # Obtenho o a data e hora exacta para dar nome aos ficheiros a gravar
+    time_of_click = datetime.now()
+    # Em versões anteriores recebiamos apenas o z do elemento, mas para poder ter acesso ao nome, recebe-se um vetor com nome e numero
     z = element[0]
     element_name = element[1]
     # print(z, element_name)
     if ap == 1:
-        yields_file = dir_path / str(z) / (str(z) + '-yields.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as yields
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as yields
+        yields_file = dir_path / str(z) / (str(z) + '-yields.out')
         try:
             with open(yields_file, 'r') as yields:  # Abrir o ficheiro
-                lineyields = [x.strip('\n').split() for x in yields.readlines()]  # Escrever todas as linhas no
+                # Escrever todas as linhas no
+                lineyields = [x.strip('\n').split()
+                              for x in yields.readlines()]
                 # ficheiro como uma lista
-                lineyields = list(filter(None, lineyields))  # Remover as linhas compostas apenas por celulas vazias
+                # Remover as linhas compostas apenas por celulas vazias
+                lineyields = list(filter(None, lineyields))
             # criar uma janela onde serao apresentados os resultados dos yields, widths, cross sections ou spectra simulations
             atdata = Toplevel()
-            atdata.title("Fluorescence and nonRadiative Yields")  # titulo da janela
+            # titulo da janela
+            atdata.title("Fluorescence and nonRadiative Yields")
             # Criar uma grelha dentro da janela onde serao inseridos os dados
             atdatayields = ttk.Frame(atdata, padding="3 3 12 12")
             atdatayields.grid(column=0, row=0, sticky=(N, W, E, S))
             atdatayields.columnconfigure(0, weight=1)
             atdatayields.rowconfigure(0, weight=1)
             # Labels dos dados na janela
-            ttk.Label(atdatayields, text="Fluorescence Yields").grid(column=0, row=0, sticky=W, columnspan=2)  # Label abaixo do qual serao escritos os resultados dos fluorescence yields
-            ttk.Label(atdatayields, text="Auger Yields").grid(column=5, row=0, sticky=W, columnspan=2)  # Label abaixo do qual serao escritos os resultados dos auger yields
-            ttk.Label(atdatayields, text="Coster-Kronig Yields").grid(column=8, row=0, sticky=W, columnspan=2)  # Label abaixo do qual serao escritos os resultados dos coster kronig yields
-            ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(ap)).grid(column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
-            ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
-            ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
+            # Label abaixo do qual serao escritos os resultados dos fluorescence yields
+            ttk.Label(atdatayields, text="Fluorescence Yields").grid(
+                column=0, row=0, sticky=W, columnspan=2)
+            # Label abaixo do qual serao escritos os resultados dos auger yields
+            ttk.Label(atdatayields, text="Auger Yields").grid(
+                column=5, row=0, sticky=W, columnspan=2)
+            # Label abaixo do qual serao escritos os resultados dos coster kronig yields
+            ttk.Label(atdatayields, text="Coster-Kronig Yields").grid(column=8,
+                                                                      row=0, sticky=W, columnspan=2)
+            ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(ap)).grid(
+                column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
+            ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(
+                column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
+            ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(
+                column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
 
             NR = False  # Variavel que diz se ja se esta a ler a parte nao radiativa do ficheiro yields
             n1 = 1  # contadores para escrever os yields em linhas sequencialmente distribuidas
             n2 = 1
             n3 = 1
-            for i, j in enumerate(lineyields):  # Ciclo sobre todas as linhas do ficheiro yields para ler todos os yields FY, AY, CKY
+            # Ciclo sobre todas as linhas do ficheiro yields para ler todos os yields FY, AY, CKY
+            for i, j in enumerate(lineyields):
                 # print(j)
                 # print(j[0])
                 if j[1] == 'FLyield' and j[0] != '':
                     print('FY_' + j[0], '=', j[2])
-                    ttk.Label(atdatayields, text='FY_' + j[0] + '=' + j[2]).grid(column=0, row=n1, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='FY_' + j[0] + '=' + j[2]).grid(
+                        column=0, row=n1, sticky=W, columnspan=2)
                     n1 = n1 + 1
                 if j[1] == 'NRyield' and j[0] != '':
                     print('AY_' + j[0], '=', j[2])
-                    ttk.Label(atdatayields, text='AY_' + j[0] + '=' + j[2]).grid(column=5, row=n2, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='AY_' + j[0] + '=' + j[2]).grid(
+                        column=5, row=n2, sticky=W, columnspan=2)
                     n2 = n2 + 1
             for i, j in enumerate(lineyields):
                 if j[1] == 'Non' and j[2] == 'Radiative' and j[3] == 'Yields':
                     NR = True
                 if j[0] == 'L1' and j[2] == 'L2' and NR == True:
                     print('fL12_', '=', j[3])
-                    ttk.Label(atdatayields, text='fL12_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fL12_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'L1' and j[2] == 'L3' and NR == True:
                     print('fL13_', '=', j[3])
-                    ttk.Label(atdatayields, text='fL13_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fL13_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'L2' and j[2] == 'L3' and NR == True:
                     print('fL23_', '=', j[3])
-                    ttk.Label(atdatayields, text='fL23_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fL23_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M1' and j[2] == 'M2' and NR == True:
                     print('fM12_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM12_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM12_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M1' and j[2] == 'M3' and NR == True:
                     print('fM13_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM13_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM13_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M1' and j[2] == 'M4' and NR == True:
                     print('fM14_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM14_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM14_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M1' and j[2] == 'M5' and NR == True:
                     print('fM15_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM15_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM15_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M2' and j[2] == 'M3' and NR == True:
                     print('fM23_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM23_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM23_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M2' and j[2] == 'M4' and NR == True:
                     print('fM24_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM24_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM24_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M2' and j[2] == 'M5' and NR == True:
                     print('fM25_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM25_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM25_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M3' and j[2] == 'M4' and NR == True:
                     print('fM34_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM34_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM34_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M3' and j[2] == 'M5' and NR == True:
                     print('fM35_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM35_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM35_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
                 if j[0] == 'M4' and j[2] == 'M5' and NR == True:
                     print('fM45_', '=', j[3])
-                    ttk.Label(atdatayields, text='fM45_' + '=' + j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
+                    ttk.Label(atdatayields, text='fM45_' + '=' +
+                              j[3]).grid(column=8, row=n3, sticky=W, columnspan=2)
                     n3 = n3 + 1
         except FileNotFoundError:
             messagebox.showerror("Error", "Required File is Missing")
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 2:
         try:
-            radrates_file = dir_path / str(z) / (str(z) + '-radrate.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as yields
+            # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as yields
+            radrates_file = dir_path / str(z) / (str(z) + '-radrate.out')
             with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
-                lineradrates = [x.strip('\n').split() for x in radrates.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
-                lineradrates = list(filter(None, lineradrates))  # Remover as linhas compostas apenas por celulas vazias
+                # Escrever todas as linhas no ficheiro como uma lista
+                lineradrates = [x.strip('\n').split()
+                                for x in radrates.readlines()]
+                # Remover as linhas compostas apenas por celulas vazias
+                lineradrates = list(filter(None, lineradrates))
 
             # criar uma janela onde serao apresentados os resultados dos yields, widths, cross sections ou spectra
             # simulations
@@ -575,169 +644,243 @@ def calculate(element, ap, parent):
             atdatayields.columnconfigure(0, weight=1)
             atdatayields.rowconfigure(0, weight=1)
             # Labels dos dados na janela
-            ttk.Label(atdatayields, text="Level Widths").grid(column=0, row=0, sticky=W, columnspan=2)  # Label abaixo do qual serao escritos os resultados dos level widths
-            ttk.Label(atdatayields, text="Line Widths").grid(column=5, row=0, sticky=W, columnspan=2)  # Label abaixo do qual serao escritos os resultados das line widths
-            ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(ap)).grid(column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
-            ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
-            ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
+            # Label abaixo do qual serao escritos os resultados dos level widths
+            ttk.Label(atdatayields, text="Level Widths").grid(
+                column=0, row=0, sticky=W, columnspan=2)
+            # Label abaixo do qual serao escritos os resultados das line widths
+            ttk.Label(atdatayields, text="Line Widths").grid(
+                column=5, row=0, sticky=W, columnspan=2)
+            ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(ap)).grid(
+                column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
+            ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(
+                column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
+            ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(
+                column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
         except FileNotFoundError:
             messagebox.showerror("Error", "Required File is Missing")
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 3:
         messagebox.showwarning("Not Possible", "Function not defined")
     # ---------------------------------------------------------------------------------------------------------------
-    elif ap == 4:  # OpÃ§Ã£o Spectra Simulation
-        radrates_file = dir_path / str(z) / (str(z) + '-intensity.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+    elif ap == 4:  # Opção Spectra Simulation
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+        radrates_file = dir_path / str(z) / (str(z) + '-intensity.out')
         try:
             with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
-                lineradrates = [x.strip('\n').split() for x in radrates.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
-                lineradrates = list(filter(None, lineradrates))  # Remover as linhas compostas apenas por celulas vazias
+                # Escrever todas as linhas no ficheiro como uma lista
+                lineradrates = [x.strip('\n').split()
+                                for x in radrates.readlines()]
+                # Remover as linhas compostas apenas por celulas vazias
+                lineradrates = list(filter(None, lineradrates))
                 del lineradrates[0:2]
         except FileNotFoundError:
             messagebox.showwarning("Error", "Diagram File is not Avaliable")
 
-        satellites_file = dir_path / str(z) / (str(z) + '-satinty.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        satellites_file = dir_path / str(z) / (str(z) + '-satinty.out')
         try:
             with open(satellites_file, 'r') as satellites:  # Abrir o ficheiro
-                linesatellites = [x.strip('\n').split() for x in satellites.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
-                linesatellites = list(filter(None, linesatellites))  # Remover as linhas compostas apenas por celulas vazias
-                del linesatellites[0:2]  # Tira as linhas que tÃªm o nome das variÃ¡veis e etc
+                # Escrever todas as linhas no ficheiro como uma lista
+                linesatellites = [x.strip('\n').split()
+                                  for x in satellites.readlines()]
+                # Remover as linhas compostas apenas por celulas vazias
+                linesatellites = list(filter(None, linesatellites))
+                # Tira as linhas que têm o nome das variáveis e etc
+                del linesatellites[0:2]
         except FileNotFoundError:
             messagebox.showwarning("Error", "Satellites File is not Avaliable")
 
-        augrates_file = dir_path / str(z) / (str(z) + '-augrate.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        augrates_file = dir_path / str(z) / (str(z) + '-augrate.out')
         try:
             with open(augrates_file, 'r') as augrates:  # Abrir o ficheiro
-                lineauger = [x.strip('\n').split() for x in augrates.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
-                lineauger = list(filter(None, lineauger))  # Remover as linhas compostas apenas por celulas vazias
-                del lineauger[0:2]  # Tira as linhas que tÃªm o nome das variÃ¡veis e etc
+                # Escrever todas as linhas no ficheiro como uma lista
+                lineauger = [x.strip('\n').split()
+                             for x in augrates.readlines()]
+                # Remover as linhas compostas apenas por celulas vazias
+                lineauger = list(filter(None, lineauger))
+                # Tira as linhas que têm o nome das variáveis e etc
+                del lineauger[0:2]
         except FileNotFoundError:
-            messagebox.showwarning("Error", "Auger Rates File is not Avaliable")
+            messagebox.showwarning(
+                "Error", "Auger Rates File is not Avaliable")
 
-        shakeweights_file = dir_path / str(z) / (str(z) + '-shakeweights.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+        shakeweights_file = dir_path / str(z) / (str(z) + '-shakeweights.out')
         try:
             with open(shakeweights_file, 'r') as shakeweights_f:  # Abrir o ficheiro
-                shakeweights_m = [x.strip('\n').split(',') for x in shakeweights_f.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
+                # Escrever todas as linhas no ficheiro como uma lista
+                shakeweights_m = [x.strip('\n').split(',')
+                                  for x in shakeweights_f.readlines()]
                 shakeweights = []
                 label1 = []
                 for i, j in enumerate(shakeweights_m):
-                    # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os valores numÃ©ricos no shakeweights
+                    # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os valores numéricos no shakeweights
                     shakeweights.append(float(shakeweights_m[i][1]))
                 for k, l in enumerate(shakeweights_m):
                     # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os rotulos no label 1
                     label1.append(shakeweights_m[k][0])
         except FileNotFoundError:
-            messagebox.showwarning("Error", "Shake Weigth File is not Avaliable")
-        
-        CS_exists = False # Flag para ativar ou desativar a opção no menu (algures nas linhas ~1500)
+            messagebox.showwarning(
+                "Error", "Shake Weigth File is not Avaliable")
+
+        # Flag para ativar ou desativar a opção no menu (algures nas linhas ~1500)
+        CS_exists = False
         Ionpop_exists = False
-        if os.path.isdir(dir_path / str(z) / 'Charge_States'): # Verificar se existe a pasta com os varios CS para o atomo escolhido
+        # Verificar se existe a pasta com os varios CS para o atomo escolhido
+        if os.path.isdir(dir_path / str(z) / 'Charge_States'):
             CS_exists = True
-            radiative_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-intensity_' in f]
-            
+            radiative_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(
+                os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-intensity_' in f]
+
             lineradrates_PCS = []
             lineradrates_NCS = []
-            
+
             rad_PCS = []
             rad_NCS = []
-            
+
             for radfile in radiative_files:
-                rad_tmp_file = dir_path / str(z) / 'Charge_States' / radfile  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                rad_tmp_file = dir_path / str(z) / 'Charge_States' / radfile
                 try:
                     with open(rad_tmp_file, 'r') as radrates:  # Abrir o ficheiro
                         if '+' in radfile:
-                            lineradrates_PCS.append([x.strip('\n').split() for x in radrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            lineradrates_PCS[-1] = list(filter(None, lineradrates_PCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            lineradrates_PCS.append(
+                                [x.strip('\n').split() for x in radrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            lineradrates_PCS[-1] = list(
+                                filter(None, lineradrates_PCS[-1]))
                             del lineradrates_PCS[-1][0:2]
-                            rad_PCS.append('+' + radfile.split('+')[1].split('.')[0])
+                            rad_PCS.append(
+                                '+' + radfile.split('+')[1].split('.')[0])
                         else:
-                            lineradrates_NCS.append([x.strip('\n').split() for x in radrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            lineradrates_NCS[-1] = list(filter(None, lineradrates_NCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            lineradrates_NCS.append(
+                                [x.strip('\n').split() for x in radrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            lineradrates_NCS[-1] = list(
+                                filter(None, lineradrates_NCS[-1]))
                             del lineradrates_NCS[-1][0:2]
-                            rad_NCS.append('-' + radfile.split('-')[1].split('.')[0])
+                            rad_NCS.append(
+                                '-' + radfile.split('-')[1].split('.')[0])
                 except FileNotFoundError:
-                    messagebox.showwarning("Error", "Charge State File is not Avaliable: " + radfile)
-            
-            auger_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-augrate_' in f]
-            
+                    messagebox.showwarning(
+                        "Error", "Charge State File is not Avaliable: " + radfile)
+
+            auger_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(
+                os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-augrate_' in f]
+
             lineaugrates_PCS = []
             lineaugrates_NCS = []
-            
+
             aug_PCS = []
             aug_NCS = []
-            
+
             for augfile in auger_files:
-                aug_tmp_file = dir_path / str(z) / 'Charge_States' / augfile  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                aug_tmp_file = dir_path / str(z) / 'Charge_States' / augfile
                 try:
                     with open(aug_tmp_file, 'r') as augrates:  # Abrir o ficheiro
                         if '+' in augfile:
-                            lineaugrates_PCS.append([x.strip('\n').split() for x in augrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            lineaugrates_PCS[-1] = list(filter(None, lineaugrates_PCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            lineaugrates_PCS.append(
+                                [x.strip('\n').split() for x in augrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            lineaugrates_PCS[-1] = list(
+                                filter(None, lineaugrates_PCS[-1]))
                             del lineaugrates_PCS[-1][0:2]
-                            aug_PCS.append('+' + radfile.split('+')[1].split('.')[0])
+                            aug_PCS.append(
+                                '+' + radfile.split('+')[1].split('.')[0])
                         else:
-                            lineaugrates_NCS.append([x.strip('\n').split() for x in augrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            lineaugrates_NCS[-1] = list(filter(None, lineaugrates_NCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            lineaugrates_NCS.append(
+                                [x.strip('\n').split() for x in augrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            lineaugrates_NCS[-1] = list(
+                                filter(None, lineaugrates_NCS[-1]))
                             del lineaugrates_NCS[-1][0:2]
-                            aug_NCS.append('-' + radfile.split('-')[1].split('.')[0])
+                            aug_NCS.append(
+                                '-' + radfile.split('-')[1].split('.')[0])
                 except FileNotFoundError:
-                    messagebox.showwarning("Error", "Charge State File is not Avaliable: " + augfile)
-            
-            sat_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-satinty_' in f]
-            
+                    messagebox.showwarning(
+                        "Error", "Charge State File is not Avaliable: " + augfile)
+
+            sat_files = [f for f in os.listdir(dir_path / str(z) / 'Charge_States') if os.path.isfile(
+                os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-satinty_' in f]
+
             linesatellites_PCS = []
             linesatellites_NCS = []
-            
+
             sat_PCS = []
             sat_NCS = []
-            
+
             for satfile in sat_files:
-                sat_tmp_file = dir_path / str(z) / 'Charge_States' / satfile  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+                sat_tmp_file = dir_path / str(z) / 'Charge_States' / satfile
                 try:
                     with open(sat_tmp_file, 'r') as satrates:  # Abrir o ficheiro
                         if '+' in satfile:
-                            linesatellites_PCS.append([x.strip('\n').split() for x in satrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            linesatellites_PCS[-1] = list(filter(None, linesatellites_PCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            linesatellites_PCS.append(
+                                [x.strip('\n').split() for x in satrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            linesatellites_PCS[-1] = list(
+                                filter(None, linesatellites_PCS[-1]))
                             del linesatellites_PCS[-1][0:2]
-                            sat_PCS.append('+' + satfile.split('+')[1].split('.')[0])
+                            sat_PCS.append(
+                                '+' + satfile.split('+')[1].split('.')[0])
                         else:
-                            linesatellites_NCS.append([x.strip('\n').split() for x in satrates.readlines()])  # Escrever todas as linhas no ficheiro como uma lista
-                            linesatellites_NCS[-1] = list(filter(None, linesatellites_NCS[-1]))  # Remover as linhas compostas apenas por celulas vazias
+                            # Escrever todas as linhas no ficheiro como uma lista
+                            linesatellites_NCS.append(
+                                [x.strip('\n').split() for x in satrates.readlines()])
+                            # Remover as linhas compostas apenas por celulas vazias
+                            linesatellites_NCS[-1] = list(
+                                filter(None, linesatellites_NCS[-1]))
                             del linesatellites_NCS[-1][0:2]
-                            sat_NCS.append('-' + satfile.split('-')[1].split('.')[0])
+                            sat_NCS.append(
+                                '-' + satfile.split('-')[1].split('.')[0])
                 except FileNotFoundError:
-                    messagebox.showwarning("Error", "Charge State File is not Avaliable: " + satfile)
-            
+                    messagebox.showwarning(
+                        "Error", "Charge State File is not Avaliable: " + satfile)
+
             if len(linesatellites_NCS) != len(lineradrates_NCS) or len(linesatellites_PCS) != len(lineradrates_PCS):
-                messagebox.showwarning("Error", "Missmatch of radiative and satellite files for Charge State mixture: " + str(len(lineradrates_NCS) + len(lineradrates_PCS)) + " radiative and " + str(len(linesatellites_NCS) + len(linesatellites_PCS)) + " satellite files found.")
-            
-            ionpop_file = dir_path / str(z) / (str(z) + '-ionpop.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+                messagebox.showwarning("Error", "Missmatch of radiative and satellite files for Charge State mixture: " + str(len(lineradrates_NCS) + len(
+                    lineradrates_PCS)) + " radiative and " + str(len(linesatellites_NCS) + len(linesatellites_PCS)) + " satellite files found.")
+
+            # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as satelites
+            ionpop_file = dir_path / str(z) / (str(z) + '-ionpop.out')
             try:
                 with open(ionpop_file, 'r') as ionpop:  # Abrir o ficheiro
-                    ionpopdata = [x.strip('\n').split() for x in ionpop.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
-                    ionpopdata = list(filter(None, ionpopdata))  # Remover as linhas compostas apenas por celulas vazias
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    ionpopdata = [x.strip('\n').split()
+                                  for x in ionpop.readlines()]
+                    # Remover as linhas compostas apenas por celulas vazias
+                    ionpopdata = list(filter(None, ionpopdata))
                 Ionpop_exists = True
             except FileNotFoundError:
-                messagebox.showwarning("Error", "Ion Population File is not Avaliable")
-        
+                messagebox.showwarning(
+                    "Error", "Ion Population File is not Avaliable")
+
         # ---------------------------------------------------------------------------------------------------------------
-        # Criamos uma nova janela onde aparecerÃ£o os grÃ¡ficostodos (TopLevel porque nÃ£o podem haver duas janelas tk abertas ao mesmo tempo)
+        # Criamos uma nova janela onde aparecerão os gráficos todos (TopLevel porque não podem haver duas janelas tk abertas ao mesmo tempo)
         # E definimos o seu titulo
         sim = Toplevel(master=parent)
         sim.title("Spectrum Simulation")
-        # Criamos um "panel" onde vamos colocar o canvas para fazer o plot do grÃ¡fico. Panels sÃ£o necessÃ¡rios para a janela poder mudar de tamanho
+        # Criamos um "panel" onde vamos colocar o canvas para fazer o plot do gráfico. Panels são necessários para a janela poder mudar de tamanho
         panel_1 = PanedWindow(sim, orient=VERTICAL)
         panel_1.pack(fill=BOTH, expand=1)
         # ---------------------------------------------------------------------------------------------------------------
-        # Figura onde o grÃ¡fico vai ser desenhado
-        f = Figure(figsize=(10, 5), dpi=100)  # canvas para o grafico do espectro
+        # Figura onde o gráfico vai ser desenhado
+        # canvas para o gráfico do espectro
+        f = Figure(figsize=(10, 5), dpi=100)
         # plt.style.use('ggplot') Estilo para os plots
-        a = f.add_subplot(111)  # zona onde estara o grafico
+        a = f.add_subplot(111)  # zona onde estara o gráfico
         a.set_xlabel('Energy (eV)')
         a.set_ylabel('Intensity (arb. units)')
         # ---------------------------------------------------------------------------------------------------------------
-        # Frames onde se vÃ£o por a figura e os labels e botÃµes e etc
-        figure_frame = Frame(panel_1, relief=GROOVE)  # frame para o grafico
+        # Frames onde se vão por a figura e os labels e botões e etc
+        figure_frame = Frame(panel_1, relief=GROOVE)  # frame para o gráfico
         panel_1.add(figure_frame)
         canvas = FigureCanvasTkAgg(f, master=figure_frame)
         canvas.get_tk_widget().pack(fill=BOTH, expand=1)
@@ -749,69 +892,88 @@ def calculate(element, ap, parent):
         panel_2.add(toolbar_frame)
         toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 
-        full_frame = Frame(panel_2, relief=GROOVE)  # Frame transiÃ§Ãµes
+        full_frame = Frame(panel_2, relief=GROOVE)  # Frame transições
         panel_2.add(full_frame)
-        buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)  # Frame transiÃ§Ãµes
+        buttons_frame = Frame(
+            full_frame, bd=1, relief=GROOVE)  # Frame transições
         buttons_frame.pack(fill=BOTH, expand=1)
-        buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)  # Max, min & Points Frame
+        # Max, min & Points Frame
+        buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)
         buttons_frame2.pack(fill=BOTH, expand=1)
-        buttons_frame3 = Frame(full_frame, bd=1, relief=GROOVE)  # Frame  yoffset, Energy offset e Calculate
+        # Frame  yoffset, Energy offset e Calculate
+        buttons_frame3 = Frame(full_frame, bd=1, relief=GROOVE)
         buttons_frame3.pack(fill=BOTH, expand=1)
         buttons_frame4 = Frame(full_frame)  # Frame Barra Progresso
         buttons_frame4.pack(fill=BOTH, expand=1)
 
         # ---------------------------------------------------------------------------------------------------------------
-        # VariÃ¡veis
-        totalvar = StringVar()  # VariÃ¡vel que define se apresentamos o ytot(soma de todas as riscas) no grÃ¡fico
-        totalvar.set('No')  # inicializamos Total como nÃ£o, porque sÃ³ se apresenta se o utilizador escolher manualmente
-        yscale_log = StringVar()  # VariÃ¡vel que define se o eixo y Ã© apresentado com escala logaritmica ou nÃ£o
-        yscale_log.set('No')  # Inicializamos a No porque sÃ³  se apresenta assim se o utilizador escolher manualmente
-        xscale_log = StringVar()  # VariÃ¡vel que define se o eixo y Ã© apresentado com escala logaritmica ou nÃ£o
-        xscale_log.set('No')  # Inicializamos a No porque sÃ³  se apresenta assim se o utilizador escolher manualmente
-        autofitvar = StringVar()  # VariÃ¡vel que define se o fit se faz automÃ¡ticamente ou nÃ£o
-        autofitvar.set('No')  # Inicializamos a No porque sÃ³ faz fit automÃ¡tico se o utilizador quiser
-        normalizevar = StringVar()  # VariÃ¡vel que define como se normalizam os grÃ¡ficos (3 opÃ§Ãµes atÃ© agora: nÃ£o normalizar, normalizar Ã  unidade, ou ao mÃ¡ximo do espectro experimental)
-        normalizevar.set('No')  # inicializamos Normalize a no, porque sÃ³ se normaliza se o utilizador escolher
-        loadvar = StringVar()  # VariÃ¡vel que define se se carrega um expectro experimental. A string, caso se queira carregar o espectro, muda para o path do ficheiro do espectro
-        loadvar.set('No')  # inicializamos Load a no, porque sÃ³ se carrega ficheiro se o utilizador escolher
+        # Variáveis
+        # Variável que define se apresentamos o ytot(soma de todas as riscas) no gráfico
+        totalvar = StringVar()
+        # inicializamos Total como não, porque só se apresenta se o utilizador escolher manualmente
+        totalvar.set('No')
+        # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+        yscale_log = StringVar()
+        # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+        yscale_log.set('No')
+        # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+        xscale_log = StringVar()
+        # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+        xscale_log.set('No')
+        autofitvar = StringVar()  # Variável que define se o fit se faz automáticamente ou não
+        # Inicializamos a No porque só faz fit automático se o utilizador quiser
+        autofitvar.set('No')
+        normalizevar = StringVar()  # Variável que define como se normalizam os gráficos (3 opções até agora: não normalizar, normalizar à unidade, ou ao máximo do espectro experimental)
+        # inicializamos Normalize a no, porque só se normaliza se o utilizador escolher
+        normalizevar.set('No')
+        loadvar = StringVar()  # Variável que define se se carrega um expectro experimental. A string, caso se queira carregar o espectro, muda para o path do ficheiro do espectro
+        # inicializamos Load a no, porque só se carrega ficheiro se o utilizador escolher
+        loadvar.set('No')
         effic_var = StringVar()
         effic_var.set("No")
 
-        exp_resolution = DoubleVar(value=1.0)  # Float correspondente a resolucao experimental
-        yoffset = DoubleVar(value=0.0)  # Float correspondente ao fundo experimental
-        energy_offset = DoubleVar(value=0.0)  # Float correspondente a resolucao experimental
-        number_points = IntVar(value=500)  # Numero de pontos a plotar na simulaÃ§Ã£o
-        x_max = StringVar()  # Controlo do x MÃ¡ximo a entrar no grÃ¡fico
+        # Float correspondente a resolucao experimental
+        exp_resolution = DoubleVar(value=1.0)
+        # Float correspondente ao fundo experimental
+        yoffset = DoubleVar(value=0.0)
+        # Float correspondente a resolucao experimental
+        energy_offset = DoubleVar(value=0.0)
+        # Numero de pontos a plotar na simulação
+        number_points = IntVar(value=500)
+        x_max = StringVar()  # Controlo do x Máximo a entrar no gráfico
         x_max.set('Auto')
-        x_min = StringVar()  # Controlo do x MÃ­nimo a entrar no grÃ¡fico
+        x_min = StringVar()  # Controlo do x Mí­nimo a entrar no gráfico
         x_min.set('Auto')
         progress_var = DoubleVar()  # Float que da a percentagem de progresso
 
-        global transition_list  # Usada na funÃ§Ã£o Selected
+        global transition_list  # Usada na função Selected
         transition_list = []
-        label_text = StringVar()  # Texto com as transiÃ§Ãµes selecionadas a apresentar no ecrÃ£
-        label_text.set('Select a Transition: ')  # Antes de se selecionar alguma transiÃ§Ã£o aparece isto
-        trans_lable = Label(buttons_frame, textvariable=label_text).grid(row=0, column=1)
+        label_text = StringVar()  # Texto com as transições selecionadas a apresentar no ecrã
+        # Antes de se selecionar alguma transição aparece isto
+        label_text.set('Select a Transition: ')
+        trans_lable = Label(
+            buttons_frame, textvariable=label_text).grid(row=0, column=1)
 
         # ---------------------------------------------------------------------------------------------------------------
-        # FunÃ§Ã£o para alterar o estado de uma transiÃ§Ã£o que seja selecionada na GUI
+        # Função para alterar o estado de uma transição que seja selecionada na GUI
         def dict_updater(transition):
             if satelite_var.get() != 'Auger':
-                # O "Estado actual" que as riscas tÃªm quando esta funÃ§Ã£o corre Ã© o oposto daquele que estÃ¡ definido no dicionÃ¡rio, porque a funÃ§Ã£o sÃ³ corre se clicarmos para mudar
+                # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
                 current_state = not the_dictionary[transition]["selected_state"]
                 # Alteramos o estado das riscas para o estado actual
                 the_dictionary[transition]["selected_state"] = current_state
             else:
-                # O "Estado actual" que as riscas tÃªm quando esta funÃ§Ã£o corre Ã© o oposto daquele que estÃ¡ definido no dicionÃ¡rio, porque a funÃ§Ã£o sÃ³ corre se clicarmos para mudar
+                # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
                 current_state = not the_aug_dictionary[transition]["selected_state"]
                 # Alteramos o estado das riscas para o estado actual
                 the_aug_dictionary[transition]["selected_state"] = current_state
 
         # ---------------------------------------------------------------------------------------------------------------
-        # FunÃ§Ãµes
+        # Funções
         def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
             interpolated_effic = [0 for i in range(len(xfinal))]
-            effic_interpolation = interp1d(energy_values, np.array(efficiency_values)/100)
+            effic_interpolation = interp1d(
+                energy_values, np.array(efficiency_values)/100)
             for i, energy in enumerate(xfinal+enoffset):
                 interpolated_effic[i] = effic_interpolation(energy)
                 print(interpolated_effic[i], energy)
@@ -821,34 +983,42 @@ def calculate(element, ap, parent):
             normalize = normalizevar.get()
             try:
                 if normalize == 'ExpMax':
-                    normalization_var = (1 - y0 / expy_max) * expy_max / ytot_max
+                    normalization_var = (
+                        1 - y0 / expy_max) * expy_max / ytot_max
                 elif normalize == 'One':
                     normalization_var = (1 - y0) / ytot_max
                 elif normalize == 'No':
                     normalization_var = 1
 
             except ValueError:
-                messagebox.showerror("No Spectrum", "No Experimental Spectrum was loaded")
+                messagebox.showerror(
+                    "No Spectrum", "No Experimental Spectrum was loaded")
             except ZeroDivisionError:
                 normalization_var = 1
             return normalization_var
 
-        def y_calculator(transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values,enoffset):
+        def y_calculator(transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset):
             global ytot, yfinal, yfinals
-            yfinal = [[0 for i in range(len(xfinal))] for j in range(len(x))]  # Criar uma lista de listas cheia de zeros que ira ser o yfinal para diagrama
+            # Criar uma lista de listas cheia de zeros que ira ser o yfinal para diagrama
+            yfinal = [[0 for i in range(len(xfinal))] for j in range(len(x))]
             ytot = [0 for i in range(len(xfinal))]
-            yfinals = [[[0 for n in range(len(xfinal))] for i in label1] for j in range(len(xs))]  # Criar uma lista de listas cheia de zeros que ira ser o yfinal para satellites
+            # Criar uma lista de listas cheia de zeros que ira ser o yfinal para satellites
+            yfinals = [[[0 for n in range(len(xfinal))]
+                        for i in label1] for j in range(len(xs))]
             if transition_type == 'Diagram':
                 b1 = 0
                 for j, k in enumerate(y):
                     # Ciclo sobre todas as riscas para somar um pico (voigt, lorentz ou gauss) para cada individual
                     for i, n in enumerate(k):
                         if fit_type == 'Voigt':
-                            yfinal[j] = np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], V(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         elif fit_type == 'Lorentzian':
-                            yfinal[j] = np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], L(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         elif fit_type == 'Gaussian':
-                            yfinal[j] = np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], G(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         b1 += 100 / (len(y) * len(k))
                         progress_var.set(b1)
                         sim.update_idletasks()
@@ -865,11 +1035,14 @@ def calculate(element, ap, parent):
                         # Ciclo sobre todas as riscas para somar um pico (voigt, lorentz ou gauss) para cada individual
                         for i, n in enumerate(m):
                             if fit_type == 'Voigt':
-                                yfinals[j][l] = np.add(yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                                yfinals[j][l] = np.add(yfinals[j][l], V(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                             elif fit_type == 'Lorentzian':
-                                yfinals[j][l] = np.add(yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                                yfinals[j][l] = np.add(yfinals[j][l], L(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                             elif fit_type == 'Gaussian':
-                                yfinals[j][l] = np.add(yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                                yfinals[j][l] = np.add(yfinals[j][l], G(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                             b1 += 100 / (len(ys) * len(label1) * len(m))
                             progress_var.set(b1)
                             sim.update_idletasks()
@@ -884,11 +1057,14 @@ def calculate(element, ap, parent):
                     # Ciclo sobre todas as riscas para somar um pico (voigt, lorentz ou gauss) para cada individual
                     for i, n in enumerate(k):
                         if fit_type == 'Voigt':
-                            yfinal[j] = np.abs(np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                            yfinal[j] = np.abs(
+                                np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i])))
                         elif fit_type == 'Lorentzian':
-                            yfinal[j] = np.abs(np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                            yfinal[j] = np.abs(
+                                np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i])))
                         elif fit_type == 'Gaussian':
-                            yfinal[j] = np.abs(np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                            yfinal[j] = np.abs(
+                                np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i])))
                         b1 += 200 / (len(y) * len(k))
                         progress_var.set(b1)
                         sim.update_idletasks()
@@ -903,11 +1079,14 @@ def calculate(element, ap, parent):
                         # Ciclo sobre todas as riscas para somar um pico (voigt, lorentz ou gauss) para cada individual
                         for i, n in enumerate(m):
                             if fit_type == 'Voigt':
-                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], V(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                             elif fit_type == 'Lorentzian':
-                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], L(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                             elif fit_type == 'Gaussian':
-                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                                yfinals[j][l] = np.abs(np.add(yfinals[j][l], G(
+                                    xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                             b1 += 100 / (len(ys) * len(label1) * len(m))
                             progress_var.set(b1)
                             sim.update_idletasks()
@@ -917,20 +1096,27 @@ def calculate(element, ap, parent):
                 progress_var.set(b1)
                 sim.update_idletasks()
             elif transition_type == 'Auger':
-                yfinal = [[0 for i in range(len(xfinal))] for j in range(len(x))]  # Criar uma lista de listas cheia de zeros que ira ser o yfinal para diagrama
+                # Criar uma lista de listas cheia de zeros que ira ser o yfinal para diagrama
+                yfinal = [[0 for i in range(len(xfinal))]
+                          for j in range(len(x))]
                 ytot = [0 for i in range(len(xfinal))]
-                yfinals = [[[0 for n in range(len(xfinal))] for i in label1] for j in range(len(xs))]  # Criar uma lista de listas cheia de zeros que ira ser o yfinal para satellites
-            
+                # Criar uma lista de listas cheia de zeros que ira ser o yfinal para satellites
+                yfinals = [[[0 for n in range(len(xfinal))]
+                            for i in label1] for j in range(len(xs))]
+
                 b1 = 0
                 for j, k in enumerate(y):
                     # Ciclo sobre todas as riscas para somar um pico (voigt, lorentz ou gauss) para cada individual
                     for i, n in enumerate(k):
                         if fit_type == 'Voigt':
-                            yfinal[j] = np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], V(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         elif fit_type == 'Lorentzian':
-                            yfinal[j] = np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], L(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         elif fit_type == 'Gaussian':
-                            yfinal[j] = np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                            yfinal[j] = np.add(yfinal[j], G(
+                                xfinal, x[j][i], y[j][i], res, w[j][i]))
                         b1 += 100 / (len(y) * len(k))
                         progress_var.set(b1)
                         sim.update_idletasks()
@@ -940,14 +1126,15 @@ def calculate(element, ap, parent):
                 b1 = 100
                 progress_var.set(b1)
                 sim.update_idletasks()
-            
+
             if effic_var.get() != 'No':
-                detector_effi = detector_efficiency(energy_values, efficiency_values, xfinal, enoffset)
+                detector_effi = detector_efficiency(
+                    energy_values, efficiency_values, xfinal, enoffset)
                 return ytot*np.array(detector_effi), yfinal*np.array(detector_effi), yfinals*np.array(detector_effi)
             else:
                 return ytot, yfinal, yfinals
 
-        def func2min(params, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values,enoffset):
+        def func2min(params, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset):
             global xfinal
             normalize = normalizevar.get()
             y_interp = [0 for i in range(len(exp_x))]
@@ -955,14 +1142,17 @@ def calculate(element, ap, parent):
             y0 = params['yoff']
             res = params['res']
             ytot_max = params['ytot_max']
-            xfinal = np.array(np.linspace(min(exp_x) - xoff, max(exp_x) - xoff, num=num_of_points))
-            ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values,enoffset)
+            xfinal = np.array(np.linspace(min(exp_x) - xoff,
+                              max(exp_x) - xoff, num=num_of_points))
+            ytot, yfinal, yfinals = y_calculator(
+                sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
             normalization_var = normalizer(y0, max(exp_y), ytot_max)
             # print(xoff, res, y0, normalization_var)
             # print(xoff, res, y0, ytot_max)
-            f_interpolate = interp1d(xfinal + xoff, np.array(ytot * normalization_var) + y0, kind='cubic')  # Falta adicionar o y0
+            f_interpolate = interp1d(
+                xfinal + xoff, np.array(ytot * normalization_var) + y0, kind='cubic')  # Falta adicionar o y0
             for g, h in enumerate(exp_x):
-                # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                # Obtemos o valor de y interpolado pela função definida a cima
                 y_interp[g] = f_interpolate(h)
             # graph_a.plot(exp_x, y_interp, 'y', marker = ',')
             if normalize == 'One':
@@ -978,52 +1168,69 @@ def calculate(element, ap, parent):
             x.insert(0, 2 * min_value - max_value)
             x.append(2 * max_value - min_value)
             if spec_type == 'Diagram':
-                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) for row in transition_values]  # *float(row[11])*float(row[9])
+                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights))
+                     for row in transition_values]  # *float(row[11])*float(row[9])
                 y.insert(0, 0)
                 y.append(0)
-                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
+                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=str(transition), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
             elif spec_type == 'Satellites':
-                sy_points = [float(float(row[11]) * 0.01 * shakeweights[ind]) for row in transition_values]  # *float(row[11])*float(row[9])
+                sy_points = [float(float(row[11]) * 0.01 * shakeweights[ind])
+                             for row in transition_values]  # *float(row[11])*float(row[9])
                 sy_points.insert(0, 0)
                 sy_points.append(0)
-                a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
+                a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
                 a.legend(loc='best', numpoints=1)
             elif spec_type == 'Auger':
-                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) for row in transition_values]  # *float(row[11])*float(row[9])
+                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights))
+                     for row in transition_values]  # *float(row[11])*float(row[9])
                 y.insert(0, 0)
                 y.append(0)
-                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
+                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=str(transition), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
             elif spec_type == 'Diagram_CS':
-                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) * float(row[-1]) for row in transition_values]  # *float(row[11])*float(row[9])
+                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) * float(row[-1])
+                     for row in transition_values]  # *float(row[11])*float(row[9])
                 y.insert(0, 0)
                 y.append(0)
-                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
+                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=str(transition), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
             elif spec_type == 'Satellites_CS':
-                sy_points = [float(float(row[11]) * 0.01 * shakeweights[ind] * float(row[-1])) for row in transition_values]  # *float(row[11])*float(row[9])
+                sy_points = [float(float(row[11]) * 0.01 * shakeweights[ind] * float(row[-1]))
+                             for row in transition_values]  # *float(row[11])*float(row[9])
                 sy_points.insert(0, 0)
                 sy_points.append(0)
-                a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
+                a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
                 a.legend(loc='best', numpoints=1)
             elif spec_type == 'Auger_CS':
-                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) * float(row[-1]) for row in transition_values]  # *float(row[11])*float(row[9])
+                y = [float(row[11]) * (1 - 0.01 * sum(shakeweights)) * float(row[-1])
+                     for row in transition_values]  # *float(row[11])*float(row[9])
                 y.insert(0, 0)
                 y.append(0)
-                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
+                a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(
+                    0, 7)][0]), label=str(transition), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
             a.legend(title=element_name, title_fontsize='large')
             # --------------------------------------------------------------------------------------------------------------------------
             # Tratamento da Legenda
             a.legend(title=element_name)
-            number_of_labels = len(a.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-            legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
-            labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-            while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+            # Descubro quantas entradas vai ter a legenda
+            number_of_labels = len(a.legend().get_texts())
+            # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
+            legend_columns = 1
+            labels_per_columns = number_of_labels / \
+                legend_columns  # Numero de entradas por coluna
+            while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                 legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
-                labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-            a.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
+                # Recalculo o numero de entradas por coluna
+                labels_per_columns = number_of_labels / legend_columns
+            # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
+            a.legend(ncol=legend_columns)
 
         def plot_stick(graph_area):
             global xfinal, exp_x, exp_y, residues_graph
@@ -1061,381 +1268,496 @@ def calculate(element, ap, parent):
             normalization_var = 1
             # --------------------------------------------------------------------------------------------------------------------------
             if spectype == 'Stick':
-                # Duas variÃ¡veis que servem para ver se hÃ¡ alguma transiÃ§Ã£o mal escolhida. A primeira serve para saber o numero total de transiÃµes escolhidas e a segunda para anotar quantas tranisÃ§Ãµes erradas se escolheram
+                # Duas variáveis que servem para ver se há alguma transição mal escolhida. A primeira serve para saber o numero total de transiões escolhidas e a segunda para anotar quantas tranisções erradas se escolheram
                 num_of_transitions = 0
                 bad_selection = 0
                 if sat != 'Auger':
                     for transition in the_dictionary:
-                        # Se a transiÃ§Ã£o estiver selecionada:
+                        # Se a transição estiver selecionada:
                         if the_dictionary[transition]["selected_state"]:
                             num_of_transitions += 1
-                            # Estas variÃ¡veis servem sÃ³ para nÃ£o ter de escrever o acesso ao valor do dicionÃ¡rio todas as vezes
+                            # Estas variáveis servem só para não ter de escrever o acesso ao valor do dicionário todas as vezes
                             low_level = the_dictionary[transition]["low_level"]
                             high_level = the_dictionary[transition]["high_level"]
-                            diag_stick_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Cada vez que o for corre, lÃª o ficheiro de uma transiÃ§Ã£o
+                            diag_stick_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(
+                                line[8]) != 0]  # Cada vez que o for corre, lê o ficheiro de uma transição
                             # for u in range(len(diag_stick_val)):
                             #     if diag_stick_val[u][1] in low_level:
                             #         print(diag_stick_val[u][1], low_level)
-                            sat_stick_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
+                            sat_stick_val = [line for line in linesatellites if low_level in line[1]
+                                             and high_level in line[5] and float(line[8]) != 0]
                             # -------------------------------------------------------------------------------------------
                             if sat == 'Diagram':
-                                if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                    # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                    diag_stick_val = [['0' for i in range(16)]]
                                     # linha do ficheiro que supostamente preencheria este vertor)
-                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                                stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
+                                    # Mostro no ecrã a transição errada que escolheram
+                                    messagebox.showwarning(
+                                        "Wrong Transition", transition + " is not Available")
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                                stem_ploter(diag_stick_val,
+                                            transition, 'Diagram', 0, 0)
                             elif sat == 'Satellites':
-                                if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                     sat_stick_val = [['0' for i in range(16)]]
-                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    # Mostro no ecrã a transição errada que escolheram
+                                    messagebox.showwarning(
+                                        "Wrong Transition", transition + " is not Available")
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 b1 = 0
                                 for ind, key in enumerate(label1):
-                                    sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
-                                    sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
-                                    sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
+                                    sat_stick_val_ind1 = [
+                                        line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
+                                    sat_stick_val_ind2 = [line for line in sat_stick_val if low_level +
+                                                          key in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_stick_val_ind3 = [
+                                        line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
+                                    sat_stick_val_ind4 = [
+                                        line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + \
+                                        sat_stick_val_ind3 + sat_stick_val_ind4
                                     if len(sat_stick_val_ind) > 1:
-                                        stem_ploter(sat_stick_val_ind, transition, 'Satellites', ind, key)
+                                        stem_ploter(
+                                            sat_stick_val_ind, transition, 'Satellites', ind, key)
                                     b1 += 100 / len(label1)
                                     progress_var.set(b1)
                                     sim.update_idletasks()
                             elif sat == 'Diagram + Satellites':
-                                if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                    # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                    diag_stick_val = [['0' for i in range(16)]]
                                     # linha do ficheiro que supostamente preencheria este vertor)
-                                    messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                                stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
-                                if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                    # Mostro no ecrã a transição errada que escolheram
+                                    messagebox.showwarning(
+                                        "Wrong Transition", "Diagram info. for " + transition + " is not Available")
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                                stem_ploter(diag_stick_val,
+                                            transition, 'Diagram', 0, 0)
+                                if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                     sat_stick_val = [['0' for i in range(16)]]
-                                    messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    # Mostro no ecrã a transição errada que escolheram
+                                    messagebox.showwarning(
+                                        "Wrong Transition", "Satellites info.  for " + transition + " is not Available")
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 b1 = 0
                                 for ind, key in enumerate(label1):
-                                    sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
-                                    sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
-                                    sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
+                                    sat_stick_val_ind1 = [
+                                        line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
+                                    sat_stick_val_ind2 = [line for line in sat_stick_val if low_level +
+                                                          key in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_stick_val_ind3 = [
+                                        line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
+                                    sat_stick_val_ind4 = [
+                                        line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + \
+                                        sat_stick_val_ind3 + sat_stick_val_ind4
                                     if len(sat_stick_val_ind) > 1:
-                                        stem_ploter(sat_stick_val_ind, transition, 'Satellites', ind, key)
+                                        stem_ploter(
+                                            sat_stick_val_ind, transition, 'Satellites', ind, key)
                                     b1 += 100 / len(label1)
                                     progress_var.set(b1)
                                     sim.update_idletasks()
-                            
+
                         graph_area.set_xlabel('Energy (eV)')
                         graph_area.set_ylabel('Intensity (arb. units)')
                 else:
                     for transition in the_aug_dictionary:
-                        # Se a transiÃ§Ã£o estiver selecionada:
+                        # Se a transição estiver selecionada:
                         if the_aug_dictionary[transition]["selected_state"]:
                             num_of_transitions += 1
                             low_level = the_aug_dictionary[transition]["low_level"]
                             high_level = the_aug_dictionary[transition]["high_level"]
                             auger_level = the_aug_dictionary[transition]["auger_level"]
-                            
-                            aug_stick_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]
-                            
-                            if not aug_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+
+                            aug_stick_val = [line for line in lineauger if low_level in line[1]
+                                             and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]
+
+                            if not aug_stick_val:  # Se não ouver dados no vetor da diagrama
+                                # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                aug_stick_val = [['0' for i in range(16)]]
                                 # linha do ficheiro que supostamente preencheria este vertor)
-                                messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                            stem_ploter(aug_stick_val, transition, 'Auger', 0, 0)
-                        
+                                # Mostro no ecrã a transição errada que escolheram
+                                messagebox.showwarning(
+                                    "Wrong Transition", "Auger info. for " + transition + " is not Available")
+                                bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                            stem_ploter(aug_stick_val,
+                                        transition, 'Auger', 0, 0)
+
                         graph_area.set_xlabel('Energy (eV)')
                         graph_area.set_ylabel('Intensity (arb. units)')
-                
-                
+
                 if num_of_transitions == 0:
-                    messagebox.showerror("No Transition", "No transition was chosen")
+                    messagebox.showerror(
+                        "No Transition", "No transition was chosen")
                 elif bad_selection != 0:
-                    messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
+                    messagebox.showerror(
+                        "Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
             # --------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'M_Stick':
-                # Duas variÃ¡veis que servem para ver se hÃ¡ alguma transiÃ§Ã£o mal escolhida. A primeira serve para saber o numero total de transiÃµes escolhidas e a segunda para anotar quantas tranisÃ§Ãµes erradas se escolheram
+                # Duas variáveis que servem para ver se há alguma transição mal escolhida. A primeira serve para saber o numero total de transiões escolhidas e a segunda para anotar quantas tranisções erradas se escolheram
                 num_of_transitions = 0
                 bad_selection = 0
                 if sat != 'Auger':
                     charge_states = rad_PCS + rad_NCS
-                    
+
                     for cs_index, cs in enumerate(charge_states):
                         mix_val = '0.0'
                         ncs = False
-                        
+
                         if cs_index < len(rad_PCS):
                             mix_val = PCS_radMixValues[cs_index].get()
                         else:
-                            mix_val = NCS_radMixValues[cs_index - len(rad_PCS)].get()
+                            mix_val = NCS_radMixValues[cs_index -
+                                                       len(rad_PCS)].get()
                             ncs = True
                         if mix_val != '0.0':
                             for transition in the_dictionary:
-                                # Se a transiÃ§Ã£o estiver selecionada:
+                                # Se a transição estiver selecionada:
                                 if the_dictionary[transition]["selected_state"]:
                                     num_of_transitions += 1
-                                    # Estas variÃ¡veis servem sÃ³ para nÃ£o ter de escrever o acesso ao valor do dicionÃ¡rio todas as vezes
+                                    # Estas variáveis servem só para não ter de escrever o acesso ao valor do dicionário todas as vezes
                                     low_level = the_dictionary[transition]["low_level"]
                                     high_level = the_dictionary[transition]["high_level"]
-                                    
+
                                     if not ncs:
-                                        diag_stick_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Cada vez que o for corre, lÃª o ficheiro de uma transiÃ§Ã£o
+                                        diag_stick_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5]
+                                                          == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Cada vez que o for corre, lê o ficheiro de uma transição
                                     else:
-                                        diag_stick_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
-                                    
+                                        diag_stick_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(
+                                            lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
+
                                     if not ncs:
-                                        sat_stick_val = [line + [PCS_radMixValues[i].get()] for i, linesat in enumerate(linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_PCS[i] == cs]
+                                        sat_stick_val = [line + [PCS_radMixValues[i].get()] for i, linesat in enumerate(
+                                            linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_PCS[i] == cs]
                                     else:
-                                        sat_stick_val = [line + [NCS_radMixValues[i].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]
+                                        sat_stick_val = [line + [NCS_radMixValues[i].get()] for i, linesat in enumerate(
+                                            linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]
                                         # -------------------------------------------------------------------------------------------
                                     if sat == 'Diagram':
-                                        if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                        if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                            # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                            diag_stick_val = [
+                                                ['0' for i in range(16)]]
                                             # linha do ficheiro que supostamente preencheria este vertor)
-                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                                        stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
+                                            # Mostro no ecrã a transição errada que escolheram
+                                            messagebox.showwarning(
+                                                "Wrong Transition", transition + " is not Available for charge state: " + cs)
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                                        stem_ploter(
+                                            diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
                                     elif sat == 'Satellites':
-                                        if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
-                                            sat_stick_val = [['0' for i in range(16)]]
-                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                        if not sat_stick_val:  # Se não ouver nada no vetor das satelites
+                                            sat_stick_val = [
+                                                ['0' for i in range(16)]]
+                                            # Mostro no ecrã a transição errada que escolheram
+                                            messagebox.showwarning(
+                                                "Wrong Transition", transition + " is not Available for charge state: " + cs)
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         b1 = 0
                                         for ind, key in enumerate(label1):
-                                            sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
-                                            sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                            sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
-                                            sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                            sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
+                                            sat_stick_val_ind1 = [
+                                                line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
+                                            sat_stick_val_ind2 = [
+                                                line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
+                                            sat_stick_val_ind3 = [
+                                                line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
+                                            sat_stick_val_ind4 = [
+                                                line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                            sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + \
+                                                sat_stick_val_ind3 + sat_stick_val_ind4
                                             if len(sat_stick_val_ind) > 1:
-                                                stem_ploter(sat_stick_val_ind, cs + ' ' + transition, 'Satellites_CS', ind, key)
+                                                stem_ploter(
+                                                    sat_stick_val_ind, cs + ' ' + transition, 'Satellites_CS', ind, key)
                                             b1 += 100 / len(label1)
                                             progress_var.set(b1)
                                             sim.update_idletasks()
                                     elif sat == 'Diagram + Satellites':
-                                        if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                        if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                            # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                            diag_stick_val = [
+                                                ['0' for i in range(16)]]
                                             # linha do ficheiro que supostamente preencheria este vertor)
-                                            messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                                        stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
-                                        if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
-                                            sat_stick_val = [['0' for i in range(16)]]
-                                            messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                            # Mostro no ecrã a transição errada que escolheram
+                                            messagebox.showwarning(
+                                                "Wrong Transition", "Diagram info. for " + transition + " is not Available")
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                                        stem_ploter(
+                                            diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
+                                        if not sat_stick_val:  # Se não ouver nada no vetor das satelites
+                                            sat_stick_val = [
+                                                ['0' for i in range(16)]]
+                                            # Mostro no ecrã a transição errada que escolheram
+                                            messagebox.showwarning(
+                                                "Wrong Transition", "Satellites info.  for " + transition + " is not Available")
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         b1 = 0
                                         for ind, key in enumerate(label1):
-                                            sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
-                                            sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                            sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
-                                            sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                            sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
+                                            sat_stick_val_ind1 = [
+                                                line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
+                                            sat_stick_val_ind2 = [
+                                                line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
+                                            sat_stick_val_ind3 = [
+                                                line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
+                                            sat_stick_val_ind4 = [
+                                                line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                            sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + \
+                                                sat_stick_val_ind3 + sat_stick_val_ind4
                                             if len(sat_stick_val_ind) > 1:
-                                                stem_ploter(sat_stick_val_ind, cs + ' ' + transition, 'Satellites_CS', ind, key)
+                                                stem_ploter(
+                                                    sat_stick_val_ind, cs + ' ' + transition, 'Satellites_CS', ind, key)
                                             b1 += 100 / len(label1)
                                             progress_var.set(b1)
                                             sim.update_idletasks()
-                                    
+
                                 graph_area.set_xlabel('Energy (eV)')
                                 graph_area.set_ylabel('Intensity (arb. units)')
                 else:
                     charge_states = aug_PCS + aug_NCS
-                    
+
                     for cs_index, cs in enumerate(charge_states):
                         mix_val = '0.0'
                         ncs = False
-                        
+
                         if cs_index < len(aug_PCS):
                             mix_val = PCS_augMixValues[cs_index].get()
                         else:
-                            mix_val = NCS_augMixValues[cs_index - len(aug_PCS)].get()
+                            mix_val = NCS_augMixValues[cs_index -
+                                                       len(aug_PCS)].get()
                             ncs = True
                         if mix_val != '0.0':
                             for transition in the_aug_dictionary:
-                                # Se a transiÃ§Ã£o estiver selecionada:
+                                # Se a transição estiver selecionada:
                                 if the_aug_dictionary[transition]["selected_state"]:
                                     num_of_transitions += 1
                                     low_level = the_aug_dictionary[transition]["low_level"]
                                     high_level = the_aug_dictionary[transition]["high_level"]
                                     auger_level = the_aug_dictionary[transition]["auger_level"]
-                                    
+
                                     if not ncs:
-                                        aug_stick_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]
+                                        aug_stick_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1]
+                                                         and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]
                                     else:
-                                        aug_stick_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]
-                                    
-                                    if not aug_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                        aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                        aug_stick_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1]
+                                                         and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]
+
+                                    if not aug_stick_val:  # Se não ouver dados no vetor da diagrama
+                                        # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
+                                        aug_stick_val = [
+                                            ['0' for i in range(16)]]
                                         # linha do ficheiro que supostamente preencheria este vertor)
-                                        messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                        bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
-                                    stem_ploter(aug_stick_val, cs + ' ' + transition, 'Auger_CS', 0, 0)
-                                
+                                        # Mostro no ecrã a transição errada que escolheram
+                                        messagebox.showwarning(
+                                            "Wrong Transition", "Auger info. for " + transition + " is not Available for charge state: " + cs)
+                                        bad_selection += 1  # incremento o numero de transições "mal" escolhidas
+                                    stem_ploter(
+                                        aug_stick_val, cs + ' ' + transition, 'Auger_CS', 0, 0)
+
                                 graph_area.set_xlabel('Energy (eV)')
                                 graph_area.set_ylabel('Intensity (arb. units)')
-                
-                
+
                 if num_of_transitions == 0:
-                    messagebox.showerror("No Transition", "No transition was chosen")
+                    messagebox.showerror(
+                        "No Transition", "No transition was chosen")
                 elif bad_selection != 0:
-                    messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
+                    messagebox.showerror(
+                        "Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
             # --------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'Simulation':
-                # VariÃ¡vel para contar as transiÃ§Ãµes erradas
+                # Variável para contar as transições erradas
                 bad_selection = 0
-                
+
                 if sat != 'Auger':
                     # -------------------------------------------------------------------------------------------
-                    # Leitura dos valores das transiÃ§Ãµes selecionadas
-                    # Contrariamente ao spectype == 'Stick' onde os plots sÃ£o feitos quando se trata de cada risca, aqui,
-                    # o  que se faz Ã© obter os valores necessÃ¡rios para os plots. NÃ£o se faz nenhum plot em si dentro deste ciclo.
+                    # Leitura dos valores das transições selecionadas
+                    # Contrariamente ao spectype == 'Stick' onde os plots são feitos quando se trata de cada risca, aqui,
+                    # o  que se faz é obter os valores necessários para os plots. Não se faz nenhum plot em si dentro deste ciclo.
                     for index, transition in enumerate(the_dictionary):
                         if the_dictionary[transition]["selected_state"]:
-                            low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                            high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
-                            diag_sim_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
-                            sat_sim_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
-                            
+                            # orbital da lacuna no iní­cio da transição
+                            low_level = the_dictionary[transition]["low_level"]
+                            # orbital da lacuna no fim da transição
+                            high_level = the_dictionary[transition]["high_level"]
+                            diag_sim_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(
+                                line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
+                            sat_sim_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(
+                                line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
+
                             if sat == 'Diagram':
                                 x1 = [float(row[8]) for row in diag_sim_val]
-                                y1 = [float(row[11]) * (1 - sum(shakeweights)) for row in diag_sim_val]
+                                y1 = [float(row[11]) * (1 - sum(shakeweights))
+                                      for row in diag_sim_val]
                                 w1 = [float(row[15]) for row in diag_sim_val]
                                 x[index] = x1
                                 y[index] = y1
                                 w[index] = w1
                             elif sat == 'Satellites':
                                 for ind, key in enumerate(label1):
-                                    sat_sim_val_ind1 = [line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
-                                    sat_sim_val_ind2 = [line for line in sat_sim_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_sim_val_ind3 = [line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
-                                    sat_sim_val_ind4 = [line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + sat_sim_val_ind3 + sat_sim_val_ind4
+                                    sat_sim_val_ind1 = [
+                                        line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
+                                    sat_sim_val_ind2 = [line for line in sat_sim_val if low_level +
+                                                        key in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_sim_val_ind3 = [
+                                        line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
+                                    sat_sim_val_ind4 = [
+                                        line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + \
+                                        sat_sim_val_ind3 + sat_sim_val_ind4
                                     if len(sat_sim_val_ind) > 1:
-                                        x1s = [float(row[8]) for row in sat_sim_val_ind]
-                                        y1s = [float(float(row[11]) * shakeweights[ind]) for row in sat_sim_val_ind]
-                                        w1s = [float(row[15]) for row in sat_sim_val_ind]
+                                        x1s = [float(row[8])
+                                               for row in sat_sim_val_ind]
+                                        y1s = [
+                                            float(float(row[11]) * shakeweights[ind]) for row in sat_sim_val_ind]
+                                        w1s = [float(row[15])
+                                               for row in sat_sim_val_ind]
                                         xs[index][ind] = x1s
                                         ys[index][ind] = y1s
                                         ws[index][ind] = w1s
                             elif sat == 'Diagram + Satellites':
                                 x1 = [float(row[8]) for row in diag_sim_val]
-                                y1 = [float(row[11]) * (1 - sum(shakeweights)) for row in diag_sim_val]
+                                y1 = [float(row[11]) * (1 - sum(shakeweights))
+                                      for row in diag_sim_val]
                                 w1 = [float(row[15]) for row in diag_sim_val]
                                 x[index] = x1
                                 y[index] = y1
                                 w[index] = w1
                                 # ---------------------------------------------------------------------------------------------------------------------
-                                ka1s = [line for line in linesatellites if 'K1' in line[1] and 'L3' in line[5] and float(line[8]) != 0]
+                                ka1s = [line for line in linesatellites if 'K1' in line[1]
+                                        and 'L3' in line[5] and float(line[8]) != 0]
                                 for ind, key in enumerate(label1):
-                                    sat_sim_val_ind1 = [line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
-                                    sat_sim_val_ind2 = [line for line in sat_sim_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_sim_val_ind3 = [line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
-                                    sat_sim_val_ind4 = [line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                    sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + sat_sim_val_ind3 + sat_sim_val_ind4
+                                    sat_sim_val_ind1 = [
+                                        line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
+                                    sat_sim_val_ind2 = [line for line in sat_sim_val if low_level +
+                                                        key in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_sim_val_ind3 = [
+                                        line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
+                                    sat_sim_val_ind4 = [
+                                        line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                    sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + \
+                                        sat_sim_val_ind3 + sat_sim_val_ind4
                                     if len(sat_sim_val_ind) > 1:
-                                        x1s = [float(row[8]) for row in sat_sim_val_ind]
-                                        y1s = [float(float(row[11]) * shakeweights[ind]) for row in sat_sim_val_ind]
-                                        w1s = [float(row[15]) for row in sat_sim_val_ind]
+                                        x1s = [float(row[8])
+                                               for row in sat_sim_val_ind]
+                                        y1s = [
+                                            float(float(row[11]) * shakeweights[ind]) for row in sat_sim_val_ind]
+                                        w1s = [float(row[15])
+                                               for row in sat_sim_val_ind]
                                         xs[index][ind] = x1s
                                         ys[index][ind] = y1s
                                         ws[index][ind] = w1s
                     # -------------------------------------------------------------------------------------------
-                    # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                    # Verificar se se selecionaram transições indí­sponí­veis
                     for index, transition in enumerate(the_dictionary):
                         if the_dictionary[transition]["selected_state"]:
                             if not x[index] and not any(xs[index]):
-                                messagebox.showwarning("Wrong Transition", transition + " is not Available")
+                                messagebox.showwarning(
+                                    "Wrong Transition", transition + " is not Available")
                                 x[index] = []
                                 bad_selection += 1
                 else:
                     x = [[] for i in range(len(the_aug_dictionary))]
                     y = [[] for i in range(len(the_aug_dictionary))]
-                    w = [[] for i in range(len(the_aug_dictionary))]            
+                    w = [[] for i in range(len(the_aug_dictionary))]
                     xs = [[[] for i in label1] for j in x]
                     ys = [[[] for i in label1] for j in y]
                     ws = [[[] for i in label1] for j in w]
-                    
+
                     for index, transition in enumerate(the_aug_dictionary):
                         if the_aug_dictionary[transition]["selected_state"]:
-                            low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                            high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
+                            # orbital da lacuna no iní­cio da transição
+                            low_level = the_aug_dictionary[transition]["low_level"]
+                            # orbital da lacuna no fim da transição
+                            high_level = the_aug_dictionary[transition]["high_level"]
                             auger_level = the_aug_dictionary[transition]["auger_level"]
-                            
-                            aug_sim_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
-                            
+
+                            aug_sim_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(
+                                line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
+
                             x1 = [float(row[8]) for row in aug_sim_val]
-                            y1 = [float(row[9]) * (1 - sum(shakeweights)) for row in aug_sim_val]
+                            y1 = [float(row[9]) * (1 - sum(shakeweights))
+                                  for row in aug_sim_val]
                             w1 = [float(row[10]) for row in aug_sim_val]
                             x[index] = x1
                             y[index] = y1
                             w[index] = w1
-                    
+
                     # -------------------------------------------------------------------------------------------
-                    # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                    # Verificar se se selecionaram transições indí­sponí­veis
                     for index, transition in enumerate(the_aug_dictionary):
                         if the_aug_dictionary[transition]["selected_state"]:
                             if not x[index]:
-                                messagebox.showwarning("Wrong Auger Transition", transition + " is not Available")
+                                messagebox.showwarning(
+                                    "Wrong Auger Transition", transition + " is not Available")
                                 x[index] = []
                                 bad_selection += 1
 
                 # -------------------------------------------------------------------------------------------
-                # ObtenÃ§Ã£o do valor de xfinal a usar nos cÃ¡clulos dos yy (caso nÃ£o seja selecionado um espectro experimental, porque se fo xfinal Ã© mudado)
-                # (Calcular a dispersÃ£o em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersÃ£o e da resoluÃ§Ã£o experimental)
+                # Obtenção do valor de xfinal a usar nos cáclulos dos yy (caso não seja selecionado um espectro experimental, porque se fo xfinal é mudado)
+                # (Calcular a dispersão em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersão e da resolução experimental)
                 try:
                     if sat == 'Diagram':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                        for j, k in enumerate(x):
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
-                        
-                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+
+                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
 
                     elif sat == 'Satellites' or sat == 'Diagram + Satellites':
                         deltaE = []
-                        for j, k in enumerate(xs):  # Ciclo sobre os elementos de x (ka1, ka2, kb1, etc... 7 no total)
+                        # Ciclo sobre os elementos de x (ka1, ka2, kb1, etc... 7 no total)
+                        for j, k in enumerate(xs):
                             for l, m in enumerate(xs[j]):
                                 if m != []:
                                     deltaE.append(max(m) - min(m))
                         max_value = max(
                             [max(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) + max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])  # valor max de todos os elementos de xs (satt) que tem 7 linhas(ka1, ka2, etc) e o tamanho da lista label1 dentro de cada linha
-                        min_value = min([min(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) - max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
-                    
+                        min_value = min([min(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != [
+                        ]]) - max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
+
                     elif sat == 'Auger':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                        for j, k in enumerate(x):
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
-                        
-                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                    # Definimos o x MÃ­nimo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mn
-                    if x_mn == 'Auto':  # x_mn Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+
+                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                    # Definimos o x Mí­nimo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mn
+                    if x_mn == 'Auto':  # x_mn é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_min = min_value - 2 * min(deltaE)
                         else:
                             array_input_min = min_value - 2 * res * min(deltaE)
                     else:
                         array_input_min = float(x_mn) - enoffset
-                    # Definimos o x MÃ¡ximo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mx
-                    if x_mx == 'Auto':  # x_mx Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Máximo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mx
+                    if x_mx == 'Auto':  # x_mx é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_max = max_value + 2 * min(deltaE)
                         else:
-                            array_input_max = max_value + 2 * res * (min(deltaE))
+                            array_input_max = max_value + \
+                                2 * res * (min(deltaE))
                     else:
                         array_input_max = float(x_mx) - enoffset
                     # Calcular o array com os valores de xfinal igualmente espacados
-                    xfinal = np.linspace(array_input_min, array_input_max, num=num_of_points)
+                    xfinal = np.linspace(
+                        array_input_min, array_input_max, num=num_of_points)
                 except ValueError:
                     xfinal = np.zeros(num_of_points)
                     if not bad_selection:
-                        messagebox.showerror("No Transition", "No transition was chosen")
+                        messagebox.showerror(
+                            "No Transition", "No transition was chosen")
                     else:
-                        messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
+                        messagebox.showerror(
+                            "Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
 
                 # ---------------------------------------------------------------------------------------------------------------
                 # Load e plot do espectro experimental
@@ -1458,16 +1780,21 @@ def calculate(element, ap, parent):
                     residues_graph.set_xlabel('Energy (eV)')
                     residues_graph.set_ylabel('Residues (arb. units)')
                     # print(load)
-                    exp_spectrum = list(csv.reader(open(load, 'r', encoding='utf-8-sig')))  # Carregar a matriz do espectro experimental do ficheiro escolhido no menu
+                    # Carregar a matriz do espectro experimental do ficheiro escolhido no menu
+                    exp_spectrum = list(csv.reader(
+                        open(load, 'r', encoding='utf-8-sig')))
                     for i, it in enumerate(exp_spectrum):
-                        for j, itm in enumerate(exp_spectrum[i]):  # Transformar os valores do espectro experimental para float
+                        # Transformar os valores do espectro experimental para float
+                        for j, itm in enumerate(exp_spectrum[i]):
                             if exp_spectrum[i][j] != '':
                                 exp_spectrum[i][j] = float(itm)
                     xe = np.array([float(row[0]) for row in exp_spectrum])
                     ye = np.array([float(row[1]) for row in exp_spectrum])
-                    if len(exp_spectrum[0]) >= 3: #Se o espectro experimental tiver 3 colunas a terceira sera a incerteza
-                        sigma_exp = np.array([float(row[2]) for row in exp_spectrum])
-                    else:  #Caso contrario utiliza-se raiz do numero de contagens como a incerteza de cada ponto
+                    # Se o espectro experimental tiver 3 colunas a terceira sera a incerteza
+                    if len(exp_spectrum[0]) >= 3:
+                        sigma_exp = np.array([float(row[2])
+                                             for row in exp_spectrum])
+                    else:  # Caso contrario utiliza-se raiz do numero de contagens como a incerteza de cada ponto
                         sigma_exp = np.sqrt(ye)
                     if x_mx == 'Auto':
                         max_exp_lim = max(xe)
@@ -1478,82 +1805,103 @@ def calculate(element, ap, parent):
                         min_exp_lim = min(xe)
                     else:
                         min_exp_lim = float(x_mn)
-                    
+
                     for i in range(len(xe)):
                         if min_exp_lim <= xe[i] <= max_exp_lim:
                             exp_x.append(xe[i])
                             exp_y.append(ye[i])
                             exp_sigma.append(sigma_exp[i])
 
-                    xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
-                    
+                    xfinal = np.array(np.linspace(
+                        min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
+
                     if normalize == 'One':
-                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados Ã  unidade
-                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        # Plot dos dados experimentais normalizados à unidade
+                        graph_area.scatter(
+                            exp_x, exp_y / max(exp_y), marker='.', label='Exp.')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, np.array(
+                            exp_sigma) / max(exp_y), 'k--')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
+                        residues_graph.plot(
+                            exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')
                     else:
-                        graph_area.scatter(exp_x, exp_y, marker='.', label='Exp.')  # Plot dos dados experimentais
-                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        # Plot dos dados experimentais
+                        graph_area.scatter(
+                            exp_x, exp_y, marker='.', label='Exp.')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')
 
                     graph_area.legend()
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # Leitura dos valores da eficÃ¡cia do detector:
+                # Leitura dos valores da eficácia do detector:
                 efficiency_values = []
                 energy_values = []
                 if effic_file_name != "No":
                     try:
-                        efficiency = list(csv.reader(open(effic_file_name, 'r')))
+                        efficiency = list(csv.reader(
+                            open(effic_file_name, 'r')))
                         for pair in efficiency:
                             energy_values.append(float(pair[0]))
                             efficiency_values.append(float(pair[1]))
                     except FileNotFoundError:
-                        messagebox.showwarning("Error", "Efficiency File is not Avaliable")
+                        messagebox.showwarning(
+                            "Error", "Efficiency File is not Avaliable")
                 # ---------------------------------------------------------------------------------------------------------------
-                # VariÃ¡veis necessÃ¡rias para os cÃ¡lcuos dos y e para os plots:
-                ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res,energy_values, efficiency_values,enoffset)
+                # Variáveis necessárias para os cálcuos dos y e para os plots:
+                ytot, yfinal, yfinals = y_calculator(
+                    sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo da variÃ¡vel de notificaÃ§Ã£o:
-                # O cÃ¡lculo Ã© feito na funÃ§Ã£o normalizer, e Ã© lÃ¡ que Ã© lida a escolha de normalizaÃ§Ã£o do utilizador. Aqui sÃ³ passamos dados para a funÃ§ao
+                # Cálculo da variável de notificação:
+                # O cálculo é feito na função normalizer, e é lá que é lida a escolha de normalização do utilizador. Aqui só passamos dados para a funçao
                 if load != 'No':
                     normalization_var = normalizer(y0, max(exp_y), max(ytot))
                 else:
                     if normalizevar.get() == 'ExpMax':  # Se tentarem normalizar ao maximo experimental sem terem carregado espectro
-                        messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
-                        normalizevar.set('No')  # Define a variavel global de normalizaÃ§Ã£o para nÃ£o normalizar
+                        messagebox.showwarning(
+                            "No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
+                        # Define a variavel global de normalização para não normalizar
+                        normalizevar.set('No')
                     normalization_var = normalizer(y0, 1, max(ytot))
                 # ---------------------------------------------------------------------------------------------------------------
                 # Autofit:
                 # start_time = time.time()
                 if autofit == 'Yes':
-                    # Fazemos fit apenas se houver um grÃ¡fico experimental carregado
+                    # Fazemos fit apenas se houver um gráfico experimental carregado
                     if load != 'No':
 
-                        # Criar os parametros que vÃ£o ser otimizados
+                        # Criar os parametros que vão ser otimizados
                         params = Parameters()
 
                         # Offset em energia
-                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do grÃ¡fico
-                        params.add('xoff', value=enoffset, min=enoffset - xoff_lim, max=enoffset + xoff_lim)
+                        # O offset vai variar entre o valor introduzido +/- 10% do tamanho do gráfico
+                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1
+                        params.add('xoff', value=enoffset, min=enoffset -
+                                   xoff_lim, max=enoffset + xoff_lim)
 
                         # Offset no yy
                         yoff_lim = (max(exp_y) - min(exp_y)) * 0.1
-                        params.add('yoff', value=y0, min=y0 - yoff_lim, max=y0 + yoff_lim)
+                        params.add('yoff', value=y0, min=y0 -
+                                   yoff_lim, max=y0 + yoff_lim)
 
-                        # ResoluÃ§Ã£o experimental
+                        # Resolução experimental
                         res_lim = res * 3
-                        params.add('res', value=res, min=0.01, max=res + res_lim)
+                        params.add('res', value=res, min=0.01,
+                                   max=res + res_lim)
 
-                        # # VariÃ¡vel de normalizaÃ§Ã£o
+                        # # Variável de normalização
                         # norm_lim = normalization_var * 0.5
                         # params.add('normal', value=normalization_var)
 
                         # Parametro na Normalization var
                         params.add('ytot_max', value=max(ytot))
                         number_of_fit_variables = len(params.valuesdict())
-                        minner = Minimizer(func2min, params, fcn_args=(exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values,enoffset))
+                        minner = Minimizer(func2min, params, fcn_args=(
+                            exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset))
                         result = minner.minimize()
                         # report_fit(result)
 
@@ -1563,15 +1911,18 @@ def calculate(element, ap, parent):
                         # Offset no yy a ser definido para o plot final das linhas
                         y0 = result.params['yoff'].value
                         yoffset.set(y0)
-                        # ResoluÃ§Ã£o experimental a ser definido para o plot final das linhas
+                        # Resolução experimental a ser definido para o plot final das linhas
                         res = result.params['res'].value
                         exp_resolution.set(res)
                         # normalization_var = result.params['normal'].value
                         ytot_max = result.params['ytot_max'].value
 
-                        xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
-                        ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values,enoffset)
-                        normalization_var = normalizer(y0, max(exp_y), ytot_max)
+                        xfinal = np.array(np.linspace(
+                            min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
+                        ytot, yfinal, yfinals = y_calculator(
+                            sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
+                        normalization_var = normalizer(
+                            y0, max(exp_y), ytot_max)
                         if messagebox.askyesno("Fit Saving", "Do you want to save this fit?"):
                             with open(file_namer("Fit", time_of_click, ".txt"), 'w') as file:
                                 file.write(fit_report(result))
@@ -1580,186 +1931,246 @@ def calculate(element, ap, parent):
                         # residues_graph.legend(title="Red.= " + "{:.5f}".format(result.redchi), loc='lower right')
 
                     else:
-                        messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
+                        messagebox.showerror(
+                            "Error", "Autofit is only avaliable if an experimental spectrum is loaded")
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Plot das linhas
                 # print('Time of fit execution: --- %s seconds ---' % (time.time() - start_time))
                 if sat == 'Diagram':
                     for index, key in enumerate(the_dictionary):
                         if the_dictionary[key]["selected_state"]:
-                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(
+                                col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
                 elif sat == 'Satellites':
                     for index, key in enumerate(the_dictionary):
                         if the_dictionary[key]["selected_state"]:
                             for l, m in enumerate(yfinals[index]):
                                 if max(m) != 0:  # Excluir as linhas que nao foram seleccionados nos botoes
-                                    graph_area.plot(xfinal + enoffset, (np.array(yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                    graph_area.plot(xfinal + enoffset, (np.array(yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[label1[l]], color=str(
+                                        col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                     graph_area.legend()
                 elif sat == 'Diagram + Satellites':
                     for index, key in enumerate(the_dictionary):
                         if the_dictionary[key]["selected_state"]:
-                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(
+                                col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
 
                     for index, key in enumerate(the_dictionary):
                         if the_dictionary[key]["selected_state"]:
                             for l, m in enumerate(yfinals[index]):
                                 if max(m) != 0:  # Excluir as linhas que nao foram seleccionados nos botoes
-                                    graph_area.plot(xfinal + enoffset, (np.array(yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                    graph_area.plot(xfinal + enoffset, (np.array(yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[label1[l]], color=str(
+                                        col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                     graph_area.legend()
                 elif sat == 'Auger':
                     for index, key in enumerate(the_aug_dictionary):
                         if the_aug_dictionary[key]["selected_state"]:
-                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            graph_area.plot(xfinal + enoffset, (np.array(yfinal[index]) * normalization_var) + y0, label=key, color=str(
+                                col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
                 if total == 'Total':
-                    graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
+                    graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0,
+                                    label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
                     graph_area.legend()
                 # ------------------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo dos Residuos
+                # Cálculo dos Residuos
                 if load != 'No':
                     # if load != 'No':
-                    # Definimos uma funÃ§Ã£o que recebe um numero, e tendo como dados o que passamos Ã  interp1d faz a sua interpolaÃ§Ã£o
+                    # Definimos uma função que recebe um numero, e tendo como dados o que passamos à interp1d faz a sua interpolação
                     # print(*ytot, sep=',')
-                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o grÃ¡fico de resÃ­duos
-                    f_interpolate = interp1d(xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
-                    # Vetor para guardar o y dos residuos (nÃ£o precisamos de guardar o x porque Ã© igual ao exp_x
+                    # Criar lista vazia para o gráfico de resí­duos
+                    y_interp = [0 for i in range(len(exp_x))]
+                    f_interpolate = interp1d(
+                        xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
+                    # Vetor para guardar o y dos residuos (não precisamos de guardar o x porque é igual ao exp_x
                     y_res = [0 for x in range(len(exp_x))]
-                    # VariÃ¡vel para a soma do chi quadrado
+                    # Variável para a soma do chi quadrado
                     chi_sum = 0
                     # Percorremos todos os valores de x
                     for g, h in enumerate(exp_x):
-                        # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                        # Obtemos o valor de y interpolado pela função definida a cima
                         y_interp[g] = f_interpolate(h)
-                        # CÃ¡lculamos o y dos residuos subtraindo o interpolado ao experimental
+                        # Cálculamos o y dos residuos subtraindo o interpolado ao experimental
                         if normalize == 'ExpMax' or normalize == 'No':
-                            y_res[g] = (exp_y[g] - y_interp[g]) 
-                            #y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
+                            y_res[g] = (exp_y[g] - y_interp[g])
+                            # y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
                             chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
                         elif normalize == 'One':
                             y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
-                            #y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
-                            chi_sum += (y_res[g] **2) / ((exp_sigma[g]/ max(exp_y))**2) 
+                            # y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
+                            chi_sum += (y_res[g] ** 2) / \
+                                ((exp_sigma[g] / max(exp_y))**2)
                         #     y_res[g] = (exp_y[g] / max(exp_y)) - y_interp[g]
-                        # SomatÃ³rio para o cÃ¡lculo de chi quad
+                        # Somatório para o cálculo de chi quad
                     global chi_sqrd
                     chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
                     residues_graph.plot(exp_x, y_res)
                     print("Valor Manual Chi", chi_sqrd)
-                    residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
+                    residues_graph.legend(
+                        title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
                 # ------------------------------------------------------------------------------------------------------------------------
-                # DefiniÃ§Ã£o do label do eixo yy e, consoante haja ou nÃ£o um grÃ¡fico de resÃ­duos, do eixo  xx
+                # Definição do label do eixo yy e, consoante haja ou não um gráfico de resí­duos, do eixo  xx
                 graph_area.set_ylabel('Intensity (arb. units)')
                 graph_area.legend(title=element_name, title_fontsize='large')
                 if load == 'No':
                     graph_area.set_xlabel('Energy (eV)')
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Controlo do numero de entradas na legenda
-                number_of_labels = len(graph_area.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-                legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
-                labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+                # Descubro quantas entradas vai ter a legenda
+                number_of_labels = len(graph_area.legend().get_texts())
+                # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
+                legend_columns = 1
+                labels_per_columns = number_of_labels / \
+                    legend_columns  # Numero de entradas por coluna
+                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                     legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
-                    labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
-            #--------------------------------------------------------------------------------------------------------------------------------------
+                    # Recalculo o numero de entradas por coluna
+                    labels_per_columns = number_of_labels / legend_columns
+                # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
+                graph_area.legend(ncol=legend_columns)
+            # --------------------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'M_Simulation':
-                # VariÃ¡vel para contar as transiÃ§Ãµes erradas
+                # Variável para contar as transições erradas
                 bad_selection = 0
-                
+
                 bad_lines = {}
-                
+
                 if sat != 'Auger':
                     # -------------------------------------------------------------------------------------------
-                    # Leitura dos valores das transiÃ§Ãµes selecionadas
-                    # Contrariamente ao spectype == 'Stick' onde os plots sÃ£o feitos quando se trata de cada risca, aqui,
-                    # o  que se faz Ã© obter os valores necessÃ¡rios para os plots. NÃ£o se faz nenhum plot em si dentro deste ciclo.
+                    # Leitura dos valores das transições selecionadas
+                    # Contrariamente ao spectype == 'Stick' onde os plots são feitos quando se trata de cada risca, aqui,
+                    # o  que se faz é obter os valores necessários para os plots. Não se faz nenhum plot em si dentro deste ciclo.
                     charge_states = rad_PCS + rad_NCS
-                    
+
                     ploted_cs = []
-                    
+
                     for cs_index, cs in enumerate(charge_states):
                         mix_val = '0.0'
                         ncs = False
-                        
+
                         if cs_index < len(rad_PCS):
                             mix_val = PCS_radMixValues[cs_index].get()
                         else:
-                            mix_val = NCS_radMixValues[cs_index - len(rad_PCS)].get()
+                            mix_val = NCS_radMixValues[cs_index -
+                                                       len(rad_PCS)].get()
                             ncs = True
-                        
+
                         if mix_val != '0.0':
                             ploted_cs.append(cs)
-                        
-                    x = [[] for i in range(len(the_dictionary) * len(ploted_cs))]
-                    y = [[] for i in range(len(the_dictionary) * len(ploted_cs))]
-                    w = [[] for i in range(len(the_dictionary) * len(ploted_cs))]
+
+                    x = [[]
+                         for i in range(len(the_dictionary) * len(ploted_cs))]
+                    y = [[]
+                         for i in range(len(the_dictionary) * len(ploted_cs))]
+                    w = [[]
+                         for i in range(len(the_dictionary) * len(ploted_cs))]
                     xs = [[[] for i in label1] for j in x]
                     ys = [[[] for i in label1] for j in y]
                     ws = [[[] for i in label1] for j in w]
-                    
+
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, transition in enumerate(the_dictionary):
                             if the_dictionary[transition]["selected_state"]:
-                                low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                                high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
-                                
+                                # orbital da lacuna no iní­cio da transição
+                                low_level = the_dictionary[transition]["low_level"]
+                                # orbital da lacuna no fim da transição
+                                high_level = the_dictionary[transition]["high_level"]
+
                                 if not ncs:
-                                    diag_sim_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                                    diag_sim_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5]
+                                                    == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                                 else:
-                                    diag_sim_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
-                                
+                                    diag_sim_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_NCS)
+                                                    for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
+
                                 if not ncs:
-                                    sat_sim_val = [line + [PCS_radMixValues[rad_PCS.index(sat_PCS[i])].get()] for i, linesat in enumerate(linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
+                                    sat_sim_val = [line + [PCS_radMixValues[rad_PCS.index(sat_PCS[i])].get()] for i, linesat in enumerate(linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(
+                                        line[8]) != 0 and sat_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
                                 else:
-                                    sat_sim_val = [line + [NCS_radMixValues[rad_NCS.index(sat_NCS[i])].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
-                                
+                                    sat_sim_val = [line + [NCS_radMixValues[rad_NCS.index(sat_NCS[i])].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(
+                                        line[8]) != 0 and sat_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
+
                                 if sat == 'Diagram':
-                                    x1 = [float(row[8]) for row in diag_sim_val]
-                                    y1 = [float(row[11]) * (1 - sum(shakeweights)) * float(row[-1]) for row in diag_sim_val]
-                                    w1 = [float(row[15]) for row in diag_sim_val]
-                                    x[cs_index * len(the_dictionary) + index] = x1
-                                    y[cs_index * len(the_dictionary) + index] = y1
-                                    w[cs_index * len(the_dictionary) + index] = w1
+                                    x1 = [float(row[8])
+                                          for row in diag_sim_val]
+                                    y1 = [float(row[11]) * (1 - sum(shakeweights))
+                                          * float(row[-1]) for row in diag_sim_val]
+                                    w1 = [float(row[15])
+                                          for row in diag_sim_val]
+                                    x[cs_index *
+                                        len(the_dictionary) + index] = x1
+                                    y[cs_index *
+                                        len(the_dictionary) + index] = y1
+                                    w[cs_index *
+                                        len(the_dictionary) + index] = w1
                                 elif sat == 'Satellites':
                                     for ind, key in enumerate(label1):
-                                        sat_sim_val_ind1 = [line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
-                                        sat_sim_val_ind2 = [line for line in sat_sim_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                        sat_sim_val_ind3 = [line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
-                                        sat_sim_val_ind4 = [line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                        sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + sat_sim_val_ind3 + sat_sim_val_ind4
+                                        sat_sim_val_ind1 = [
+                                            line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
+                                        sat_sim_val_ind2 = [line for line in sat_sim_val if low_level +
+                                                            key in line[1] and high_level + key in line[5] and key != high_level]
+                                        sat_sim_val_ind3 = [
+                                            line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
+                                        sat_sim_val_ind4 = [
+                                            line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                        sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + \
+                                            sat_sim_val_ind3 + sat_sim_val_ind4
                                         if len(sat_sim_val_ind) > 1:
-                                            x1s = [float(row[8]) for row in sat_sim_val_ind]
-                                            y1s = [float(float(row[11]) * shakeweights[ind] * float(row[-1])) for row in sat_sim_val_ind]
-                                            w1s = [float(row[15]) for row in sat_sim_val_ind]
-                                            xs[cs_index * len(the_dictionary) + index][ind] = x1s
-                                            ys[cs_index * len(the_dictionary) + index][ind] = y1s
-                                            ws[cs_index * len(the_dictionary) + index][ind] = w1s
+                                            x1s = [float(row[8])
+                                                   for row in sat_sim_val_ind]
+                                            y1s = [float(
+                                                float(row[11]) * shakeweights[ind] * float(row[-1])) for row in sat_sim_val_ind]
+                                            w1s = [float(row[15])
+                                                   for row in sat_sim_val_ind]
+                                            xs[cs_index *
+                                                len(the_dictionary) + index][ind] = x1s
+                                            ys[cs_index *
+                                                len(the_dictionary) + index][ind] = y1s
+                                            ws[cs_index *
+                                                len(the_dictionary) + index][ind] = w1s
                                 elif sat == 'Diagram + Satellites':
-                                    x1 = [float(row[8]) for row in diag_sim_val]
-                                    y1 = [float(row[11]) * (1 - sum(shakeweights)) * float(row[-1]) for row in diag_sim_val]
-                                    w1 = [float(row[15]) for row in diag_sim_val]
-                                    x[cs_index * len(the_dictionary) + index] = x1
-                                    y[cs_index * len(the_dictionary) + index] = y1
-                                    w[cs_index * len(the_dictionary) + index] = w1
+                                    x1 = [float(row[8])
+                                          for row in diag_sim_val]
+                                    y1 = [float(row[11]) * (1 - sum(shakeweights))
+                                          * float(row[-1]) for row in diag_sim_val]
+                                    w1 = [float(row[15])
+                                          for row in diag_sim_val]
+                                    x[cs_index *
+                                        len(the_dictionary) + index] = x1
+                                    y[cs_index *
+                                        len(the_dictionary) + index] = y1
+                                    w[cs_index *
+                                        len(the_dictionary) + index] = w1
                                     # ---------------------------------------------------------------------------------------------------------------------
                                     for ind, key in enumerate(label1):
-                                        sat_sim_val_ind1 = [line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
-                                        sat_sim_val_ind2 = [line for line in sat_sim_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
-                                        sat_sim_val_ind3 = [line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
-                                        sat_sim_val_ind4 = [line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
-                                        sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + sat_sim_val_ind3 + sat_sim_val_ind4
-                                        
+                                        sat_sim_val_ind1 = [
+                                            line for line in sat_sim_val if low_level + key in line[1] and key + high_level in line[5]]
+                                        sat_sim_val_ind2 = [line for line in sat_sim_val if low_level +
+                                                            key in line[1] and high_level + key in line[5] and key != high_level]
+                                        sat_sim_val_ind3 = [
+                                            line for line in sat_sim_val if key + low_level in line[1] and key + high_level in line[5]]
+                                        sat_sim_val_ind4 = [
+                                            line for line in sat_sim_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
+                                        sat_sim_val_ind = sat_sim_val_ind1 + sat_sim_val_ind2 + \
+                                            sat_sim_val_ind3 + sat_sim_val_ind4
+
                                         if len(sat_sim_val_ind) > 1:
-                                            x1s = [float(row[8]) for row in sat_sim_val_ind]
-                                            y1s = [float(float(row[11]) * shakeweights[ind] * float(row[-1])) for row in sat_sim_val_ind]
-                                            w1s = [float(row[15]) for row in sat_sim_val_ind]
-                                            xs[cs_index * len(the_dictionary) + index][ind] = x1s
-                                            ys[cs_index * len(the_dictionary) + index][ind] = y1s
-                                            ws[cs_index * len(the_dictionary) + index][ind] = w1s
+                                            x1s = [float(row[8])
+                                                   for row in sat_sim_val_ind]
+                                            y1s = [float(
+                                                float(row[11]) * shakeweights[ind] * float(row[-1])) for row in sat_sim_val_ind]
+                                            w1s = [float(row[15])
+                                                   for row in sat_sim_val_ind]
+                                            xs[cs_index *
+                                                len(the_dictionary) + index][ind] = x1s
+                                            ys[cs_index *
+                                                len(the_dictionary) + index][ind] = y1s
+                                            ws[cs_index *
+                                                len(the_dictionary) + index][ind] = w1s
                         # -------------------------------------------------------------------------------------------
-                        # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                        # Verificar se se selecionaram transições indí­sponí­veis
                         for index, transition in enumerate(the_dictionary):
                             if the_dictionary[transition]["selected_state"]:
                                 if not x[cs_index * len(the_dictionary) + index] and not any(xs[cs_index * len(the_dictionary) + index]):
@@ -1767,70 +2178,85 @@ def calculate(element, ap, parent):
                                         bad_lines[cs] = [transition]
                                     else:
                                         bad_lines[cs].append(transition)
-                                    
-                                    x[cs_index * len(the_dictionary) + index] = []
+
+                                    x[cs_index *
+                                        len(the_dictionary) + index] = []
                                     bad_selection += 1
-                
+
                     text = "Transitions not available for:\n"
                     for cs in bad_lines:
                         text += cs + ": " + str(bad_lines[cs]) + "\n"
-                    
+
                     messagebox.showwarning("Wrong Transition", text)
-                    
+
                     if len(bad_lines) == len(ploted_cs):
                         intersection = list(bad_lines.values())[-1]
                         for cs in bad_lines:
                             l1 = set(bad_lines[cs])
                             intersection = list(l1.intersection(intersection))
-                        
-                        messagebox.showwarning("Common Transitions", intersection)
+
+                        messagebox.showwarning(
+                            "Common Transitions", intersection)
                     else:
-                        messagebox.showwarning("Common Transitions", "Every transition is plotted for at least 1 charge state.")
+                        messagebox.showwarning(
+                            "Common Transitions", "Every transition is plotted for at least 1 charge state.")
                 else:
                     charge_states = aug_PCS + aug_NCS
-                    
+
                     ploted_cs = []
-                    
+
                     for cs_index, cs in enumerate(charge_states):
                         mix_val = '0.0'
                         ncs = False
-                        
+
                         if cs_index < len(aug_PCS):
                             mix_val = PCS_augMixValues[cs_index].get()
                         else:
-                            mix_val = NCS_augMixValues[cs_index - len(aug_PCS)].get()
+                            mix_val = NCS_augMixValues[cs_index -
+                                                       len(aug_PCS)].get()
                             ncs = True
                         if mix_val != '0.0':
                             ploted_cs.append(cs)
-                    
-                    x = [[] for i in range(len(the_aug_dictionary) * len(ploted_cs))]
-                    y = [[] for i in range(len(the_aug_dictionary) * len(ploted_cs))]
-                    w = [[] for i in range(len(the_aug_dictionary) * len(ploted_cs))]            
+
+                    x = [[]
+                         for i in range(len(the_aug_dictionary) * len(ploted_cs))]
+                    y = [[]
+                         for i in range(len(the_aug_dictionary) * len(ploted_cs))]
+                    w = [[]
+                         for i in range(len(the_aug_dictionary) * len(ploted_cs))]
                     xs = [[[] for i in label1] for j in x]
                     ys = [[[] for i in label1] for j in y]
                     ws = [[[] for i in label1] for j in w]
-                    
+
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, transition in enumerate(the_aug_dictionary):
                             if the_aug_dictionary[transition]["selected_state"]:
-                                low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                                high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
+                                # orbital da lacuna no iní­cio da transição
+                                low_level = the_aug_dictionary[transition]["low_level"]
+                                # orbital da lacuna no fim da transição
+                                high_level = the_aug_dictionary[transition]["high_level"]
                                 auger_level = the_aug_dictionary[transition]["auger_level"]
-                                
+
                                 if not ncs:
-                                    aug_sim_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                                    aug_sim_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5]
+                                                   [:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                                 else:
-                                    aug_sim_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
-                                
+                                    aug_sim_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5]
+                                                   [:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
+
                                 x1 = [float(row[8]) for row in aug_sim_val]
-                                y1 = [float(row[9]) * (1 - sum(shakeweights)) * float(row[-1]) for row in aug_sim_val]
+                                y1 = [float(row[9]) * (1 - sum(shakeweights))
+                                      * float(row[-1]) for row in aug_sim_val]
                                 w1 = [float(row[10]) for row in aug_sim_val]
-                                x[cs_index * len(the_aug_dictionary) + index] = x1
-                                y[cs_index * len(the_aug_dictionary) + index] = y1
-                                w[cs_index * len(the_aug_dictionary) + index] = w1
-                        
+                                x[cs_index *
+                                    len(the_aug_dictionary) + index] = x1
+                                y[cs_index *
+                                    len(the_aug_dictionary) + index] = y1
+                                w[cs_index *
+                                    len(the_aug_dictionary) + index] = w1
+
                         # -------------------------------------------------------------------------------------------
-                        # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                        # Verificar se se selecionaram transições indí­sponí­veis
                         for index, transition in enumerate(the_aug_dictionary):
                             if the_aug_dictionary[transition]["selected_state"]:
                                 if not x[cs_index * len(the_aug_dictionary) + index]:
@@ -1838,81 +2264,96 @@ def calculate(element, ap, parent):
                                         bad_lines[cs] = [transition]
                                     else:
                                         bad_lines[cs].append(transition)
-                                    
-                                    x[cs_index * len(the_aug_dictionary) + index] = []
+
+                                    x[cs_index *
+                                        len(the_aug_dictionary) + index] = []
                                     bad_selection += 1
-                
+
                     text = "Transitions not available for:\n"
                     for cs in bad_lines:
                         text += cs + ": " + str(bad_lines[cs]) + "\n"
-                    
+
                     messagebox.showwarning("Wrong Auger Transition", text)
-                    
+
                     if len(bad_lines) == len(ploted_cs):
                         intersection = list(bad_lines.values())[-1]
                         for cs in bad_lines:
                             l1 = set(bad_lines[cs])
                             intersection = list(l1.intersection(intersection))
-                        
-                        messagebox.showwarning("Common Auger Transitions", intersection)
+
+                        messagebox.showwarning(
+                            "Common Auger Transitions", intersection)
                     else:
-                        messagebox.showwarning("Common Auger Transitions", "Every transition is plotted for at least 1 charge state.")
-                
+                        messagebox.showwarning(
+                            "Common Auger Transitions", "Every transition is plotted for at least 1 charge state.")
+
                 # -------------------------------------------------------------------------------------------
-                # ObtenÃ§Ã£o do valor de xfinal a usar nos cÃ¡clulos dos yy (caso nÃ£o seja selecionado um espectro experimental, porque se fo xfinal Ã© mudado)
-                # (Calcular a dispersÃ£o em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersÃ£o e da resoluÃ§Ã£o experimental)
+                # Obtenção do valor de xfinal a usar nos cáclulos dos yy (caso não seja selecionado um espectro experimental, porque se fo xfinal é mudado)
+                # (Calcular a dispersão em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersão e da resolução experimental)
                 try:
                     if sat == 'Diagram':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                        for j, k in enumerate(x):
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
-                        
-                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+
+                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
 
                     elif sat == 'Satellites' or sat == 'Diagram + Satellites':
                         deltaE = []
-                        for j, k in enumerate(xs):  # Ciclo sobre os elementos de x (ka1, ka2, kb1, etc... 7 no total)
+                        # Ciclo sobre os elementos de x (ka1, ka2, kb1, etc... 7 no total)
+                        for j, k in enumerate(xs):
                             for l, m in enumerate(xs[j]):
                                 if m != []:
                                     deltaE.append(max(m) - min(m))
                         max_value = max(
                             [max(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) + max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])  # valor max de todos os elementos de xs (satt) que tem 7 linhas(ka1, ka2, etc) e o tamanho da lista label1 dentro de cada linha
-                        min_value = min([min(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) - max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
-                    
+                        min_value = min([min(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != [
+                        ]]) - max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
+
                     elif sat == 'Auger':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                        for j, k in enumerate(x):
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
-                        
-                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                    # Definimos o x MÃ­nimo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mn
-                    if x_mn == 'Auto':  # x_mn Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+
+                        max_value = max([max(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                        min_value = min([min(x[i]) for i in range(len(x)) if x[i] != [
+                        ]]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
+                    # Definimos o x Mí­nimo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mn
+                    if x_mn == 'Auto':  # x_mn é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_min = min_value - 2 * min(deltaE)
                         else:
                             array_input_min = min_value - 2 * res * min(deltaE)
                     else:
                         array_input_min = float(x_mn) - enoffset
-                    # Definimos o x MÃ¡ximo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mx
-                    if x_mx == 'Auto':  # x_mx Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Máximo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mx
+                    if x_mx == 'Auto':  # x_mx é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_max = max_value + 2 * min(deltaE)
                         else:
-                            array_input_max = max_value + 2 * res * (min(deltaE))
+                            array_input_max = max_value + \
+                                2 * res * (min(deltaE))
                     else:
                         array_input_max = float(x_mx) - enoffset
                     # Calcular o array com os valores de xfinal igualmente espacados
-                    xfinal = np.linspace(array_input_min, array_input_max, num=num_of_points)
+                    xfinal = np.linspace(
+                        array_input_min, array_input_max, num=num_of_points)
                 except ValueError:
                     xfinal = np.zeros(num_of_points)
                     if not bad_selection:
-                        messagebox.showerror("No Transition", "No transition was chosen")
+                        messagebox.showerror(
+                            "No Transition", "No transition was chosen")
                     else:
-                        messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
+                        messagebox.showerror(
+                            "Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
 
                 # ---------------------------------------------------------------------------------------------------------------
                 # Load e plot do espectro experimental
@@ -1935,18 +2376,25 @@ def calculate(element, ap, parent):
                     residues_graph.set_xlabel('Energy (eV)')
                     residues_graph.set_ylabel('Residues (arb. units)')
                     # print(load)
-                    exp_spectrum = list(csv.reader(open(load, 'r', encoding='utf-8-sig')))  # Carregar a matriz do espectro experimental do ficheiro escolhido no menu
+                    # Carregar a matriz do espectro experimental do ficheiro escolhido no menu
+                    exp_spectrum = list(csv.reader(
+                        open(load, 'r', encoding='utf-8-sig')))
                     for i, it in enumerate(exp_spectrum):
-                        for j, itm in enumerate(exp_spectrum[i]):  # Transformar os valores do espectro experimental para float
+                        # Transformar os valores do espectro experimental para float
+                        for j, itm in enumerate(exp_spectrum[i]):
                             if exp_spectrum[i][j] != '':
                                 exp_spectrum[i][j] = float(itm)
                     xe = np.array([float(row[0]) for row in exp_spectrum])
                     ye = np.array([float(row[1]) for row in exp_spectrum])
-                    if len(exp_spectrum[0]) >= 3: #Se o espectro experimental tiver 3 colunas a terceira sera a incerteza
-                        sigma_exp = np.array([float(row[2]) for row in exp_spectrum])
-                    else:  #Caso contrario utiliza-se raiz do numero de contagens como a incerteza de cada ponto
+                    # Se o espectro experimental tiver 3 colunas a terceira sera a incerteza
+                    if len(exp_spectrum[0]) >= 3:
+                        sigma_exp = np.array([float(row[2])
+                                             for row in exp_spectrum])
+                    else:  # Caso contrario utiliza-se raiz do numero de contagens como a incerteza de cada ponto
                         sigma_exp = np.sqrt(ye)
-                        sigma_exp[sigma_exp == 0] = np.min(sigma_exp[sigma_exp != 0]) #replace zeros with the min unceartanty to prevent an inf chi sqr
+                        # replace zeros with the min unceartanty to prevent an inf chi sqr
+                        sigma_exp[sigma_exp == 0] = np.min(
+                            sigma_exp[sigma_exp != 0])
                     if x_mx == 'Auto':
                         max_exp_lim = max(xe)
                     else:
@@ -1956,82 +2404,103 @@ def calculate(element, ap, parent):
                         min_exp_lim = min(xe)
                     else:
                         min_exp_lim = float(x_mn)
-                    
+
                     for i in range(len(xe)):
                         if min_exp_lim <= xe[i] <= max_exp_lim:
                             exp_x.append(xe[i])
                             exp_y.append(ye[i])
                             exp_sigma.append(sigma_exp[i])
 
-                    xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
-                    
+                    xfinal = np.array(np.linspace(
+                        min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
+
                     if normalize == 'One':
-                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados Ã  unidade
-                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        # Plot dos dados experimentais normalizados à unidade
+                        graph_area.scatter(
+                            exp_x, exp_y / max(exp_y), marker='.', label='Exp.')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, np.array(
+                            exp_sigma) / max(exp_y), 'k--')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
+                        residues_graph.plot(
+                            exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')
                     else:
-                        graph_area.scatter(exp_x, exp_y, marker='.', label='Exp.')  # Plot dos dados experimentais
-                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        # Plot dos dados experimentais
+                        graph_area.scatter(
+                            exp_x, exp_y, marker='.', label='Exp.')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')
+                        # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')
 
                     graph_area.legend()
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # Leitura dos valores da eficÃ¡cia do detector:
+                # Leitura dos valores da eficácia do detector:
                 efficiency_values = []
                 energy_values = []
                 if effic_file_name != "No":
                     try:
-                        efficiency = list(csv.reader(open(effic_file_name, 'r')))
+                        efficiency = list(csv.reader(
+                            open(effic_file_name, 'r')))
                         for pair in efficiency:
                             energy_values.append(float(pair[0]))
                             efficiency_values.append(float(pair[1]))
                     except FileNotFoundError:
-                        messagebox.showwarning("Error", "Efficiency File is not Avaliable")
+                        messagebox.showwarning(
+                            "Error", "Efficiency File is not Avaliable")
                 # ---------------------------------------------------------------------------------------------------------------
-                # VariÃ¡veis necessÃ¡rias para os cÃ¡lcuos dos y e para os plots:
-                ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res,energy_values, efficiency_values,enoffset)
+                # Variáveis necessárias para os cálcuos dos y e para os plots:
+                ytot, yfinal, yfinals = y_calculator(
+                    sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo da variÃ¡vel de notificaÃ§Ã£o:
-                # O cÃ¡lculo Ã© feito na funÃ§Ã£o normalizer, e Ã© lÃ¡ que Ã© lida a escolha de normalizaÃ§Ã£o do utilizador. Aqui sÃ³ passamos dados para a funÃ§ao
+                # Cálculo da variável de notificação:
+                # O cálculo é feito na função normalizer, e é lá que é lida a escolha de normalização do utilizador. Aqui só passamos dados para a funçao
                 if load != 'No':
                     normalization_var = normalizer(y0, max(exp_y), max(ytot))
                 else:
                     if normalizevar.get() == 'ExpMax':  # Se tentarem normalizar ao maximo experimental sem terem carregado espectro
-                        messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
-                        normalizevar.set('No')  # Define a variavel global de normalizaÃ§Ã£o para nÃ£o normalizar
+                        messagebox.showwarning(
+                            "No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
+                        # Define a variavel global de normalização para não normalizar
+                        normalizevar.set('No')
                     normalization_var = normalizer(y0, 1, max(ytot))
                 # ---------------------------------------------------------------------------------------------------------------
                 # Autofit:
                 # start_time = time.time()
                 if autofit == 'Yes':
-                    # Fazemos fit apenas se houver um grÃ¡fico experimental carregado
+                    # Fazemos fit apenas se houver um gráfico experimental carregado
                     if load != 'No':
 
-                        # Criar os parametros que vÃ£o ser otimizados
+                        # Criar os parametros que vão ser otimizados
                         params = Parameters()
 
                         # Offset em energia
-                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do grÃ¡fico
-                        params.add('xoff', value=enoffset, min=enoffset - xoff_lim, max=enoffset + xoff_lim)
+                        # O offset vai variar entre o valor introduzido +/- 10% do tamanho do gráfico
+                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1
+                        params.add('xoff', value=enoffset, min=enoffset -
+                                   xoff_lim, max=enoffset + xoff_lim)
 
                         # Offset no yy
                         yoff_lim = (max(exp_y) - min(exp_y)) * 0.1
-                        params.add('yoff', value=y0, min=y0 - yoff_lim, max=y0 + yoff_lim)
+                        params.add('yoff', value=y0, min=y0 -
+                                   yoff_lim, max=y0 + yoff_lim)
 
-                        # ResoluÃ§Ã£o experimental
+                        # Resolução experimental
                         res_lim = res * 3
-                        params.add('res', value=res, min=0.01, max=res + res_lim)
+                        params.add('res', value=res, min=0.01,
+                                   max=res + res_lim)
 
-                        # # VariÃ¡vel de normalizaÃ§Ã£o
+                        # # Variável de normalização
                         # norm_lim = normalization_var * 0.5
                         # params.add('normal', value=normalization_var)
 
                         # Parametro na Normalization var
                         params.add('ytot_max', value=max(ytot))
                         number_of_fit_variables = len(params.valuesdict())
-                        minner = Minimizer(func2min, params, fcn_args=(exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values,enoffset))
+                        minner = Minimizer(func2min, params, fcn_args=(
+                            exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset))
                         result = minner.minimize()
                         # report_fit(result)
 
@@ -2041,15 +2510,18 @@ def calculate(element, ap, parent):
                         # Offset no yy a ser definido para o plot final das linhas
                         y0 = result.params['yoff'].value
                         yoffset.set(y0)
-                        # ResoluÃ§Ã£o experimental a ser definido para o plot final das linhas
+                        # Resolução experimental a ser definido para o plot final das linhas
                         res = result.params['res'].value
                         exp_resolution.set(res)
                         # normalization_var = result.params['normal'].value
                         ytot_max = result.params['ytot_max'].value
 
-                        xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
-                        ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values,enoffset)
-                        normalization_var = normalizer(y0, max(exp_y), ytot_max)
+                        xfinal = np.array(np.linspace(
+                            min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
+                        ytot, yfinal, yfinals = y_calculator(
+                            sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
+                        normalization_var = normalizer(
+                            y0, max(exp_y), ytot_max)
                         if messagebox.askyesno("Fit Saving", "Do you want to save this fit?"):
                             with open(file_namer("Fit", time_of_click, ".txt"), 'w') as file:
                                 file.write(fit_report(result))
@@ -2058,7 +2530,8 @@ def calculate(element, ap, parent):
                         # residues_graph.legend(title="Red.= " + "{:.5f}".format(result.redchi), loc='lower right')
 
                     else:
-                        messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
+                        messagebox.showerror(
+                            "Error", "Autofit is only avaliable if an experimental spectrum is loaded")
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Plot das linhas
                 # print('Time of fit execution: --- %s seconds ---' % (time.time() - start_time))
@@ -2066,132 +2539,150 @@ def calculate(element, ap, parent):
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, key in enumerate(the_dictionary):
                             if the_dictionary[key]["selected_state"]:
-                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(
+                                    col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                 graph_area.legend()
                 elif sat == 'Satellites':
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, key in enumerate(the_dictionary):
                             if the_dictionary[key]["selected_state"]:
                                 for l, m in enumerate(yfinals[cs_index * len(the_dictionary) + index]):
-                                    if max(m) != 0:  # Excluir as linhas que nao foram seleccionados nos botoes
-                                        graph_area.plot(xfinal + enoffset, (np.array(yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                    # Excluir as linhas que nao foram seleccionados nos botoes
+                                    if max(m) != 0:
+                                        graph_area.plot(xfinal + enoffset, (np.array(yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0,
+                                                        label=key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                         graph_area.legend()
                 elif sat == 'Diagram + Satellites':
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, key in enumerate(the_dictionary):
                             if the_dictionary[key]["selected_state"]:
-                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(
+                                    col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                 graph_area.legend()
-                        
+
                         for index, key in enumerate(the_dictionary):
                             if the_dictionary[key]["selected_state"]:
                                 for l, m in enumerate(yfinals[cs_index * len(the_dictionary) + index]):
-                                    if max(m) != 0:  # Excluir as linhas que nao foram seleccionados nos botoes
-                                        graph_area.plot(xfinal + enoffset, (np.array(yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0, label=cs + ' ' + key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                    # Excluir as linhas que nao foram seleccionados nos botoes
+                                    if max(m) != 0:
+                                        graph_area.plot(xfinal + enoffset, (np.array(yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0, label=cs +
+                                                        ' ' + key + ' - ' + labeldict[label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                         graph_area.legend()
                 elif sat == 'Auger':
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, key in enumerate(the_aug_dictionary):
                             if the_aug_dictionary[key]["selected_state"]:
-                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_aug_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                graph_area.plot(xfinal + enoffset, (np.array(yfinal[cs_index * len(the_aug_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(
+                                    col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                 graph_area.legend()
                 if total == 'Total':
-                    graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
+                    graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0,
+                                    label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
                     graph_area.legend()
                 # ------------------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo dos Residuos
+                # Cálculo dos Residuos
                 if load != 'No':
                     # if load != 'No':
-                    # Definimos uma funÃ§Ã£o que recebe um numero, e tendo como dados o que passamos Ã  interp1d faz a sua interpolaÃ§Ã£o
+                    # Definimos uma função que recebe um numero, e tendo como dados o que passamos à interp1d faz a sua interpolação
                     # print(*ytot, sep=',')
-                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o grÃ¡fico de resÃ­duos
-                    f_interpolate = interp1d(xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
-                    # Vetor para guardar o y dos residuos (nÃ£o precisamos de guardar o x porque Ã© igual ao exp_x
+                    # Criar lista vazia para o gráfico de resí­duos
+                    y_interp = [0 for i in range(len(exp_x))]
+                    f_interpolate = interp1d(
+                        xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
+                    # Vetor para guardar o y dos residuos (não precisamos de guardar o x porque é igual ao exp_x
                     y_res = [0 for x in range(len(exp_x))]
-                    # VariÃ¡vel para a soma do chi quadrado
+                    # Variável para a soma do chi quadrado
                     chi_sum = 0
                     # Percorremos todos os valores de x
                     for g, h in enumerate(exp_x):
-                        # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                        # Obtemos o valor de y interpolado pela função definida a cima
                         y_interp[g] = f_interpolate(h)
-                        # CÃ¡lculamos o y dos residuos subtraindo o interpolado ao experimental
+                        # Cálculamos o y dos residuos subtraindo o interpolado ao experimental
                         if normalize == 'ExpMax' or normalize == 'No':
-                            y_res[g] = (exp_y[g] - y_interp[g]) 
-                            #y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
+                            y_res[g] = (exp_y[g] - y_interp[g])
+                            # y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
                             chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
                         elif normalize == 'One':
                             y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
-                            #y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
-                            chi_sum += (y_res[g] **2) / ((exp_sigma[g]/ max(exp_y))**2) 
+                            # y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
+                            chi_sum += (y_res[g] ** 2) / \
+                                ((exp_sigma[g] / max(exp_y))**2)
                         #     y_res[g] = (exp_y[g] / max(exp_y)) - y_interp[g]
-                        # SomatÃ³rio para o cÃ¡lculo de chi quad
-                    
+                        # Somatório para o cálculo de chi quad
+
                     chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
                     residues_graph.plot(exp_x, y_res)
                     print("Valor Manual Chi", chi_sqrd)
-                    residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
+                    residues_graph.legend(
+                        title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
                 # ------------------------------------------------------------------------------------------------------------------------
-                # DefiniÃ§Ã£o do label do eixo yy e, consoante haja ou nÃ£o um grÃ¡fico de resÃ­duos, do eixo  xx
+                # Definição do label do eixo yy e, consoante haja ou não um gráfico de resí­duos, do eixo  xx
                 graph_area.set_ylabel('Intensity (arb. units)')
                 graph_area.legend(title=element_name, title_fontsize='large')
                 if load == 'No':
                     graph_area.set_xlabel('Energy (eV)')
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Controlo do numero de entradas na legenda
-                number_of_labels = len(graph_area.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-                legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
-                labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+                # Descubro quantas entradas vai ter a legenda
+                number_of_labels = len(graph_area.legend().get_texts())
+                # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
+                legend_columns = 1
+                labels_per_columns = number_of_labels / \
+                    legend_columns  # Numero de entradas por coluna
+                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                     legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
-                    labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
-            
+                    # Recalculo o numero de entradas por coluna
+                    labels_per_columns = number_of_labels / legend_columns
+                # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
+                graph_area.legend(ncol=legend_columns)
+
             f.canvas.draw()
 
         def on_key_event(event):  # NAO SEI BEM O QUE ISTO FAZ
             print('you pressed %s' % event.key)
             key_press_handler(event, canvas, toolbar)
 
-        canvas.mpl_connect('key_press_event', on_key_event)  # NAO SEI BEM O QUE ISTO FAZ
+        # NAO SEI BEM O QUE ISTO FAZ
+        canvas.mpl_connect('key_press_event', on_key_event)
 
         def _quit():
             original = satelite_var.get()
-            
+
             satelite_var.set('Diagram')
-            
+
             for transition in the_dictionary:
                 if the_dictionary[transition]["selected_state"]:
                     dict_updater(transition)
-            
+
             satelite_var.set('Auger')
-            
+
             for transition in the_aug_dictionary:
                 if the_aug_dictionary[transition]["selected_state"]:
                     dict_updater(transition)
-            
+
             satelite_var.set(original)
-            
+
             sim.quit()  # stops mainloop
             sim.destroy()  # this is necessary on Windows to prevent
             # Fatal Python Error: PyEval_RestoreThread: NULL tstate
 
         def restarter():
             original = satelite_var.get()
-            
+
             satelite_var.set('Diagram')
-            
+
             for transition in the_dictionary:
                 if the_dictionary[transition]["selected_state"]:
                     dict_updater(transition)
-            
+
             satelite_var.set('Auger')
-            
+
             for transition in the_aug_dictionary:
                 if the_aug_dictionary[transition]["selected_state"]:
                     dict_updater(transition)
-            
+
             satelite_var.set(original)
-            
+
             sim.quit()  # stops mainloop
             sim.destroy()
             parent.destroy()
@@ -2199,35 +2690,49 @@ def calculate(element, ap, parent):
             # Fatal Python Error: PyEval_RestoreThread: NULL tstate
 
         def load():  # funcao que muda o nome da variavel correspondente ao ficheiro experimental
-            fname = askopenfilename(filetypes=(("Spectra files", "*.csv *.txt"), ("All files", "*.*")))
-            loadvar.set(fname)  # Muda o nome da variavel loadvar para a string correspondente ao path do ficheiro seleccionado
+            fname = askopenfilename(filetypes=(
+                ("Spectra files", "*.csv *.txt"), ("All files", "*.*")))
+            # Muda o nome da variavel loadvar para a string correspondente ao path do ficheiro seleccionado
+            loadvar.set(fname)
 
         def load_effic_file():
-            effic_fname = askopenfilename(filetypes =(("Efficiency files", "*.csv"), ("All files", "*.*")))
+            effic_fname = askopenfilename(filetypes=(
+                ("Efficiency files", "*.csv"), ("All files", "*.*")))
             effic_var.set(effic_fname)
 
         def selected(event):
-            text_T = drop_menu.get()  # LÃª Texto da box com as transiÃ§Ãµes
-            dict_updater(text_T)  # Faz update do dicionÃ¡rio com a transiÃ§Ã£o lida
-            to_print = ''  # Texto a imprimir no label com as transiÃ§Ãµes selecionadas
-            
+            text_T = drop_menu.get()  # Lê Texto da box com as transições
+            # Faz update do dicionário com a transição lida
+            dict_updater(text_T)
+            to_print = ''  # Texto a imprimir no label com as transições selecionadas
+
             if satelite_var.get() != 'Auger':
-                if the_dictionary[text_T]["selected_state"]:  # Se a transiÃ§Ã£o estiver selecionada:
-                    transition_list.append(text_T)  # Ã‰ adicionada Ã  lista de transiÃ§Ãµes que vai para o label
-                elif not the_dictionary[text_T]["selected_state"]:  # Se for descelecionada
-                    transition_list.remove(text_T)  # Ã‰ removida da lista que vai para o label
+                # Se a transição estiver selecionada:
+                if the_dictionary[text_T]["selected_state"]:
+                    # é adicionada à lista de transições que vai para o label
+                    transition_list.append(text_T)
+                # Se for descelecionada
+                elif not the_dictionary[text_T]["selected_state"]:
+                    # é removida da lista que vai para o label
+                    transition_list.remove(text_T)
             else:
-                if the_aug_dictionary[text_T]["selected_state"]:  # Se a transiÃ§Ã£o estiver selecionada:
-                    transition_list.append(text_T)  # Ã‰ adicionada Ã  lista de transiÃ§Ãµes que vai para o label
-                elif not the_aug_dictionary[text_T]["selected_state"]:  # Se for descelecionada
-                    transition_list.remove(text_T)  # Ã‰ removida da lista que vai para o label
-            
-            for a, b in enumerate(transition_list):  # Este for serve para colocar as virgulas entre as transiÃ§Ãµes que vÃ£o para o label
+                # Se a transição estiver selecionada:
+                if the_aug_dictionary[text_T]["selected_state"]:
+                    # é adicionada à lista de transições que vai para o label
+                    transition_list.append(text_T)
+                # Se for descelecionada
+                elif not the_aug_dictionary[text_T]["selected_state"]:
+                    # é removida da lista que vai para o label
+                    transition_list.remove(text_T)
+
+            # Este for serve para colocar as vírgulas entre as transições que vão para o label
+            for a, b in enumerate(transition_list):
                 if len(transition_list) == a + 1:
                     to_print += str(b) + ' '
                 else:
                     to_print += str(b) + ', '
-            label_text.set('Selected Transitions: ' + to_print)  # Definimos o novo label
+            # Definimos o novo label
+            label_text.set('Selected Transitions: ' + to_print)
 
         def enter_function(event):
             plot_stick(a)
@@ -2236,12 +2741,13 @@ def calculate(element, ap, parent):
             number_points.set(500)
             x_max.set('Auto')
             x_min.set('Auto')
-        
+
         def update_transition_dropdown():
             global transition_list
-            
+
             if satelite_var.get() != 'Auger':
-                drop_menu['values'] = [transition for transition in the_dictionary]
+                drop_menu['values'] = [
+                    transition for transition in the_dictionary]
                 if not any([the_dictionary[transition]["selected_state"] for transition in the_dictionary]):
                     transition_list = []
                     label_text.set('Select a Transition: ')
@@ -2249,288 +2755,338 @@ def calculate(element, ap, parent):
                     for transition in the_aug_dictionary:
                         the_aug_dictionary[transition]["selected_state"] = False
             else:
-                drop_menu['values'] = [transition for transition in the_aug_dictionary]
+                drop_menu['values'] = [
+                    transition for transition in the_aug_dictionary]
                 if not any([the_aug_dictionary[transition]["selected_state"] for transition in the_aug_dictionary]):
                     transition_list = []
                     label_text.set('Select a Transition: ')
                     drop_menu.set('Transitions:')
                     for transition in the_dictionary:
                         the_dictionary[transition]["selected_state"] = False
-            
 
         def configureCSMix():
             global PCS_radMixValues, NCS_radMixValues, PCS_augMixValues, NCS_augMixValues
-            
+
             mixer = Toplevel(sim)
             mixer.title("Charge State Mixer")
-            mixer.grab_set() # Make this window the only interactable one until its closed
-            
+            mixer.grab_set()  # Make this window the only interactable one until its closed
+
             mixer.geometry("700x300")
-            
+
             import re
+
             def check_num(newval):
                 return re.match('^(?:[0-9]*[.]?[0-9]*)$', newval) is not None
             check_num_wrapper = (mixer.register(check_num), '%P')
-            
+
             # -------------------------------------------------------------------------------------------------------------------------------------------
             # RADIATIVE
-            
-            
+
             slidersRad = []
             CS_labelsRad = []
-            PCS_order = [int(cs.split('intensity_')[1].split('.out')[0].split('+')[-1]) for cs in radiative_files if '+' in cs]
-            NCS_order = [int(cs.split('intensity_')[1].split('.out')[0].split('-')[-1]) for cs in radiative_files if '+' not in cs]
-            
+            PCS_order = [int(cs.split('intensity_')[1].split('.out')[0].split(
+                '+')[-1]) for cs in radiative_files if '+' in cs]
+            NCS_order = [int(cs.split('intensity_')[1].split('.out')[0].split(
+                '-')[-1]) for cs in radiative_files if '+' not in cs]
+
             CS_mixEntriesRad = []
-            
-            labelRad = ttk.Label(mixer, text = "Charge States With Radiative Transitions For Selected Atom:")
-            labelRad.grid(column=0, row=0, columnspan=len(radiative_files), pady=40)
-            
+
+            labelRad = ttk.Label(
+                mixer, text="Charge States With Radiative Transitions For Selected Atom:")
+            labelRad.grid(column=0, row=0, columnspan=len(
+                radiative_files), pady=40)
+
             if len(PCS_radMixValues) == 0:
                 for cs in radiative_files:
                     if '+' in cs:
                         PCS_radMixValues.append(StringVar())
-                        CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=PCS_radMixValues[-1], validate='key', validatecommand=check_num_wrapper))
-                        slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_radMixValues[-1]))
-                        CS_labelsRad.append(ttk.Label(mixer, text = cs.split('intensity_')[1].split('.out')[0]))
+                        CS_mixEntriesRad.append(ttk.Entry(
+                            mixer, textvariable=PCS_radMixValues[-1], validate='key', validatecommand=check_num_wrapper))
+                        slidersRad.append(ttk.Scale(
+                            mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_radMixValues[-1]))
+                        CS_labelsRad.append(
+                            ttk.Label(mixer, text=cs.split('intensity_')[1].split('.out')[0]))
                         slidersRad[-1].set(0.0)
             else:
                 i = 0
                 for cs in radiative_files:
                     if '+' in cs:
-                        CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=PCS_radMixValues[i], validate='key', validatecommand=check_num_wrapper))                        
-                        slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_radMixValues[i]))
-                        CS_labelsRad.append(ttk.Label(mixer, text = cs.split('intensity_')[1].split('.out')[0]))
-                        
+                        CS_mixEntriesRad.append(ttk.Entry(
+                            mixer, textvariable=PCS_radMixValues[i], validate='key', validatecommand=check_num_wrapper))
+                        slidersRad.append(ttk.Scale(
+                            mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_radMixValues[i]))
+                        CS_labelsRad.append(
+                            ttk.Label(mixer, text=cs.split('intensity_')[1].split('.out')[0]))
+
                         i += 1
-            
+
             if len(NCS_radMixValues) == 0:
                 for cs in radiative_files:
                     if '+' not in cs:
-                        NCS_radMixValues.append(StringVar())                        
-                        CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=NCS_radMixValues[-1], validate='key', validatecommand=check_num_wrapper))
-                        slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_radMixValues[-1]))
-                        CS_labelsRad.append(ttk.Label(mixer, text = cs.split('intensity_')[1].split('.out')[0]))
+                        NCS_radMixValues.append(StringVar())
+                        CS_mixEntriesRad.append(ttk.Entry(
+                            mixer, textvariable=NCS_radMixValues[-1], validate='key', validatecommand=check_num_wrapper))
+                        slidersRad.append(ttk.Scale(
+                            mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_radMixValues[-1]))
+                        CS_labelsRad.append(
+                            ttk.Label(mixer, text=cs.split('intensity_')[1].split('.out')[0]))
                         slidersRad[-1].set(0.0)
             else:
                 i = 0
                 for cs in radiative_files:
                     if '+' not in cs:
-                        CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=NCS_radMixValues[i], validate='key', validatecommand=check_num_wrapper))
-                        slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_radMixValues[i]))                        
-                        CS_labelsRad.append(ttk.Label(mixer, text = cs.split('intensity_')[1].split('.out')[0]))
-                        
+                        CS_mixEntriesRad.append(ttk.Entry(
+                            mixer, textvariable=NCS_radMixValues[i], validate='key', validatecommand=check_num_wrapper))
+                        slidersRad.append(ttk.Scale(
+                            mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_radMixValues[i]))
+                        CS_labelsRad.append(
+                            ttk.Label(mixer, text=cs.split('intensity_')[1].split('.out')[0]))
+
                         i += 1
-                
+
             initial_PCS_Order = PCS_order.copy()
             initial_NCS_Order = NCS_order.copy()
             colIndex = 0
             while len(NCS_order) > 0:
                 idx = initial_NCS_Order.index(min(NCS_order))
-                
-                CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
-                slidersRad[idx].grid(column=colIndex, row=2, sticky=(N,S), pady=5)
-                CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W,E), padx=5)
-                
+
+                CS_labelsRad[idx].grid(
+                    column=colIndex, row=1, sticky=(N), pady=5)
+                slidersRad[idx].grid(
+                    column=colIndex, row=2, sticky=(N, S), pady=5)
+                CS_mixEntriesRad[idx].grid(
+                    column=colIndex, row=3, sticky=(W, E), padx=5)
+
                 mixer.columnconfigure(colIndex, weight=1)
-                
+
                 colIndex += 1
                 del NCS_order[NCS_order.index(min(NCS_order))]
-            
+
             while len(PCS_order) > 0:
                 idx = initial_PCS_Order.index(min(PCS_order))
-                
-                CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
-                slidersRad[idx].grid(column=colIndex, row=2, sticky=(N,S), pady=5)
-                CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W,E), padx=5)
-                
+
+                CS_labelsRad[idx].grid(
+                    column=colIndex, row=1, sticky=(N), pady=5)
+                slidersRad[idx].grid(
+                    column=colIndex, row=2, sticky=(N, S), pady=5)
+                CS_mixEntriesRad[idx].grid(
+                    column=colIndex, row=3, sticky=(W, E), padx=5)
+
                 mixer.columnconfigure(colIndex, weight=1)
-                
+
                 colIndex += 1
                 del PCS_order[PCS_order.index(min(PCS_order))]
-            
+
             mixer.rowconfigure(2, weight=1)
-            
+
             # ------------------------------------------------------------------------------------------------------------------------------------
             # AUGER
-            
+
             if len(auger_files) > 0:
                 mixer.geometry("800x600")
-                
+
                 slidersAug = []
                 CS_labelsAug = []
-                PCS_order = [int(cs.split('augrate_')[1].split('.out')[0].split('+')[-1]) for cs in auger_files if '+' in cs]
-                NCS_order = [int(cs.split('augrate_')[1].split('.out')[0].split('-')[-1]) for cs in auger_files if '+' not in cs]
-                
+                PCS_order = [int(cs.split('augrate_')[1].split('.out')[0].split(
+                    '+')[-1]) for cs in auger_files if '+' in cs]
+                NCS_order = [int(cs.split('augrate_')[1].split('.out')[0].split(
+                    '-')[-1]) for cs in auger_files if '+' not in cs]
+
                 CS_mixEntriesAug = []
-                
-                labelAug = ttk.Label(mixer, text = "Charge States With Auger Transitions For Selected Atom:")
-                labelAug.grid(column=0, row=4, columnspan=len(radiative_files), pady=40)
-                
+
+                labelAug = ttk.Label(
+                    mixer, text="Charge States With Auger Transitions For Selected Atom:")
+                labelAug.grid(column=0, row=4, columnspan=len(
+                    radiative_files), pady=40)
+
                 if len(PCS_augMixValues) == 0:
                     for cs in auger_files:
                         if '+' in cs:
                             PCS_augMixValues.append(StringVar())
-                            CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=PCS_augMixValues[-1], validate='key', validatecommand=check_num_wrapper))
-                            slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_augMixValues[-1]))
-                            CS_labelsAug.append(ttk.Label(mixer, text = cs.split('augrate_')[1].split('.out')[0]))
+                            CS_mixEntriesAug.append(ttk.Entry(
+                                mixer, textvariable=PCS_augMixValues[-1], validate='key', validatecommand=check_num_wrapper))
+                            slidersAug.append(ttk.Scale(
+                                mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_augMixValues[-1]))
+                            CS_labelsAug.append(
+                                ttk.Label(mixer, text=cs.split('augrate_')[1].split('.out')[0]))
                             slidersAug[-1].set(0.0)
                 else:
                     i = 0
                     for cs in auger_files:
                         if '+' in cs:
-                            CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=PCS_augMixValues[i], validate='key', validatecommand=check_num_wrapper))                        
-                            slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_augMixValues[i]))
-                            CS_labelsAug.append(ttk.Label(mixer, text = cs.split('augrate_')[1].split('.out')[0]))
-                            
+                            CS_mixEntriesAug.append(ttk.Entry(
+                                mixer, textvariable=PCS_augMixValues[i], validate='key', validatecommand=check_num_wrapper))
+                            slidersAug.append(ttk.Scale(
+                                mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=PCS_augMixValues[i]))
+                            CS_labelsAug.append(
+                                ttk.Label(mixer, text=cs.split('augrate_')[1].split('.out')[0]))
+
                             i += 1
-                
+
                 if len(NCS_augMixValues) == 0:
                     for cs in auger_files:
                         if '+' not in cs:
-                            NCS_augMixValues.append(StringVar())                        
-                            CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=NCS_augMixValues[-1], validate='key', validatecommand=check_num_wrapper))
-                            slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_augMixValues[-1]))
-                            CS_labelsAug.append(ttk.Label(mixer, text = cs.split('augrate_')[1].split('.out')[0]))
+                            NCS_augMixValues.append(StringVar())
+                            CS_mixEntriesAug.append(ttk.Entry(
+                                mixer, textvariable=NCS_augMixValues[-1], validate='key', validatecommand=check_num_wrapper))
+                            slidersAug.append(ttk.Scale(
+                                mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_augMixValues[-1]))
+                            CS_labelsAug.append(
+                                ttk.Label(mixer, text=cs.split('augrate_')[1].split('.out')[0]))
                             slidersAug[-1].set(0.0)
                 else:
                     i = 0
                     for cs in auger_files:
                         if '+' not in cs:
-                            CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=NCS_augMixValues[i], validate='key', validatecommand=check_num_wrapper))
-                            slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_augMixValues[i]))                        
-                            CS_labelsAug.append(ttk.Label(mixer, text = cs.split('augrate_')[1].split('.out')[0]))
-                            
+                            CS_mixEntriesAug.append(ttk.Entry(
+                                mixer, textvariable=NCS_augMixValues[i], validate='key', validatecommand=check_num_wrapper))
+                            slidersAug.append(ttk.Scale(
+                                mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=NCS_augMixValues[i]))
+                            CS_labelsAug.append(
+                                ttk.Label(mixer, text=cs.split('augrate_')[1].split('.out')[0]))
+
                             i += 1
-                    
+
                 initial_PCS_Order = PCS_order.copy()
                 initial_NCS_Order = NCS_order.copy()
                 colIndex = 0
                 while len(NCS_order) > 0:
                     idx = initial_NCS_Order.index(min(NCS_order))
-                    
-                    CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
-                    slidersAug[idx].grid(column=colIndex, row=6, sticky=(N,S), pady=5)
-                    CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W,E), padx=5)
-                    
+
+                    CS_labelsAug[idx].grid(
+                        column=colIndex, row=5, sticky=(N), pady=5)
+                    slidersAug[idx].grid(
+                        column=colIndex, row=6, sticky=(N, S), pady=5)
+                    CS_mixEntriesAug[idx].grid(
+                        column=colIndex, row=7, sticky=(W, E), padx=5)
+
                     mixer.columnconfigure(colIndex, weight=1)
-                    
+
                     colIndex += 1
                     del NCS_order[NCS_order.index(min(NCS_order))]
-                
+
                 while len(PCS_order) > 0:
                     idx = initial_PCS_Order.index(min(PCS_order))
-                    
-                    CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
-                    slidersAug[idx].grid(column=colIndex, row=6, sticky=(N,S), pady=5)
-                    CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W,E), padx=5)
-                    
+
+                    CS_labelsAug[idx].grid(
+                        column=colIndex, row=5, sticky=(N), pady=5)
+                    slidersAug[idx].grid(
+                        column=colIndex, row=6, sticky=(N, S), pady=5)
+                    CS_mixEntriesAug[idx].grid(
+                        column=colIndex, row=7, sticky=(W, E), padx=5)
+
                     mixer.columnconfigure(colIndex, weight=1)
-                    
+
                     colIndex += 1
                     del PCS_order[PCS_order.index(min(PCS_order))]
-                
+
                 mixer.rowconfigure(6, weight=1)
-            
+
             # ------------------------------------------------------------------------------------------------------------------------------------
             # Ion Population slider
-            
+
             Ion_Populations = {}
-            
+
             combined_x = []
             combined_y = []
-            
+
             for i, cs in enumerate(ionpopdata[0]):
                 Ion_Populations[cs + '_x'] = []
                 Ion_Populations[cs + '_y'] = []
-                
+
                 col = i * 2
-                
+
                 for vals in ionpopdata[1:]:
                     if '---' not in vals[col]:
                         combined_x.append(float(vals[col]))
                         combined_y.append(float(vals[col + 1]))
                         if float(vals[col]) not in Ion_Populations[cs + '_x']:
                             Ion_Populations[cs + '_x'].append(float(vals[col]))
-                            Ion_Populations[cs + '_y'].append(float(vals[col + 1]))
-                
-            
+                            Ion_Populations[cs +
+                                            '_y'].append(float(vals[col + 1]))
+
             y_max = max(combined_y)
             for cs in ionpopdata[0]:
-                Ion_Populations[cs + '_y'] = [pop * 100 / y_max for pop in Ion_Populations[cs + '_y']]
-            
+                Ion_Populations[cs + '_y'] = [pop * 100 /
+                                              y_max for pop in Ion_Populations[cs + '_y']]
+
             Ion_Population_Functions = {}
-            #linear interpolation because of "corners" in the distribution functions
+            # linear interpolation because of "corners" in the distribution functions
             for cs in ionpopdata[0]:
                 order = np.argsort(Ion_Populations[cs + '_x'])
-                Ion_Population_Functions[cs] = interp1d(np.array(Ion_Populations[cs + '_x'])[order], np.array(Ion_Populations[cs + '_y'])[order], kind='linear')
-            
+                Ion_Population_Functions[cs] = interp1d(np.array(
+                    Ion_Populations[cs + '_x'])[order], np.array(Ion_Populations[cs + '_y'])[order], kind='linear')
+
             combined_x = list(set(combined_x))
-            
+
             temperature_max = max(combined_x)
             temperature_min = min(combined_x)
-            
+
             if len(auger_files) > 0:
                 fig_row = 7
             else:
                 fig_row = 4
-            
-            # Figura onde o grÃ¡fico vai ser desenhado
-            f = Figure(figsize=(10, 5), dpi=100)  # canvas para o grafico do espectro
+
+            # Figura onde o gráfico vai ser desenhado
+            # canvas para o gráfico do espectro
+            f = Figure(figsize=(10, 5), dpi=100)
             # plt.style.use('ggplot') Estilo para os plots
-            a = f.add_subplot(111)  # zona onde estara o grafico
+            a = f.add_subplot(111)  # zona onde estara o gráfico
             a.set_xlabel('Temperature (K)')
             a.set_ylabel('Population')
             # ---------------------------------------------------------------------------------------------------------------
-            # Frames onde se vÃ£o por a figura e os labels e botÃµes e etc
-            figure_frame = Frame(mixer, relief=GROOVE)  # frame para o grafico
-            
-            figure_frame.grid(column=0, row=fig_row, columnspan=max(len(radiative_files), len(auger_files)), pady=20)
-            
+            # Frames onde se vão pôr a figura e os labels e botões e etc
+            figure_frame = Frame(mixer, relief=GROOVE)  # frame para o gráfico
+
+            figure_frame.grid(column=0, row=fig_row, columnspan=max(
+                len(radiative_files), len(auger_files)), pady=20)
+
             canvas = FigureCanvasTkAgg(f, master=figure_frame)
             canvas.get_tk_widget().pack(fill=BOTH, expand=1)
-            
+
             mixer.rowconfigure(fig_row, weight=1)
-            
+
             temperature = StringVar()
             temperature.set(str(temperature_min))
             prev_line = a.axvline(x=float(temperature.get()), color='b')
-            
+
             def update_temp_line(event, arg1, arg2):
                 prev_line.set_xdata(float(temperature.get()))
-                
+
                 f.canvas.draw()
                 f.canvas.flush_events()
-                
+
                 for cs in Ion_Population_Functions:
                     if len(PCS_radMixValues) > 0:
                         i = 0
                         for cs_file in radiative_files:
                             if cs in cs_file:
                                 try:
-                                    PCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                                    PCS_radMixValues[i].set(
+                                        str(Ion_Population_Functions[cs](float(temperature.get()))))
                                 except:
                                     PCS_radMixValues[i].set("0.0")
-                                
+
                                 break
-                        
+
                             if '+' in cs:
                                 i += 1
-                        
+
                     if len(NCS_radMixValues) > 0:
                         i = 0
                         for cs_file in radiative_files:
                             if cs in cs_file:
                                 try:
-                                    NCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                                    NCS_radMixValues[i].set(
+                                        str(Ion_Population_Functions[cs](float(temperature.get()))))
                                 except:
                                     NCS_radMixValues[i].set("0.0")
-                                
+
                                 break
-                            
+
                             if '+' not in cs:
                                 i += 1
-                
+
                 if len(auger_files) > 0:
                     for cs in Ion_Population_Functions:
                         if len(PCS_augMixValues) > 0:
@@ -2538,80 +3094,99 @@ def calculate(element, ap, parent):
                             for cs_file in auger_files:
                                 if cs in cs_file:
                                     try:
-                                        PCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                                        PCS_augMixValues[i].set(
+                                            str(Ion_Population_Functions[cs](float(temperature.get()))))
                                     except:
                                         PCS_augMixValues[i].set("0.0")
-                                    
+
                                     break
-                            
+
                                 if '+' in cs:
                                     i += 1
-                            
+
                         if len(NCS_augMixValues) > 0:
                             i = 0
                             for cs_file in auger_files:
                                 if cs in cs_file:
                                     try:
-                                        NCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                                        NCS_augMixValues[i].set(
+                                            str(Ion_Population_Functions[cs](float(temperature.get()))))
                                     except:
                                         NCS_augMixValues[i].set("0.0")
-                                    
+
                                     break
-                                
+
                                 if '+' not in cs:
                                     i += 1
-            
+
             temperature.trace_add("write", update_temp_line)
-            temp_slider = ttk.Scale(mixer, orient=HORIZONTAL, length=200, from_=temperature_min, to=temperature_max, variable=temperature)
-            temp_entry = ttk.Entry(mixer, textvariable=temperature, validate='key', validatecommand=check_num_wrapper)
-            temp_slider.grid(column=0, row=fig_row + 1, columnspan=max(len(radiative_files), len(auger_files)) - 1, sticky=(W,E), padx=10, pady=20)
-            temp_entry.grid(column=max(len(radiative_files), len(auger_files)) - 1, row=fig_row + 1, sticky=(W,E), padx=5)
-            
+            temp_slider = ttk.Scale(mixer, orient=HORIZONTAL, length=200,
+                                    from_=temperature_min, to=temperature_max, variable=temperature)
+            temp_entry = ttk.Entry(
+                mixer, textvariable=temperature, validate='key', validatecommand=check_num_wrapper)
+            temp_slider.grid(column=0, row=fig_row + 1, columnspan=max(
+                len(radiative_files), len(auger_files)) - 1, sticky=(W, E), padx=10, pady=20)
+            temp_entry.grid(column=max(len(radiative_files), len(
+                auger_files)) - 1, row=fig_row + 1, sticky=(W, E), padx=5)
+
             mixer.rowconfigure(fig_row + 1, weight=1)
-            
+
             for cs in ionpopdata[0]:
                 x_min = min(Ion_Populations[cs + '_x'])
                 x_max = max(Ion_Populations[cs + '_x'])
-                
+
                 temp_new = np.arange(x_min, x_max, (x_max - x_min) / 100)
                 pop_new = Ion_Population_Functions[cs](temp_new)
-                
+
                 a.plot(temp_new, pop_new, label=cs)
-            
+
             a.legend()
-        
-        sim.bind('<Return>', enter_function)  # BotÃ£o para correr a calculate quando se clica no enter
+
+        # Botão para correr a calculate quando se clica no enter
+        sim.bind('<Return>', enter_function)
         # ---------------------------------------------------------------------------------------------------------------
-        # DropList das transiÃ§Ãµes, Labels e botÃ£o calculate a apresentar na janela
-        drop_menu = ttk.Combobox(buttons_frame, value=[transition for transition in the_dictionary], height=5, width=10)
+        # DropList das transições, Labels e botão calculate a apresentar na janela
+        drop_menu = ttk.Combobox(buttons_frame, value=[
+                                 transition for transition in the_dictionary], height=5, width=10)
         drop_menu.set('Transitions:')
         drop_menu.bind("<<ComboboxSelected>>", selected)
         drop_menu.grid(row=0, column=0)
 
-        # Min Max e NÂº Pontos
+        # Min Max e Nº Pontos
         ttk.Label(buttons_frame2, text="Points").pack(side=LEFT)
-        points = ttk.Entry(buttons_frame2, width=7, textvariable=number_points).pack(side=LEFT)
+        points = ttk.Entry(buttons_frame2, width=7,
+                           textvariable=number_points).pack(side=LEFT)
         ttk.Label(buttons_frame2, text="x Max").pack(side=LEFT)
-        max_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_max).pack(side=LEFT)
+        max_x = ttk.Entry(buttons_frame2, width=7,
+                          textvariable=x_max).pack(side=LEFT)
         ttk.Label(buttons_frame2, text="x Min").pack(side=LEFT)
-        min_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_min).pack(side=LEFT)
-        ttk.Button(master=buttons_frame2, text="Reset", command=lambda: reset_limits()).pack(side=LEFT, padx=(30, 0))
+        min_x = ttk.Entry(buttons_frame2, width=7,
+                          textvariable=x_min).pack(side=LEFT)
+        ttk.Button(master=buttons_frame2, text="Reset",
+                   command=lambda: reset_limits()).pack(side=LEFT, padx=(30, 0))
 
         # Res, Offsets e Calculate
-        ttk.Style().configure('red/black.TButton', foreground='red', background='black')  # , font = ('Sans','10','bold'))  #definicoes botao "calculate"
-        ttk.Button(master=buttons_frame3, text="Calculate", command=lambda: plot_stick(a), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0))
+        # , font = ('Sans','10','bold'))  #definicoes botao "calculate"
+        ttk.Style().configure('red/black.TButton', foreground='red', background='black')
+        ttk.Button(master=buttons_frame3, text="Calculate", command=lambda: plot_stick(
+            a), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0))
         # yoffset
-        res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=yoffset).pack(side=RIGHT)
+        res_entry = ttk.Entry(buttons_frame3, width=7,
+                              textvariable=yoffset).pack(side=RIGHT)
         ttk.Label(buttons_frame3, text="y Offset").pack(side=RIGHT)
         # En. Offset
-        res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=energy_offset).pack(side=RIGHT, padx=(0, 30))
+        res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=energy_offset).pack(
+            side=RIGHT, padx=(0, 30))
         ttk.Label(buttons_frame3, text="En. offset (eV)").pack(side=RIGHT)
         # Energy Resolution
-        ttk.Label(buttons_frame3, text="Experimental Resolution (eV)").pack(side=LEFT)
-        res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=exp_resolution).pack(side=LEFT)
+        ttk.Label(buttons_frame3, text="Experimental Resolution (eV)").pack(
+            side=LEFT)
+        res_entry = ttk.Entry(buttons_frame3, width=7,
+                              textvariable=exp_resolution).pack(side=LEFT)
 
         # Barra progresso
-        progressbar = ttk.Progressbar(buttons_frame4, variable=progress_var, maximum=100)
+        progressbar = ttk.Progressbar(
+            buttons_frame4, variable=progress_var, maximum=100)
         progressbar.pack(fill=X, expand=1)
         # ---------------------------------------------------------------------------------------------------------------
         # Menus
@@ -2625,64 +3200,92 @@ def calculate(element, ap, parent):
         exc_mech_menu = Menu(my_menu, tearoff=0)
         # ---------------------------------------------------------------------------------------------------------------
         my_menu.add_cascade(label="Options", menu=options_menu)
-        options_menu.add_checkbutton(label='Show Total Y', variable=totalvar, onvalue='Total', offvalue='No')
+        options_menu.add_checkbutton(
+            label='Show Total Y', variable=totalvar, onvalue='Total', offvalue='No')
         options_menu.add_separator()
-        options_menu.add_checkbutton(label='Log Scale Y Axis', variable=yscale_log, onvalue='Ylog', offvalue='No')
-        options_menu.add_checkbutton(label='Log Scale X Axis', variable=xscale_log, onvalue='Xlog', offvalue='No')
+        options_menu.add_checkbutton(
+            label='Log Scale Y Axis', variable=yscale_log, onvalue='Ylog', offvalue='No')
+        options_menu.add_checkbutton(
+            label='Log Scale X Axis', variable=xscale_log, onvalue='Xlog', offvalue='No')
         options_menu.add_separator()
-        options_menu.add_command(label="Load Experimental Spectrum", command=load)
-        options_menu.add_checkbutton(label='Perform Autofit', variable=autofitvar, onvalue='Yes', offvalue='No')
+        options_menu.add_command(
+            label="Load Experimental Spectrum", command=load)
+        options_menu.add_checkbutton(
+            label='Perform Autofit', variable=autofitvar, onvalue='Yes', offvalue='No')
         options_menu.add_separator()
-        options_menu.add_checkbutton(label = "Import Detector Efficiency", command = load_effic_file)
+        options_menu.add_checkbutton(
+            label="Import Detector Efficiency", command=load_effic_file)
         options_menu.add_separator()
-        options_menu.add_command(label="Export Spectrum", command=lambda: write_to_xls(satelite_var.get(), xfinal, yfinal, yfinals, ytot, energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, time_of_click))
+        options_menu.add_command(label="Export Spectrum", command=lambda: write_to_xls(satelite_var.get(), xfinal, yfinal, yfinals,
+                                 ytot, energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, time_of_click))
         options_menu.add_separator()
         options_menu.add_command(label="Choose New Element", command=restarter)
         options_menu.add_command(label="Quit", command=_quit)
         # ---------------------------------------------------------------------------------------------------------------
         my_menu.add_cascade(label="Spectrum Type", menu=stick_plot_menu)
         choice_var = StringVar(value='Simulation')
-        stick_plot_menu.add_checkbutton(label='Stick', variable=choice_var, onvalue='Stick', offvalue='')
-        stick_plot_menu.add_checkbutton(label='Simulation', variable=choice_var, onvalue='Simulation', offvalue='')
-        stick_plot_menu.add_checkbutton(label='CS Mixture: Stick', variable=choice_var, onvalue='M_Stick', offvalue='', command=configureCSMix, state='disabled')
-        stick_plot_menu.add_checkbutton(label='CS Mixture: Simulation', variable=choice_var, onvalue='M_Simulation', offvalue='', command=configureCSMix, state='disabled')
+        stick_plot_menu.add_checkbutton(
+            label='Stick', variable=choice_var, onvalue='Stick', offvalue='')
+        stick_plot_menu.add_checkbutton(
+            label='Simulation', variable=choice_var, onvalue='Simulation', offvalue='')
+        stick_plot_menu.add_checkbutton(label='CS Mixture: Stick', variable=choice_var,
+                                        onvalue='M_Stick', offvalue='', command=configureCSMix, state='disabled')
+        stick_plot_menu.add_checkbutton(label='CS Mixture: Simulation', variable=choice_var,
+                                        onvalue='M_Simulation', offvalue='', command=configureCSMix, state='disabled')
         if CS_exists:
             stick_plot_menu.entryconfigure(2, state=NORMAL)
-            stick_plot_menu.entryconfigure(3, state=NORMAL) # Good TK documentation: https://tkdocs.com/tutorial/menus.html
+            # Good TK documentation: https://tkdocs.com/tutorial/menus.html
+            stick_plot_menu.entryconfigure(3, state=NORMAL)
         # ---------------------------------------------------------------------------------------------------------------
         my_menu.add_cascade(label="Transition Type", menu=transition_type_menu)
         satelite_var = StringVar(value='Diagram')
-        transition_type_menu.add_checkbutton(label='Diagram', variable=satelite_var, onvalue='Diagram', offvalue='', command=update_transition_dropdown)
-        transition_type_menu.add_checkbutton(label='Satellites', variable=satelite_var, onvalue='Satellites', offvalue='', command=update_transition_dropdown)
-        transition_type_menu.add_checkbutton(label='Diagram + Satellites', variable=satelite_var, onvalue='Diagram + Satellites', offvalue='', command=update_transition_dropdown)
-        transition_type_menu.add_checkbutton(label='Auger', variable=satelite_var, onvalue='Auger', offvalue='', command=update_transition_dropdown)
+        transition_type_menu.add_checkbutton(
+            label='Diagram', variable=satelite_var, onvalue='Diagram', offvalue='', command=update_transition_dropdown)
+        transition_type_menu.add_checkbutton(
+            label='Satellites', variable=satelite_var, onvalue='Satellites', offvalue='', command=update_transition_dropdown)
+        transition_type_menu.add_checkbutton(label='Diagram + Satellites', variable=satelite_var,
+                                             onvalue='Diagram + Satellites', offvalue='', command=update_transition_dropdown)
+        transition_type_menu.add_checkbutton(
+            label='Auger', variable=satelite_var, onvalue='Auger', offvalue='', command=update_transition_dropdown)
         # ---------------------------------------------------------------------------------------------------------------
         my_menu.add_cascade(label="Fit Type", menu=fit_type_menu)
         type_var = StringVar(value='Lorentzian')
-        fit_type_menu.add_checkbutton(label='Voigt', variable=type_var, onvalue='Voigt', offvalue='')
-        fit_type_menu.add_checkbutton(label='Lorentzian', variable=type_var, onvalue='Lorentzian', offvalue='')
-        fit_type_menu.add_checkbutton(label='Gaussian', variable=type_var, onvalue='Gaussian', offvalue='')
+        fit_type_menu.add_checkbutton(
+            label='Voigt', variable=type_var, onvalue='Voigt', offvalue='')
+        fit_type_menu.add_checkbutton(
+            label='Lorentzian', variable=type_var, onvalue='Lorentzian', offvalue='')
+        fit_type_menu.add_checkbutton(
+            label='Gaussian', variable=type_var, onvalue='Gaussian', offvalue='')
         # ---------------------------------------------------------------------------------------------------------------
         my_menu.add_cascade(label="Normalization Options", menu=norm_menu)
-        norm_menu.add_checkbutton(label='to Experimental Maximum', variable=normalizevar, onvalue='ExpMax', offvalue='No')
-        norm_menu.add_checkbutton(label='to Unity', variable=normalizevar, onvalue='One', offvalue='No')
+        norm_menu.add_checkbutton(label='to Experimental Maximum',
+                                  variable=normalizevar, onvalue='ExpMax', offvalue='No')
+        norm_menu.add_checkbutton(
+            label='to Unity', variable=normalizevar, onvalue='One', offvalue='No')
         # ---------------------------------------------------------------------------------------------------------------
-        my_menu.add_cascade(label="Excitation Mechanism", menu=exc_mech_menu, state="disabled")  # Apagar o state para tornar funcional
+        # Apagar o state para tornar funcional
+        my_menu.add_cascade(label="Excitation Mechanism",
+                            menu=exc_mech_menu, state="disabled")
         exc_mech_var = StringVar(value='')
-        exc_mech_menu.add_checkbutton(label='Nuclear Electron Capture', variable=exc_mech_var, onvalue='NEC', offvalue='')
-        exc_mech_menu.add_checkbutton(label='Photoionization', variable=exc_mech_var, onvalue='PIon', offvalue='')
-        exc_mech_menu.add_checkbutton(label='Electron Impact Ionization', variable=exc_mech_var, onvalue='EII', offvalue='')
+        exc_mech_menu.add_checkbutton(
+            label='Nuclear Electron Capture', variable=exc_mech_var, onvalue='NEC', offvalue='')
+        exc_mech_menu.add_checkbutton(
+            label='Photoionization', variable=exc_mech_var, onvalue='PIon', offvalue='')
+        exc_mech_menu.add_checkbutton(
+            label='Electron Impact Ionization', variable=exc_mech_var, onvalue='EII', offvalue='')
         # ---------------------------------------------------------------------------------------------------------------
         sim.mainloop()
     return 0
 
 
-def params(z):  # Definicoes relacionadas com a segunda janela (depois da tabela periodica)
-    parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulacao)
+def params(z):  # Definições relacionadas com a segunda janela (depois da tabela periódica)
+    parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulação)
     parameters.title("Atomic Parameters")  # nome da janela
 
-    check_var = IntVar()  # variavel que vai dar o valor do botao seleccionado (yields=1, widths=2, cross sections=3, simulacao=4)
-    check_var.set(1)  # initialize (o botao 1, yields, comeca seleccionado por defeito)
+    # variável que vai dar o valor do botao seleccionado (yields=1, widths=2, cross sections=3, simulacao=4)
+    check_var = IntVar()
+    # initialize (o botao 1, yields, começa selecionado por defeito)
+    check_var.set(1)
     # ---------------------------------------------------------------------------------------------------------------
     # Propriedades da janela
     subelem = ttk.Frame(parameters, padding="3 3 12 12")
@@ -2690,14 +3293,21 @@ def params(z):  # Definicoes relacionadas com a segunda janela (depois da tabela
     subelem.columnconfigure(0, weight=1)
     subelem.rowconfigure(0, weight=1)
     # ---------------------------------------------------------------------------------------------------------------
-    # BotÃµes
-    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
-    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
-    ttk.Radiobutton(subelem, text='Yields', variable=check_var, value=1).grid(column=0, row=5, sticky=W)
-    ttk.Radiobutton(subelem, text='Level Widths', variable=check_var, value=2).grid(column=1, row=5, sticky=W)
-    ttk.Radiobutton(subelem, text='Cross Sections', variable=check_var, value=3).grid(column=0, row=6, sticky=W)
-    ttk.Radiobutton(subelem, text='Spectra Simulations', variable=check_var, value=4).grid(column=1, row=6, sticky=W)
-    ttk.Label(subelem, text="Which parameters do you want to retrieve?").grid(column=0, row=4, sticky=W, columnspan=2)
+    # Botões
+    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(
+        column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
+    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(
+        column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
+    ttk.Radiobutton(subelem, text='Yields', variable=check_var,
+                    value=1).grid(column=0, row=5, sticky=W)
+    ttk.Radiobutton(subelem, text='Level Widths', variable=check_var,
+                    value=2).grid(column=1, row=5, sticky=W)
+    ttk.Radiobutton(subelem, text='Cross Sections',
+                    variable=check_var, value=3).grid(column=0, row=6, sticky=W)
+    ttk.Radiobutton(subelem, text='Spectra Simulations',
+                    variable=check_var, value=4).grid(column=1, row=6, sticky=W)
+    ttk.Label(subelem, text="Which parameters do you want to retrieve?").grid(
+        column=0, row=4, sticky=W, columnspan=2)
 
     subelem.mainloop()
 
@@ -2715,7 +3325,8 @@ class App(Tk):
         self.topLabel = Label(self, text="", font=20)
         self.topLabel.grid(row=2, column=3, columnspan=10)
 
-        self.Label1 = Label(self, text="Click the element for which you would like to obtain the atomic parameters.", font=22)
+        self.Label1 = Label(
+            self, text="Click the element for which you would like to obtain the atomic parameters.", font=22)
         self.Label1.grid(row=0, column=0, columnspan=18)
 
         self.Label2 = Label(self, text="", font=20)
@@ -2849,9 +3460,11 @@ class App(Tk):
         # create all buttons with a loop
         for i, element in enumerate(per_table):
             #        print(element[1])
-            Button(self, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: quit_window([(i + 1), per_table[i][2]])).grid(row=element[6], column=element[7])
+            Button(self, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: quit_window(
+                [(i + 1), per_table[i][2]])).grid(row=element[6], column=element[7])
 
-        for child in self.winfo_children(): child.grid_configure(padx=3, pady=3)
+        for child in self.winfo_children():
+            child.grid_configure(padx=3, pady=3)
 
         self.mainloop()
 
