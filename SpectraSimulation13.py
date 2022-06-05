@@ -17,14 +17,14 @@ from datetime import datetime
 import time
 import matplotlib.pyplot as plt
 
-dir_path = Path(str(os.getcwd()) + '/')  # os.getcwd retorna a directoria onde o cÃ³digo estÃ¡. Criamos um objecto tipo Path porque permite o programa ser corrido em qq OS
+dir_path = Path(str(os.getcwd()) + '/')  # os.getcwd retorna a directoria onde o código está. Criamos um objecto tipo Path porque permite o programa ser corrido em qq OS
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f site onde vi sobre isto GRV
 
 # ---------------------------------------------------------------------------------------------------------------
 labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': '3p*', 'M3': '3p', 'M4': '3d*',
              'M5': '3d', 'N1': '4s', 'N2': '4p*', 'N3': '4p', 'N4': '4d*', 'N5': '4d', 'N6': '4f*', 'N7': '4f',
              'O1': '5s', 'O2': '5p*', 'O3': '5p', 'O4': '5d*', 'O5': '5d', 'O6': '5f*', 'O7': '5f', 'O8': '5g*',
-             'O9': '5g', 'P1': '6s'}  # Acho que este dicionÃ¡rio serve sÃ³ para converter notaÃ§Ãµes FALTA: Confirmar com Mauro
+             'O9': '5g', 'P1': '6s'}  # Acho que este dicionário serve só para converter notações FALTA: Confirmar com Mauro
 
 the_dictionary = {
     "KL\u2081": {"low_level": "K1", "high_level": "L1", "selected_state": False, "readable_name": "KL1"}, #for ionic transitions
@@ -63,7 +63,7 @@ the_dictionary = {
     "M\u03B1\u2082": {"low_level": "M5", "high_level": "N6", "selected_state": False, "readable_name": "Malpha2"},
     "M\u03B2": {"low_level": "M4", "high_level": "N6", "selected_state": False, "readable_name": "Mbeta"},
     "M\u03B3\u2081": {"low_level": "M3", "high_level": "N5", "selected_state": False, "readable_name": "Mgamma1"},
-}  # DicionÃ¡rio onde estÃ£o guardadas as transiÃ§Ãµes. Cada valor do dicionÃ¡rio Ã© em si um dicionÃ¡rio (Nested dictionaries)
+}  # Dicionário onde estão guardadas as transições. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
 
 
 the_aug_dictionary = {
@@ -240,7 +240,7 @@ the_aug_dictionary = {
     "M4N1N1": {"low_level": "M4", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M4N1N1"},
     
     "M5N1N1": {"low_level": "M5", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M5N1N1"},
-}  # DicionÃ¡rio onde estÃ£o guardadas as transiÃ§Ãµes Auger. Cada valor do dicionÃ¡rio Ã© em si um dicionÃ¡rio (Nested dictionaries)
+}  # Dicionário onde estão guardadas as transições Auger. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
 
 chi_sqrd = 0
 
@@ -255,20 +255,20 @@ def destroy(window):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o para dar nome aos ficheiros a gravar
+# Função para dar nome aos ficheiros a gravar
 def file_namer(simulation_or_fit, fit_time, extension):
 #    dt_string = fit_time.strftime("%d-%m-%Y %H:%M:%S")  # converte a data para string
     dt_string = fit_time.strftime("%d%m%Y_%H%M%S")  # converte a data para string
-    file_name = simulation_or_fit + '_from_' + dt_string + extension  # Defino o nome conforme seja fit ou simulaÃ§Ã£o,a data e hora e a extensÃ£o desejada
+    file_name = simulation_or_fit + '_from_' + dt_string + extension  # Defino o nome conforme seja fit ou simulação,a data e hora e a extensão desejada
     return file_name
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o para gaurdar os dados dos grÃ¡ifocs simulados em excel
+# Função para gaurdar os dados dos gráifocs simulados em excel
 def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, date_and_time):
     print(date_and_time)
     file_title = file_namer("Simulation",date_and_time,".csv")
-    first_line = ['Energy (eV)']  # Crio aquela que vai ser a primeira linha da matriz. Crio sÃ³ a primeira coluna e depois adiciono as outras
+    first_line = ['Energy (eV)']  # Crio aquela que vai ser a primeira linha da matriz. Crio só a primeira coluna e depois adiciono as outras
     
     if enoffset != 0:
         first_line += ['Energy Off (eV)'] #adicionar a coluna com o offset de energia calculado
@@ -277,7 +277,7 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
         first_line += ['Intensity Off'] #adicionar a coluna com o offset de energia calculado
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Corro o dicionÃ¡rio e se a transiÃ§Ã£o estiver selecionada e tiver dados, adiciono o seu nome Ã  primeira linha. Idem para as satÃ©lites
+    # Corro o dicionário e se a transição estiver selecionada e tiver dados, adiciono o seu nome à primeira linha. Idem para as satélites
     if type_t != 'Auger':
         for index, transition in enumerate(the_dictionary):
             if the_dictionary[transition]["selected_state"]:
@@ -295,7 +295,7 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
                     if max(m) != 0:
                         first_line += [the_aug_dictionary[transition]["readable_name"] + '-' + labeldict[label1[l]]]
     # ---------------------------------------------------------------------------------------------------------------
-    first_line += ['Total']  # Adiciono a ultima coluna que terÃ¡ o total
+    first_line += ['Total']  # Adiciono a ultima coluna que terá o total
     
     if exp_x != None and exp_y != None:
         first_line += ['Exp Energy (eV)', 'Intensity']
@@ -309,10 +309,10 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
     if exp_x != None:
         matrix = [[None for x in range(len(first_line))] for y in range(max(len(xfinal), len(exp_x)))]
     else:
-        matrix = [[None for x in range(len(first_line))] for y in range(len(xfinal))]  # Crio uma matriz vazia com o numero de colunas= tamanho da primeira linha e o numero de linhas = numero de pontos dos grÃ¡ficos
+        matrix = [[None for x in range(len(first_line))] for y in range(len(xfinal))]  # Crio uma matriz vazia com o numero de colunas= tamanho da primeira linha e o numero de linhas = numero de pontos dos gráficos
     # ---------------------------------------------------------------------------------------------------------------
     #  Preencho a primeira e segunda coluna com os valores de x e x + offset
-    transition_columns = 1  # comeÃ§a no 1 porque a coluna 0 Ã© a dos valores de x. Uso esta variÃ¡vel para ir avanÃ§ando nas colunas
+    transition_columns = 1  # começa no 1 porque a coluna 0 é a dos valores de x. Uso esta variável para ir avançando nas colunas
     
     if enoffset != 0:
         for i, x in enumerate(xfinal):
@@ -325,11 +325,11 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
             matrix[i][0] = x
     # ---------------------------------------------------------------------------------------------------------------
     # Preencho as colunas dos valores yy
-    for i, y in enumerate(yfinal):  # Corro todas as transiÃ§Ãµes
-        if max(y) != 0 or any(yfinals[i]) != 0:  # Se houver diagrama ou satÃ©lite
-            for row in range(len(y)):  # Corro todos os valores da diagrama e adiciono-os Ã  linha correspondente
+    for i, y in enumerate(yfinal):  # Corro todas as transições
+        if max(y) != 0 or any(yfinals[i]) != 0:  # Se houver diagrama ou satélite
+            for row in range(len(y)):  # Corro todos os valores da diagrama e adiciono-os à linha correspondente
                 matrix[row][transition_columns] = y[row]
-            if max(y) != 0:  # NÃ£o tenho a certeza que este if Ã© necessÃ¡rio porque acho que jÃ¡ verifiquei isto antes
+            if max(y) != 0:  # Não tenho a certeza que este if é necessário porque acho que já verifiquei isto antes
                 transition_columns += 1
             for j, ys in enumerate(yfinals[i]):  # Mesma ideia que para a diagrama
                 if max(ys) != 0:
@@ -405,13 +405,13 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
                     matrix[i + 1][transition_columns + 2] = NCS_augMixValues[idx_n].get()
                     idx_n += 1
     # ---------------------------------------------------------------------------------------------------------------
-    matrix = [first_line] + matrix  # Adiciono a linha com os nomes das trnaisÃ§Ãµes Ã  matriz
+    matrix = [first_line] + matrix  # Adiciono a linha com os nomes das trnaisções à matriz
     # ---------------------------------------------------------------------------------------------------------------
     # Util para imprimir a matriz na consola e fazer testes
     # for row in matrix:
     #     print(' '.join(map(str, row)))
     # ---------------------------------------------------------------------------------------------------------------
-    # Escrita para o ficheiro. Se for a primeira linha da matriz, abrimos como write, se nÃ£o, abrimos como append porque sÃ³ queremos adicionar ao fim do ficheiro
+    # Escrita para o ficheiro. Se for a primeira linha da matriz, abrimos como write, se não, abrimos como append porque só queremos adicionar ao fim do ficheiro
     for i, item in enumerate(matrix):
         if i == 0:
             with open(file_title, 'w', newline='') as csvfile:
@@ -425,7 +425,7 @@ def write_to_xls(type_t, xfinal, yfinal, yfinals, ytot, enoffset, y0, exp_x, exp
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ãµes que fazem o cÃ¡lculo das riscas a ser plotadas FALTA: Mal explicado e sem comentÃ¡rios nas funÃ§Ãµes em si
+# Funções que fazem o cálculo das riscas a ser plotadas FALTA: Mal explicado e sem comentários nas funções em si
 def G(T, energy, intens, res, width):
     """ Return Gaussian line shape at x with HWHM alpha """
     y = [0 for j in range(len(T))]  # Criar um vector com o tamanho de T cheio de zeros
@@ -455,10 +455,10 @@ def V(T, energy, intens, res, width):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# FunÃ§Ã£o que corre depois de escolher a opÃ§Ã£o na janela que surge depois da tabela periÃ³dica
+# Função que corre depois de escolher a opção na janela que surge depois da tabela periódica
 def calculate(element, ap, parent):
     time_of_click = datetime.now()  # Obtenho o a data e hora exacta para dar nome aos ficheiros a gravar
-    # Em versÃµes anteriores recebiamos apenas o z do elemento, mas para poder ter acesso ao nome, recebe-se um vetor com nome e numero
+    # Em versões anteriores recebiamos apenas o z do elemento, mas para poder ter acesso ao nome, recebe-se um vetor com nome e numero
     z = element[0]
     element_name = element[1]
     # print(z, element_name)
@@ -586,7 +586,7 @@ def calculate(element, ap, parent):
     elif ap == 3:
         messagebox.showwarning("Not Possible", "Function not defined")
     # ---------------------------------------------------------------------------------------------------------------
-    elif ap == 4:  # OpÃ§Ã£o Spectra Simulation
+    elif ap == 4:  # Opção Spectra Simulation
         radrates_file = dir_path / str(z) / (str(z) + '-intensity.out')  # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
         try:
             with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
@@ -601,7 +601,7 @@ def calculate(element, ap, parent):
             with open(satellites_file, 'r') as satellites:  # Abrir o ficheiro
                 linesatellites = [x.strip('\n').split() for x in satellites.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
                 linesatellites = list(filter(None, linesatellites))  # Remover as linhas compostas apenas por celulas vazias
-                del linesatellites[0:2]  # Tira as linhas que tÃªm o nome das variÃ¡veis e etc
+                del linesatellites[0:2]  # Tira as linhas que têm o nome das variáveis e etc
         except FileNotFoundError:
             messagebox.showwarning("Error", "Satellites File is not Avaliable")
 
@@ -610,7 +610,7 @@ def calculate(element, ap, parent):
             with open(augrates_file, 'r') as augrates:  # Abrir o ficheiro
                 lineauger = [x.strip('\n').split() for x in augrates.readlines()]  # Escrever todas as linhas no ficheiro como uma lista
                 lineauger = list(filter(None, lineauger))  # Remover as linhas compostas apenas por celulas vazias
-                del lineauger[0:2]  # Tira as linhas que tÃªm o nome das variÃ¡veis e etc
+                del lineauger[0:2]  # Tira as linhas que têm o nome das variáveis e etc
         except FileNotFoundError:
             messagebox.showwarning("Error", "Auger Rates File is not Avaliable")
 
@@ -621,7 +621,7 @@ def calculate(element, ap, parent):
                 shakeweights = []
                 label1 = []
                 for i, j in enumerate(shakeweights_m):
-                    # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os valores numÃ©ricos no shakeweights
+                    # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os valores numéricos no shakeweights
                     shakeweights.append(float(shakeweights_m[i][1]))
                 for k, l in enumerate(shakeweights_m):
                     # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os rotulos no label 1
@@ -721,23 +721,23 @@ def calculate(element, ap, parent):
                 messagebox.showwarning("Error", "Ion Population File is not Avaliable")
         
         # ---------------------------------------------------------------------------------------------------------------
-        # Criamos uma nova janela onde aparecerÃ£o os grÃ¡ficostodos (TopLevel porque nÃ£o podem haver duas janelas tk abertas ao mesmo tempo)
+        # Criamos uma nova janela onde aparecerão os gráficos todos (TopLevel porque não podem haver duas janelas tk abertas ao mesmo tempo)
         # E definimos o seu titulo
         sim = Toplevel(master=parent)
         sim.title("Spectrum Simulation")
-        # Criamos um "panel" onde vamos colocar o canvas para fazer o plot do grÃ¡fico. Panels sÃ£o necessÃ¡rios para a janela poder mudar de tamanho
+        # Criamos um "panel" onde vamos colocar o canvas para fazer o plot do gráfico. Panels são necessários para a janela poder mudar de tamanho
         panel_1 = PanedWindow(sim, orient=VERTICAL)
         panel_1.pack(fill=BOTH, expand=1)
         # ---------------------------------------------------------------------------------------------------------------
-        # Figura onde o grÃ¡fico vai ser desenhado
-        f = Figure(figsize=(10, 5), dpi=100)  # canvas para o grafico do espectro
+        # Figura onde o gráfico vai ser desenhado
+        f = Figure(figsize=(10, 5), dpi=100)  # canvas para o gráfico do espectro
         # plt.style.use('ggplot') Estilo para os plots
-        a = f.add_subplot(111)  # zona onde estara o grafico
+        a = f.add_subplot(111)  # zona onde estara o gráfico
         a.set_xlabel('Energy (eV)')
         a.set_ylabel('Intensity (arb. units)')
         # ---------------------------------------------------------------------------------------------------------------
-        # Frames onde se vÃ£o por a figura e os labels e botÃµes e etc
-        figure_frame = Frame(panel_1, relief=GROOVE)  # frame para o grafico
+        # Frames onde se vão por a figura e os labels e botões e etc
+        figure_frame = Frame(panel_1, relief=GROOVE)  # frame para o gráfico
         panel_1.add(figure_frame)
         canvas = FigureCanvasTkAgg(f, master=figure_frame)
         canvas.get_tk_widget().pack(fill=BOTH, expand=1)
@@ -749,9 +749,9 @@ def calculate(element, ap, parent):
         panel_2.add(toolbar_frame)
         toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 
-        full_frame = Frame(panel_2, relief=GROOVE)  # Frame transiÃ§Ãµes
+        full_frame = Frame(panel_2, relief=GROOVE)  # Frame transições
         panel_2.add(full_frame)
-        buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)  # Frame transiÃ§Ãµes
+        buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)  # Frame transições
         buttons_frame.pack(fill=BOTH, expand=1)
         buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)  # Max, min & Points Frame
         buttons_frame2.pack(fill=BOTH, expand=1)
@@ -761,54 +761,54 @@ def calculate(element, ap, parent):
         buttons_frame4.pack(fill=BOTH, expand=1)
 
         # ---------------------------------------------------------------------------------------------------------------
-        # VariÃ¡veis
-        totalvar = StringVar()  # VariÃ¡vel que define se apresentamos o ytot(soma de todas as riscas) no grÃ¡fico
-        totalvar.set('No')  # inicializamos Total como nÃ£o, porque sÃ³ se apresenta se o utilizador escolher manualmente
-        yscale_log = StringVar()  # VariÃ¡vel que define se o eixo y Ã© apresentado com escala logaritmica ou nÃ£o
-        yscale_log.set('No')  # Inicializamos a No porque sÃ³  se apresenta assim se o utilizador escolher manualmente
-        xscale_log = StringVar()  # VariÃ¡vel que define se o eixo y Ã© apresentado com escala logaritmica ou nÃ£o
-        xscale_log.set('No')  # Inicializamos a No porque sÃ³  se apresenta assim se o utilizador escolher manualmente
-        autofitvar = StringVar()  # VariÃ¡vel que define se o fit se faz automÃ¡ticamente ou nÃ£o
-        autofitvar.set('No')  # Inicializamos a No porque sÃ³ faz fit automÃ¡tico se o utilizador quiser
-        normalizevar = StringVar()  # VariÃ¡vel que define como se normalizam os grÃ¡ficos (3 opÃ§Ãµes atÃ© agora: nÃ£o normalizar, normalizar Ã  unidade, ou ao mÃ¡ximo do espectro experimental)
-        normalizevar.set('No')  # inicializamos Normalize a no, porque sÃ³ se normaliza se o utilizador escolher
-        loadvar = StringVar()  # VariÃ¡vel que define se se carrega um expectro experimental. A string, caso se queira carregar o espectro, muda para o path do ficheiro do espectro
-        loadvar.set('No')  # inicializamos Load a no, porque sÃ³ se carrega ficheiro se o utilizador escolher
+        # Variáveis
+        totalvar = StringVar()  # Variável que define se apresentamos o ytot(soma de todas as riscas) no gráfico
+        totalvar.set('No')  # inicializamos Total como não, porque só se apresenta se o utilizador escolher manualmente
+        yscale_log = StringVar()  # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+        yscale_log.set('No')  # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+        xscale_log = StringVar()  # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+        xscale_log.set('No')  # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+        autofitvar = StringVar()  # Variável que define se o fit se faz automáticamente ou não
+        autofitvar.set('No')  # Inicializamos a No porque só faz fit automático se o utilizador quiser
+        normalizevar = StringVar()  # Variável que define como se normalizam os gráficos (3 opções até agora: não normalizar, normalizar à unidade, ou ao máximo do espectro experimental)
+        normalizevar.set('No')  # inicializamos Normalize a no, porque só se normaliza se o utilizador escolher
+        loadvar = StringVar()  # Variável que define se se carrega um expectro experimental. A string, caso se queira carregar o espectro, muda para o path do ficheiro do espectro
+        loadvar.set('No')  # inicializamos Load a no, porque só se carrega ficheiro se o utilizador escolher
         effic_var = StringVar()
         effic_var.set("No")
 
         exp_resolution = DoubleVar(value=1.0)  # Float correspondente a resolucao experimental
         yoffset = DoubleVar(value=0.0)  # Float correspondente ao fundo experimental
         energy_offset = DoubleVar(value=0.0)  # Float correspondente a resolucao experimental
-        number_points = IntVar(value=500)  # Numero de pontos a plotar na simulaÃ§Ã£o
-        x_max = StringVar()  # Controlo do x MÃ¡ximo a entrar no grÃ¡fico
+        number_points = IntVar(value=500)  # Numero de pontos a plotar na simulação
+        x_max = StringVar()  # Controlo do x Máximo a entrar no gráfico
         x_max.set('Auto')
-        x_min = StringVar()  # Controlo do x MÃ­nimo a entrar no grÃ¡fico
+        x_min = StringVar()  # Controlo do x Mí­nimo a entrar no gráfico
         x_min.set('Auto')
         progress_var = DoubleVar()  # Float que da a percentagem de progresso
 
-        global transition_list  # Usada na funÃ§Ã£o Selected
+        global transition_list  # Usada na função Selected
         transition_list = []
-        label_text = StringVar()  # Texto com as transiÃ§Ãµes selecionadas a apresentar no ecrÃ£
-        label_text.set('Select a Transition: ')  # Antes de se selecionar alguma transiÃ§Ã£o aparece isto
+        label_text = StringVar()  # Texto com as transições selecionadas a apresentar no ecrã
+        label_text.set('Select a Transition: ')  # Antes de se selecionar alguma transição aparece isto
         trans_lable = Label(buttons_frame, textvariable=label_text).grid(row=0, column=1)
 
         # ---------------------------------------------------------------------------------------------------------------
-        # FunÃ§Ã£o para alterar o estado de uma transiÃ§Ã£o que seja selecionada na GUI
+        # Função para alterar o estado de uma transição que seja selecionada na GUI
         def dict_updater(transition):
             if satelite_var.get() != 'Auger':
-                # O "Estado actual" que as riscas tÃªm quando esta funÃ§Ã£o corre Ã© o oposto daquele que estÃ¡ definido no dicionÃ¡rio, porque a funÃ§Ã£o sÃ³ corre se clicarmos para mudar
+                # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
                 current_state = not the_dictionary[transition]["selected_state"]
                 # Alteramos o estado das riscas para o estado actual
                 the_dictionary[transition]["selected_state"] = current_state
             else:
-                # O "Estado actual" que as riscas tÃªm quando esta funÃ§Ã£o corre Ã© o oposto daquele que estÃ¡ definido no dicionÃ¡rio, porque a funÃ§Ã£o sÃ³ corre se clicarmos para mudar
+                # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
                 current_state = not the_aug_dictionary[transition]["selected_state"]
                 # Alteramos o estado das riscas para o estado actual
                 the_aug_dictionary[transition]["selected_state"] = current_state
 
         # ---------------------------------------------------------------------------------------------------------------
-        # FunÃ§Ãµes
+        # Funções
         def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
             interpolated_effic = [0 for i in range(len(xfinal))]
             effic_interpolation = interp1d(energy_values, np.array(efficiency_values)/100)
@@ -962,7 +962,7 @@ def calculate(element, ap, parent):
             # print(xoff, res, y0, ytot_max)
             f_interpolate = interp1d(xfinal + xoff, np.array(ytot * normalization_var) + y0, kind='cubic')  # Falta adicionar o y0
             for g, h in enumerate(exp_x):
-                # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                # Obtemos o valor de y interpolado pela função definida a cima
                 y_interp[g] = f_interpolate(h)
             # graph_a.plot(exp_x, y_interp, 'y', marker = ',')
             if normalize == 'One':
@@ -1018,12 +1018,12 @@ def calculate(element, ap, parent):
             # Tratamento da Legenda
             a.legend(title=element_name)
             number_of_labels = len(a.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-            legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
+            legend_columns = 1  # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
             labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-            while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+            while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                 legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
                 labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-            a.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
+            a.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
 
         def plot_stick(graph_area):
             global xfinal, exp_x, exp_y, residues_graph
@@ -1061,35 +1061,35 @@ def calculate(element, ap, parent):
             normalization_var = 1
             # --------------------------------------------------------------------------------------------------------------------------
             if spectype == 'Stick':
-                # Duas variÃ¡veis que servem para ver se hÃ¡ alguma transiÃ§Ã£o mal escolhida. A primeira serve para saber o numero total de transiÃµes escolhidas e a segunda para anotar quantas tranisÃ§Ãµes erradas se escolheram
+                # Duas variáveis que servem para ver se há alguma transição mal escolhida. A primeira serve para saber o numero total de transiões escolhidas e a segunda para anotar quantas tranisções erradas se escolheram
                 num_of_transitions = 0
                 bad_selection = 0
                 if sat != 'Auger':
                     for transition in the_dictionary:
-                        # Se a transiÃ§Ã£o estiver selecionada:
+                        # Se a transição estiver selecionada:
                         if the_dictionary[transition]["selected_state"]:
                             num_of_transitions += 1
-                            # Estas variÃ¡veis servem sÃ³ para nÃ£o ter de escrever o acesso ao valor do dicionÃ¡rio todas as vezes
+                            # Estas variáveis servem só para não ter de escrever o acesso ao valor do dicionário todas as vezes
                             low_level = the_dictionary[transition]["low_level"]
                             high_level = the_dictionary[transition]["high_level"]
-                            diag_stick_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Cada vez que o for corre, lÃª o ficheiro de uma transiÃ§Ã£o
+                            diag_stick_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Cada vez que o for corre, lê o ficheiro de uma transição
                             # for u in range(len(diag_stick_val)):
                             #     if diag_stick_val[u][1] in low_level:
                             #         print(diag_stick_val[u][1], low_level)
                             sat_stick_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
                             # -------------------------------------------------------------------------------------------
                             if sat == 'Diagram':
-                                if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                     # linha do ficheiro que supostamente preencheria este vertor)
-                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
                             elif sat == 'Satellites':
-                                if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                     sat_stick_val = [['0' for i in range(16)]]
-                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    messagebox.showwarning("Wrong Transition", transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 b1 = 0
                                 for ind, key in enumerate(label1):
                                     sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
@@ -1103,16 +1103,16 @@ def calculate(element, ap, parent):
                                     progress_var.set(b1)
                                     sim.update_idletasks()
                             elif sat == 'Diagram + Satellites':
-                                if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                    diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                     # linha do ficheiro que supostamente preencheria este vertor)
-                                    messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
-                                if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                     sat_stick_val = [['0' for i in range(16)]]
-                                    messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                    bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                    messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                    bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                 b1 = 0
                                 for ind, key in enumerate(label1):
                                     sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
@@ -1130,7 +1130,7 @@ def calculate(element, ap, parent):
                         graph_area.set_ylabel('Intensity (arb. units)')
                 else:
                     for transition in the_aug_dictionary:
-                        # Se a transiÃ§Ã£o estiver selecionada:
+                        # Se a transição estiver selecionada:
                         if the_aug_dictionary[transition]["selected_state"]:
                             num_of_transitions += 1
                             low_level = the_aug_dictionary[transition]["low_level"]
@@ -1139,11 +1139,11 @@ def calculate(element, ap, parent):
                             
                             aug_stick_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]
                             
-                            if not aug_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                            if not aug_stick_val:  # Se não ouver dados no vetor da diagrama
+                                aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                 # linha do ficheiro que supostamente preencheria este vertor)
-                                messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                             stem_ploter(aug_stick_val, transition, 'Auger', 0, 0)
                         
                         graph_area.set_xlabel('Energy (eV)')
@@ -1156,7 +1156,7 @@ def calculate(element, ap, parent):
                     messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
             # --------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'M_Stick':
-                # Duas variÃ¡veis que servem para ver se hÃ¡ alguma transiÃ§Ã£o mal escolhida. A primeira serve para saber o numero total de transiÃµes escolhidas e a segunda para anotar quantas tranisÃ§Ãµes erradas se escolheram
+                # Duas variáveis que servem para ver se há alguma transição mal escolhida. A primeira serve para saber o numero total de transiões escolhidas e a segunda para anotar quantas tranisções erradas se escolheram
                 num_of_transitions = 0
                 bad_selection = 0
                 if sat != 'Auger':
@@ -1173,15 +1173,15 @@ def calculate(element, ap, parent):
                             ncs = True
                         if mix_val != '0.0':
                             for transition in the_dictionary:
-                                # Se a transiÃ§Ã£o estiver selecionada:
+                                # Se a transição estiver selecionada:
                                 if the_dictionary[transition]["selected_state"]:
                                     num_of_transitions += 1
-                                    # Estas variÃ¡veis servem sÃ³ para nÃ£o ter de escrever o acesso ao valor do dicionÃ¡rio todas as vezes
+                                    # Estas variáveis servem só para não ter de escrever o acesso ao valor do dicionário todas as vezes
                                     low_level = the_dictionary[transition]["low_level"]
                                     high_level = the_dictionary[transition]["high_level"]
                                     
                                     if not ncs:
-                                        diag_stick_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Cada vez que o for corre, lÃª o ficheiro de uma transiÃ§Ã£o
+                                        diag_stick_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Cada vez que o for corre, lê o ficheiro de uma transição
                                     else:
                                         diag_stick_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
                                     
@@ -1191,17 +1191,17 @@ def calculate(element, ap, parent):
                                         sat_stick_val = [line + [NCS_radMixValues[i].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]
                                         # -------------------------------------------------------------------------------------------
                                     if sat == 'Diagram':
-                                        if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                        if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                             # linha do ficheiro que supostamente preencheria este vertor)
-                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrã a transição errada que escolheram
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
                                     elif sat == 'Satellites':
-                                        if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                        if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                             sat_stick_val = [['0' for i in range(16)]]
-                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                            messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)  # Mostro no ecrã a transição errada que escolheram
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         b1 = 0
                                         for ind, key in enumerate(label1):
                                             sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
@@ -1215,16 +1215,16 @@ def calculate(element, ap, parent):
                                             progress_var.set(b1)
                                             sim.update_idletasks()
                                     elif sat == 'Diagram + Satellites':
-                                        if not diag_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                        if not diag_stick_val:  # Se não ouver dados no vetor da diagrama
+                                            diag_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                             # linha do ficheiro que supostamente preencheria este vertor)
-                                            messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                            messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
-                                        if not sat_stick_val:  # Se nÃ£o ouver nada no vetor das satelites
+                                        if not sat_stick_val:  # Se não ouver nada no vetor das satelites
                                             sat_stick_val = [['0' for i in range(16)]]
-                                            messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                            bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                            messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")  # Mostro no ecrã a transição errada que escolheram
+                                            bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                         b1 = 0
                                         for ind, key in enumerate(label1):
                                             sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
@@ -1254,7 +1254,7 @@ def calculate(element, ap, parent):
                             ncs = True
                         if mix_val != '0.0':
                             for transition in the_aug_dictionary:
-                                # Se a transiÃ§Ã£o estiver selecionada:
+                                # Se a transição estiver selecionada:
                                 if the_aug_dictionary[transition]["selected_state"]:
                                     num_of_transitions += 1
                                     low_level = the_aug_dictionary[transition]["low_level"]
@@ -1266,11 +1266,11 @@ def calculate(element, ap, parent):
                                     else:
                                         aug_stick_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]
                                     
-                                    if not aug_stick_val:  # Se nÃ£o ouver dados no vetor da diagrama
-                                        aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque Ã© o tamanho da
+                                    if not aug_stick_val:  # Se não ouver dados no vetor da diagrama
+                                        aug_stick_val = [['0' for i in range(16)]]  # Crio um vector de zeros para o programa continuar a correr (Em string porque estava a dar um erro qq quando punha em int)(range 16 porque é o tamanho da
                                         # linha do ficheiro que supostamente preencheria este vertor)
-                                        messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available for charge state: " + cs)  # Mostro no ecrÃ£ a transiÃ§Ã£o errada que escolheram
-                                        bad_selection += 1  # incremento o numero de transiÃ§Ãµes "mal" escolhidas
+                                        messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available for charge state: " + cs)  # Mostro no ecrã a transição errada que escolheram
+                                        bad_selection += 1  # incremento o numero de transições "mal" escolhidas
                                     stem_ploter(aug_stick_val, cs + ' ' + transition, 'Auger_CS', 0, 0)
                                 
                                 graph_area.set_xlabel('Energy (eV)')
@@ -1283,20 +1283,20 @@ def calculate(element, ap, parent):
                     messagebox.showerror("Wrong Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
             # --------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'Simulation':
-                # VariÃ¡vel para contar as transiÃ§Ãµes erradas
+                # Variável para contar as transições erradas
                 bad_selection = 0
                 
                 if sat != 'Auger':
                     # -------------------------------------------------------------------------------------------
-                    # Leitura dos valores das transiÃ§Ãµes selecionadas
-                    # Contrariamente ao spectype == 'Stick' onde os plots sÃ£o feitos quando se trata de cada risca, aqui,
-                    # o  que se faz Ã© obter os valores necessÃ¡rios para os plots. NÃ£o se faz nenhum plot em si dentro deste ciclo.
+                    # Leitura dos valores das transições selecionadas
+                    # Contrariamente ao spectype == 'Stick' onde os plots são feitos quando se trata de cada risca, aqui,
+                    # o  que se faz é obter os valores necessários para os plots. Não se faz nenhum plot em si dentro deste ciclo.
                     for index, transition in enumerate(the_dictionary):
                         if the_dictionary[transition]["selected_state"]:
-                            low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                            high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
-                            diag_sim_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
-                            sat_sim_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
+                            low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no iní­cio da transição
+                            high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transição
+                            diag_sim_val = [line for line in lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
+                            sat_sim_val = [line for line in linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
                             
                             if sat == 'Diagram':
                                 x1 = [float(row[8]) for row in diag_sim_val]
@@ -1342,7 +1342,7 @@ def calculate(element, ap, parent):
                                         ys[index][ind] = y1s
                                         ws[index][ind] = w1s
                     # -------------------------------------------------------------------------------------------
-                    # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                    # Verificar se se selecionaram transições indí­sponí­veis
                     for index, transition in enumerate(the_dictionary):
                         if the_dictionary[transition]["selected_state"]:
                             if not x[index] and not any(xs[index]):
@@ -1359,11 +1359,11 @@ def calculate(element, ap, parent):
                     
                     for index, transition in enumerate(the_aug_dictionary):
                         if the_aug_dictionary[transition]["selected_state"]:
-                            low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                            high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
+                            low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no iní­cio da transição
+                            high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transição
                             auger_level = the_aug_dictionary[transition]["auger_level"]
                             
-                            aug_sim_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                            aug_sim_val = [line for line in lineauger if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                             
                             x1 = [float(row[8]) for row in aug_sim_val]
                             y1 = [float(row[9]) * (1 - sum(shakeweights)) for row in aug_sim_val]
@@ -1373,7 +1373,7 @@ def calculate(element, ap, parent):
                             w[index] = w1
                     
                     # -------------------------------------------------------------------------------------------
-                    # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                    # Verificar se se selecionaram transições indí­sponí­veis
                     for index, transition in enumerate(the_aug_dictionary):
                         if the_aug_dictionary[transition]["selected_state"]:
                             if not x[index]:
@@ -1382,13 +1382,13 @@ def calculate(element, ap, parent):
                                 bad_selection += 1
 
                 # -------------------------------------------------------------------------------------------
-                # ObtenÃ§Ã£o do valor de xfinal a usar nos cÃ¡clulos dos yy (caso nÃ£o seja selecionado um espectro experimental, porque se fo xfinal Ã© mudado)
-                # (Calcular a dispersÃ£o em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersÃ£o e da resoluÃ§Ã£o experimental)
+                # Obtenção do valor de xfinal a usar nos cáclulos dos yy (caso não seja selecionado um espectro experimental, porque se fo xfinal é mudado)
+                # (Calcular a dispersão em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersão e da resolução experimental)
                 try:
                     if sat == 'Diagram':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
                         
                         max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
@@ -1406,22 +1406,22 @@ def calculate(element, ap, parent):
                     
                     elif sat == 'Auger':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
                         
                         max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
                         min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                    # Definimos o x MÃ­nimo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mn
-                    if x_mn == 'Auto':  # x_mn Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Mí­nimo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mn
+                    if x_mn == 'Auto':  # x_mn é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_min = min_value - 2 * min(deltaE)
                         else:
                             array_input_min = min_value - 2 * res * min(deltaE)
                     else:
                         array_input_min = float(x_mn) - enoffset
-                    # Definimos o x MÃ¡ximo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mx
-                    if x_mx == 'Auto':  # x_mx Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Máximo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mx
+                    if x_mx == 'Auto':  # x_mx é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_max = max_value + 2 * min(deltaE)
                         else:
@@ -1488,18 +1488,18 @@ def calculate(element, ap, parent):
                     xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
                     
                     if normalize == 'One':
-                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados Ã  unidade
-                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados à unidade
+                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
                     else:
                         graph_area.scatter(exp_x, exp_y, marker='.', label='Exp.')  # Plot dos dados experimentais
-                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
 
                     graph_area.legend()
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # Leitura dos valores da eficÃ¡cia do detector:
+                # Leitura dos valores da eficácia do detector:
                 efficiency_values = []
                 energy_values = []
                 if effic_file_name != "No":
@@ -1511,42 +1511,42 @@ def calculate(element, ap, parent):
                     except FileNotFoundError:
                         messagebox.showwarning("Error", "Efficiency File is not Avaliable")
                 # ---------------------------------------------------------------------------------------------------------------
-                # VariÃ¡veis necessÃ¡rias para os cÃ¡lcuos dos y e para os plots:
+                # Variáveis necessárias para os cálcuos dos y e para os plots:
                 ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res,energy_values, efficiency_values,enoffset)
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo da variÃ¡vel de notificaÃ§Ã£o:
-                # O cÃ¡lculo Ã© feito na funÃ§Ã£o normalizer, e Ã© lÃ¡ que Ã© lida a escolha de normalizaÃ§Ã£o do utilizador. Aqui sÃ³ passamos dados para a funÃ§ao
+                # Cálculo da variável de notificação:
+                # O cálculo é feito na função normalizer, e é lá que é lida a escolha de normalização do utilizador. Aqui só passamos dados para a funçao
                 if load != 'No':
                     normalization_var = normalizer(y0, max(exp_y), max(ytot))
                 else:
                     if normalizevar.get() == 'ExpMax':  # Se tentarem normalizar ao maximo experimental sem terem carregado espectro
                         messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
-                        normalizevar.set('No')  # Define a variavel global de normalizaÃ§Ã£o para nÃ£o normalizar
+                        normalizevar.set('No')  # Define a variavel global de normalização para não normalizar
                     normalization_var = normalizer(y0, 1, max(ytot))
                 # ---------------------------------------------------------------------------------------------------------------
                 # Autofit:
                 # start_time = time.time()
                 if autofit == 'Yes':
-                    # Fazemos fit apenas se houver um grÃ¡fico experimental carregado
+                    # Fazemos fit apenas se houver um gráfico experimental carregado
                     if load != 'No':
 
-                        # Criar os parametros que vÃ£o ser otimizados
+                        # Criar os parametros que vão ser otimizados
                         params = Parameters()
 
                         # Offset em energia
-                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do grÃ¡fico
+                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do gráfico
                         params.add('xoff', value=enoffset, min=enoffset - xoff_lim, max=enoffset + xoff_lim)
 
                         # Offset no yy
                         yoff_lim = (max(exp_y) - min(exp_y)) * 0.1
                         params.add('yoff', value=y0, min=y0 - yoff_lim, max=y0 + yoff_lim)
 
-                        # ResoluÃ§Ã£o experimental
+                        # Resolução experimental
                         res_lim = res * 3
                         params.add('res', value=res, min=0.01, max=res + res_lim)
 
-                        # # VariÃ¡vel de normalizaÃ§Ã£o
+                        # # Variável de normalização
                         # norm_lim = normalization_var * 0.5
                         # params.add('normal', value=normalization_var)
 
@@ -1563,7 +1563,7 @@ def calculate(element, ap, parent):
                         # Offset no yy a ser definido para o plot final das linhas
                         y0 = result.params['yoff'].value
                         yoffset.set(y0)
-                        # ResoluÃ§Ã£o experimental a ser definido para o plot final das linhas
+                        # Resolução experimental a ser definido para o plot final das linhas
                         res = result.params['res'].value
                         exp_resolution.set(res)
                         # normalization_var = result.params['normal'].value
@@ -1617,22 +1617,22 @@ def calculate(element, ap, parent):
                     graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
                     graph_area.legend()
                 # ------------------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo dos Residuos
+                # Cálculo dos Residuos
                 if load != 'No':
                     # if load != 'No':
-                    # Definimos uma funÃ§Ã£o que recebe um numero, e tendo como dados o que passamos Ã  interp1d faz a sua interpolaÃ§Ã£o
+                    # Definimos uma função que recebe um numero, e tendo como dados o que passamos à interp1d faz a sua interpolação
                     # print(*ytot, sep=',')
-                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o grÃ¡fico de resÃ­duos
+                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o gráfico de resí­duos
                     f_interpolate = interp1d(xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
-                    # Vetor para guardar o y dos residuos (nÃ£o precisamos de guardar o x porque Ã© igual ao exp_x
+                    # Vetor para guardar o y dos residuos (não precisamos de guardar o x porque é igual ao exp_x
                     y_res = [0 for x in range(len(exp_x))]
-                    # VariÃ¡vel para a soma do chi quadrado
+                    # Variável para a soma do chi quadrado
                     chi_sum = 0
                     # Percorremos todos os valores de x
                     for g, h in enumerate(exp_x):
-                        # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                        # Obtemos o valor de y interpolado pela função definida a cima
                         y_interp[g] = f_interpolate(h)
-                        # CÃ¡lculamos o y dos residuos subtraindo o interpolado ao experimental
+                        # Cálculamos o y dos residuos subtraindo o interpolado ao experimental
                         if normalize == 'ExpMax' or normalize == 'No':
                             y_res[g] = (exp_y[g] - y_interp[g]) 
                             #y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
@@ -1642,14 +1642,14 @@ def calculate(element, ap, parent):
                             #y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
                             chi_sum += (y_res[g] **2) / ((exp_sigma[g]/ max(exp_y))**2) 
                         #     y_res[g] = (exp_y[g] / max(exp_y)) - y_interp[g]
-                        # SomatÃ³rio para o cÃ¡lculo de chi quad
+                        # Somatório para o cálculo de chi quad
                     global chi_sqrd
                     chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
                     residues_graph.plot(exp_x, y_res)
                     print("Valor Manual Chi", chi_sqrd)
                     residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
                 # ------------------------------------------------------------------------------------------------------------------------
-                # DefiniÃ§Ã£o do label do eixo yy e, consoante haja ou nÃ£o um grÃ¡fico de resÃ­duos, do eixo  xx
+                # Definição do label do eixo yy e, consoante haja ou não um gráfico de resí­duos, do eixo  xx
                 graph_area.set_ylabel('Intensity (arb. units)')
                 graph_area.legend(title=element_name, title_fontsize='large')
                 if load == 'No':
@@ -1657,24 +1657,24 @@ def calculate(element, ap, parent):
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Controlo do numero de entradas na legenda
                 number_of_labels = len(graph_area.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-                legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
+                legend_columns = 1  # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
                 labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                     legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
                     labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
+                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
             #--------------------------------------------------------------------------------------------------------------------------------------
             elif spectype == 'M_Simulation':
-                # VariÃ¡vel para contar as transiÃ§Ãµes erradas
+                # Variável para contar as transições erradas
                 bad_selection = 0
                 
                 bad_lines = {}
                 
                 if sat != 'Auger':
                     # -------------------------------------------------------------------------------------------
-                    # Leitura dos valores das transiÃ§Ãµes selecionadas
-                    # Contrariamente ao spectype == 'Stick' onde os plots sÃ£o feitos quando se trata de cada risca, aqui,
-                    # o  que se faz Ã© obter os valores necessÃ¡rios para os plots. NÃ£o se faz nenhum plot em si dentro deste ciclo.
+                    # Leitura dos valores das transições selecionadas
+                    # Contrariamente ao spectype == 'Stick' onde os plots são feitos quando se trata de cada risca, aqui,
+                    # o  que se faz é obter os valores necessários para os plots. Não se faz nenhum plot em si dentro deste ciclo.
                     charge_states = rad_PCS + rad_NCS
                     
                     ploted_cs = []
@@ -1702,18 +1702,18 @@ def calculate(element, ap, parent):
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, transition in enumerate(the_dictionary):
                             if the_dictionary[transition]["selected_state"]:
-                                low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                                high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
+                                low_level = the_dictionary[transition]["low_level"]  # orbital da lacuna no iní­cio da transição
+                                high_level = the_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transição
                                 
                                 if not ncs:
-                                    diag_sim_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                                    diag_sim_val = [line + [PCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                                 else:
                                     diag_sim_val = [line + [NCS_radMixValues[i].get()] for i, linerad in enumerate(lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and rad_NCS[i] == cs]
                                 
                                 if not ncs:
-                                    sat_sim_val = [line + [PCS_radMixValues[rad_PCS.index(sat_PCS[i])].get()] for i, linesat in enumerate(linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
+                                    sat_sim_val = [line + [PCS_radMixValues[rad_PCS.index(sat_PCS[i])].get()] for i, linesat in enumerate(linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
                                 else:
-                                    sat_sim_val = [line + [NCS_radMixValues[rad_NCS.index(sat_NCS[i])].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã s satÃ©lites de transition
+                                    sat_sim_val = [line + [NCS_radMixValues[rad_NCS.index(sat_NCS[i])].get()] for i, linesat in enumerate(linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and sat_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem às satélites de transition
                                 
                                 if sat == 'Diagram':
                                     x1 = [float(row[8]) for row in diag_sim_val]
@@ -1759,7 +1759,7 @@ def calculate(element, ap, parent):
                                             ys[cs_index * len(the_dictionary) + index][ind] = y1s
                                             ws[cs_index * len(the_dictionary) + index][ind] = w1s
                         # -------------------------------------------------------------------------------------------
-                        # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                        # Verificar se se selecionaram transições indí­sponí­veis
                         for index, transition in enumerate(the_dictionary):
                             if the_dictionary[transition]["selected_state"]:
                                 if not x[cs_index * len(the_dictionary) + index] and not any(xs[cs_index * len(the_dictionary) + index]):
@@ -1813,14 +1813,14 @@ def calculate(element, ap, parent):
                     for cs_index, cs in enumerate(ploted_cs):
                         for index, transition in enumerate(the_aug_dictionary):
                             if the_aug_dictionary[transition]["selected_state"]:
-                                low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no inÃ­cio da transiÃ§Ã£o
-                                high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transiÃ§Ã£o
+                                low_level = the_aug_dictionary[transition]["low_level"]  # orbital da lacuna no iní­cio da transição
+                                high_level = the_aug_dictionary[transition]["high_level"]  # orbital da lacuna no fim da transição
                                 auger_level = the_aug_dictionary[transition]["auger_level"]
                                 
                                 if not ncs:
-                                    aug_sim_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                                    aug_sim_val = [line + [PCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_PCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                                 else:
-                                    aug_sim_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem Ã  trasiÃ§Ã£o transition
+                                    aug_sim_val = [line + [NCS_augMixValues[i].get()] for i, lineaug in enumerate(lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and aug_NCS[i] == cs]  # Guarda para uma lista as linhas do ficheiro que se referem à trasição transition
                                 
                                 x1 = [float(row[8]) for row in aug_sim_val]
                                 y1 = [float(row[9]) * (1 - sum(shakeweights)) * float(row[-1]) for row in aug_sim_val]
@@ -1830,7 +1830,7 @@ def calculate(element, ap, parent):
                                 w[cs_index * len(the_aug_dictionary) + index] = w1
                         
                         # -------------------------------------------------------------------------------------------
-                        # Verificar se se selecionaram transiÃ§Ãµes indÃ­sponÃ­veis
+                        # Verificar se se selecionaram transições indí­sponí­veis
                         for index, transition in enumerate(the_aug_dictionary):
                             if the_aug_dictionary[transition]["selected_state"]:
                                 if not x[cs_index * len(the_aug_dictionary) + index]:
@@ -1859,13 +1859,13 @@ def calculate(element, ap, parent):
                         messagebox.showwarning("Common Auger Transitions", "Every transition is plotted for at least 1 charge state.")
                 
                 # -------------------------------------------------------------------------------------------
-                # ObtenÃ§Ã£o do valor de xfinal a usar nos cÃ¡clulos dos yy (caso nÃ£o seja selecionado um espectro experimental, porque se fo xfinal Ã© mudado)
-                # (Calcular a dispersÃ£o em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersÃ£o e da resoluÃ§Ã£o experimental)
+                # Obtenção do valor de xfinal a usar nos cáclulos dos yy (caso não seja selecionado um espectro experimental, porque se fo xfinal é mudado)
+                # (Calcular a dispersão em energia das varias riscas para criar o array de valores de x a plotar em funcao desta dispersão e da resolução experimental)
                 try:
                     if sat == 'Diagram':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
                         
                         max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
@@ -1883,22 +1883,22 @@ def calculate(element, ap, parent):
                     
                     elif sat == 'Auger':
                         deltaE = []
-                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k Ã© a lista e i o indice onde ela estÃ¡ guardada em x.
-                            if k != []:  # Se a lista nÃ£o estiver vazia, guardamos em deltaE a diferenÃ§a entre o seu valor mÃ¡ximo e mÃ­nimo
+                        for j, k in enumerate(x):  # Percorremos as listas guardadas em x. k é a lista e i o indice onde ela está guardada em x.
+                            if k != []:  # Se a lista não estiver vazia, guardamos em deltaE a diferença entre o seu valor máximo e mí­nimo
                                 deltaE.append(max(x[j]) - min(x[j]))
                         
                         max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
                         min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-                    # Definimos o x MÃ­nimo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mn
-                    if x_mn == 'Auto':  # x_mn Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Mí­nimo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mn
+                    if x_mn == 'Auto':  # x_mn é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_min = min_value - 2 * min(deltaE)
                         else:
                             array_input_min = min_value - 2 * res * min(deltaE)
                     else:
                         array_input_min = float(x_mn) - enoffset
-                    # Definimos o x MÃ¡ximo que queremos plotar. Pode ser definido automÃ¡ticamente ou pelo valor x_mx
-                    if x_mx == 'Auto':  # x_mx Ã© inicializado a Auto, da primeira vez que o programa corre isto Ã© verdade
+                    # Definimos o x Máximo que queremos plotar. Pode ser definido automáticamente ou pelo valor x_mx
+                    if x_mx == 'Auto':  # x_mx é inicializado a Auto, da primeira vez que o programa corre isto é verdade
                         if res <= 0.2 * (min(deltaE)):
                             array_input_max = max_value + 2 * min(deltaE)
                         else:
@@ -1966,18 +1966,18 @@ def calculate(element, ap, parent):
                     xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
                     
                     if normalize == 'One':
-                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados Ã  unidade
-                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')  # Plot dos dados experimentais normalizados à unidade
+                        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
                     else:
                         graph_area.scatter(exp_x, exp_y, marker='.', label='Exp.')  # Plot dos dados experimentais
-                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha positiva)
-                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrÃ£o no grÃ¡fico dos resÃ­duos (linha negativa)
+                        residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha positiva)
+                        residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')  # Plot do desvio padrão no gráfico dos resí­duos (linha negativa)
 
                     graph_area.legend()
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # Leitura dos valores da eficÃ¡cia do detector:
+                # Leitura dos valores da eficácia do detector:
                 efficiency_values = []
                 energy_values = []
                 if effic_file_name != "No":
@@ -1989,42 +1989,42 @@ def calculate(element, ap, parent):
                     except FileNotFoundError:
                         messagebox.showwarning("Error", "Efficiency File is not Avaliable")
                 # ---------------------------------------------------------------------------------------------------------------
-                # VariÃ¡veis necessÃ¡rias para os cÃ¡lcuos dos y e para os plots:
+                # Variáveis necessárias para os cálcuos dos y e para os plots:
                 ytot, yfinal, yfinals = y_calculator(sat, peak, xfinal, x, y, w, xs, ys, ws, res,energy_values, efficiency_values,enoffset)
 
                 # ---------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo da variÃ¡vel de notificaÃ§Ã£o:
-                # O cÃ¡lculo Ã© feito na funÃ§Ã£o normalizer, e Ã© lÃ¡ que Ã© lida a escolha de normalizaÃ§Ã£o do utilizador. Aqui sÃ³ passamos dados para a funÃ§ao
+                # Cálculo da variável de notificação:
+                # O cálculo é feito na função normalizer, e é lá que é lida a escolha de normalização do utilizador. Aqui só passamos dados para a funçao
                 if load != 'No':
                     normalization_var = normalizer(y0, max(exp_y), max(ytot))
                 else:
                     if normalizevar.get() == 'ExpMax':  # Se tentarem normalizar ao maximo experimental sem terem carregado espectro
                         messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")  # Apresenta aviso
-                        normalizevar.set('No')  # Define a variavel global de normalizaÃ§Ã£o para nÃ£o normalizar
+                        normalizevar.set('No')  # Define a variavel global de normalização para não normalizar
                     normalization_var = normalizer(y0, 1, max(ytot))
                 # ---------------------------------------------------------------------------------------------------------------
                 # Autofit:
                 # start_time = time.time()
                 if autofit == 'Yes':
-                    # Fazemos fit apenas se houver um grÃ¡fico experimental carregado
+                    # Fazemos fit apenas se houver um gráfico experimental carregado
                     if load != 'No':
 
-                        # Criar os parametros que vÃ£o ser otimizados
+                        # Criar os parametros que vão ser otimizados
                         params = Parameters()
 
                         # Offset em energia
-                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do grÃ¡fico
+                        xoff_lim = (max(exp_x) - min(exp_x)) * 0.1  # O offset vai variar entre o valor introduzido +/- 10% do tamanho do gráfico
                         params.add('xoff', value=enoffset, min=enoffset - xoff_lim, max=enoffset + xoff_lim)
 
                         # Offset no yy
                         yoff_lim = (max(exp_y) - min(exp_y)) * 0.1
                         params.add('yoff', value=y0, min=y0 - yoff_lim, max=y0 + yoff_lim)
 
-                        # ResoluÃ§Ã£o experimental
+                        # Resolução experimental
                         res_lim = res * 3
                         params.add('res', value=res, min=0.01, max=res + res_lim)
 
-                        # # VariÃ¡vel de normalizaÃ§Ã£o
+                        # # Variável de normalização
                         # norm_lim = normalization_var * 0.5
                         # params.add('normal', value=normalization_var)
 
@@ -2041,7 +2041,7 @@ def calculate(element, ap, parent):
                         # Offset no yy a ser definido para o plot final das linhas
                         y0 = result.params['yoff'].value
                         yoffset.set(y0)
-                        # ResoluÃ§Ã£o experimental a ser definido para o plot final das linhas
+                        # Resolução experimental a ser definido para o plot final das linhas
                         res = result.params['res'].value
                         exp_resolution.set(res)
                         # normalization_var = result.params['normal'].value
@@ -2099,22 +2099,22 @@ def calculate(element, ap, parent):
                     graph_area.plot(xfinal + enoffset, (ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
                     graph_area.legend()
                 # ------------------------------------------------------------------------------------------------------------------------
-                # CÃ¡lculo dos Residuos
+                # Cálculo dos Residuos
                 if load != 'No':
                     # if load != 'No':
-                    # Definimos uma funÃ§Ã£o que recebe um numero, e tendo como dados o que passamos Ã  interp1d faz a sua interpolaÃ§Ã£o
+                    # Definimos uma função que recebe um numero, e tendo como dados o que passamos à interp1d faz a sua interpolação
                     # print(*ytot, sep=',')
-                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o grÃ¡fico de resÃ­duos
+                    y_interp = [0 for i in range(len(exp_x))]  # Criar lista vazia para o gráfico de resí­duos
                     f_interpolate = interp1d(xfinal + enoffset, (np.array(ytot) * normalization_var) + y0, kind='cubic')
-                    # Vetor para guardar o y dos residuos (nÃ£o precisamos de guardar o x porque Ã© igual ao exp_x
+                    # Vetor para guardar o y dos residuos (não precisamos de guardar o x porque é igual ao exp_x
                     y_res = [0 for x in range(len(exp_x))]
-                    # VariÃ¡vel para a soma do chi quadrado
+                    # Variável para a soma do chi quadrado
                     chi_sum = 0
                     # Percorremos todos os valores de x
                     for g, h in enumerate(exp_x):
-                        # Obtemos o valor de y interpolado pela funÃ§Ã£o definida a cima
+                        # Obtemos o valor de y interpolado pela função definida a cima
                         y_interp[g] = f_interpolate(h)
-                        # CÃ¡lculamos o y dos residuos subtraindo o interpolado ao experimental
+                        # Cálculamos o y dos residuos subtraindo o interpolado ao experimental
                         if normalize == 'ExpMax' or normalize == 'No':
                             y_res[g] = (exp_y[g] - y_interp[g]) 
                             #y_res[g] = y_interp[g] - exp_y[g]                  ORIGINAL CODE
@@ -2124,14 +2124,14 @@ def calculate(element, ap, parent):
                             #y_res[g] = y_interp[g] - (exp_y[g] / max(exp_y))           ORGINAL CODE
                             chi_sum += (y_res[g] **2) / ((exp_sigma[g]/ max(exp_y))**2) 
                         #     y_res[g] = (exp_y[g] / max(exp_y)) - y_interp[g]
-                        # SomatÃ³rio para o cÃ¡lculo de chi quad
+                        # Somatório para o cálculo de chi quad
                     
                     chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
                     residues_graph.plot(exp_x, y_res)
                     print("Valor Manual Chi", chi_sqrd)
                     residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(chi_sqrd))
                 # ------------------------------------------------------------------------------------------------------------------------
-                # DefiniÃ§Ã£o do label do eixo yy e, consoante haja ou nÃ£o um grÃ¡fico de resÃ­duos, do eixo  xx
+                # Definição do label do eixo yy e, consoante haja ou não um gráfico de resí­duos, do eixo  xx
                 graph_area.set_ylabel('Intensity (arb. units)')
                 graph_area.legend(title=element_name, title_fontsize='large')
                 if load == 'No':
@@ -2139,12 +2139,12 @@ def calculate(element, ap, parent):
                 # ------------------------------------------------------------------------------------------------------------------------
                 # Controlo do numero de entradas na legenda
                 number_of_labels = len(graph_area.legend().get_texts())  # Descubro quantas entradas vai ter a legenda
-                legend_columns = 1  # Inicialmente hÃ¡ uma coluna, mas vou fazer contas para ter 10 itens por coluna no mÃ¡ximo
+                legend_columns = 1  # Inicialmente há uma coluna, mas vou fazer contas para ter 10 itens por coluna no máximo
                 labels_per_columns = number_of_labels / legend_columns  # Numero de entradas por coluna
-                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, nÃ£o acontece nada
+                while labels_per_columns > 10:  # Se a priori for menos de 10 entradas por coluna, não acontece nada
                     legend_columns += 1  # Se houver mais que 10 entradas por coluna, meto mais uma coluna
                     labels_per_columns = number_of_labels / legend_columns  # Recalculo o numero de entradas por coluna
-                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessÃ¡rias para nÃ£o ter mais de 10 entradas por coluna
+                graph_area.legend(ncol=legend_columns)  # Defino o numero de colunas na legenda = numero de colunas necessárias para não ter mais de 10 entradas por coluna
             
             f.canvas.draw()
 
@@ -2207,22 +2207,22 @@ def calculate(element, ap, parent):
             effic_var.set(effic_fname)
 
         def selected(event):
-            text_T = drop_menu.get()  # LÃª Texto da box com as transiÃ§Ãµes
-            dict_updater(text_T)  # Faz update do dicionÃ¡rio com a transiÃ§Ã£o lida
-            to_print = ''  # Texto a imprimir no label com as transiÃ§Ãµes selecionadas
+            text_T = drop_menu.get()  # Lê Texto da box com as transições
+            dict_updater(text_T)  # Faz update do dicionário com a transição lida
+            to_print = ''  # Texto a imprimir no label com as transições selecionadas
             
             if satelite_var.get() != 'Auger':
-                if the_dictionary[text_T]["selected_state"]:  # Se a transiÃ§Ã£o estiver selecionada:
-                    transition_list.append(text_T)  # Ã‰ adicionada Ã  lista de transiÃ§Ãµes que vai para o label
+                if the_dictionary[text_T]["selected_state"]:  # Se a transição estiver selecionada:
+                    transition_list.append(text_T)  # é adicionada à lista de transições que vai para o label
                 elif not the_dictionary[text_T]["selected_state"]:  # Se for descelecionada
-                    transition_list.remove(text_T)  # Ã‰ removida da lista que vai para o label
+                    transition_list.remove(text_T)  # é removida da lista que vai para o label
             else:
-                if the_aug_dictionary[text_T]["selected_state"]:  # Se a transiÃ§Ã£o estiver selecionada:
-                    transition_list.append(text_T)  # Ã‰ adicionada Ã  lista de transiÃ§Ãµes que vai para o label
+                if the_aug_dictionary[text_T]["selected_state"]:  # Se a transição estiver selecionada:
+                    transition_list.append(text_T)  # é adicionada à lista de transições que vai para o label
                 elif not the_aug_dictionary[text_T]["selected_state"]:  # Se for descelecionada
-                    transition_list.remove(text_T)  # Ã‰ removida da lista que vai para o label
+                    transition_list.remove(text_T)  # é removida da lista que vai para o label
             
-            for a, b in enumerate(transition_list):  # Este for serve para colocar as virgulas entre as transiÃ§Ãµes que vÃ£o para o label
+            for a, b in enumerate(transition_list):  # Este for serve para colocar as vírgulas entre as transições que vão para o label
                 if len(transition_list) == a + 1:
                     to_print += str(b) + ' '
                 else:
@@ -2475,15 +2475,15 @@ def calculate(element, ap, parent):
             else:
                 fig_row = 4
             
-            # Figura onde o grÃ¡fico vai ser desenhado
-            f = Figure(figsize=(10, 5), dpi=100)  # canvas para o grafico do espectro
+            # Figura onde o gráfico vai ser desenhado
+            f = Figure(figsize=(10, 5), dpi=100)  # canvas para o gráfico do espectro
             # plt.style.use('ggplot') Estilo para os plots
-            a = f.add_subplot(111)  # zona onde estara o grafico
+            a = f.add_subplot(111)  # zona onde estara o gráfico
             a.set_xlabel('Temperature (K)')
             a.set_ylabel('Population')
             # ---------------------------------------------------------------------------------------------------------------
-            # Frames onde se vÃ£o por a figura e os labels e botÃµes e etc
-            figure_frame = Frame(mixer, relief=GROOVE)  # frame para o grafico
+            # Frames onde se vão pôr a figura e os labels e botões e etc
+            figure_frame = Frame(mixer, relief=GROOVE)  # frame para o gráfico
             
             figure_frame.grid(column=0, row=fig_row, columnspan=max(len(radiative_files), len(auger_files)), pady=20)
             
@@ -2580,15 +2580,15 @@ def calculate(element, ap, parent):
             
             a.legend()
         
-        sim.bind('<Return>', enter_function)  # BotÃ£o para correr a calculate quando se clica no enter
+        sim.bind('<Return>', enter_function)  # Botão para correr a calculate quando se clica no enter
         # ---------------------------------------------------------------------------------------------------------------
-        # DropList das transiÃ§Ãµes, Labels e botÃ£o calculate a apresentar na janela
+        # DropList das transições, Labels e botão calculate a apresentar na janela
         drop_menu = ttk.Combobox(buttons_frame, value=[transition for transition in the_dictionary], height=5, width=10)
         drop_menu.set('Transitions:')
         drop_menu.bind("<<ComboboxSelected>>", selected)
         drop_menu.grid(row=0, column=0)
 
-        # Min Max e NÂº Pontos
+        # Min Max e Nº Pontos
         ttk.Label(buttons_frame2, text="Points").pack(side=LEFT)
         points = ttk.Entry(buttons_frame2, width=7, textvariable=number_points).pack(side=LEFT)
         ttk.Label(buttons_frame2, text="x Max").pack(side=LEFT)
@@ -2677,12 +2677,12 @@ def calculate(element, ap, parent):
     return 0
 
 
-def params(z):  # Definicoes relacionadas com a segunda janela (depois da tabela periodica)
-    parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulacao)
+def params(z):  # Definições relacionadas com a segunda janela (depois da tabela periódica)
+    parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulação)
     parameters.title("Atomic Parameters")  # nome da janela
 
-    check_var = IntVar()  # variavel que vai dar o valor do botao seleccionado (yields=1, widths=2, cross sections=3, simulacao=4)
-    check_var.set(1)  # initialize (o botao 1, yields, comeca seleccionado por defeito)
+    check_var = IntVar()  # variável que vai dar o valor do botao seleccionado (yields=1, widths=2, cross sections=3, simulacao=4)
+    check_var.set(1)  # initialize (o botao 1, yields, começa selecionado por defeito)
     # ---------------------------------------------------------------------------------------------------------------
     # Propriedades da janela
     subelem = ttk.Frame(parameters, padding="3 3 12 12")
@@ -2690,7 +2690,7 @@ def params(z):  # Definicoes relacionadas com a segunda janela (depois da tabela
     subelem.columnconfigure(0, weight=1)
     subelem.rowconfigure(0, weight=1)
     # ---------------------------------------------------------------------------------------------------------------
-    # BotÃµes
+    # Botões
     ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
     ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
     ttk.Radiobutton(subelem, text='Yields', variable=check_var, value=1).grid(column=0, row=5, sticky=W)
