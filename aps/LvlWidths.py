@@ -16,10 +16,9 @@ def fetchWidths(dir_path, z):
         radrates_file = dir_path / str(z) / (str(z) + '-radrate.out')
         with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
             # Escrever todas as linhas no ficheiro como uma lista
-            lineradrates = [x.strip('\n').split()
-                            for x in radrates.readlines()]
+            generalVars.lineradrates = [x.strip('\n').split() for x in radrates.readlines()]
             # Remover as linhas compostas apenas por celulas vazias
-            lineradrates = list(filter(None, lineradrates))
+            generalVars.lineradrates = list(filter(None, generalVars.lineradrates))
 
         # criar uma janela onde serao apresentados os resultados dos yields, widths, cross sections ou spectra
         # simulations

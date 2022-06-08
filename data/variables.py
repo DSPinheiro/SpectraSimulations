@@ -11,6 +11,35 @@ ytot = []
 yfinals = []
 
 
+radiative_files = []
+auger_files = []
+
+
+lineradrates = []
+linesatellites = []
+lineauger = []
+shakeweights = []
+label1 = []
+
+lineradrates_PCS = []
+lineradrates_NCS = []
+rad_PCS = []
+rad_NCS = []
+
+lineaugrates_PCS = []
+lineaugrates_NCS = []
+aug_PCS = []
+aug_NCS = []
+
+linesatellites_PCS = []
+linesatellites_NCS = []
+sat_PCS = []
+sat_NCS = []
+
+Ionpop_exists = False
+ionpopdata = []
+
+
 labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': '3p*', 'M3': '3p', 'M4': '3d*',
              'M5': '3d', 'N1': '4s', 'N2': '4p*', 'N3': '4p', 'N4': '4d*', 'N5': '4d', 'N6': '4f*', 'N7': '4f',
              'O1': '5s', 'O2': '5p*', 'O3': '5p', 'O4': '5d*', 'O5': '5d', 'O6': '5f*', 'O7': '5f', 'O8': '5g*',

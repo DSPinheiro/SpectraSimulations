@@ -1,8 +1,11 @@
 from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
 
 from data.variables import labeldict, the_dictionary, the_aug_dictionary
 import data.variables
 import csv
+
+import os
 
 # Função para dar nome aos ficheiros a gravar
 def file_namer(simulation_or_fit, fit_time, extension):
@@ -202,3 +205,230 @@ def write_to_xls(type_t, xfinal, enoffset, y0, exp_x, exp_y, residues_graph, rad
                                 quotechar='|', quoting=csv.QUOTE_MINIMAL)
                 w1.writerow(matrix[i])
     messagebox.showinfo("File Saved", "Data file has been saved")
+
+
+
+def readRadRates(radrates_file):
+    try:
+        with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
+            # Escrever todas as linhas no ficheiro como uma lista
+            lineradrates = [x.strip('\n').split() for x in radrates.readlines()]
+            # Remover as linhas compostas apenas por celulas vazias
+            lineradrates = list(filter(None, lineradrates))
+            del lineradrates[0:2]
+            
+            return lineradrates
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Diagram File is not Avaliable")
+
+
+def readSatRates(satellites_file):
+    try:
+        with open(satellites_file, 'r') as satellites:  # Abrir o ficheiro
+            # Escrever todas as linhas no ficheiro como uma lista
+            linesatellites = [x.strip('\n').split() for x in satellites.readlines()]
+            # Remover as linhas compostas apenas por celulas vazias
+            linesatellites = list(filter(None, linesatellites))
+            # Tira as linhas que têm o nome das variáveis e etc
+            del linesatellites[0:2]
+            
+            return linesatellites
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Satellites File is not Avaliable")
+
+
+def readAugRates(augrates_file):
+    try:
+        with open(augrates_file, 'r') as augrates:  # Abrir o ficheiro
+            # Escrever todas as linhas no ficheiro como uma lista
+            lineauger = [x.strip('\n').split() for x in augrates.readlines()]
+            # Remover as linhas compostas apenas por celulas vazias
+            lineauger = list(filter(None, lineauger))
+            # Tira as linhas que têm o nome das variáveis e etc
+            del lineauger[0:2]
+            
+            return lineauger
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Auger Rates File is not Avaliable")
+
+
+def readShakeWeights(shakeweights_file):
+    try:
+        with open(shakeweights_file, 'r') as shakeweights_f:  # Abrir o ficheiro
+            # Escrever todas as linhas no ficheiro como uma lista
+            shakeweights_m = [x.strip('\n').split(',') for x in shakeweights_f.readlines()]
+            shakeweights = []
+            label1 = []
+            for i, j in enumerate(shakeweights_m):
+                # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os valores numéricos no shakeweights
+                shakeweights.append(float(shakeweights_m[i][1]))
+            for k, l in enumerate(shakeweights_m):
+                # Neste for corremos as linhas todas guardadas em shakeweights_m e metemos os rotulos no label 1
+                label1.append(shakeweights_m[k][0])
+            
+            
+            return shakeweights, label1
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Shake Weigth File is not Avaliable")
+
+
+
+def searchRadChargeStates(dir_path, z):
+    radiative_files = []
+    
+    for f in os.listdir(dir_path / str(z) / 'Charge_States'):
+        if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-intensity_' in f:
+            radiative_files.append(f)
+    
+    return radiative_files
+
+
+
+def readRadChargeStates(radiative_files, dir_path, z):
+    lineradrates_PCS = []
+    lineradrates_NCS = []
+
+    rad_PCS = []
+    rad_NCS = []
+
+    for radfile in radiative_files:
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+        rad_tmp_file = dir_path / str(z) / 'Charge_States' / radfile
+        try:
+            with open(rad_tmp_file, 'r') as radrates:  # Abrir o ficheiro
+                if '+' in radfile:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    lineradrates_PCS.append([x.strip('\n').split() for x in radrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    lineradrates_PCS[-1] = list(filter(None, lineradrates_PCS[-1]))
+                    del lineradrates_PCS[-1][0:2]
+                    rad_PCS.append('+' + radfile.split('+')[1].split('.')[0])
+                else:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    lineradrates_NCS.append([x.strip('\n').split() for x in radrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    lineradrates_NCS[-1] = list(filter(None, lineradrates_NCS[-1]))
+                    del lineradrates_NCS[-1][0:2]
+                    rad_NCS.append('-' + radfile.split('-')[1].split('.')[0])
+        except FileNotFoundError:
+            messagebox.showwarning("Error", "Charge State File is not Avaliable: " + radfile)
+    
+    return lineradrates_PCS, lineradrates_NCS, rad_PCS, rad_NCS
+
+
+
+def searchAugChargeStates(dir_path, z):
+    auger_files = []
+    
+    for f in os.listdir(dir_path / str(z) / 'Charge_States'):
+        if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-augrate_' in f:
+            auger_files.append(f)
+    
+    return auger_files
+
+
+
+def readAugChargeStates(auger_files, dir_path, z):
+    lineaugrates_PCS = []
+    lineaugrates_NCS = []
+
+    aug_PCS = []
+    aug_NCS = []
+
+    for augfile in auger_files:
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+        aug_tmp_file = dir_path / str(z) / 'Charge_States' / augfile
+        try:
+            with open(aug_tmp_file, 'r') as augrates:  # Abrir o ficheiro
+                if '+' in augfile:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    lineaugrates_PCS.append([x.strip('\n').split() for x in augrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    lineaugrates_PCS[-1] = list(filter(None, lineaugrates_PCS[-1]))
+                    del lineaugrates_PCS[-1][0:2]
+                    aug_PCS.append('+' + radfile.split('+')[1].split('.')[0])
+                else:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    lineaugrates_NCS.append([x.strip('\n').split() for x in augrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    lineaugrates_NCS[-1] = list(filter(None, lineaugrates_NCS[-1]))
+                    del lineaugrates_NCS[-1][0:2]
+                    aug_NCS.append('-' + radfile.split('-')[1].split('.')[0])
+        except FileNotFoundError:
+            messagebox.showwarning("Error", "Charge State File is not Avaliable: " + augfile)
+    
+    return lineaugrates_PCS, lineaugrates_NCS, aug_PCS, aug_NCS
+
+
+
+def searchSatChargeStates(dir_path, z):
+    sat_files = []
+    
+    for f in os.listdir(dir_path / str(z) / 'Charge_States'):
+        if os.path.isfile(os.path.join(dir_path / str(z) / 'Charge_States', f)) and '-satinty_' in f:
+            sat_files.append(f)
+    
+    return sat_files
+
+
+
+def readSatChargeStates(sat_files, dir_path, z):
+    linesatellites_PCS = []
+    linesatellites_NCS = []
+
+    sat_PCS = []
+    sat_NCS = []
+
+    for satfile in sat_files:
+        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as intensidades
+        sat_tmp_file = dir_path / str(z) / 'Charge_States' / satfile
+        try:
+            with open(sat_tmp_file, 'r') as satrates:  # Abrir o ficheiro
+                if '+' in satfile:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    linesatellites_PCS.append([x.strip('\n').split() for x in satrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    linesatellites_PCS[-1] = list(filter(None, linesatellites_PCS[-1]))
+                    del linesatellites_PCS[-1][0:2]
+                    sat_PCS.append('+' + satfile.split('+')[1].split('.')[0])
+                else:
+                    # Escrever todas as linhas no ficheiro como uma lista
+                    linesatellites_NCS.append([x.strip('\n').split() for x in satrates.readlines()])
+                    # Remover as linhas compostas apenas por celulas vazias
+                    linesatellites_NCS[-1] = list(filter(None, linesatellites_NCS[-1]))
+                    del linesatellites_NCS[-1][0:2]
+                    sat_NCS.append('-' + satfile.split('-')[1].split('.')[0])
+        except FileNotFoundError:
+            messagebox.showwarning("Error", "Charge State File is not Avaliable: " + satfile)
+    
+    return linesatellites_PCS, linesatellites_NCS, sat_PCS, sat_NCS
+
+
+
+def readIonPop(ionpop_file):
+    try:
+        with open(ionpop_file, 'r') as ionpop:  # Abrir o ficheiro
+            # Escrever todas as linhas no ficheiro como uma lista
+            ionpopdata = [x.strip('\n').split() for x in ionpop.readlines()]
+            # Remover as linhas compostas apenas por celulas vazias
+            ionpopdata = list(filter(None, ionpopdata))
+        
+        return True, ionpopdata
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Ion Population File is not Avaliable")
+
+
+
+def load(loadvar):  # funcao que muda o nome da variavel correspondente ao ficheiro experimental
+    fname = askopenfilename(filetypes=(("Spectra files", "*.csv *.txt"), ("All files", "*.*")))
+    # Muda o nome da variavel loadvar para a string correspondente ao path do ficheiro seleccionado
+    loadvar.set(fname)
+
+
+def load_effic_file(effic_var):
+    effic_fname = askopenfilename(filetypes=(("Efficiency files", "*.csv"), ("All files", "*.*")))
+    effic_var.set(effic_fname)
+
+
+def loadExp(file):
+    return list(csv.reader(open(file, 'r', encoding='utf-8-sig')))
