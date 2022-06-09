@@ -31,16 +31,11 @@ def fetchWidths(dir_path, z):
         atdatayields.rowconfigure(0, weight=1)
         # Labels dos dados na janela
         # Label abaixo do qual serao escritos os resultados dos level widths
-        ttk.Label(atdatayields, text="Level Widths").grid(
-            column=0, row=0, sticky=W, columnspan=2)
+        ttk.Label(atdatayields, text="Level Widths").grid(column=0, row=0, sticky=W, columnspan=2)
         # Label abaixo do qual serao escritos os resultados das line widths
-        ttk.Label(atdatayields, text="Line Widths").grid(
-            column=5, row=0, sticky=W, columnspan=2)
-        ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(2)).grid(
-            column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
-        ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(
-            column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
-        ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(
-            column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
+        ttk.Label(atdatayields, text="Line Widths").grid(column=5, row=0, sticky=W, columnspan=2)
+        ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(2)).grid(column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
+        ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
+        ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
     except FileNotFoundError:
         messagebox.showerror("Error", "Required File is Missing")

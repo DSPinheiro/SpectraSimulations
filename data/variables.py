@@ -1,45 +1,63 @@
+#Chi^2 of the current fit
 chi_sqrd = 0
 
+#Mix Values of the various charge states used in the simulation
 PCS_radMixValues = []
 NCS_radMixValues = []
 PCS_augMixValues = []
 NCS_augMixValues = []
 
-
+#Final y of the simulated spectrum (Rad or Aug, no satellite) for each transition
 yfinal = []
+#Total y of the simulated spectrum summed over all simulated lines
 ytot = []
+#Final y of the simulated satellite lines for each Rad transition
 yfinals = []
 
-
+#File names of the radiative transitions for each charge state found
 radiative_files = []
+#File names of the auger transitions for each charge state found
 auger_files = []
 
-
+#Raw data read from the radiative transitions file to be simulated
 lineradrates = []
+#Raw data read from the satellite transitions file to be simulated
 linesatellites = []
+#Raw data read from the auger transitions file to be simulated
 lineauger = []
+#Raw data read from the shake wheights file to be simulated
 shakeweights = []
+#Variable to store the labels read from the shake weights file
 label1 = []
 
+
+#Raw data read from the radiative transitions files to be simulated, for each charge state split by positive and negative CS
 lineradrates_PCS = []
 lineradrates_NCS = []
+#Order of the charge states read and stored in the previous variables
 rad_PCS = []
 rad_NCS = []
 
+#Raw data read from the auger transitions files to be simulated, for each charge state split by positive and negative CS
 lineaugrates_PCS = []
 lineaugrates_NCS = []
+#Order of the charge states read and stored in the previous variables
 aug_PCS = []
 aug_NCS = []
 
+#Raw data read from the satellite transitions files to be simulated, for each charge state split by positive and negative CS
 linesatellites_PCS = []
 linesatellites_NCS = []
+#Order of the charge states read and stored in the previous variables
 sat_PCS = []
 sat_NCS = []
 
+#Flag to check if a file containing the ion population data is present
 Ionpop_exists = False
+#Raw data read from the ion population file
 ionpopdata = []
 
-
+#Correspondence between Siegbahn notation and relativistic orbitals
 labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': '3p*', 'M3': '3p', 'M4': '3d*',
              'M5': '3d', 'N1': '4s', 'N2': '4p*', 'N3': '4p', 'N4': '4d*', 'N5': '4d', 'N6': '4f*', 'N7': '4f',
              'O1': '5s', 'O2': '5p*', 'O3': '5p', 'O4': '5d*', 'O5': '5d', 'O6': '5f*', 'O7': '5f', 'O8': '5g*',
@@ -265,7 +283,7 @@ the_aug_dictionary = {
     "M5N1N1": {"low_level": "M5", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M5N1N1"},
 }
 
-
+#Values to initialize the periodic table
 per_table = [[1, 1.0079, ' Hydrogen ', ' H ', 0.09, 'grey', 1, 1, ' 1s1 ', 13.5984],
              [2, 4.0026, ' Helium ', ' He ', 0.18, 'cyan', 1, 18, ' 1s2 ', 24.5874],
              [3, 6.941, ' Lithium ', ' Li ', 0.53, 'orange', 2, 1, ' [He] 2s1 ', 5.3917],

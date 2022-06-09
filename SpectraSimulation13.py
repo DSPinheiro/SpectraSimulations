@@ -40,8 +40,9 @@ def calculate(element, ap, parent):
         simulateSpectra(dir_path, element, parent)
     return 0
 
-
-def params(z):  # Definições relacionadas com a segunda janela (depois da tabela periódica)
+# ---------------------------------------------------------------------------------------------------------------
+# Configurate the window that apears after the periodic table where we choose the atomic parameters we want
+def params(z):
     parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulação)
     parameters.title("Atomic Parameters")  # nome da janela
 
@@ -49,47 +50,47 @@ def params(z):  # Definições relacionadas com a segunda janela (depois da tabe
     check_var = IntVar()
     # initialize (o botao 1, yields, começa selecionado por defeito)
     check_var.set(1)
+    
     # ---------------------------------------------------------------------------------------------------------------
     # Propriedades da janela
     subelem = ttk.Frame(parameters, padding="3 3 12 12")
     subelem.grid(column=0, row=0, sticky=(N, W, E, S))
     subelem.columnconfigure(0, weight=1)
     subelem.rowconfigure(0, weight=1)
+    
     # ---------------------------------------------------------------------------------------------------------------
     # Botões
-    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(
-        column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
-    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(
-        column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
-    ttk.Radiobutton(subelem, text='Yields', variable=check_var,
-                    value=1).grid(column=0, row=5, sticky=W)
-    ttk.Radiobutton(subelem, text='Level Widths', variable=check_var,
-                    value=2).grid(column=1, row=5, sticky=W)
-    ttk.Radiobutton(subelem, text='Cross Sections',
-                    variable=check_var, value=3).grid(column=0, row=6, sticky=W)
-    ttk.Radiobutton(subelem, text='Spectra Simulations',
-                    variable=check_var, value=4).grid(column=1, row=6, sticky=W)
-    ttk.Label(subelem, text="Which parameters do you want to retrieve?").grid(
-        column=0, row=4, sticky=W, columnspan=2)
+    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
+    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
+    ttk.Radiobutton(subelem, text='Yields', variable=check_var, value=1).grid(column=0, row=5, sticky=W)
+    ttk.Radiobutton(subelem, text='Level Widths', variable=check_var, value=2).grid(column=1, row=5, sticky=W)
+    ttk.Radiobutton(subelem, text='Cross Sections', variable=check_var, value=3).grid(column=0, row=6, sticky=W)
+    ttk.Radiobutton(subelem, text='Spectra Simulations', variable=check_var, value=4).grid(column=1, row=6, sticky=W)
+    ttk.Label(subelem, text="Which parameters do you want to retrieve?").grid(column=0, row=4, sticky=W, columnspan=2)
 
     subelem.mainloop()
 
-
+# ---------------------------------------------------------------------------------------------------------------
+# Define our Tkinter GUI application entry point
 class App(Tk):
+    # Define how to initialize the window
     def __init__(self):
+        # Default Tkinter window initialization
         Tk.__init__(self)
 
+        # Default Tkinter window closing + create the next window where we choose the atomic parameters we want
         def quit_window(z):
             self.destroy()
             params(z)
 
+        # Set title
         self.title("Periodic Table of the Elements")
 
+        # Set the labels and spacing around the periodic table that will be created using the grid system
         self.topLabel = Label(self, text="", font=20)
         self.topLabel.grid(row=2, column=3, columnspan=10)
 
-        self.Label1 = Label(
-            self, text="Click the element for which you would like to obtain the atomic parameters.", font=22)
+        self.Label1 = Label(self, text="Click the element for which you would like to obtain the atomic parameters.", font=22)
         self.Label1.grid(row=0, column=0, columnspan=18)
 
         self.Label2 = Label(self, text="", font=20)
@@ -102,15 +103,15 @@ class App(Tk):
         self.Label4.grid(row=10, column=1, columnspan=2)
 
         
-        # create all buttons with a loop
+        # create all buttons for the periodic table with a loop
         for i, element in enumerate(per_table):
-            #        print(element[1])
-            Button(self, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: quit_window(
-                [(i + 1), per_table[i][2]])).grid(row=element[6], column=element[7])
+            Button(self, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: quit_window([(i + 1), per_table[i][2]])).grid(row=element[6], column=element[7])
 
+        # Configure padding around the buttons
         for child in self.winfo_children():
             child.grid_configure(padx=3, pady=3)
 
+        # Initialize the interface's main loop
         self.mainloop()
 
 
