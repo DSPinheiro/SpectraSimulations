@@ -18,13 +18,11 @@ from data.variables import per_table
 #GUI utils: destroy window
 from utils.interface import destroy
 
-# os.getcwd retorna a directoria onde o código está. Criamos um objecto tipo Path porque permite o programa ser corrido em qq OS
+# Get the full path of the directory where the program is running
 dir_path = Path(str(os.getcwd()) + '/')
-# https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f site onde vi sobre isto GRV
-
 
 # ---------------------------------------------------------------------------------------------------------------
-# Função que corre depois de escolher a opção na janela que surge depois da tabela periódica
+# Function to choose the type of atomic parameters we want to fetch after selecting the element
 def calculate(element, ap, parent):
     
     if ap == 1:
@@ -36,32 +34,34 @@ def calculate(element, ap, parent):
     elif ap == 3:
         fetchSections(dir_path, z)
     # ---------------------------------------------------------------------------------------------------------------
-    elif ap == 4:  # Opção Spectra Simulation
+    elif ap == 4:
         simulateSpectra(dir_path, element, parent)
     return 0
 
 # ---------------------------------------------------------------------------------------------------------------
 # Configurate the window that apears after the periodic table where we choose the atomic parameters we want
 def params(z):
-    parameters = Tk()  # Abrir uma janela com botoes que seleccionam o que calcular (yields, widths, cross sections e simulação)
-    parameters.title("Atomic Parameters")  # nome da janela
+    # Create new window to select the atomic parameters
+    parameters = Tk()
+    # Window title
+    parameters.title("Atomic Parameters")
 
-    # variável que vai dar o valor do botao seleccionado (yields=1, widths=2, cross sections=3, simulacao=4)
+    # Variable to know which atomic parameter was selected
     check_var = IntVar()
-    # initialize (o botao 1, yields, começa selecionado por defeito)
+    # Initialize as 1 (yields)
     check_var.set(1)
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Propriedades da janela
+    # Setup the window frame and grid system
     subelem = ttk.Frame(parameters, padding="3 3 12 12")
     subelem.grid(column=0, row=0, sticky=(N, W, E, S))
     subelem.columnconfigure(0, weight=1)
     subelem.rowconfigure(0, weight=1)
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Botões
-    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(column=6, row=5, sticky=E, columnspan=2)  # este botao faz correr a funcao calculate
-    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(column=6, row=6, sticky=E, columnspan=2)  # este botao fecha a janela
+    # Buttons and label for the interface
+    ttk.Button(subelem, text="Get", command=lambda: calculate(z, check_var.get(), parameters)).grid(column=6, row=5, sticky=E, columnspan=2)
+    ttk.Button(subelem, text="Exit", command=lambda: destroy(parameters)).grid(column=6, row=6, sticky=E, columnspan=2)
     ttk.Radiobutton(subelem, text='Yields', variable=check_var, value=1).grid(column=0, row=5, sticky=W)
     ttk.Radiobutton(subelem, text='Level Widths', variable=check_var, value=2).grid(column=1, row=5, sticky=W)
     ttk.Radiobutton(subelem, text='Cross Sections', variable=check_var, value=3).grid(column=0, row=6, sticky=W)
@@ -103,7 +103,7 @@ class App(Tk):
         self.Label4.grid(row=10, column=1, columnspan=2)
 
         
-        # create all buttons for the periodic table with a loop
+        # Create all buttons for the periodic table with a loop
         for i, element in enumerate(per_table):
             Button(self, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: quit_window([(i + 1), per_table[i][2]])).grid(row=element[6], column=element[7])
 

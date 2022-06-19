@@ -12,30 +12,36 @@ from utils.interface import destroy
 
 def fetchWidths(dir_path, z):
     try:
-        # Caminho do ficheiro na pasta com o nome igual ao numero atomico que tem as yields
+        # This can be moved to the fileIO module later
+        # Path to the file with the widths for this element
         radrates_file = dir_path / str(z) / (str(z) + '-radrate.out')
-        with open(radrates_file, 'r') as radrates:  # Abrir o ficheiro
-            # Escrever todas as linhas no ficheiro como uma lista
+        with open(radrates_file, 'r') as radrates:
+            # Write the lines into a list
             generalVars.lineradrates = [x.strip('\n').split() for x in radrates.readlines()]
-            # Remover as linhas compostas apenas por celulas vazias
+            # Remove empty strings from possible uneven formating
             generalVars.lineradrates = list(filter(None, generalVars.lineradrates))
 
-        # criar uma janela onde serao apresentados os resultados dos yields, widths, cross sections ou spectra
-        # simulations
+        # Create a window to display the widths
         atdata = Toplevel()
-        atdata.title("Level and Line Widths")  # titulo da janela
-        # Criar uma grelha dentro da janela onde serao inseridos os dados
+        # Window title
+        atdata.title("Level and Line Widths")
+        
+        # Make a frame in the window and initialize a grid positioning and resising for the results
         atdatayields = ttk.Frame(atdata, padding="3 3 12 12")
         atdatayields.grid(column=0, row=0, sticky=(N, W, E, S))
         atdatayields.columnconfigure(0, weight=1)
         atdatayields.rowconfigure(0, weight=1)
-        # Labels dos dados na janela
-        # Label abaixo do qual serao escritos os resultados dos level widths
+        
+        # Label objects to show the level and line widths
         ttk.Label(atdatayields, text="Level Widths").grid(column=0, row=0, sticky=W, columnspan=2)
-        # Label abaixo do qual serao escritos os resultados das line widths
         ttk.Label(atdatayields, text="Line Widths").grid(column=5, row=0, sticky=W, columnspan=2)
-        ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(2)).grid(column=12, row=0, sticky=W, columnspan=2)  # botao que exporta os resultados para um xls
-        ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)  # botao que destroi esta janela
-        ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)  # botao que destroi esta janela
+        
+        # Buttons for the export and program flow functions
+        ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(2)).grid(column=12, row=0, sticky=W, columnspan=2)
+        ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)
+        ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)
+        
+        # NOT FURTHER IMPLEMENTED
+        
     except FileNotFoundError:
         messagebox.showerror("Error", "Required File is Missing")

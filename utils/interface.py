@@ -190,37 +190,29 @@ def enter_function(event):
 # Update the transition that was just selected from the dropdown into the list of transitions to simulate
 # This function runs whenever we one transition is selected from the dropdown
 def selected(event):
-    text_T = drop_menu.get()  # Lê Texto da box com as transições
-    # Faz update do dicionário com a transição lida
+    # Read which transition was selected
+    text_T = drop_menu.get()
+    # Update the dictionary for the transition
     dict_updater(text_T)
-    to_print = ''  # Texto a imprimir no label com as transições selecionadas
-
+    
     if satelite_var.get() != 'Auger':
-        # Se a transição estiver selecionada:
+        # If the transition added to the selection
         if the_dictionary[text_T]["selected_state"]:
-            # é adicionada à lista de transições que vai para o label
             transition_list.append(text_T)
-        # Se for descelecionada
+        # If it was removed
         elif not the_dictionary[text_T]["selected_state"]:
-            # é removida da lista que vai para o label
             transition_list.remove(text_T)
     else:
-        # Se a transição estiver selecionada:
+        # Same for Auger
         if the_aug_dictionary[text_T]["selected_state"]:
-            # é adicionada à lista de transições que vai para o label
             transition_list.append(text_T)
-        # Se for descelecionada
         elif not the_aug_dictionary[text_T]["selected_state"]:
-            # é removida da lista que vai para o label
             transition_list.remove(text_T)
-
-    # Este for serve para colocar as vírgulas entre as transições que vão para o label
-    for a, b in enumerate(transition_list):
-        if len(transition_list) == a + 1:
-            to_print += str(b) + ' '
-        else:
-            to_print += str(b) + ', '
-    # Definimos o novo label
+    
+    # Variable with the text to be shown in the interface with the selected transitions
+    to_print = ', '.join(transition_list)
+    
+    # Set the interface label to the text
     label_text.set('Selected Transitions: ' + to_print)
 
 # Function to properly reset the x limits in the interface (bound to the reset button)
@@ -231,34 +223,34 @@ def reset_limits():
     x_max.set('Auto')
     x_min.set('Auto')
 
-# Função para alterar o estado de uma transição que seja selecionada na GUI
+# Update the selection state of a transition in the correct dictionary
 def dict_updater(transition):
     if satelite_var.get() != 'Auger':
-        # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
-        current_state = not the_dictionary[transition]["selected_state"]
-        # Alteramos o estado das riscas para o estado actual
-        the_dictionary[transition]["selected_state"] = current_state
+        # Toggle the current state of the transition
+        the_dictionary[transition]["selected_state"] = not the_dictionary[transition]["selected_state"]
     else:
-        # O "Estado actual" que as riscas têm quando esta função corre é o oposto daquele que está definido no dicionário, porque a função só corre se clicarmos para mudar
-        current_state = not the_aug_dictionary[transition]["selected_state"]
-        # Alteramos o estado das riscas para o estado actual
-        the_aug_dictionary[transition]["selected_state"] = current_state
+        # Toggle the current state of the transition
+        the_aug_dictionary[transition]["selected_state"] = not the_aug_dictionary[transition]["selected_state"]
 
 # Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
 def update_transition_dropdown():
     global transition_list
     
     if satelite_var.get() != 'Auger':
+        # Update the values on the dropdown
         drop_menu['values'] = [transition for transition in the_dictionary]
         if not any([the_dictionary[transition]["selected_state"] for transition in the_dictionary]):
+            # Reset the interface text
             label_text.set('Select a Transition: ')
             drop_menu.set('Transitions:')
             # Deselect transitions
             for transition in the_aug_dictionary:
                 the_aug_dictionary[transition]["selected_state"] = False
     else:
+        # Update the values on the dropdown
         drop_menu['values'] = [transition for transition in the_aug_dictionary]
         if not any([the_aug_dictionary[transition]["selected_state"] for transition in the_aug_dictionary]):
+            # Reset the interface text
             label_text.set('Select a Transition: ')
             drop_menu.set('Transitions:')
             # Deselect transitions
@@ -278,30 +270,34 @@ def configureSimuPlot():
     global _sim, _a, _f, _parent
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Criamos uma nova janela onde aparecerão os gráficos todos (TopLevel porque não podem haver duas janelas tk abertas ao mesmo tempo)
-    # E definimos o seu titulo
+    # Start a new window for the simulation plot. We use TopLevel as we want this window to be the main interface
     sim = Toplevel(master=_parent)
+    # Define the title
     sim.title("Spectrum Simulation")
-    # Criamos um "panel" onde vamos colocar o canvas para fazer o plot do gráfico. Panels são necessários para a janela poder mudar de tamanho
+    # Pack a panel into the window where we will place our canvas to plot the simulations. This way the window will properly resize
     panel_1 = PanedWindow(sim, orient=VERTICAL)
     panel_1.pack(fill=BOTH, expand=1)
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Figura onde o gráfico vai ser desenhado
-    # canvas para o gráfico do espectro
+    # Matplotlib figure where we will place the graph objects
     f = Figure(figsize=(10, 5), dpi=100)
-    # plt.style.use('ggplot') Estilo para os plots
-    a = f.add_subplot(111)  # zona onde estara o gráfico
+    # Add a plotting space to the figure
+    a = f.add_subplot(111)
+    # Set labels for the axis
     a.set_xlabel('Energy (eV)')
     a.set_ylabel('Intensity (arb. units)')
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Frames onde se vão por a figura e os labels e botões e etc
-    figure_frame = Frame(panel_1, relief=GROOVE)  # frame para o gráfico
+    # Frame where we will place the figure with the graph
+    figure_frame = Frame(panel_1, relief=GROOVE) # grooved border style
+    # Add the frame to the panel
     panel_1.add(figure_frame)
+    # Create the tk widget canvas to place the figure in the frame
     canvas = FigureCanvasTkAgg(f, master=figure_frame)
+    # pack the canvas in the frame
     canvas.get_tk_widget().pack(fill=BOTH, expand=1)
 
+    # Store the interface objects for use in other functions across the file
     _a = a
     _f = f
     _sim = sim
@@ -320,9 +316,9 @@ def configureButtonArea(sim, canvas):
     toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
 
     # Frame for the buttons
-    full_frame = Frame(panel_2, relief=GROOVE)  # Frame transições
+    full_frame = Frame(panel_2, relief=GROOVE)
     panel_2.add(full_frame)
-    buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)  # Frame transições
+    buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)
     buttons_frame.pack(fill=BOTH, expand=1)
     # Max, min & Points Frame
     buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)
@@ -330,13 +326,14 @@ def configureButtonArea(sim, canvas):
     # Frame  yoffset, Energy offset e Calculate
     buttons_frame3 = Frame(full_frame, bd=1, relief=GROOVE)
     buttons_frame3.pack(fill=BOTH, expand=1)
-    buttons_frame4 = Frame(full_frame)  # Frame Barra Progresso
+    buttons_frame4 = Frame(full_frame)
     buttons_frame4.pack(fill=BOTH, expand=1)
 
     return panel_2, toolbar_frame, toolbar, full_frame, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4
 
 # Setup the variables to hold the values of the interface entries
 def setupVars(p):
+    # Use global to be able to initialize and change the values of the global interface variables
     global _parent, totalvar, yscale_log, xscale_log, autofitvar, normalizevar, loadvar, effic_var
     global exp_resolution, yoffset, energy_offset, number_points, x_max, x_min, progress_var, label_text
     global satelite_var, choice_var, type_var, exc_mech_var
@@ -345,46 +342,58 @@ def setupVars(p):
     _parent = p
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Variáveis
-    # Variável que define se apresentamos o ytot(soma de todas as riscas) no gráfico
+    # Variable to know if we need to show the total y in the plot
     totalvar = StringVar(master = _parent)
-    # inicializamos Total como não, porque só se apresenta se o utilizador escolher manualmente
+    # Initialize it as false
     totalvar.set('No')
-    # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+    # Variable to know if we need to make the y axis logarithmic or linear
     yscale_log = StringVar(master = _parent)
-    # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+    # Initialize it as false
     yscale_log.set('No')
-    # Variável que define se o eixo y é apresentado com escala logaritmica ou não
+    # Variable to know if we need to make the x axis logarithmic or linear
     xscale_log = StringVar(master = _parent)
-    # Inicializamos a No porque só  se apresenta assim se o utilizador escolher manualmente
+    # Initialize it as false
     xscale_log.set('No')
-    autofitvar = StringVar(master = _parent)  # Variável que define se o fit se faz automáticamente ou não
-    # Inicializamos a No porque só faz fit automático se o utilizador quiser
+    # Variable to know if we need to perform an autofit of the simulation to experimental data
+    autofitvar = StringVar(master = _parent)
+    # Initialize it as false
     autofitvar.set('No')
-    normalizevar = StringVar(master = _parent)  # Variável que define como se normalizam os gráficos (3 opções até agora: não normalizar, normalizar à unidade, ou ao máximo do espectro experimental)
-    # inicializamos Normalize a no, porque só se normaliza se o utilizador escolher
+    # Variable to know what normalization we need to perform (no normalization, normalize to unity, normalize to experimental maximum)
+    normalizevar = StringVar(master = _parent)
+    # Initialize to no normalization
     normalizevar.set('No')
-    loadvar = StringVar(master = _parent)  # Variável que define se se carrega um expectro experimental. A string, caso se queira carregar o espectro, muda para o path do ficheiro do espectro
-    # inicializamos Load a no, porque só se carrega ficheiro se o utilizador escolher
+    # Variable to know if we need to load an experimental spectrum and if so where it is located
+    loadvar = StringVar(master = _parent)
+    # Initialize to no file
     loadvar.set('No')
+    # Variable to know if we need to load detector efficiency data and if so where it is located
     effic_var = StringVar(master = _parent)
-    effic_var.set("No")
+    # Initialize to no file
+    effic_var.set('No')
 
-    # Float correspondente a resolucao experimental
+    # Variable to hold the experimental resolution value introduced in the interface
     exp_resolution = DoubleVar(master = _parent, value=1.0)
-    # Float correspondente ao fundo experimental
+    # Variable to hold the experimental background offset value introduced in the interface
     yoffset = DoubleVar(master = _parent, value=0.0)
-    # Float correspondente a resolucao experimental
+    # Variable to hold the experimental energy offset value introduced in the interface
     energy_offset = DoubleVar(master = _parent, value=0.0)
-    # Numero de pontos a plotar na simulação
+    # Variable to hold the number of points to simulate introduced in the interface
     number_points = IntVar(master = _parent, value=500)
-    x_max = StringVar(master = _parent)  # Controlo do x Máximo a entrar no gráfico
-    x_max.set('Auto')
-    x_min = StringVar(master = _parent)  # Controlo do x Mínimo a entrar no gráfico
-    x_min.set('Auto')
-    progress_var = DoubleVar(master = _parent)  # Float que da a percentagem de progresso
     
-    label_text = StringVar(master = _parent)  # Texto com as transições selecionadas a apresentar no ecrã
+    # Variable to hold the maximum x value to be simulated introduced in the interface
+    x_max = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_max.set('Auto')
+    # Variable to hold the minimum x value to be simulated introduced in the interface
+    x_min = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_min.set('Auto')
+    
+    # Variable to hold the percentage of current progress to be displayed in the bottom of the interface
+    progress_var = DoubleVar(master = _parent)
+    
+    # Variable to hold the text with the selected transitions that will be shown in the interface label
+    label_text = StringVar(master = _parent)
     
     # Initialize the transition type to diagram
     satelite_var = StringVar(value='Diagram')
@@ -884,20 +893,27 @@ def configureCSMix():
 
 # Function to setup the experimental plot when we load one and the residue plot
 def setupExpPlot(f, load, element_name):
+    # Clear the plot
     f.clf()
+    # Split the figure plot into two with the first having 3 times the height
     gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1])
-    new_graph_area = f.add_subplot(gs[0])
-    graph_area = new_graph_area
+    # Add the first subplot to the figure
+    graph_area = f.add_subplot(gs[0])
+    
+    # Set the logarithmic axes if needed
     if yscale_log.get() == 'Ylog':
         graph_area.set_yscale('log')
     if xscale_log.get() == 'Xlog':
         graph_area.set_xscale('log')
+    # Add the name of the plot
     graph_area.legend(title=element_name)
+    # Add the second subplot for the residues
     residues_graph = f.add_subplot(gs[1])
+    # Set the axes labels
     residues_graph.set_xlabel('Energy (eV)')
     residues_graph.set_ylabel('Residues (arb. units)')
     
-    # Carregar a matriz do espectro experimental do ficheiro escolhido no menu
+    # Read and load the experimental spectrum file
     exp_spectrum = loadExp(load)
     
     return graph_area, residues_graph, exp_spectrum

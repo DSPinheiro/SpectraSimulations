@@ -64,7 +64,7 @@ labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': 
              'O9': '5g', 'P1': '6s'}
 
 
-# Dicionário onde estão guardadas as transições. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
+# Radiative transition dictionary. This is used to list, select and control which transitions are to be simulated
 the_dictionary = {
     # for ionic transitions
     "KL\u2081": {"low_level": "K1", "high_level": "L1", "selected_state": False, "readable_name": "KL1"},
@@ -106,7 +106,7 @@ the_dictionary = {
 }
 
 
-# Dicionário onde estão guardadas as transições Auger. Cada valor do dicionário é em si um dicionário (Nested dictionaries)
+# Auger transition dictionary. This is used to list, select and control which transitions are to be simulated
 the_aug_dictionary = {
     "KL1L1": {"low_level": "K1", "high_level": "L1", "auger_level": "L1", "selected_state": False, "readable_name": "KL1L1"},
     "KL1L2": {"low_level": "K1", "high_level": "L1", "auger_level": "L2", "selected_state": False, "readable_name": "KL1L2"},
@@ -283,7 +283,7 @@ the_aug_dictionary = {
     "M5N1N1": {"low_level": "M5", "high_level": "N1", "auger_level": "N1", "selected_state": False, "readable_name": "M5N1N1"},
 }
 
-#Values to initialize the periodic table
+#Values to initialize the periodic table (First window)
 per_table = [[1, 1.0079, ' Hydrogen ', ' H ', 0.09, 'grey', 1, 1, ' 1s1 ', 13.5984],
              [2, 4.0026, ' Helium ', ' He ', 0.18, 'cyan', 1, 18, ' 1s2 ', 24.5874],
              [3, 6.941, ' Lithium ', ' Li ', 0.53, 'orange', 2, 1, ' [He] 2s1 ', 5.3917],
