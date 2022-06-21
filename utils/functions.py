@@ -475,7 +475,56 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
     else:
         return np.array(y_interp) - np.array(exp_y)
 
-
+# Calculate the residues, reduced chi^2 and update the respective graph
+def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph):
+    """
+    Function to calculate the residues, reduced chi^2 and update the respective graph
+        
+        Args:
+            exp_x: energy values from the experimental spectrum
+            exp_y: intensity values from the experimental spectrum
+            exp_sigma: error values from the experimental spectrum
+            xfinal: list of the simulated x values
+            enoffset: simulated energy offset
+            normalization_var: normalization multiplyer
+            normalize: normalization type chosen
+            y0: simulated intensity offset
+            number_of_fit_variables: total number of fitted variables
+            residues_graph: matplotlib plot object where to plot the residue data
+        
+        Returns:
+            Nothing, the residues are plotted and the chi^2 value is updated in the variables module
+    """
+    # Initialize a list for the interpolated experimental y values
+    y_interp = [0 for i in range(len(exp_x))]
+    # Interpolate the total plotted intensities
+    f_interpolate = interp1d(xfinal + enoffset, (np.array(generalVars.ytot) * normalization_var) + y0, kind='cubic')
+    
+    # Initialize a list for the residue values
+    y_res = [0 for x in range(len(exp_x))]
+    # Temporary variable for the chi sum to calculate the chi^2
+    chi_sum = 0
+    
+    # Loop the experimental x values
+    for g, h in enumerate(exp_x):
+        # Get the interpolated y values
+        y_interp[g] = f_interpolate(h)
+        # Calculate the chi sum from the interpolated values
+        if normalize == 'ExpMax' or normalize == 'No':
+            y_res[g] = (exp_y[g] - y_interp[g])
+            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
+        elif normalize == 'One':
+            y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
+            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
+    
+    # Calculate the reduced chi^2 value
+    generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
+    # Plot the residues
+    residues_graph.plot(exp_x, y_res)
+    # Print the value in the console
+    print("Valor Manual Chi", generalVars.chi_sqrd)
+    # Put the chi^2 value in the plot legend
+    residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
 
 # --------------------------------------------------------- #
 #                                                           #
@@ -1536,36 +1585,7 @@ def plot_stick(sim, f, graph_area):
         # ------------------------------------------------------------------------------------------------------------------------
         # Calculate the residues
         if load != 'No':
-            # Initialize a list for the interpolated experimental y values
-            y_interp = [0 for i in range(len(exp_x))]
-            # Interpolate the total plotted intensities
-            f_interpolate = interp1d(xfinal + enoffset, (np.array(generalVars.ytot) * normalization_var) + y0, kind='cubic')
-            
-            # Initialize a list for the residue values
-            y_res = [0 for x in range(len(exp_x))]
-            # Temporary variable for the chi sum to calculate the chi^2
-            chi_sum = 0
-            
-            # Loop the experimental x values
-            for g, h in enumerate(exp_x):
-                # Get the interpolated y values
-                y_interp[g] = f_interpolate(h)
-                # Calculate the chi sum from the interpolated values
-                if normalize == 'ExpMax' or normalize == 'No':
-                    y_res[g] = (exp_y[g] - y_interp[g])
-                    chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
-                elif normalize == 'One':
-                    y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
-                    chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
-            
-            # Calculate the reduced chi^2 value
-            generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
-            # Plot the residues
-            residues_graph.plot(exp_x, y_res)
-            # Print the value in the console
-            print("Valor Manual Chi", generalVars.chi_sqrd)
-            # Put the chi^2 value in the plot legend
-            residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
+            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph)
         
         # ------------------------------------------------------------------------------------------------------------------------
         # Set the axis labels
@@ -1985,36 +2005,7 @@ def plot_stick(sim, f, graph_area):
         # ------------------------------------------------------------------------------------------------------------------------
         # Calculate the residues
         if load != 'No':
-            # Initialize a list for the interpolated experimental y values
-            y_interp = [0 for i in range(len(exp_x))]
-            # Interpolate the total plotted intensities
-            f_interpolate = interp1d(xfinal + enoffset, (np.array(generalVars.ytot) * normalization_var) + y0, kind='cubic')
-            
-            # Initialize a list for the residue values
-            y_res = [0 for x in range(len(exp_x))]
-            # Temporary variable for the chi sum to calculate the chi^2
-            chi_sum = 0
-            
-            # Loop the experimental x values
-            for g, h in enumerate(exp_x):
-                # Get the interpolated y values
-                y_interp[g] = f_interpolate(h)
-                # Calculate the chi sum from the interpolated values
-                if normalize == 'ExpMax' or normalize == 'No':
-                    y_res[g] = (exp_y[g] - y_interp[g])
-                    chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
-                elif normalize == 'One':
-                    y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
-                    chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
-            
-            # Calculate the reduced chi^2 value
-            generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
-            # Plot the residues
-            residues_graph.plot(exp_x, y_res)
-            # Print the value in the console
-            print("Valor Manual Chi", generalVars.chi_sqrd)
-            # Put the chi^2 value in the plot legend
-            residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
+            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph)
         
         # ------------------------------------------------------------------------------------------------------------------------
         # Set the axis labels
