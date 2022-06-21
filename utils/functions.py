@@ -1,3 +1,9 @@
+"""
+Module with several functions for data handling and computation.
+In this module we define the profile functions, normalizing function, autofitting function and the main function that calculates and plots spectra.
+Other utility functions for updating the transition rates to be used and determine the bounds of the simulation are also defined.
+"""
+
 #GUI Imports for warnings
 from tkinter import messagebox
 
@@ -23,7 +29,9 @@ import utils.interface as guiVars
 
 
 element_name = None
-
+"""
+Element name to use when sending the data to plot
+"""
 
 # --------------------------------------------------------- #
 #                                                           #
@@ -33,23 +41,57 @@ element_name = None
 
 # Gaussian profile
 def G(T, energy, intens, res, width):
-    """ Return Gaussian line shape at x with HWHM alpha """
-    
+    """ 
+    Function to calculate the Gaussian line shape at x with HWHM alpha
+        
+        Args:
+            T: list of x values for which we want the y values of the profile
+            energy: x value of the profile center
+            intens: hight of the profile
+            res: experimental resolution to be added to the profile width
+            width: natural width of the transition for the profile
+        
+        Returns:
+            y: list of y values for each of the x values in T
+    """
     y = [intens * np.sqrt(np.log(2) / np.pi) / (res + width) * np.exp(-((l - energy) / (res + width)) ** 2 * np.log(2)) for l in T]
     
     return y
 
 # Lorentzian profile
 def L(T, energy, intens, res, width):
-    """ Return Lorentzian line shape at x with HWHM gamma """
+    """ 
+    Function to calculate the Lorentzian line shape at x with HWHM alpha
+        
+        Args:
+            T: list of x values for which we want the y values of the profile
+            energy: x value of the profile center
+            intens: hight of the profile
+            res: experimental resolution to be added to the profile width
+            width: natural width of the transition for the profile
+        
+        Returns:
+            y: list of y values for each of the x values in T
+    """
     y = [intens * (0.5 * (width + res) / np.pi) / ((l - energy) ** 2 + (0.5 * (width + res)) ** 2) for l in T]
     
     return y
 
 # Voigt profile
 def V(T, energy, intens, res, width):
-    """ Return the Voigt line shape at x with Lorentzian component HWHM gamma and Gaussian component HWHM alpha."""
-    
+    """ 
+    Function to calculate the Voigt line shape at x with HWHM alpha
+        
+        Args:
+            T: list of x values for which we want the y values of the profile
+            energy: x value of the profile center
+            intens: hight of the profile
+            res: experimental resolution to be added to the profile width
+            width: natural width of the transition for the profile
+        
+        Returns:
+            y: list of y values for each of the x values in T
+    """
     sigma = res / np.sqrt(2 * np.log(2))
     y = [np.real(intens * wofz(complex(l - energy, width / 2) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi) for l in T]
     
@@ -65,11 +107,25 @@ def V(T, energy, intens, res, width):
 
 # Interpolate detector efficiency on the simulation xfinal
 def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
+    """ 
+    Function to interpolate the detector efficiency to the simulated x values
+        
+        Args:
+            energy_values: list of the energy values provided in the detector efficiency data
+            efficiency_values: list of the efficiency values provided in the detector efficiency data
+            xfinal: list of the simulated x values
+            enoffset: value of the simulated x offset
+            
+        Returns:
+            interpolated_effic: list of efficiency values interpolated for the simulated x values
+    """
     # Initialize interpolated y values
     interpolated_effic = [0 for i in range(len(xfinal))]
     # Interpolate data
     effic_interpolation = interp1d(energy_values, np.array(efficiency_values)/100)
-    
+    """
+    Interpolation function initialized from the efficiency data, normalized to 1
+    """
     # Loop the energy values with the simulated offset and store the efficiency
     for i, energy in enumerate(xfinal+enoffset):
         interpolated_effic[i] = effic_interpolation(energy)
@@ -77,8 +133,22 @@ def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
 
 # Normalization function
 def normalizer(y0, expy_max, ytot_max):
+    """ 
+    Function to normalize the simulated intensity values
+        
+        Args:
+            y0: simulated background intensity offset
+            expy_max: maximum experimental intensity
+            ytot_max: maximum simulated intensity
+            
+        Returns:
+            normalization_var: value of the normalization multiplyer for the requested normalization
+    """
     # Get the type of normalization selected on the interface
     normalize = guiVars.normalizevar.get()
+    """
+    Value of the normalization type selected in the interface (No, to Experimental Maximum, to Unity)
+    """
     
     try:
         # Calculate the normalization multiplier for the normalization chosen
@@ -105,12 +175,46 @@ def normalizer(y0, expy_max, ytot_max):
 
 # Calculate the simulated y values applying the selected line profile, detector efficiency, resolution and energy offset
 def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset):
+    """ 
+    Function to calculate the simulated intensities for all the transitions requested, taking into account the simulated offsets.
+    This function is used only to apply the selected profile to the already filtered x, y and width values for the transitions.
+        
+        Args:
+            sim: tkinter simulation window required to update the progress bar
+            transition_type: type of transition to be simulated (diagram data comes in the x, y, w and satellite data in the xs, ys, ws)
+            fit_type: profile type selected in the interface
+            xfinal: simulate x values
+            x: energy values for each diagram transition to simulate
+            y: intensity values for each diagram transition to simulate
+            w: natural width values for each diagram transition to simulate
+            xs: energy values for each satellite transition in each radiative transition to simulate
+            ys: intensity values for each satellite transition in each radiative transition to simulate
+            ws: natural width values for each satellite transition in each radiative transition to simulate
+            res: experimental resolution to simulate
+            energy_values: energy values read from the detector efficiency data
+            efficiency_values: efficiency values read from the detector efficiency data
+            enoffset: energy offset to simulate
+        
+        Returns:
+            yfinal: list of simulated y values for each diagrma transition we want to simulate for each of the x values in T
+            ytot: list of the simulated total y values for all transitions we want to simulate for each of the x values in T
+            yfinals: list of simulated y values for each satellite transition in each digram transition we want to simulate for each of the x values in T
+    """
     # Initialize a list to store the final y values for each selected transition to be calulated
-    generalVars.yfinal = [[0 for i in range(len(xfinal))] for j in range(len(x))]
+    yfinal = [[0 for i in range(len(xfinal))] for j in range(len(x))]
+    """
+    List of simulated y values for each diagrma transition we want to simulate for each of the x values in T
+    """
     # Initialize a list to store the final y values summed across all selected transitions
-    generalVars.ytot = [0 for i in range(len(xfinal))]
+    ytot = [0 for i in range(len(xfinal))]
+    """
+    List of the simulated total y values for all transitions we want to simulate for each of the x values in T
+    """
     # Initialize a list to store the final y values for each satellite transition for each of the selected transitions
-    generalVars.yfinals = [[[0 for n in range(len(xfinal))] for i in generalVars.label1] for j in range(len(xs))]
+    yfinals = [[[0 for n in range(len(xfinal))] for i in generalVars.label1] for j in range(len(xs))]
+    """
+    List of simulated y values for each satellite transition in each digram transition we want to simulate for each of the x values in T
+    """
     
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
@@ -121,11 +225,11 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
                 # Depending on the profile selected add the y values of the calculated profile to the y values of this transition
                 # This profile is calculated across the entire simulated range of x values
                 if fit_type == 'Voigt':
-                    generalVars.yfinal[j] = np.add(generalVars.yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                    yfinal[j] = np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
                 elif fit_type == 'Lorentzian':
-                    generalVars.yfinal[j] = np.add(generalVars.yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                    yfinal[j] = np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
                 elif fit_type == 'Gaussian':
-                    generalVars.yfinal[j] = np.add(generalVars.yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                    yfinal[j] = np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
                 # Add a proportionate amount of progress to the current progress value
                 b1 += 100 / (len(y) * len(k))
                 # Set the progress on the interface
@@ -135,7 +239,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
             
             # If the transition rates list is not empty then add the y values for this transition into the total y values for all transitions
             if k != []:
-                generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinal[j])
+                ytot = np.add(ytot, yfinal[j])
         
         # Set and update the progress and progress bar to 100%
         b1 = 100
@@ -148,17 +252,17 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
             for l, m in enumerate(k):
                 for i, n in enumerate(m):
                     if fit_type == 'Voigt':
-                        generalVars.yfinals[j][l] = np.add(generalVars.yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                        yfinals[j][l] = np.add(yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                     elif fit_type == 'Lorentzian':
-                        generalVars.yfinals[j][l] = np.add(generalVars.yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                        yfinals[j][l] = np.add(yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                     elif fit_type == 'Gaussian':
-                        generalVars.yfinals[j][l] = np.add(generalVars.yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
+                        yfinals[j][l] = np.add(yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i]))
                     b1 += 100 / (len(ys) * len(generalVars.label1) * len(m))
                     guiVars.progress_var.set(b1)
                     sim.update_idletasks()
                 
                 if m != []:
-                    generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinals[j][l])
+                    ytot = np.add(ytot, yfinals[j][l])
         
         b1 = 100
         guiVars.progress_var.set(b1)
@@ -169,17 +273,17 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
         for j, k in enumerate(y):
             for i, n in enumerate(k):
                 if fit_type == 'Voigt':
-                    generalVars.yfinal[j] = np.abs(np.add(generalVars.yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                    yfinal[j] = np.abs(np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i])))
                 elif fit_type == 'Lorentzian':
-                    generalVars.yfinal[j] = np.abs(np.add(generalVars.yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                    yfinal[j] = np.abs(np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i])))
                 elif fit_type == 'Gaussian':
-                    generalVars.yfinal[j] = np.abs(np.add(generalVars.yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i])))
+                    yfinal[j] = np.abs(np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i])))
                 b1 += 200 / (len(y) * len(k))
                 guiVars.progress_var.set(b1)
                 sim.update_idletasks()
             
             if k != []:
-                generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinal[j])
+                ytot = np.add(ytot, yfinal[j])
 
         # We define the 50% mark in between the two blocks
         b1 = 50
@@ -191,17 +295,17 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
             for l, m in enumerate(ys[j]):
                 for i, n in enumerate(m):
                     if fit_type == 'Voigt':
-                        generalVars.yfinals[j][l] = np.abs(np.add(generalVars.yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                        yfinals[j][l] = np.abs(np.add(yfinals[j][l], V(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                     elif fit_type == 'Lorentzian':
-                        generalVars.yfinals[j][l] = np.abs(np.add(generalVars.yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                        yfinals[j][l] = np.abs(np.add(yfinals[j][l], L(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                     elif fit_type == 'Gaussian':
-                        generalVars.yfinals[j][l] = np.abs(np.add(generalVars.yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
+                        yfinals[j][l] = np.abs(np.add(yfinals[j][l], G(xfinal, xs[j][l][i], ys[j][l][i], res, ws[j][l][i])))
                     b1 += 100 / (len(ys) * len(generalVars.label1) * len(m))
                     guiVars.progress_var.set(b1)
                     sim.update_idletasks()
                 
                 if m != []:
-                    generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinals[j][l])
+                    ytot = np.add(ytot, yfinals[j][l])
         
         b1 = 100
         guiVars.progress_var.set(b1)
@@ -212,19 +316,35 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
         # Get the efficiency values for the x values simulated
         detector_effi = detector_efficiency(energy_values, efficiency_values, xfinal, enoffset)
         # Modify the y values by the effiency weights
-        return generalVars.ytot*np.array(detector_effi), generalVars.yfinal*np.array(detector_effi), generalVars.yfinals*np.array(detector_effi)
+        return ytot*np.array(detector_effi), yfinal*np.array(detector_effi), yfinals*np.array(detector_effi)
     else:
-        return generalVars.ytot, generalVars.yfinal, generalVars.yfinals
+        return ytot, yfinal, yfinals
 
 # Initialize the parameters for fitting
 def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
+    """
+    Function to initialize the parameters for fitting
+        
+        Args:
+            exp_x: list of energy values read from the experimental spectrum
+            exp_y: list of intensity values read from the experimental spectrum
+            enoffset: simulated energy offset
+            y0: simulated intensity offset
+            res: simulated experimental resolution
+        
+        Returns:
+            params: parameter object with the parameters to be optimized
+    """
     # Initialize the parameters to be optimized
     params = Parameters()
-
+    
     # --------------------------------------------------------------------------------------------------------
     # Energy offset parameter
     # We set the range of variation for this parameter during optimization to +- 10% of the simulated x range
     xoff_lim = (max(exp_x) - min(exp_x)) * 0.1
+    """
+    Variation limits for the energy offset parameter
+    """
     # Add the parameter to the set of parameters
     params.add('xoff', value=enoffset, min=enoffset - xoff_lim, max=enoffset + xoff_lim)
 
@@ -232,6 +352,9 @@ def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
     # y background offset parameter
     # We set the range of variation for this parameter during optimization to +- 10% of the experimental y range
     yoff_lim = (max(exp_y) - min(exp_y)) * 0.1
+    """
+    Variation limits for the intensity offset parameter
+    """
     # Add the parameter to the set of parameters
     params.add('yoff', value=y0, min=y0 - yoff_lim, max=y0 + yoff_lim)
 
@@ -239,6 +362,9 @@ def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
     # Experimental resolution
     # We set the range of variation for this parameter during optimization +- 3 times the initial value
     res_lim = res * 3
+    """
+    Variation limits for the experimental resolution parameter
+    """
     # Add the parameter to the set of parameters
     params.add('res', value=res, min=0.01, max=res + res_lim)
     
@@ -251,6 +377,18 @@ def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
 
 # Extract the values of the fitted parameters
 def fetchFittedParams(result):
+    """
+    Function to extract the values of the fitted parameters. These values are also set in the interface
+        
+        Args:
+            result: result object from the fitting
+            
+        Returns:
+            enoffset: fitted value of the simulated energy offset
+            y0: fitted value of the simulated intensity offset
+            res: fitted value of the simulated experimental resolution
+            ytot_max: fitted value of the simulated maximum intensity
+    """
     # Get the fitted value of the x offset
     enoffset = result.params['xoff'].value
     # Set the fitted value in the interface
@@ -273,12 +411,39 @@ def fetchFittedParams(result):
 
 # Create the function to be minimized for the fitting
 def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset):
+    """
+    Function to be minimized in the fitting
+        
+        Args:
+            params: parameters to be minimized in the function
+            sim: tkinter window object to update the progress bar
+            exp_x: energy values of the experimental spectrum
+            exp_y: intensity values of the experimental spectrum
+            num_of_points: number of simulated points
+            sat: type of transitions to be simulated (diagram data comes in the x, y, w and satellite data in the xs, ys, ws)
+            peak: profile type selected in the interface
+            x: energy values for each diagram transition to simulate
+            y: intensity values for each diagram transition to simulate
+            w: natural width values for each diagram transition to simulate
+            xs: energy values for each satellite transition in each radiative transition to simulate
+            ys: intensity values for each satellite transition in each radiative transition to simulate
+            ws: natural width values for each satellite transition in each radiative transition to simulate
+            energy_values: energy values read from the detector efficiency data
+            efficiency_values: efficiency values read from the detector efficiency data
+            enoffset: energy offset to simulate
+            
+        Returns:
+            list with the differences between the simulated y values and the experimental intensities
+    """
     global xfinal
     
     # Normalizer for the function to match the plotted values
     normalize = guiVars.normalizevar.get()
     # Initialize the interpolated y values
     y_interp = [0 for i in range(len(exp_x))]
+    """
+    List for the interpolated values of the simulated y at each energy value of the experimental spectrum
+    """
     
     # Get the parameters from the list of initialized parameters
     xoff = params['xoff']
@@ -296,6 +461,9 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
     
     # Interpolate the data
     f_interpolate = interp1d(xfinal + xoff, np.array(generalVars.ytot * normalization_var) + y0, kind='cubic')
+    """
+    Interpolated function of the simulated points
+    """
     
     for g, h in enumerate(exp_x):
         # Get the values of the interpolation for the experimental x values
@@ -317,6 +485,20 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
 
 # Update the radiative and satellite rates for the selected transition
 def updateRadTransitionVals(transition, num):
+    """
+    Function to update the radiative and satellite rates for the selected transition
+        
+        Args:
+            transition: which transition to fetch the rates of
+            num: total number of transitions processed
+        
+        Returns:
+            num_of_transitions: total number of transitions processed
+            low_level: low level of the selected transition
+            high_level: high level of the selected transition
+            diag_stick_val: rates data for the selected transition
+            sat_stick_val: rates data for the possible satellite transitions for the selected transition
+    """
     # Update the number of transitions loaded (this could be done by reference as well)
     num_of_transitions = num + 1
     # Get the low and high levels for the selected transition
@@ -331,6 +513,18 @@ def updateRadTransitionVals(transition, num):
 
 # Update the satellite rates for the selected transition
 def updateSatTransitionVals(low_level, high_level, key, sat_stick_val):
+    """
+    Function to update the satellite rates for the selected transition and shake level
+        
+        Args:
+            low_level: low level of the selected transition
+            high_level: high level of the selected transition
+            key: shake level of the satellite transition
+            sat_stick_val: list with all the possible satellite transitions for the current diagram transition
+        
+        Returns:
+            sat_stick_val_ind: list with the satellite rates for the selected diagram transition and shake level
+    """
     # Filter the satellite rates data for the combinations of selected levels
     sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
     sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5] and key != high_level]
@@ -338,10 +532,21 @@ def updateSatTransitionVals(low_level, high_level, key, sat_stick_val):
     sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5] and key != high_level]
     sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
     
-    return sat_stick_val
+    return sat_stick_val_ind
 
 # Update the auger rates for the selected transition
 def updateAugTransitionVals(transition, num):
+    """
+    Function to update the auger rates for the selected transition
+        
+        Args:
+            transition: which transition to fetch the rates of
+            num: total number of transitions processed
+        
+        Returns:
+            num_of_transitions: total number of transitions processed
+            aug_stick_val: rates data for the selected transition
+    """
     # Update the number of transitions loaded (this could be done by reference as well)
     num_of_transitions = num + 1
     # Get the low, high and auger levels for the selected transition
@@ -356,6 +561,22 @@ def updateAugTransitionVals(transition, num):
 
 # Update the radiative and satellite rates for the selected transition and charge state
 def updateRadCSTrantitionsVals(transition, num, ncs, cs):
+    """
+    Function to update the radiative and satellite rates for the selected transition and charge state
+        
+        Args:
+            transition: which transition to fetch the rates of
+            num: total number of transitions processed
+            ncs: boolean selecting if this is a negative charge state or not
+            cs: value of the charge state
+        
+        Returns:
+            num_of_transitions: total number of transitions processed
+            low_level: low level of the selected transition and charge state
+            high_level: high level of the selected transition and charge state
+            diag_stick_val: rates data for the selected transition and charge state
+            sat_stick_val: rates data for the possible satellite transitions for the selected transition and charge state
+    """
     # Update the number of transitions loaded (this could be done by reference as well)
     num_of_transitions = num + 1
     # Get the low and high levels for the selected transition
@@ -377,6 +598,19 @@ def updateRadCSTrantitionsVals(transition, num, ncs, cs):
 
 # Update the auger rates for the selected transition and charge state
 def updateAugCSTransitionsVals(transition, num, ncs, cs):
+    """
+    Function to update the auger rates for the selected transition and charge state
+        
+        Args:
+            transition: which transition to fetch the rates of
+            num: total number of transitions processed
+            ncs: boolean selecting if this is a negative charge state or not
+            cs: value of the charge state
+        
+        Returns:
+            num_of_transitions: total number of transitions processed
+            aug_stick_val: rates data for the selected transition and charge state
+    """
     # Update the number of transitions loaded (this could be done by reference as well)
     num_of_transitions = num + 1
     # Get the low, high and auger levels for the selected transition
@@ -402,6 +636,18 @@ def updateAugCSTransitionsVals(transition, num, ncs, cs):
 
 # Calculate the x bounds from the simulated transition energy and width data (excluing satellite transitions)
 def getBounds(x, w):
+    """
+    Function to calculate the x bounds from the simulated transition energy and width data (excluing satellite transitions)
+        
+        Args:
+            x: energy values for the simulated diagram transitions
+            w: width values for the simulated diagram transitions
+        
+        Returns:
+            deltaE: difference between the max and min energy of each transition
+            max_value: maximum value to be simulated, taking into consideration all transition energies and widths
+            min_value: minimum value to be simulated, taking into consideration all transition energies and widths
+    """
     deltaE = []
     # Loop the values of x and calulate the range of each transition
     for j, k in enumerate(x):
@@ -416,6 +662,18 @@ def getBounds(x, w):
 
 # Calculate the x bound from the simulated satellite transition energy and width data
 def getSatBounds(xs, ws):
+    """
+    Function to calculate the x bound from the simulated satellite transition energy and width data
+        
+        Args:
+            xs: energy values for the simulated satellite transitions
+            ws: width values for the simulated satellite transitions
+        
+        Returns:
+            deltaE: difference between the max and min energy of each transition
+            max_value: maximum value to be simulated, taking into consideration all transition energies and widths
+            min_value: minimum value to be simulated, taking into consideration all transition energies and widths
+    """
     deltaE = []
     # Loop the values of x and calulate the range of each satellite transition in each diagram transition
     for j, k in enumerate(xs):
@@ -431,6 +689,22 @@ def getSatBounds(xs, ws):
 
 # Update the bounds for the user selected bounds (Auto or value)
 def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
+    """
+    Function to update the bounds for the user selected bounds (Auto or value)
+        
+        Args:
+            x_mx: user value for the maximum x value. if set to Auto we calculate it
+            x_mn: user value for the minimum x value. if set to Auto we calculate it
+            deltaE: delta values for each of the plotted transitions
+            max_value: maximum value to be simulated, taking into consideration all transition energies and widths
+            min_value: minimum value to be simulated, taking into consideration all transition energies and widths
+            res: simulated experimental resolution
+            enoffset: simulated energy offset
+        
+        Returns:
+            array_input_max: maximum x value to be plotted
+            array_input_min: minimum x value to be plotted
+    """
     if x_mn == 'Auto':
         # If we are automaticaly calculating the bounds we add extra space arround the data to show possible tails of transitions
         if res <= 0.2 * (min(deltaE)):
@@ -455,6 +729,17 @@ def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
     
 # Extract x, y and sigma values from the read experimental file
 def extractExpVals(exp_spectrum):
+    """
+    Function to extract x, y and sigma values from the read experimental file
+        
+        Args:
+            exp_spectrum: list with the experimental spectrum to be handled
+        
+        Returns:
+            xe: energy values of the experimental spectrum
+            ye: intensity values of the experimental spectrum
+            sigma_exp: error values of the experimental spectrum (sqrt(intensity) by default if no data is provided)
+    """
     for i, it in enumerate(exp_spectrum):
         # Convert the loaded values to float. Update this to a map function?
         for j, itm in enumerate(exp_spectrum[i]):
@@ -476,6 +761,25 @@ def extractExpVals(exp_spectrum):
 
 # Bind the experimental values into the chosen bounds
 def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
+    """
+    Function to bind the experimental values into the chosen bounds.
+    If Auto bounds are chosen the simulation will be performed for all the experimental spectrum span
+    Otherwise we remove the experimental data that is outside the bounds we want
+        
+        Args:
+            xe: energy values from the experimental spectrum
+            ye: intensity values from the experimental spectrum
+            sigma_exp: error values from the experimental spectrum
+            enoffset: simulated energy offset
+            num_of_points: number of simulated points
+            x_mx: user value for the maximum x value. if set to Auto we calculate it
+            x_mn: user value for the minimum x value. if set to Auto we calculate it
+        
+        Returns:
+            exp_x: list of xe values inside the bounds
+            exp_y: list of ye values inside the bounds
+            exp_sigma: list of sigma_exp values inside the bounds
+    """
     exp_x = []
     exp_y = []
     exp_sigma = []
@@ -508,13 +812,31 @@ def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
 #                                                           #
 # --------------------------------------------------------- #
 
-# Stick plotter. Plots a stick for each transition
+# Stick plotter. Plots a stick for the transition
 def stem_ploter(transition_values, transition, spec_type, ind, key):
+    """
+    Stick plotter function. Plots a stick for the transition
+        
+        Args:
+            transition_values: list of the transition rates data
+            transition: the selected transition to plot
+            spec_type: simulation type selected in the interface (diagram, satellite, auger, diagram_cs, satellite_cs, auger_cs)
+            ind: shake level index to use when plotting a satellite transition
+            key: shake level label to use when plotting a satellite transition
+        
+        Returns:
+            Nothing, the transition is plotted and the interface is updated
+    """
     # Set of colors to choose from when plotting
     col2 = [['b'], ['g'], ['r'], ['c'], ['m'], ['y'], ['k']]
-    
+    """
+    Set of colors to choose from when plotting
+    """
     # Extract the energy values
     x = [float(row[8]) for row in transition_values]
+    """
+    Energy values for the selected transition
+    """
 
     # Add extra values before and after to make the y start and terminate on 0
     max_value = max(x)
@@ -524,41 +846,41 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
     
     # Calculate the y's weighted with the shake weights depending on the spectrum type and plot the sticks
     # In the case of charge state simulation the y's are also weighted by the selected mixture percentages
-    if spec_type == 'Diagram':
+    if spec_type == 'Diagram' or spec_type == 'Auger':
         y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) for row in transition_values]
+        """
+        Intensity values for the selected diagram or auger transition
+        """
         y.insert(0, 0)
         y.append(0)
         a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites':
         sy_points = [float(float(row[11]) * 0.01 * generalVars.shakeweights[ind]) for row in transition_values]
+        """
+        Intensity values for the selected satellite transition
+        """
         sy_points.insert(0, 0)
         sy_points.append(0)
         a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
         a.legend(loc='best', numpoints=1)
-    elif spec_type == 'Auger':
-        y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) for row in transition_values]
-        y.insert(0, 0)
-        y.append(0)
-        a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
-        a.legend(loc='best', numpoints=1)
-    elif spec_type == 'Diagram_CS':
+    elif spec_type == 'Diagram_CS' or spec_type == 'Auger_CS':
         y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) * float(row[-1]) for row in transition_values]
+        """
+        Intensity values for the selected diagram or auger transition weight by the charge state mix value
+        """
         y.insert(0, 0)
         y.append(0)
         a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites_CS':
         sy_points = [float(float(row[11]) * 0.01 * generalVars.shakeweights[ind] * float(row[-1])) for row in transition_values]
+        """
+        Intensity values for the selected satellite transition weight by the charge state mix value
+        """
         sy_points.insert(0, 0)
         sy_points.append(0)
         a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
-        a.legend(loc='best', numpoints=1)
-    elif spec_type == 'Auger_CS':
-        y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) * float(row[-1]) for row in transition_values]
-        y.insert(0, 0)
-        y.append(0)
-        a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     
     # --------------------------------------------------------------------------------------------------------------------------
@@ -584,15 +906,37 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
 
 # Profile plotter. Plots each transition, applying the selected profile
 def plot_stick(sim, f, graph_area):
+    """
+    Profile plotter function. Plots each transition, applying the selected profile
+        
+        Args:
+            sim: tkinter simulation window to update the progress bar
+            f: matplotlib figure object where to plot the data
+            graph_area: matplotlib graph to plot the simulated transitions
+            
+        Returns:
+            Nothing, the simulation is performed, the transitions are plotted and the interface is updated
+    """
     # Get the timestamp to use when saving files for this simulation plot
     time_of_click = datetime.now()
-    
+    """
+    Timestamp to use when saving files for this simulation plot
+    """
     global xfinal, exp_x, exp_y, residues_graph
     
     # Reinitialize the residues graph and experimental points
     residues_graph = None
+    """
+    Matplotlib graph object for the residues
+    """
     exp_x = None
+    """
+    List of experimental spectrum energies
+    """
     exp_y = None
+    """
+    List of experimental spectrum intensities
+    """
     
     # Reset the plot with the configurations selected
     graph_area.clear()
@@ -623,17 +967,42 @@ def plot_stick(sim, f, graph_area):
     
     # Set of colors to choose from when plotting
     col2 = [['b'], ['g'], ['r'], ['c'], ['m'], ['y'], ['k']]
+    """
+    Set of colors to choose from when plotting
+    """
     
     # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
     x = [[] for i in range(len(the_dictionary))]
+    """
+    Energy values for each of the possible radiative transitions
+    """
     y = [[] for i in range(len(the_dictionary))]
+    """
+    Intensity values for each of the possible radiative transitions
+    """
     w = [[] for i in range(len(the_dictionary))]
+    """
+    Natural width values for each of the possible radiative transitions
+    """
     xs = [[[] for i in generalVars.label1] for j in x]
+    """
+    Energy values for each of the possible radiative satellite transitions
+    """
     ys = [[[] for i in generalVars.label1] for j in y]
+    """
+    Intensity values for each of the possible radiative satellite transitions
+    """
     ws = [[[] for i in generalVars.label1] for j in w]
+    """
+    Natural width values for each of the possible radiative satellite transitions
+    """
     
     # Initialize the normalization multiplier
     normalization_var = 1
+    """
+    Normalization multiplyer
+    """
+    
     # --------------------------------------------------------------------------------------------------------------------------
     if spectype == 'Stick':
         # Variable for the total number of plotted transitions
@@ -1115,7 +1484,7 @@ def plot_stick(sim, f, graph_area):
                     # Get the report on the fit
                     report = fit_report(result)
                     # Export the fit to file
-                    exportFit(time_of_click, file, report)
+                    exportFit(time_of_click, report)
                 
             else:
                 messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
@@ -1560,7 +1929,7 @@ def plot_stick(sim, f, graph_area):
                     # Get the report on the fit
                     report = fit_report(result)
                     # Export the fit to file
-                    exportFit(time_of_click, file, report)
+                    exportFit(time_of_click, report)
                 
             else:
                 messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")

@@ -1,3 +1,8 @@
+"""
+Module that implements the line and level widths interface.
+The interface barebones is implemented but no data is being processed and shown.
+"""
+
 #GUI Imports
 from tkinter import *
 from tkinter import ttk
@@ -11,6 +16,16 @@ from utils.interface import destroy
 
 
 def fetchWidths(dir_path, z):
+    """
+    Function to run the cross sections interface
+        
+        Args:
+            dir_path: full path to the location where the application is ran
+            z: z value of the element to simulate
+            
+        Returns:
+            Not fully implemented, only the base interface
+    """
     try:
         # This can be moved to the fileIO module later
         # Path to the file with the widths for this element
@@ -23,11 +38,17 @@ def fetchWidths(dir_path, z):
 
         # Create a window to display the widths
         atdata = Toplevel()
+        """
+        Variable to hold the tkinter widths window object
+        """
         # Window title
         atdata.title("Level and Line Widths")
         
         # Make a frame in the window and initialize a grid positioning and resising for the results
         atdatayields = ttk.Frame(atdata, padding="3 3 12 12")
+        """
+        Frame with the grid system that will be used to position the data in the interface
+        """
         atdatayields.grid(column=0, row=0, sticky=(N, W, E, S))
         atdatayields.columnconfigure(0, weight=1)
         atdatayields.rowconfigure(0, weight=1)

@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>SpectraSimulations_git.data.variables API documentation</title>
+<meta name="description" content="Module that holds various global level data variables for the simulations.
+Here we have variables that are only initialized and are later filled by …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>SpectraSimulations_git.data.variables</code></h1>
+</header>
+<section id="section-intro">
+<p>Module that holds various global level data variables for the simulations.
+Here we have variables that are only initialized and are later filled by data from files or simulation calculations
+As well as static variables that are used to list fixed data such as transition labels and periodic table values.
+No functions should be defined in this module.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module that holds various global level data variables for the simulations.
+Here we have variables that are only initialized and are later filled by data from files or simulation calculations
+As well as static variables that are used to list fixed data such as transition labels and periodic table values.
+No functions should be defined in this module.
+&#34;&#34;&#34;
+
+#Chi^2 of the current fit
+chi_sqrd = 0
+&#34;&#34;&#34;
+Variable used to hold the current value of the reduced chi^2 calculated in the current simulation
+&#34;&#34;&#34;
+
+#Mix Values of the various charge states used in the simulation
+PCS_radMixValues = []
+&#34;&#34;&#34;
+Variable used to hold the mixture values for the positive charge states when performing a radiative simulation
+&#34;&#34;&#34;
+NCS_radMixValues = []
+&#34;&#34;&#34;
+Variable used to hold the mixture values for the negative charge states when performing a radiative simulation
+&#34;&#34;&#34;
+PCS_augMixValues = []
+&#34;&#34;&#34;
+Variable used to hold the mixture values for the positive charge states when performing an auger simulation
+&#34;&#34;&#34;
+NCS_augMixValues = []
+&#34;&#34;&#34;
+Variable used to hold the mixture values for the negative charge states when performing an auger simulation
+&#34;&#34;&#34;
+
+#Final y of the simulated spectrum (Rad or Aug, no satellite) for each transition
+yfinal = []
+&#34;&#34;&#34;
+Variable to hold the final y values calculated for each of the simulated transitions
+&#34;&#34;&#34;
+#Total y of the simulated spectrum summed over all simulated lines
+ytot = []
+&#34;&#34;&#34;
+Variable to hold the final total y values for all simulated transitions
+&#34;&#34;&#34;
+#Final y of the simulated satellite lines for each Rad transition
+yfinals = []
+&#34;&#34;&#34;
+Variable to hold the final y values calculated for each of the possible satellite transitions in each of the simulated diagram transitions
+&#34;&#34;&#34;
+
+#File names of the radiative transitions for each charge state found
+radiative_files = []
+&#34;&#34;&#34;
+Variable to hold the names of the radiative rates files for each charge state found
+&#34;&#34;&#34;
+#File names of the auger transitions for each charge state found
+auger_files = []
+&#34;&#34;&#34;
+Variable to hold the names of the auger rates files for each charge state found
+&#34;&#34;&#34;
+#File names of the satellite transitions for each charge state found
+sat_files = []
+&#34;&#34;&#34;
+Variable to hold the names of the satellite rates files for each charge state found
+&#34;&#34;&#34;
+
+#Raw data read from the radiative transitions file to be simulated
+lineradrates = []
+&#34;&#34;&#34;
+Variable to hold the data from the radiative rates read from file
+&#34;&#34;&#34;
+#Raw data read from the satellite transitions file to be simulated
+linesatellites = []
+&#34;&#34;&#34;
+Variable to hold the data from the satellite rates read from file
+&#34;&#34;&#34;
+#Raw data read from the auger transitions file to be simulated
+lineauger = []
+&#34;&#34;&#34;
+Variable to hold the data from the auger rates read from file
+&#34;&#34;&#34;
+#Raw data read from the shake wheights file to be simulated
+shakeweights = []
+&#34;&#34;&#34;
+Variable to hold the shake weights read from file
+&#34;&#34;&#34;
+#Variable to store the labels read from the shake weights file
+label1 = []
+&#34;&#34;&#34;
+Variable to hold the shake labels read from file
+&#34;&#34;&#34;
+
+
+#Raw data read from the radiative transitions files to be simulated, for each charge state split by positive and negative CS
+lineradrates_PCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the radiative rates read from file for each of the positive charge states
+&#34;&#34;&#34;
+lineradrates_NCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the radiative rates read from file for each of the negative charge states
+&#34;&#34;&#34;
+#Order of the charge states read and stored in the previous variables
+rad_PCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the positive charge states were read for the radiative rates
+&#34;&#34;&#34;
+rad_NCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the negative charge states were read for the radiative rates
+&#34;&#34;&#34;
+
+#Raw data read from the auger transitions files to be simulated, for each charge state split by positive and negative CS
+lineaugrates_PCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the auger rates read from file for each of the positive charge states
+&#34;&#34;&#34;
+lineaugrates_NCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the auger rates read from file for each of the negative charge states
+&#34;&#34;&#34;
+#Order of the charge states read and stored in the previous variables
+aug_PCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the positive charge states were read for the auger rates
+&#34;&#34;&#34;
+aug_NCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the negative charge states were read for the auger rates
+&#34;&#34;&#34;
+
+#Raw data read from the satellite transitions files to be simulated, for each charge state split by positive and negative CS
+linesatellites_PCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the satellite rates read from file for each of the positive charge states
+&#34;&#34;&#34;
+linesatellites_NCS = []
+&#34;&#34;&#34;
+Variable to hold the data from the satellite rates read from file for each of the negative charge states
+&#34;&#34;&#34;
+#Order of the charge states read and stored in the previous variables
+sat_PCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the positive charge states were read for the satellite rates
+&#34;&#34;&#34;
+sat_NCS = []
+&#34;&#34;&#34;
+Variable to hold the order that the negative charge states were read for the satellite rates
+&#34;&#34;&#34;
+
+#Flag to check if a file containing the ion population data is present
+Ionpop_exists = False
+&#34;&#34;&#34;
+Variable to know if an ion population file was found. Not currently in used
+&#34;&#34;&#34;
+#Raw data read from the ion population file
+ionpopdata = []
+&#34;&#34;&#34;
+Variable to hold the data read from the ion populations file
+&#34;&#34;&#34;
+
+#Correspondence between Siegbahn notation and relativistic orbitals
+labeldict = {&#39;K1&#39;: &#39;1s&#39;, &#39;L1&#39;: &#39;2s&#39;, &#39;L2&#39;: &#39;2p*&#39;, &#39;L3&#39;: &#39;2p&#39;, &#39;M1&#39;: &#39;3s&#39;, &#39;M2&#39;: &#39;3p*&#39;, &#39;M3&#39;: &#39;3p&#39;, &#39;M4&#39;: &#39;3d*&#39;,
+             &#39;M5&#39;: &#39;3d&#39;, &#39;N1&#39;: &#39;4s&#39;, &#39;N2&#39;: &#39;4p*&#39;, &#39;N3&#39;: &#39;4p&#39;, &#39;N4&#39;: &#39;4d*&#39;, &#39;N5&#39;: &#39;4d&#39;, &#39;N6&#39;: &#39;4f*&#39;, &#39;N7&#39;: &#39;4f&#39;,
+             &#39;O1&#39;: &#39;5s&#39;, &#39;O2&#39;: &#39;5p*&#39;, &#39;O3&#39;: &#39;5p&#39;, &#39;O4&#39;: &#39;5d*&#39;, &#39;O5&#39;: &#39;5d&#39;, &#39;O6&#39;: &#39;5f*&#39;, &#39;O7&#39;: &#39;5f&#39;, &#39;O8&#39;: &#39;5g*&#39;,
+             &#39;O9&#39;: &#39;5g&#39;, &#39;P1&#39;: &#39;6s&#39;}
+&#34;&#34;&#34;
+Variable with the correspondence between Siegbahn notation and relativistic orbitals
+&#34;&#34;&#34;
+
+
+# Radiative transition dictionary. This is used to list, select and control which transitions are to be simulated
+the_dictionary = {
+    # for ionic transitions
+    &#34;KL\u2081&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1&#34;},
+    &#34;K\u03B1\u2081&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kalpha1&#34;},
+    &#34;K\u03B1\u2082&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kalpha2&#34;},
+    &#34;K\u03B2\u2081&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta1&#34;},
+    &#34;K\u03B2\u2082\u00B9&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;N3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta2 1&#34;},
+    &#34;K\u03B2\u2082\u00B2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;N2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta2 2&#34;},
+    &#34;K\u03B2\u2083&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta3&#34;},
+    &#34;K\u03B2\u2084\u00B9&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;N5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta4 1&#34;},
+    &#34;K\u03B2\u2084\u00B2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;N4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta4 2&#34;},
+    &#34;K\u03B2\u2085\u00B9&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta5 1&#34;},
+    &#34;K\u03B2\u2085\u00B2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Kbeta5 2&#34;},
+    &#34;L\u03B1\u2081&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lalpha1&#34;},
+    &#34;L\u03B1\u2082&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lalpha2&#34;},
+    &#34;L\u03B2\u2081&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta1&#34;},
+    &#34;L\u03B2\u2083&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta3&#34;},
+    &#34;L\u03B2\u2084&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta4&#34;},
+    &#34;L\u03B2\u2086&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta6&#34;},
+    &#34;L\u03B2\u2089&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta9&#34;},
+    &#34;L\u03B2\u2081\u2080&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta10&#34;},
+    &#34;L\u03B2\u2081\u2087&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lbeta17&#34;},
+    &#34;L\u03B3\u2081&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;N4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma1&#34;},
+    &#34;L\u03B3\u2082&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;N2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma2&#34;},
+    &#34;L\u03B3\u2083&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;N3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma3&#34;},
+    &#34;L\u03B3\u2084&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;O3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma4&#34;},
+    &#34;L\u03B3\u2082&#39;&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;O2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma2&#39;&#34;},
+    &#34;L\u03B3\u2085&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma5&#34;},
+    &#34;L\u03B3\u2086&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;O4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma6&#34;},
+    &#34;L\u03B3\u2088&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;O1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lgamma8&#34;},
+    &#34;L\u03B7&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Ln&#34;},
+    &#34;Ll&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Ll&#34;},
+    &#34;Ls&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Ls&#34;},
+    &#34;Lt&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Lt&#34;},
+    &#34;M\u03B1\u2081&#34;: {&#34;low_level&#34;: &#34;M5&#34;, &#34;high_level&#34;: &#34;N7&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Malpha1&#34;},
+    &#34;M\u03B1\u2082&#34;: {&#34;low_level&#34;: &#34;M5&#34;, &#34;high_level&#34;: &#34;N6&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Malpha2&#34;},
+    &#34;M\u03B2&#34;: {&#34;low_level&#34;: &#34;M4&#34;, &#34;high_level&#34;: &#34;N6&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Mbeta&#34;},
+    &#34;M\u03B3\u2081&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;N5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;Mgamma1&#34;}}
+&#34;&#34;&#34;
+Radiative transition dictionary. This is used to list, select and control which transitions are to be simulated
+&#34;&#34;&#34;
+
+
+# Auger transition dictionary. This is used to list, select and control which transitions are to be simulated
+the_aug_dictionary = {
+    &#34;KL1L1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;L1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1L1&#34;},
+    &#34;KL1L2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;L2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1L2&#34;},
+    &#34;KL1L3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1L3&#34;},
+    &#34;KL1M1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1M1&#34;},
+    &#34;KL1M2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1M2&#34;},
+    &#34;KL1M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1M3&#34;},
+    &#34;KL1M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1M4&#34;},
+    &#34;KL1M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1M5&#34;},
+    &#34;KL1N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL1N1&#34;},
+    &#34;KL2L2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;L2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2L2&#34;},
+    &#34;KL2L3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2L3&#34;},
+    &#34;KL2M1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2M1&#34;},
+    &#34;KL2M2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2M2&#34;},
+    &#34;KL2M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2M3&#34;},
+    &#34;KL2M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2M4&#34;},
+    &#34;KL2M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2M5&#34;},
+    &#34;KL2N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL2N1&#34;},
+    &#34;KL3L3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3L3&#34;},
+    &#34;KL3M1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3M1&#34;},
+    &#34;KL3M2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3M2&#34;},
+    &#34;KL3M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3M3&#34;},
+    &#34;KL3M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3M4&#34;},
+    &#34;KL3M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3M5&#34;},
+    &#34;KL3N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KL3N1&#34;},
+    &#34;KM1M1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1M1&#34;},
+    &#34;KM1M2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1M2&#34;},
+    &#34;KM1M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1M3&#34;},
+    &#34;KM1M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1M4&#34;},
+    &#34;KM1M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1M5&#34;},
+    &#34;KM1N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM1N1&#34;},
+    &#34;KM2M2&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM2M2&#34;},
+    &#34;KM2M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM2M3&#34;},
+    &#34;KM2M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM2M4&#34;},
+    &#34;KM2M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM2M5&#34;},
+    &#34;KM2N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM2N1&#34;},
+    &#34;KM3M3&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM3M3&#34;},
+    &#34;KM3M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM3M4&#34;},
+    &#34;KM3M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM3M5&#34;},
+    &#34;KM3N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM3N1&#34;},
+    &#34;KM4M4&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM4M4&#34;},
+    &#34;KM4M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM4M5&#34;},
+    &#34;KM4N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM4N1&#34;},
+    &#34;KM5M5&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM5M5&#34;},
+    &#34;KM5N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KM5N1&#34;},
+    &#34;KN1N1&#34;: {&#34;low_level&#34;: &#34;K1&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;KN1N1&#34;},
+
+    &#34;L1L2L2&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;L2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2L2&#34;},
+    &#34;L1L2L3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2L3&#34;},
+    &#34;L1L2M1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2M1&#34;},
+    &#34;L1L2M2&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2M2&#34;},
+    &#34;L1L2M3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2M3&#34;},
+    &#34;L1L2M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2M4&#34;},
+    &#34;L1L2M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2M5&#34;},
+    &#34;L1L2N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L2N1&#34;},
+    &#34;L1L3L3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3L3&#34;},
+    &#34;L1L3M1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3M1&#34;},
+    &#34;L1L3M2&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3M2&#34;},
+    &#34;L1L3M3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3M3&#34;},
+    &#34;L1L3M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3M4&#34;},
+    &#34;L1L3M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3M5&#34;},
+    &#34;L1L3N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1L3N1&#34;},
+    &#34;L1M1M1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1M1&#34;},
+    &#34;L1M1M2&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1M2&#34;},
+    &#34;L1M1M3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1M3&#34;},
+    &#34;L1M1M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1M4&#34;},
+    &#34;L1M1M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1M5&#34;},
+    &#34;L1M1N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M1N1&#34;},
+    &#34;L1M2M2&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M2M2&#34;},
+    &#34;L1M2M3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M2M3&#34;},
+    &#34;L1M2M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M2M4&#34;},
+    &#34;L1M2M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M2M5&#34;},
+    &#34;L1M2N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M2N1&#34;},
+    &#34;L1M3M3&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M3M3&#34;},
+    &#34;L1M3M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M3M4&#34;},
+    &#34;L1M3M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M3M5&#34;},
+    &#34;L1M3N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M3N1&#34;},
+    &#34;L1M4M4&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M4M4&#34;},
+    &#34;L1M4M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M4M5&#34;},
+    &#34;L1M4N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M4N1&#34;},
+    &#34;L1M5M5&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M5M5&#34;},
+    &#34;L1M5N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1M5N1&#34;},
+    &#34;L1N1N1&#34;: {&#34;low_level&#34;: &#34;L1&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L1N1N1&#34;},
+
+    &#34;L2L3L3&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;L3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3L3&#34;},
+    &#34;L2L3M1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3M1&#34;},
+    &#34;L2L3M2&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3M2&#34;},
+    &#34;L2L3M3&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3M3&#34;},
+    &#34;L2L3M4&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3M4&#34;},
+    &#34;L2L3M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3M5&#34;},
+    &#34;L2L3N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;L3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2L3N1&#34;},
+    &#34;L2M1M1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1M1&#34;},
+    &#34;L2M1M2&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1M2&#34;},
+    &#34;L2M1M3&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1M3&#34;},
+    &#34;L2M1M4&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1M4&#34;},
+    &#34;L2M1M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1M5&#34;},
+    &#34;L2M1N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M1N1&#34;},
+    &#34;L2M2M2&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M2M2&#34;},
+    &#34;L2M2M3&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M2M3&#34;},
+    &#34;L2M2M4&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M2M4&#34;},
+    &#34;L2M2M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M2M5&#34;},
+    &#34;L2M2N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M2N1&#34;},
+    &#34;L2M3M3&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M3M3&#34;},
+    &#34;L2M3M4&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M3M4&#34;},
+    &#34;L2M3M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M3M5&#34;},
+    &#34;L2M3N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M3N1&#34;},
+    &#34;L2M4M4&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M4M4&#34;},
+    &#34;L2M4M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M4M5&#34;},
+    &#34;L2M4N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M4N1&#34;},
+    &#34;L2M5M5&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M5M5&#34;},
+    &#34;L2M5N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2M5N1&#34;},
+    &#34;L2N1N1&#34;: {&#34;low_level&#34;: &#34;L2&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L2N1N1&#34;},
+
+    &#34;L3M1M1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1M1&#34;},
+    &#34;L3M1M2&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1M2&#34;},
+    &#34;L3M1M3&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1M3&#34;},
+    &#34;L3M1M4&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1M4&#34;},
+    &#34;L3M1M5&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1M5&#34;},
+    &#34;L3M1N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M1N1&#34;},
+    &#34;L3M2M2&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M2M2&#34;},
+    &#34;L3M2M3&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M2M3&#34;},
+    &#34;L3M2M4&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M2M4&#34;},
+    &#34;L3M2M5&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M2M5&#34;},
+    &#34;L3M2N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M2N1&#34;},
+    &#34;L3M3M3&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M3M3&#34;},
+    &#34;L3M3M4&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M3M4&#34;},
+    &#34;L3M3M5&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M3M5&#34;},
+    &#34;L3M3N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M3N1&#34;},
+    &#34;L3M4M4&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M4M4&#34;},
+    &#34;L3M4M5&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M4M5&#34;},
+    &#34;L3M4N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M4N1&#34;},
+    &#34;L3M5M5&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M5M5&#34;},
+    &#34;L3M5N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3M5N1&#34;},
+    &#34;L3N1N1&#34;: {&#34;low_level&#34;: &#34;L3&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;L3N1N1&#34;},
+
+    &#34;M1M2M2&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M2&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M2M2&#34;},
+    &#34;M1M2M3&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M2M3&#34;},
+    &#34;M1M2M4&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M2M4&#34;},
+    &#34;M1M2M5&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M2M5&#34;},
+    &#34;M1M2N1&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M2&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M2N1&#34;},
+    &#34;M1M3M3&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M3M3&#34;},
+    &#34;M1M3M4&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;N3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M3M4&#34;},
+    &#34;M1M3M5&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;N3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M3M5&#34;},
+    &#34;M1M3N1&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M3N1&#34;},
+    &#34;M1M4M4&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M4M4&#34;},
+    &#34;M1M4M5&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M4M5&#34;},
+    &#34;M1M4N1&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M4N1&#34;},
+    &#34;M1M5M5&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M5M5&#34;},
+    &#34;M1M5N1&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1M5N1&#34;},
+    &#34;M1N1N1&#34;: {&#34;low_level&#34;: &#34;M1&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M1N1N1&#34;},
+
+    &#34;M2M3M3&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M3&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M3M3&#34;},
+    &#34;M2M3M4&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M3M4&#34;},
+    &#34;M2M3M5&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M3M5&#34;},
+    &#34;M2M3N1&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M3&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M3N1&#34;},
+    &#34;M2M4M4&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M4M4&#34;},
+    &#34;M2M4M5&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M4M5&#34;},
+    &#34;M2M4N1&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M4N1&#34;},
+    &#34;M2M5M5&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M5M5&#34;},
+    &#34;M2M5N1&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2M5N1&#34;},
+    &#34;M2N1N1&#34;: {&#34;low_level&#34;: &#34;M2&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M2N1N1&#34;},
+
+    &#34;M3M4M4&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M4&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3M4M4&#34;},
+    &#34;M3M4M5&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3M4M5&#34;},
+    &#34;M3M4N1&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;M4&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3M4N1&#34;},
+    &#34;M3M5M5&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3M5M5&#34;},
+    &#34;M3M5N1&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3M5N1&#34;},
+    &#34;M3N1N1&#34;: {&#34;low_level&#34;: &#34;M3&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M3N1N1&#34;},
+
+    &#34;M4M5M5&#34;: {&#34;low_level&#34;: &#34;M4&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;M5&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M4M5M5&#34;},
+    &#34;M4M5N1&#34;: {&#34;low_level&#34;: &#34;M4&#34;, &#34;high_level&#34;: &#34;M5&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M4M5N1&#34;},
+    &#34;M4N1N1&#34;: {&#34;low_level&#34;: &#34;M4&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M4N1N1&#34;},
+
+    &#34;M5N1N1&#34;: {&#34;low_level&#34;: &#34;M5&#34;, &#34;high_level&#34;: &#34;N1&#34;, &#34;auger_level&#34;: &#34;N1&#34;, &#34;selected_state&#34;: False, &#34;readable_name&#34;: &#34;M5N1N1&#34;}}
+&#34;&#34;&#34;
+Auger transition dictionary. This is used to list, select and control which transitions are to be simulated
+&#34;&#34;&#34;
+
+#Values to initialize the periodic table (First window)
+per_table = [[1, 1.0079, &#39; Hydrogen &#39;, &#39; H &#39;, 0.09, &#39;grey&#39;, 1, 1, &#39; 1s1 &#39;, 13.5984],
+             [2, 4.0026, &#39; Helium &#39;, &#39; He &#39;, 0.18, &#39;cyan&#39;, 1, 18, &#39; 1s2 &#39;, 24.5874],
+             [3, 6.941, &#39; Lithium &#39;, &#39; Li &#39;, 0.53, &#39;orange&#39;, 2, 1, &#39; [He] 2s1 &#39;, 5.3917],
+             [4, 9.0122, &#39; Beryllium &#39;, &#39; Be &#39;, 1.85, &#39;yellow&#39;, 2, 2, &#39; [He] 2s2 &#39;, 9.3227],
+             [5, 10.811, &#39; Boron &#39;, &#39; B &#39;, 2.34, &#39;green&#39;, 2, 13, &#39; [He] 2s2 2p1 &#39;, 8.298],
+             [6, 12.0107, &#39; Carbon &#39;, &#39; C &#39;, 2.26, &#39;green&#39;, 2, 14, &#39; [He] 2s2 2p2 &#39;, 11.2603],
+             [7, 14.0067, &#39; Nitrogen &#39;, &#39; N &#39;, 1.25, &#39;green&#39;, 2, 15, &#39; [He] 2s2 2p3 &#39;, 14.5341],
+             [8, 15.9994, &#39; Oxygen &#39;, &#39; O &#39;, 1.43, &#39;green&#39;, 2, 16, &#39; [He] 2s2 2p4 &#39;, 13.6181],
+             [9, 18.9984, &#39; Fluorine &#39;, &#39; F &#39;, 1.7, &#39;green&#39;, 2, 17, &#39; [He] 2s2 2p5 &#39;, 17.4228],
+             [10, 20.1797, &#39; Neon &#39;, &#39; Ne &#39;, 0.9, &#39;cyan&#39;, 2, 18, &#39; [He] 2s2 2p6 &#39;, 21.5645],
+             [11, 22.9897, &#39; Sodium &#39;, &#39; Na &#39;, 0.97, &#39;orange&#39;, 3, 1, &#39; [Ne] 3s1 &#39;, 5.1391],
+             [12, 24.305, &#39; Magnesium &#39;, &#39; Mg &#39;, 1.74, &#39;yellow&#39;, 3, 2, &#39; [Ne] 3s2 &#39;, 7.6462],
+             [13, 26.9815, &#39; Aluminum &#39;, &#39; Al &#39;, 2.7, &#39;blue&#39;, 3, 13, &#39; [Ne] 3s2 3p1 &#39;, 5.9858],
+             [14, 28.0855, &#39; Silicon &#39;, &#39; Si &#39;, 2.33, &#39;green&#39;, 3, 14, &#39; [Ne] 3s2 3p2 &#39;, 8.1517],
+             [15, 30.9738, &#39; Phosphorus &#39;, &#39; P &#39;, 1.82, &#39;green&#39;, 3, 15, &#39; [Ne] 3s2 3p3 &#39;, 10.4867],
+             [16, 32.065, &#39; Sulfur &#39;, &#39; S &#39;, 2.07, &#39;green&#39;, 3, 16, &#39; [Ne] 3s2 3p4 &#39;, 10.36],
+             [17, 35.453, &#39; Chlorine &#39;, &#39; Cl &#39;, 3.21, &#39;green&#39;, 3, 17, &#39; [Ne] 3s2 3p5 &#39;, 12.9676],
+             [18, 39.948, &#39; Argon &#39;, &#39; Ar &#39;, 1.78, &#39;cyan&#39;, 3, 18, &#39; [Ne] 3s2 3p6 &#39;, 15.7596],
+             [19, 39.0983, &#39; Potassium &#39;, &#39; K &#39;, 0.86, &#39;orange&#39;, 4, 1, &#39; [Ar] 4s1 &#39;, 4.3407],
+             [20, 40.078, &#39; Calcium &#39;, &#39; Ca &#39;, 1.55, &#39;yellow&#39;, 4, 2, &#39; [Ar] 4s2 &#39;, 6.1132],
+             [21, 44.9559, &#39; Scandium &#39;, &#39; Sc &#39;, 2.99, &#39;pink&#39;, 4, 3, &#39; [Ar] 3d1 4s2 &#39;, 6.5615],
+             [22, 47.867, &#39; Titanium &#39;, &#39; Ti &#39;, 4.54, &#39;pink&#39;, 4, 4, &#39; [Ar] 3d2 4s2 &#39;, 6.8281],
+             [23, 50.9415, &#39; Vanadium &#39;, &#39; V &#39;, 6.11, &#39;pink&#39;, 4, 5, &#39; [Ar] 3d3 4s2 &#39;, 6.7462],
+             [24, 51.9961, &#39; Chromium &#39;, &#39; Cr &#39;, 7.19, &#39;pink&#39;, 4, 6, &#39; [Ar] 3d5 4s1 &#39;, 6.7665],
+             [25, 54.938, &#39; Manganese &#39;, &#39; Mn &#39;, 7.43, &#39;pink&#39;, 4, 7, &#39; [Ar] 3d5 4s2 &#39;, 7.434],
+             [26, 55.845, &#39; Iron &#39;, &#39; Fe &#39;, 7.87, &#39;pink&#39;, 4, 8, &#39; [Ar] 3d6 4s2 &#39;, 7.9024],
+             [27, 58.9332, &#39; Cobalt &#39;, &#39; Co &#39;, 8.9, &#39;pink&#39;, 4, 9, &#39; [Ar] 3d7 4s2 &#39;, 7.881],
+             [28, 58.6934, &#39; Nickel &#39;, &#39; Ni &#39;, 8.9, &#39;pink&#39;, 4, 10, &#39; [Ar] 3d8 4s2 &#39;, 7.6398],
+             [29, 63.546, &#39; Copper &#39;, &#39; Cu &#39;, 8.96, &#39;pink&#39;, 4, 11, &#39; [Ar] 3d10 4s1 &#39;, 7.7264],
+             [30, 65.39, &#39; Zinc &#39;, &#39; Zn &#39;, 7.13, &#39;pink&#39;, 4, 12, &#39; [Ar] 3d10 4s2 &#39;, 9.3942],
+             [31, 69.723, &#39; Gallium &#39;, &#39; Ga &#39;, 5.91, &#39;blue&#39;, 4, 13, &#39; [Ar] 3d10 4s2 4p1 &#39;, 5.9993],
+             [32, 72.64, &#39; Germanium &#39;, &#39; Ge &#39;, 5.32, &#39;blue&#39;, 4, 14, &#39; [Ar] 3d10 4s2 4p2 &#39;, 7.8994],
+             [33, 74.9216, &#39; Arsenic &#39;, &#39; As &#39;, 5.72, &#39;green&#39;, 4, 15, &#39; [Ar] 3d10 4s2 4p3 &#39;, 9.7886],
+             [34, 78.96, &#39; Selenium &#39;, &#39; Se &#39;, 4.79, &#39;green&#39;, 4, 16, &#39; [Ar] 3d10 4s2 4p4 &#39;, 9.7524],
+             [35, 79.904, &#39; Bromine &#39;, &#39; Br &#39;, 3.12, &#39;green&#39;, 4, 17, &#39; [Ar] 3d10 4s2 4p5 &#39;, 11.8138],
+             [36, 83.8, &#39; Krypton &#39;, &#39; Kr &#39;, 3.75, &#39;cyan&#39;, 4, 18, &#39; [Ar] 3d10 4s2 4p6 &#39;, 13.9996],
+             [37, 85.4678, &#39; Rubidium &#39;, &#39; Rb &#39;, 1.63, &#39;orange&#39;, 5, 1, &#39; [Kr] 5s1 &#39;, 4.1771],
+             [38, 87.62, &#39; Strontium &#39;, &#39; Sr &#39;, 2.54, &#39;yellow&#39;, 5, 2, &#39; [Kr] 5s2 &#39;, 5.6949],
+             [39, 88.9059, &#39; Yttrium &#39;, &#39; Y &#39;, 4.47, &#39;pink&#39;, 5, 3, &#39; [Kr] 4d1 5s2 &#39;, 6.2173],
+             [40, 91.224, &#39; Zirconium &#39;, &#39; Zr &#39;, 6.51, &#39;pink&#39;, 5, 4, &#39; [Kr] 4d2 5s2 &#39;, 6.6339],
+             [41, 92.9064, &#39; Niobium &#39;, &#39; Nb &#39;, 8.57, &#39;pink&#39;, 5, 5, &#39; [Kr] 4d4 5s1 &#39;, 6.7589],
+             [42, 95.94, &#39; Molybdenum &#39;, &#39; Mo &#39;, 10.22, &#39;pink&#39;, 5, 6, &#39; [Kr] 4d5 5s1 &#39;, 7.0924],
+             [43, 98, &#39; Technetium &#39;, &#39; Tc &#39;, 11.5, &#39;pink&#39;, 5, 7, &#39; [Kr] 4d5 5s2 &#39;, 7.28],
+             [44, 101.07, &#39; Ruthenium &#39;, &#39; Ru &#39;, 12.37, &#39;pink&#39;, 5, 8, &#39; [Kr] 4d7 5s1 &#39;, 7.3605],
+             [45, 102.9055, &#39; Rhodium &#39;, &#39; Rh &#39;, 12.41, &#39;pink&#39;, 5, 9, &#39; [Kr] 4d8 5s1 &#39;, 7.4589],
+             [46, 106.42, &#39; Palladium &#39;, &#39; Pd &#39;, 12.02, &#39;pink&#39;, 5, 10, &#39; [Kr] 4d10 &#39;, 8.3369],
+             [47, 107.8682, &#39; Silver &#39;, &#39; Ag &#39;, 10.5, &#39;pink&#39;, 5, 11, &#39; [Kr] 4d10 5s1 &#39;, 7.5762],
+             [48, 112.411, &#39; Cadmium &#39;, &#39; Cd &#39;, 8.65, &#39;pink&#39;, 5, 12, &#39; [Kr] 4d10 5s2 &#39;, 8.9938],
+             [49, 114.818, &#39; Indium &#39;, &#39; In &#39;, 7.31, &#39;blue&#39;, 5, 13, &#39; [Kr] 4d10 5s2 5p1 &#39;, 5.7864],
+             [50, 118.71, &#39; Tin &#39;, &#39; Sn &#39;, 7.31, &#39;blue&#39;, 5, 14, &#39; [Kr] 4d10 5s2 5p2 &#39;, 7.3439],
+             [51, 121.76, &#39; Antimony &#39;, &#39; Sb &#39;, 6.68, &#39;blue&#39;, 5, 15, &#39; [Kr] 4d10 5s2 5p3 &#39;, 8.6084],
+             [52, 127.6, &#39; Tellurium &#39;, &#39; Te &#39;, 6.24, &#39;green&#39;, 5, 16, &#39; [Kr] 4d10 5s2 5p4 &#39;, 9.0096],
+             [53, 126.9045, &#39; Iodine &#39;, &#39; I &#39;, 4.93, &#39;green&#39;, 5, 17, &#39; [Kr] 4d10 5s2 5p5 &#39;, 10.4513],
+             [54, 131.293, &#39; Xenon &#39;, &#39; Xe &#39;, 5.9, &#39;cyan&#39;, 5, 18, &#39; [Kr] 4d10 5s2 5p6 &#39;, 12.1298],
+             [55, 132.9055, &#39; Cesium &#39;, &#39; Cs &#39;, 1.87, &#39;orange&#39;, 6, 1, &#39; [Xe] 6s1 &#39;, 3.8939],
+             [56, 137.327, &#39; Barium &#39;, &#39; Ba &#39;, 3.59, &#39;yellow&#39;, 6, 2, &#39; [Xe] 6s2 &#39;, 5.2117],
+             [57, 138.9055, &#39; Lanthanum &#39;, &#39; La &#39;, 6.15, &#39;purple&#39;, 9, 3, &#39; [Xe] 5d1 6s2 &#39;, 5.5769],
+             [58, 140.116, &#39; Cerium &#39;, &#39; Ce &#39;, 6.77, &#39;purple&#39;, 9, 4, &#39; [Xe] 4f1 5d1 6s2 &#39;, 5.5387],
+             [59, 140.9077, &#39; Praseodymium &#39;, &#39; Pr &#39;, 6.77, &#39;purple&#39;, 9, 5, &#39; [Xe] 4f3 6s2 &#39;, 5.473],
+             [60, 144.24, &#39; Neodymium &#39;, &#39; Nd &#39;, 7.01, &#39;purple&#39;, 9, 6, &#39; [Xe] 4f4 6s2 &#39;, 5.525],
+             [61, 145, &#39; Promethium &#39;, &#39; Pm &#39;, 7.3, &#39;purple&#39;, 9, 7, &#39; [Xe] 4f5 6s2 &#39;, 5.582],
+             [62, 150.36, &#39; Samarium &#39;, &#39; Sm &#39;, 7.52, &#39;purple&#39;, 9, 8, &#39; [Xe] 4f6 6s2 &#39;, 5.6437],
+             [63, 151.964, &#39; Europium &#39;, &#39; Eu &#39;, 5.24, &#39;purple&#39;, 9, 9, &#39; [Xe] 4f7 6s2 &#39;, 5.6704],
+             [64, 157.25, &#39; Gadolinium &#39;, &#39; Gd &#39;, 7.9, &#39;purple&#39;, 9, 10, &#39; [Xe] 4f7 5d1 6s2 &#39;, 6.1501],
+             [65, 158.9253, &#39; Terbium &#39;, &#39; Tb &#39;, 8.23, &#39;purple&#39;, 9, 11, &#39; [Xe] 4f9 6s2 &#39;, 5.8638],
+             [66, 162.5, &#39; Dysprosium &#39;, &#39; Dy &#39;, 8.55, &#39;purple&#39;, 9, 12, &#39; [Xe] 4f10 6s2 &#39;, 5.9389],
+             [67, 164.9303, &#39; Holmium &#39;, &#39; Ho &#39;, 8.8, &#39;purple&#39;, 9, 13, &#39; [Xe] 4f11 6s2 &#39;, 6.0215],
+             [68, 167.259, &#39; Erbium &#39;, &#39; Er &#39;, 9.07, &#39;purple&#39;, 9, 14, &#39; [Xe] 4f12 6s2 &#39;, 6.1077],
+             [69, 168.9342, &#39; Thulium &#39;, &#39; Tm &#39;, 9.32, &#39;purple&#39;, 9, 15, &#39; [Xe] 4f13 6s2 &#39;, 6.1843],
+             [70, 173.04, &#39; Ytterbium &#39;, &#39; Yb &#39;, 6.9, &#39;purple&#39;, 9, 16, &#39; [Xe] 4f14 6s2 &#39;, 6.2542],
+             [71, 174.967, &#39; Lutetium &#39;, &#39; Lu &#39;, 9.84, &#39;purple&#39;, 9, 17, &#39; [Xe] 4f14 5d1 6s2 &#39;, 5.4259],
+             [72, 178.49, &#39; Hafnium &#39;, &#39; Hf &#39;, 13.31, &#39;pink&#39;, 6, 4, &#39; [Xe] 4f14 5d2 6s2 &#39;, 6.8251],
+             [73, 180.9479, &#39; Tantalum &#39;, &#39; Ta &#39;, 16.65, &#39;pink&#39;, 6, 5, &#39; [Xe] 4f14 5d3 6s2 &#39;, 7.5496],
+             [74, 183.84, &#39; Tungsten &#39;, &#39; W &#39;, 19.35, &#39;pink&#39;, 6, 6, &#39; [Xe] 4f14 5d4 6s2 &#39;, 7.864],
+             [75, 186.207, &#39; Rhenium &#39;, &#39; Re &#39;, 21.04, &#39;pink&#39;, 6, 7, &#39; [Xe] 4f14 5d5 6s2 &#39;, 7.8335],
+             [76, 190.23, &#39; Osmium &#39;, &#39; Os &#39;, 22.6, &#39;pink&#39;, 6, 8, &#39; [Xe] 4f14 5d6 6s2 &#39;, 8.4382],
+             [77, 192.217, &#39; Iridium &#39;, &#39; Ir &#39;, 22.4, &#39;pink&#39;, 6, 9, &#39; [Xe] 4f14 5d7 6s2 &#39;, 8.967],
+             [78, 195.078, &#39; Platinum &#39;, &#39; Pt &#39;, 21.45, &#39;pink&#39;, 6, 10, &#39; [Xe] 4f14 5d9 6s1 &#39;, 8.9587],
+             [79, 196.9665, &#39; Gold &#39;, &#39; Au &#39;, 19.32, &#39;pink&#39;, 6, 11, &#39; [Xe] 4f14 5d10 6s1 &#39;, 9.2255],
+             [80, 200.59, &#39; Mercury &#39;, &#39; Hg &#39;, 13.55, &#39;pink&#39;, 6, 12, &#39; [Xe] 4f14 5d10 6s2 &#39;, 10.4375],
+             [81, 204.3833, &#39; Thallium &#39;, &#39; Tl &#39;, 11.85, &#39;blue&#39;, 6, 13, &#39; [Xe] 4f14 5d10 6s2 6p1 &#39;, 6.1082],
+             [82, 207.2, &#39; Lead &#39;, &#39; Pb &#39;, 11.35, &#39;blue&#39;, 6, 14, &#39; [Xe] 4f14 5d10 6s2 6p2 &#39;, 7.4167],
+             [83, 208.9804, &#39; Bismuth &#39;, &#39; Bi &#39;, 9.75, &#39;blue&#39;, 6, 15, &#39; [Xe] 4f14 5d10 6s2 6p3 &#39;, 7.2856],
+             [84, 209, &#39; Polonium &#39;, &#39; Po &#39;, 9.3, &#39;blue&#39;, 6, 16, &#39; [Xe] 4f14 5d10 6s2 6p4 &#39;, 8.417],
+             [85, 210, &#39; Astatine &#39;, &#39; At &#39;, 6.2, &#39;green&#39;, 6, 17, &#39; [Xe] 4f14 5d10 6s2 6p5 &#39;, 9.3],
+             [86, 222, &#39; Radon &#39;, &#39; Rn &#39;, 9.73, &#39;cyan&#39;, 6, 18, &#39; [Xe] 4f14 5d10 6s2 6p6 &#39;, 10.7485],
+             [87, 223, &#39; Francium &#39;, &#39; Fr &#39;, 1.87, &#39;orange&#39;, 7, 1, &#39; [Rn] 7s1 &#39;, 4.0727],
+             [88, 226, &#39; Radium &#39;, &#39; Ra &#39;, 5.5, &#39;yellow&#39;, 7, 2, &#39; [Rn] 7s2 &#39;, 5.2784],
+             [89, 227, &#39; Actinium &#39;, &#39; Ac &#39;, 10.07, &#39;purple&#39;, 10, 3, &#39; [Rn] 6d1 7s2 &#39;, 5.17],
+             [90, 232.0381, &#39; Thorium &#39;, &#39; Th &#39;, 11.72, &#39;purple&#39;, 10, 4, &#39; [Rn] 6d2 7s2 &#39;, 6.3067],
+             [91, 231.0359, &#39; Protactinium &#39;, &#39; Pa &#39;, 15.4, &#39;purple&#39;, 10, 5, &#39; [Rn] 5f2 6d1 7s2 &#39;, 5.89],
+             [92, 238.0289, &#39; Uranium &#39;, &#39; U &#39;, 18.95, &#39;purple&#39;, 10, 6, &#39; [Rn] 5f3 6d1 7s2 &#39;, 6.1941],
+             [93, 237, &#39; Neptunium &#39;, &#39; Np &#39;, 20.2, &#39;purple&#39;, 10, 7, &#39; [Rn] 5f4 6d1 7s2 &#39;, 6.2657],
+             [94, 244, &#39; Plutonium &#39;, &#39; Pu &#39;, 19.84, &#39;purple&#39;, 10, 8, &#39; [Rn] 5f6 7s2 &#39;, 6.0262],
+             [95, 243, &#39; Americium &#39;, &#39; Am &#39;, 13.67, &#39;purple&#39;, 10, 9, &#39; [Rn] 5f7 7s2 &#39;, 5.9738],
+             [96, 247, &#39; Curium &#39;, &#39; Cm &#39;, 13.5, &#39;purple&#39;, 10, 10, &#39; &#39;, 5.9915],
+             [97, 247, &#39; Berkelium &#39;, &#39; Bk &#39;, 14.78, &#39;purple&#39;, 10, 11, &#39; &#39;, 6.1979],
+             [98, 251, &#39; Californium &#39;, &#39; Cf &#39;, 15.1, &#39;purple&#39;, 10, 12, &#39; &#39;, 6.2817],
+             [99, 252, &#39; Einsteinium &#39;, &#39; Es &#39;, 8.84, &#39;purple&#39;, 10, 13, &#39; &#39;, 6.42],
+             [100, 257, &#39; Fermium &#39;, &#39; Fm &#39;, &#39;?&#39;, &#39;purple&#39;, 10, 14, &#39; &#39;, 6.5],
+             [101, 258, &#39; Mendelevium &#39;, &#39; Md &#39;, &#39;?&#39;, &#39;purple&#39;, 10, 15, &#39; &#39;, 6.58],
+             [102, 259, &#39; Nobelium &#39;, &#39; No &#39;, &#39;?&#39;, &#39;purple&#39;, 10, 16, &#39; &#39;, 6.65],
+             [103, 262, &#39; Lawrencium &#39;, &#39; Lr &#39;, &#39;?&#39;, &#39;purple&#39;, 10, 17, &#39; &#39;, 4.9],
+             [104, 261, &#39; Rutherfordium &#39;, &#39; Rf &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 4, &#39; &#39;, &#39;?&#39;],
+             [105, 262, &#39; Dubnium &#39;, &#39; Db &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 5, &#39; &#39;, &#39;?&#39;],
+             [106, 266, &#39; Seaborgium &#39;, &#39; Sg &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 6, &#39; &#39;, &#39;?&#39;],
+             [107, 264, &#39; Bohrium &#39;, &#39; Bh &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 7, &#39; &#39;, &#39;?&#39;],
+             [108, 277, &#39; Hassium &#39;, &#39; Hs &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 8, &#39; &#39;, &#39;?&#39;],
+             [109, 268, &#39; Meitnerium &#39;, &#39; Mt &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 9, &#39; &#39;, &#39;?&#39;],
+             [110, 277, &#39; Darmstadtium &#39;, &#39; Ds &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 10, &#39; &#39;, &#39;?&#39;],
+             [111, 277, &#39; Roentgenium &#39;, &#39; Rg &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 11, &#39; &#39;, &#39;?&#39;],
+             [112, 277, &#39; Copernicium &#39;, &#39; Cn &#39;, &#39;?&#39;, &#39;pink&#39;, 7, 12, &#39; &#39;, &#39;?&#39;],
+             [113, 277, &#39; Ununtrium &#39;, &#39; Uut &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 13, &#39; &#39;, &#39;?&#39;],
+             [114, 277, &#39; Flerovium &#39;, &#39; Fl &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 14, &#39; &#39;, &#39;?&#39;],
+             [115, 277, &#39; Ununpentium &#39;, &#39; Uup &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 15, &#39; &#39;, &#39;?&#39;],
+             [116, 277, &#39; Livermorium &#39;, &#39; Lv &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 16, &#39; &#39;, &#39;?&#39;],
+             [117, 277, &#39; Ununseptium &#39;, &#39; Uus &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 17, &#39; &#39;, &#39;?&#39;],
+             [118, 277, &#39; Ununoctium &#39;, &#39; Uuo &#39;, &#39;?&#39;, &#39;grey&#39;, 7, 18, &#39; &#39;, &#39;?&#39;] ]
+&#34;&#34;&#34;
+Values to initialize the periodic table (First window)
+&#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="SpectraSimulations_git.data.variables.Ionpop_exists"><code class="name">var <span class="ident">Ionpop_exists</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know if an ion population file was found. Not currently in used</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.NCS_augMixValues"><code class="name">var <span class="ident">NCS_augMixValues</span></code></dt>
+<dd>
+<div class="desc"><p>Variable used to hold the mixture values for the negative charge states when performing an auger simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.NCS_radMixValues"><code class="name">var <span class="ident">NCS_radMixValues</span></code></dt>
+<dd>
+<div class="desc"><p>Variable used to hold the mixture values for the negative charge states when performing a radiative simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.PCS_augMixValues"><code class="name">var <span class="ident">PCS_augMixValues</span></code></dt>
+<dd>
+<div class="desc"><p>Variable used to hold the mixture values for the positive charge states when performing an auger simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.PCS_radMixValues"><code class="name">var <span class="ident">PCS_radMixValues</span></code></dt>
+<dd>
+<div class="desc"><p>Variable used to hold the mixture values for the positive charge states when performing a radiative simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.aug_NCS"><code class="name">var <span class="ident">aug_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the negative charge states were read for the auger rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.aug_PCS"><code class="name">var <span class="ident">aug_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the positive charge states were read for the auger rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.auger_files"><code class="name">var <span class="ident">auger_files</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the names of the auger rates files for each charge state found</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.chi_sqrd"><code class="name">var <span class="ident">chi_sqrd</span></code></dt>
+<dd>
+<div class="desc"><p>Variable used to hold the current value of the reduced chi^2 calculated in the current simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.ionpopdata"><code class="name">var <span class="ident">ionpopdata</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data read from the ion populations file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.label1"><code class="name">var <span class="ident">label1</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the shake labels read from file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.labeldict"><code class="name">var <span class="ident">labeldict</span></code></dt>
+<dd>
+<div class="desc"><p>Variable with the correspondence between Siegbahn notation and relativistic orbitals</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineauger"><code class="name">var <span class="ident">lineauger</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the auger rates read from file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineaugrates_NCS"><code class="name">var <span class="ident">lineaugrates_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the auger rates read from file for each of the negative charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineaugrates_PCS"><code class="name">var <span class="ident">lineaugrates_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the auger rates read from file for each of the positive charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineradrates"><code class="name">var <span class="ident">lineradrates</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the radiative rates read from file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineradrates_NCS"><code class="name">var <span class="ident">lineradrates_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the radiative rates read from file for each of the negative charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.lineradrates_PCS"><code class="name">var <span class="ident">lineradrates_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the radiative rates read from file for each of the positive charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.linesatellites"><code class="name">var <span class="ident">linesatellites</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the satellite rates read from file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.linesatellites_NCS"><code class="name">var <span class="ident">linesatellites_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the satellite rates read from file for each of the negative charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.linesatellites_PCS"><code class="name">var <span class="ident">linesatellites_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the data from the satellite rates read from file for each of the positive charge states</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.per_table"><code class="name">var <span class="ident">per_table</span></code></dt>
+<dd>
+<div class="desc"><p>Values to initialize the periodic table (First window)</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.rad_NCS"><code class="name">var <span class="ident">rad_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the negative charge states were read for the radiative rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.rad_PCS"><code class="name">var <span class="ident">rad_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the positive charge states were read for the radiative rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.radiative_files"><code class="name">var <span class="ident">radiative_files</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the names of the radiative rates files for each charge state found</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.sat_NCS"><code class="name">var <span class="ident">sat_NCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the negative charge states were read for the satellite rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.sat_PCS"><code class="name">var <span class="ident">sat_PCS</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the order that the positive charge states were read for the satellite rates</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.sat_files"><code class="name">var <span class="ident">sat_files</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the names of the satellite rates files for each charge state found</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.shakeweights"><code class="name">var <span class="ident">shakeweights</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the shake weights read from file</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.the_aug_dictionary"><code class="name">var <span class="ident">the_aug_dictionary</span></code></dt>
+<dd>
+<div class="desc"><p>Auger transition dictionary. This is used to list, select and control which transitions are to be simulated</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.the_dictionary"><code class="name">var <span class="ident">the_dictionary</span></code></dt>
+<dd>
+<div class="desc"><p>Radiative transition dictionary. This is used to list, select and control which transitions are to be simulated</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.yfinal"><code class="name">var <span class="ident">yfinal</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the final y values calculated for each of the simulated transitions</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.yfinals"><code class="name">var <span class="ident">yfinals</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the final y values calculated for each of the possible satellite transitions in each of the simulated diagram transitions</p></div>
+</dd>
+<dt id="SpectraSimulations_git.data.variables.ytot"><code class="name">var <span class="ident">ytot</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the final total y values for all simulated transitions</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="SpectraSimulations_git.data" href="index.html">SpectraSimulations_git.data</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="two-column">
+<li><code><a title="SpectraSimulations_git.data.variables.Ionpop_exists" href="#SpectraSimulations_git.data.variables.Ionpop_exists">Ionpop_exists</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.NCS_augMixValues" href="#SpectraSimulations_git.data.variables.NCS_augMixValues">NCS_augMixValues</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.NCS_radMixValues" href="#SpectraSimulations_git.data.variables.NCS_radMixValues">NCS_radMixValues</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.PCS_augMixValues" href="#SpectraSimulations_git.data.variables.PCS_augMixValues">PCS_augMixValues</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.PCS_radMixValues" href="#SpectraSimulations_git.data.variables.PCS_radMixValues">PCS_radMixValues</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.aug_NCS" href="#SpectraSimulations_git.data.variables.aug_NCS">aug_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.aug_PCS" href="#SpectraSimulations_git.data.variables.aug_PCS">aug_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.auger_files" href="#SpectraSimulations_git.data.variables.auger_files">auger_files</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.chi_sqrd" href="#SpectraSimulations_git.data.variables.chi_sqrd">chi_sqrd</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.ionpopdata" href="#SpectraSimulations_git.data.variables.ionpopdata">ionpopdata</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.label1" href="#SpectraSimulations_git.data.variables.label1">label1</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.labeldict" href="#SpectraSimulations_git.data.variables.labeldict">labeldict</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineauger" href="#SpectraSimulations_git.data.variables.lineauger">lineauger</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineaugrates_NCS" href="#SpectraSimulations_git.data.variables.lineaugrates_NCS">lineaugrates_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineaugrates_PCS" href="#SpectraSimulations_git.data.variables.lineaugrates_PCS">lineaugrates_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineradrates" href="#SpectraSimulations_git.data.variables.lineradrates">lineradrates</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineradrates_NCS" href="#SpectraSimulations_git.data.variables.lineradrates_NCS">lineradrates_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.lineradrates_PCS" href="#SpectraSimulations_git.data.variables.lineradrates_PCS">lineradrates_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.linesatellites" href="#SpectraSimulations_git.data.variables.linesatellites">linesatellites</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.linesatellites_NCS" href="#SpectraSimulations_git.data.variables.linesatellites_NCS">linesatellites_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.linesatellites_PCS" href="#SpectraSimulations_git.data.variables.linesatellites_PCS">linesatellites_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.per_table" href="#SpectraSimulations_git.data.variables.per_table">per_table</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.rad_NCS" href="#SpectraSimulations_git.data.variables.rad_NCS">rad_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.rad_PCS" href="#SpectraSimulations_git.data.variables.rad_PCS">rad_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.radiative_files" href="#SpectraSimulations_git.data.variables.radiative_files">radiative_files</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.sat_NCS" href="#SpectraSimulations_git.data.variables.sat_NCS">sat_NCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.sat_PCS" href="#SpectraSimulations_git.data.variables.sat_PCS">sat_PCS</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.sat_files" href="#SpectraSimulations_git.data.variables.sat_files">sat_files</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.shakeweights" href="#SpectraSimulations_git.data.variables.shakeweights">shakeweights</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.the_aug_dictionary" href="#SpectraSimulations_git.data.variables.the_aug_dictionary">the_aug_dictionary</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.the_dictionary" href="#SpectraSimulations_git.data.variables.the_dictionary">the_dictionary</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.yfinal" href="#SpectraSimulations_git.data.variables.yfinal">yfinal</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.yfinals" href="#SpectraSimulations_git.data.variables.yfinals">yfinals</a></code></li>
+<li><code><a title="SpectraSimulations_git.data.variables.ytot" href="#SpectraSimulations_git.data.variables.ytot">ytot</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

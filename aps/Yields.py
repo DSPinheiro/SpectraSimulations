@@ -1,3 +1,9 @@
+"""
+Module that implements the fluorescence and non radiative yields interface.
+First we search and read all the required files to calculate the selected element's yields.
+Second we initialize the Tkinter interface and present the values calculated from the input data
+"""
+
 #GUI Imports
 from tkinter import *
 from tkinter import ttk
@@ -11,23 +17,45 @@ from utils.interface import destroy
 
 
 def fetchYields(dir_path, z):
+    """
+    Function to run the yields interface
+        
+        Args:
+            dir_path: full path to the location where the application is ran
+            z: z value of the element to simulate
+            
+        Returns:
+            Nothing, we just setup the interface and all commands are bound and performed through the interface
+    """
     # This can be moved to the fileIO module later
     # Path to the file with the yields for this element
     yields_file = dir_path / str(z) / (str(z) + '-yields.out')
+    """
+    Variable with the full path to the yields file of this element
+    """
     try:
         with open(yields_file, 'r') as yields:
             # Write the lines into a list
             lineyields = [x.strip('\n').split() for x in yields.readlines()]
+            """
+            Variable to hold the yields data that was read from the file
+            """
             # Remove empty strings from possible uneven formating
             lineyields = list(filter(None, lineyields))
         
         # Create a window to display the yields
         atdata = Toplevel()
+        """
+        Variable to hold the tkinter yields window object
+        """
         # Window title
         atdata.title("Fluorescence and nonRadiative Yields")
         
         # Make a frame in the window and initialize a grid positioning and resising for the results
         atdatayields = ttk.Frame(atdata, padding="3 3 12 12")
+        """
+        Frame with the grid system that will be used to position the data in the interface
+        """
         atdatayields.grid(column=0, row=0, sticky=(N, W, E, S))
         atdatayields.columnconfigure(0, weight=1)
         atdatayields.rowconfigure(0, weight=1)
@@ -44,13 +72,24 @@ def fetchYields(dir_path, z):
 
         # Variable to control if we show the non radiative yields
         NR = False
-        
+        """
+        Variable to control if we show the non radiative yields
+        """
         # Row counter for the fluorescence yields position
         n1 = 1
+        """
+        Row counter for the fluorescence yields position
+        """
         # Row counter for the Auger yields position
         n2 = 1
+        """
+        Row counter for the Auger yields position
+        """
         # Row counter for the Coster-Kronig yields position
         n3 = 1
+        """
+        Row counter for the Coster-Kronig yields position
+        """
         
         # Loop the lines of the file and read the yields
         for j in lineyields:

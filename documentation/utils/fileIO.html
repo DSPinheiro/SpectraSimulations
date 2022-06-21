@@ -1,0 +1,1320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>SpectraSimulations_git.utils.fileIO API documentation</title>
+<meta name="description" content="Module for file I/O functions.
+Exporting to and importing from files is handled by these functions.
+I/O in aps 1, 2 and 3 is not yet implemented in …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>SpectraSimulations_git.utils.fileIO</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for file I/O functions.
+Exporting to and importing from files is handled by these functions.
+I/O in aps 1, 2 and 3 is not yet implemented in this module.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for file I/O functions.
+Exporting to and importing from files is handled by these functions.
+I/O in aps 1, 2 and 3 is not yet implemented in this module.
+&#34;&#34;&#34;
+
+#GUI Imports for warnings and interface to select files
+from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
+
+#Data import for variable management
+from data.variables import labeldict, the_dictionary, the_aug_dictionary
+import data.variables
+
+#CSV reader import for reading and exporting data
+import csv
+
+#OS Imports for file paths
+import os
+
+
+# ----------------------------------------------------- #
+#                                                       #
+#                   EXPORT FUNCTIONS                    #
+#                                                       #
+# ----------------------------------------------------- #
+
+# Function to generate the file names when saving data
+def file_namer(simulation_or_fit, fit_time, extension):
+    &#34;&#34;&#34;
+    Function to generate file names
+        
+        Args:
+            simulation_or_fit: prefix for the type of file we want a name for
+            fit_time: timestamp to identify the simulation/calculation that this file should correspond
+            extension: file extention to be saved as
+            
+        Returns:
+            file_name: final file name to be saved
+    &#34;&#34;&#34;
+    # Convert the timestamp to formatted string
+    dt_string = fit_time.strftime(&#34;%d%m%Y_%H%M%S&#34;)
+    &#34;&#34;&#34;
+    Formated timestamp string
+    &#34;&#34;&#34;
+    # Build the filename
+    file_name = simulation_or_fit + &#39;_from_&#39; + dt_string + extension
+    &#34;&#34;&#34;
+    Final file name
+    &#34;&#34;&#34;
+    
+    return file_name
+
+# Function to save the simulation data into an excel file
+def write_to_xls(type_t, xfinal, enoffset, y0, exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, date_and_time):
+    &#34;&#34;&#34;
+    Function to save the current simulation data into an excel file
+        
+        Args:
+            type_t: type of transitions simulated (diagram, satellite, diagram + satellite, auger)
+            xfinal: simulated x values
+            enoffset: energy offset chosen in the simulation
+            y0: intensity offset chosen in the simulation
+            exp_x: loaded experimental spectrum x values
+            exp_y: loaded experimental spectrum y values
+            residues_graph: residues graph object from where we will extract the calculated residues
+            radiative_files: radiative rates file names found for each charge state
+            auger_files: auger rates file names found for each charge state
+            label1: shake weights labels read from the shake weigths file
+            date_and_time: timestamp of the simulation for the name of the file saved
+            
+        Returns:
+            Nothing, the file is saved and a message box is shown to the used
+    &#34;&#34;&#34;
+    #Print the timestamp of the simulation
+    print(date_and_time)
+    
+    #Generate filename to save the data
+    file_title = file_namer(&#34;Simulation&#34;, date_and_time, &#34;.csv&#34;)
+    &#34;&#34;&#34;
+    Name of the file that is going to be saved. Please use the :func:`file_namer` function to generate names
+    &#34;&#34;&#34;
+    
+    # Initialize the header row of the excel file
+    first_line = [&#39;Energy (eV)&#39;]
+    &#34;&#34;&#34;
+    Variable that holds the header row of the file
+    &#34;&#34;&#34;
+    # Add an energy offset column if the offset is not 0
+    if enoffset != 0:
+        first_line += [&#39;Energy Off (eV)&#39;]
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the selected radiative and satellite transition labels into a seperate column
+    if type_t != &#39;Auger&#39;:
+        for index, transition in enumerate(the_dictionary):
+            if the_dictionary[transition][&#34;selected_state&#34;]:
+                # Add the diagram transitions
+                if max(data.variables.yfinal[index]) != 0:
+                    first_line += [the_dictionary[transition][&#34;readable_name&#34;]]
+                # Add the satellite transitions
+                for l, m in enumerate(data.variables.yfinals[index]):
+                    if max(m) != 0:
+                        first_line += [the_dictionary[transition][&#34;readable_name&#34;] + &#39;-&#39; + labeldict[label1[l]]]
+    else:
+        for index, transition in enumerate(the_aug_dictionary):
+            if the_aug_dictionary[transition][&#34;selected_state&#34;]:
+                # Add the diagram transitions
+                if max(data.variables.yfinal[index]) != 0:
+                    first_line += [the_aug_dictionary[transition][&#34;readable_name&#34;]]
+                # Add the satellite transitions
+                for l, m in enumerate(data.variables.yfinals[index]):
+                    if max(m) != 0:
+                        first_line += [the_aug_dictionary[transition][&#34;readable_name&#34;] + &#39;-&#39; + labeldict[label1[l]]]
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the column for the total y
+    first_line += [&#39;Total&#39;]
+    
+    # Add an intensity offset column if the offset is not 0
+    if y0 != 0:
+        first_line += [&#39;Total Off&#39;]
+    
+    # Add 2 columns for the experimental spectrum if it is loaded
+    if exp_x != None and exp_y != None:
+        first_line += [&#39;Exp Energy (eV)&#39;, &#39;Intensity&#39;]
+
+    # Add 4 columns for the residue data if it was calculated. An extra spacing column is added before the chi^2 value
+    if residues_graph != None:
+        first_line += [&#39;Residues (arb. units)&#39;, &#39;std+&#39;, &#39;std-&#39;, &#39;&#39;, &#39;red chi 2&#39;]
+
+    # Add a spacing column and 2 columns for the charge state mixture weights if they were used in the simulation
+    if len(data.variables.PCS_radMixValues) &gt; 0 or len(data.variables.NCS_radMixValues) &gt; 0 or len(data.variables.PCS_augMixValues) &gt; 0 or len(data.variables.NCS_augMixValues) &gt; 0:
+        first_line += [&#39;&#39;, &#39;Charge States&#39;, &#39;Percentage&#39;]
+
+    # Now that we have the header line configured we can initialize a matrix to save in excel
+    # If we have loaded an experimental spectrum we use the largest dimention between the x values grid and the experimental spectrum
+    # Matrix = len(first_line) x max(len(xfinal), len(exp_x))
+    if exp_x != None:
+        matrix = [[None for x in range(len(first_line))] for y in range(max(len(xfinal), len(exp_x)))]
+        &#34;&#34;&#34;
+        Variable that holds the data to be saved in matrix form
+        &#34;&#34;&#34;
+    else:
+        matrix = [[None for x in range(len(first_line))] for y in range(len(xfinal))]
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Variable to control which column we need to write to
+    transition_columns = 1
+    &#34;&#34;&#34;
+    Variable to control which column we need to write to
+    &#34;&#34;&#34;
+
+    # Write the x and x + offset values in the matrix if the offset is not 0, otherwise write only the x
+    if enoffset != 0:
+        for i, x in enumerate(xfinal):
+            matrix[i][0] = x
+            matrix[i][1] = x + enoffset
+
+        transition_columns += 1
+    else:
+        for i, x in enumerate(xfinal):
+            matrix[i][0] = x
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the transition data in the respective columns
+    for i, y in enumerate(data.variables.yfinal):
+        # If we have data for this transition
+        if max(y) != 0:
+            # Write the values in the column
+            for row in range(len(y)):
+                matrix[row][transition_columns] = y[row]
+            
+            transition_columns += 1
+        
+        # Same for the satellite transitions but we require and extra loop
+        if any(data.variables.yfinals[i]) != 0:
+            for j, ys in enumerate(data.variables.yfinals[i]):
+                if max(ys) != 0:
+                    for row in range(len(y)):
+                        matrix[row][transition_columns] = ys[row]
+                    
+                    transition_columns += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the total y and y + offset values in the matrix if the offset is not 0, otherwise write only the total y
+    if y0 != 0:
+        for j in range(len(data.variables.ytot)):
+            matrix[j][transition_columns] = data.variables.ytot[j]
+            matrix[j][transition_columns + 1] = data.variables.ytot[j] + y0
+    
+        transition_columns += 1
+    else:
+        for j in range(len(data.variables.ytot)):
+            matrix[j][transition_columns] = data.variables.ytot[j]
+
+    transition_columns += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the experimental spectrum values
+    if exp_x == None and exp_y == None:
+        print(&#34;No experimental spectrum loaded. Skipping...&#34;)
+    else:
+        for i in range(len(exp_x)):
+            matrix[i][transition_columns] = exp_x[i]
+            matrix[i][transition_columns + 1] = exp_y[i]
+
+        transition_columns += 2
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Retrieve the residue data from the graph object
+    if residues_graph == None:
+        print(&#34;No residues calculated. Skipping...&#34;)
+    else:
+        # Retrieve the data from the graph
+        lines = residues_graph.get_lines()
+        &#34;&#34;&#34;
+        Lines from the residue graph
+        &#34;&#34;&#34;
+        sigp, sigm, res = lines[0].get_ydata(), lines[1].get_ydata(), lines[2].get_ydata()
+        &#34;&#34;&#34;
+        sigp: positive sigma (std. deviation) values for the residues calculate
+        sigm: negative sigma (std. deviation) values for the residues calculate
+        res: residue values calculated
+        &#34;&#34;&#34;
+        # Write the data in the respective columns
+        for i in range(len(exp_x)):
+            matrix[i][transition_columns] = res[i]
+            matrix[i][transition_columns + 1] = sigp[i]
+            matrix[i][transition_columns + 2] = sigm[i]
+
+        matrix[0][transition_columns + 4] = data.variables.chi_sqrd
+
+        transition_columns += 5
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the mix values in the matrix
+    if type_t != &#39;Auger&#39;:
+        if len(data.variables.PCS_radMixValues) &gt; 0 or len(data.variables.NCS_radMixValues) &gt; 0:
+            idx_p = 0
+            idx_n = 0
+            # Loop all loaded charge states
+            for i, cs in enumerate(radiative_files):
+                # Write the charge state label
+                matrix[i][transition_columns + 1] = cs.split(&#39;-intensity_&#39;)[1].split(&#39;.out&#39;)[0] + &#39;_&#39;
+
+                # As the mixture values are split by positive and negative charge states we need to diferenciate them
+                if &#39;+&#39; in cs:
+                    matrix[i][transition_columns + 2] = data.variables.PCS_radMixValues[idx_p].get()
+                    idx_p += 1
+                else:
+                    matrix[i][transition_columns + 2] = data.variables.NCS_radMixValues[idx_n].get()
+                    idx_n += 1
+    else:
+        if len(data.variables.PCS_augMixValues) &gt; 0 or len(data.variables.NCS_augMixValues) &gt; 0:
+            idx_p = 0
+            idx_n = 0
+
+            # Add an extra label to know this mixture is for an auger simulation
+            matrix[1][transition_columns + 1] = &#34;Auger Mix Values&#34;
+
+            # Loop all loaded charge states
+            for i, cs in enumerate(auger_files):
+                matrix[i + 1][transition_columns + 1] = cs.split(&#39;-augrate_&#39;)[1].split(&#39;.out&#39;)[0] + &#39;_&#39;
+
+                # As the mixture values are split by positive and negative charge states we need to diferenciate them
+                if &#39;+&#39; in cs:
+                    matrix[i + 1][transition_columns + 2] = data.variables.PCS_augMixValues[idx_p].get()
+                    idx_p += 1
+                else:
+                    matrix[i + 1][transition_columns + 2] = data.variables.NCS_augMixValues[idx_n].get()
+                    idx_n += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the header row
+    matrix = [first_line] + matrix
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Print the matrix values in the console to debug
+    # for row in matrix:
+    #     print(&#39; &#39;.join(map(str, row)))
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the matrix in the file. First open as write to create the file, then we append the remaining lines
+    for i, item in enumerate(matrix):
+        if i == 0:
+            with open(file_title, &#39;w&#39;, newline=&#39;&#39;) as csvfile:
+                w1 = csv.writer(csvfile, delimiter=&#39;,&#39;, quotechar=&#39;|&#39;, quoting=csv.QUOTE_MINIMAL)
+                w1.writerow(matrix[i])
+        else:
+            with open(file_title, &#39;a&#39;, newline=&#39;&#39;) as csvfile2:
+                w1 = csv.writer(csvfile2, delimiter=&#39;,&#39;, quotechar=&#39;|&#39;, quoting=csv.QUOTE_MINIMAL)
+                w1.writerow(matrix[i])
+    
+    # Prompt that the data was saved
+    messagebox.showinfo(&#34;File Saved&#34;, &#34;Data file has been saved&#34;)
+
+# Function to save the fit report to file
+def exportFit(time_of_click, report):
+    &#34;&#34;&#34;
+    Function export the fit parameters calculated
+        
+        Args:
+            time_of_click: timestamp of the fit
+            report: the report to be saved
+            
+        Returns:
+            Nothing, the data is saved to file and printed on the console
+    &#34;&#34;&#34;
+    with open(file_namer(&#34;Fit&#34;, time_of_click, &#34;.txt&#34;), &#39;w&#39;) as file:
+        file.write(report)
+        print(report)
+
+# ----------------------------------------------------- #
+#                                                       #
+#       LOAD EXPERIMENTAL AND EFFICIENCY DATA           #
+#                                                       #
+# ----------------------------------------------------- #
+
+# Function to request the file with the experimental spectrum and save the file path
+def load(loadvar):
+    &#34;&#34;&#34;
+    Function to request the file with the experimental spectrum
+        
+        Args:
+            loadvar: variable where we save the chosen file path
+            
+        Returns:
+            Nothing, the file path is save in the variable
+    &#34;&#34;&#34;
+    # Lauch a file picker interface
+    fname = askopenfilename(filetypes=((&#34;Spectra files&#34;, &#34;*.csv *.txt&#34;), (&#34;All files&#34;, &#34;*.*&#34;)))
+    # Save the path to the loadvar variable
+    loadvar.set(fname)
+
+# Function to request the file with the detector efficiency and save the file path
+def load_effic_file(effic_var):
+    &#34;&#34;&#34;
+    Function to request the file with the detector efficiency
+        
+        Args:
+            effic_var: variable where we save the chosen file path
+            
+        Returns:
+            Nothing, the file path is save in the variable
+    &#34;&#34;&#34;
+    # Lauch a file picker interface
+    effic_fname = askopenfilename(filetypes=((&#34;Efficiency files&#34;, &#34;*.csv&#34;), (&#34;All files&#34;, &#34;*.*&#34;)))
+    # Save the path to the effic_var variable
+    effic_var.set(effic_fname)
+
+# Function to read the experimental spectrum as csv and return it as a list
+def loadExp(file):
+    &#34;&#34;&#34;
+    Function to read the experimental spectrum as csv
+        
+        Args:
+            file: file path of the experimental spectrum
+            
+        Returns:
+            List with the data still in string format
+    &#34;&#34;&#34;
+    return list(csv.reader(open(file, &#39;r&#39;, encoding=&#39;utf-8-sig&#39;)))
+
+# Function to read the detector efficiency as csv and return it as a list
+def loadEfficiency(file):
+    &#34;&#34;&#34;
+    Function to read the detector efficiency as csv
+        
+        Args:
+            file: file path of the efficiency data
+            
+        Returns:
+            List with the data still in string format
+    &#34;&#34;&#34;
+    return list(csv.reader(open(file, &#39;r&#39;)))
+
+
+# ----------------------------------------------------- #
+#                                                       #
+#                  READ RATES FILES                     #
+#                                                       #
+# ----------------------------------------------------- #
+
+# Read the rates file and return a list with the data
+def readRates(rates_file):
+    &#34;&#34;&#34;
+    Function to read the rates file
+        
+        Args:
+            rates_file: file path of the rates file
+            
+        Returns:
+            linerates: list with the data still in string format
+    &#34;&#34;&#34;
+    try:
+        with open(rates_file, &#39;r&#39;) as rates:
+            # Write the lines into a list
+            linerates = [x.strip(&#39;\n&#39;).split() for x in rates.readlines()]
+            # Remove empty strings from possible uneven formating
+            linerates = list(filter(None, linerates))
+            # Delete the header rows
+            del linerates[0:2]
+            
+            return linerates
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Rates File is not Avaliable: &#34; + rates_file)
+
+# Read the shake weights file and return a list with the data and a list with the labels
+def readShakeWeights(shakeweights_file):
+    &#34;&#34;&#34;
+    Function to read the shake weights file
+        
+        Args:
+            shakeweights_file: file path of the shake weights file
+            
+        Returns:
+            shakeweights: list with the shake weights in float
+            label1: list with the shake labels
+    &#34;&#34;&#34;
+    try:
+        with open(shakeweights_file, &#39;r&#39;) as shakeweights_f:
+            # Write the lines into a list
+            shakeweights_m = [x.strip(&#39;\n&#39;).split(&#39;,&#39;) for x in shakeweights_f.readlines()]
+            shakeweights = []
+            label1 = []
+            
+            # Loop the read values and store them in two lists
+            for i in range(len(shakeweights_m)):
+                shakeweights.append(float(shakeweights_m[i][1]))
+                label1.append(shakeweights_m[i][0])
+            
+            return shakeweights, label1
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Shake Weigths File is not Avaliable&#34;)
+
+
+
+# ----------------------------------------------------- #
+#                                                       #
+#    READ RATES AND IONPOP FILES FOR CHARGE STATES      #
+#                                                       #
+# ----------------------------------------------------- #
+
+# Search the Charge_States folder for all &#34;identifyer&#34; rate files and return a list with their names
+def searchChargeStates(dir_path, z, identifyer):
+    &#34;&#34;&#34;
+    Function to search the Charge_States folder for all &#34;identifyer&#34; rate files
+        
+        Args:
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+            identifyer: identifyer of the rate files we want to search (intensity, satinty, augrate)
+            
+        Returns:
+            files: file names found in the Charge_States folder with the identifyer
+    &#34;&#34;&#34;
+    files = []
+    # Loop all files in the folder
+    for f in os.listdir(dir_path / str(z) / &#39;Charge_States&#39;):
+        # If the name format matches a radiative rates files then append it to the list
+        if os.path.isfile(os.path.join(dir_path / str(z) / &#39;Charge_States&#39;, f)) and identifyer in f:
+            files.append(f)
+    
+    return files
+
+# Read the rates files in the files list and return a list with the data split by positive and negative charge states.
+# Also return a list with the order in which the data was stored in the lists
+def readChargeStates(files, dir_path, z):
+    &#34;&#34;&#34;
+    Function to read the rates files in the files list
+        
+        Args:
+            files: list of the file names to read
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+        
+        Returns:
+            linerates_PCS: lists of the rates read for each positive charge state
+            linerates_NCS: lists of the rates read for each negative charge state
+            PCS: list with the order that the rates for the positive charge states were read
+            NCS: list with the order that the rates for the negative charge states were read
+    &#34;&#34;&#34;
+    linerates_PCS = []
+    linerates_NCS = []
+
+    PCS = []
+    NCS = []
+
+    # Loop for each charge state file
+    for file in files:
+        # Path to the selected file
+        tmp_file = dir_path / str(z) / &#39;Charge_States&#39; / file
+        try:
+            with open(tmp_file, &#39;r&#39;) as rates:
+                if &#39;+&#39; in file:
+                    # Write the lines into a list and append it to the total rates for all charge states
+                    linerates_PCS.append([x.strip(&#39;\n&#39;).split() for x in rates.readlines()])
+                    # Remove empty strings from possible uneven formating in the appended list
+                    linerates_PCS[-1] = list(filter(None, linerates_PCS[-1]))
+                    # Delete the header rows from the last list
+                    del linerates_PCS[-1][0:2]
+                    
+                    # Append the charge state value to identify the rates we just appended
+                    PCS.append(&#39;+&#39; + file.split(&#39;+&#39;)[1].split(&#39;.&#39;)[0])
+                else:
+                    # Write the lines into a list and append it to the total rates for all charge states
+                    linerates_NCS.append([x.strip(&#39;\n&#39;).split() for x in rates.readlines()])
+                    # Remove empty strings from possible uneven formating in the appended list
+                    linerates_NCS[-1] = list(filter(None, linerates_NCS[-1]))
+                    # Delete the header rows from the last list
+                    del linerates_NCS[-1][0:2]
+                    
+                    # Append the charge state value to identify the rates we just appended
+                    NCS.append(&#39;-&#39; + file.split(&#39;-&#39;)[1].split(&#39;.&#39;)[0])
+        except FileNotFoundError:
+            messagebox.showwarning(&#34;Error&#34;, &#34;Charge State File is not Avaliable: &#34; + file)
+    
+    return linerates_PCS, linerates_NCS, PCS, NCS
+
+# Read the ion population file and return a list with the raw data
+def readIonPop(ionpop_file):
+    &#34;&#34;&#34;
+    Function to read the ion population file
+        
+        Args:
+            ionpop_file: full path of the ion population file
+            
+        Returns:
+            True: if the ion population file could be open
+            ionpopdata: list with the ion population data
+    &#34;&#34;&#34;
+    try:
+        with open(ionpop_file, &#39;r&#39;) as ionpop:
+            # Write the lines into a list
+            ionpopdata = [x.strip(&#39;\n&#39;).split() for x in ionpop.readlines()]
+            # Remove empty strings from possible uneven formating
+            ionpopdata = list(filter(None, ionpopdata))
+        
+        return True, ionpopdata
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Ion Population File is not Avaliable&#34;)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="SpectraSimulations_git.utils.fileIO.exportFit"><code class="name flex">
+<span>def <span class="ident">exportFit</span></span>(<span>time_of_click, report)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function export the fit parameters calculated</p>
+<pre><code>Args:
+    time_of_click: timestamp of the fit
+    report: the report to be saved
+
+Returns:
+    Nothing, the data is saved to file and printed on the console
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exportFit(time_of_click, report):
+    &#34;&#34;&#34;
+    Function export the fit parameters calculated
+        
+        Args:
+            time_of_click: timestamp of the fit
+            report: the report to be saved
+            
+        Returns:
+            Nothing, the data is saved to file and printed on the console
+    &#34;&#34;&#34;
+    with open(file_namer(&#34;Fit&#34;, time_of_click, &#34;.txt&#34;), &#39;w&#39;) as file:
+        file.write(report)
+        print(report)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.file_namer"><code class="name flex">
+<span>def <span class="ident">file_namer</span></span>(<span>simulation_or_fit, fit_time, extension)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to generate file names</p>
+<pre><code>Args:
+    simulation_or_fit: prefix for the type of file we want a name for
+    fit_time: timestamp to identify the simulation/calculation that this file should correspond
+    extension: file extention to be saved as
+
+Returns:
+    file_name: final file name to be saved
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def file_namer(simulation_or_fit, fit_time, extension):
+    &#34;&#34;&#34;
+    Function to generate file names
+        
+        Args:
+            simulation_or_fit: prefix for the type of file we want a name for
+            fit_time: timestamp to identify the simulation/calculation that this file should correspond
+            extension: file extention to be saved as
+            
+        Returns:
+            file_name: final file name to be saved
+    &#34;&#34;&#34;
+    # Convert the timestamp to formatted string
+    dt_string = fit_time.strftime(&#34;%d%m%Y_%H%M%S&#34;)
+    &#34;&#34;&#34;
+    Formated timestamp string
+    &#34;&#34;&#34;
+    # Build the filename
+    file_name = simulation_or_fit + &#39;_from_&#39; + dt_string + extension
+    &#34;&#34;&#34;
+    Final file name
+    &#34;&#34;&#34;
+    
+    return file_name</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.load"><code class="name flex">
+<span>def <span class="ident">load</span></span>(<span>loadvar)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to request the file with the experimental spectrum</p>
+<pre><code>Args:
+    loadvar: variable where we save the chosen file path
+
+Returns:
+    Nothing, the file path is save in the variable
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load(loadvar):
+    &#34;&#34;&#34;
+    Function to request the file with the experimental spectrum
+        
+        Args:
+            loadvar: variable where we save the chosen file path
+            
+        Returns:
+            Nothing, the file path is save in the variable
+    &#34;&#34;&#34;
+    # Lauch a file picker interface
+    fname = askopenfilename(filetypes=((&#34;Spectra files&#34;, &#34;*.csv *.txt&#34;), (&#34;All files&#34;, &#34;*.*&#34;)))
+    # Save the path to the loadvar variable
+    loadvar.set(fname)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.loadEfficiency"><code class="name flex">
+<span>def <span class="ident">loadEfficiency</span></span>(<span>file)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the detector efficiency as csv</p>
+<pre><code>Args:
+    file: file path of the efficiency data
+
+Returns:
+    List with the data still in string format
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def loadEfficiency(file):
+    &#34;&#34;&#34;
+    Function to read the detector efficiency as csv
+        
+        Args:
+            file: file path of the efficiency data
+            
+        Returns:
+            List with the data still in string format
+    &#34;&#34;&#34;
+    return list(csv.reader(open(file, &#39;r&#39;)))</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.loadExp"><code class="name flex">
+<span>def <span class="ident">loadExp</span></span>(<span>file)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the experimental spectrum as csv</p>
+<pre><code>Args:
+    file: file path of the experimental spectrum
+
+Returns:
+    List with the data still in string format
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def loadExp(file):
+    &#34;&#34;&#34;
+    Function to read the experimental spectrum as csv
+        
+        Args:
+            file: file path of the experimental spectrum
+            
+        Returns:
+            List with the data still in string format
+    &#34;&#34;&#34;
+    return list(csv.reader(open(file, &#39;r&#39;, encoding=&#39;utf-8-sig&#39;)))</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.load_effic_file"><code class="name flex">
+<span>def <span class="ident">load_effic_file</span></span>(<span>effic_var)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to request the file with the detector efficiency</p>
+<pre><code>Args:
+    effic_var: variable where we save the chosen file path
+
+Returns:
+    Nothing, the file path is save in the variable
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_effic_file(effic_var):
+    &#34;&#34;&#34;
+    Function to request the file with the detector efficiency
+        
+        Args:
+            effic_var: variable where we save the chosen file path
+            
+        Returns:
+            Nothing, the file path is save in the variable
+    &#34;&#34;&#34;
+    # Lauch a file picker interface
+    effic_fname = askopenfilename(filetypes=((&#34;Efficiency files&#34;, &#34;*.csv&#34;), (&#34;All files&#34;, &#34;*.*&#34;)))
+    # Save the path to the effic_var variable
+    effic_var.set(effic_fname)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.readChargeStates"><code class="name flex">
+<span>def <span class="ident">readChargeStates</span></span>(<span>files, dir_path, z)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the rates files in the files list</p>
+<pre><code>Args:
+    files: list of the file names to read
+    dir_path: full path of the simulation
+    z: z value of the element to simulate
+
+Returns:
+    linerates_PCS: lists of the rates read for each positive charge state
+    linerates_NCS: lists of the rates read for each negative charge state
+    PCS: list with the order that the rates for the positive charge states were read
+    NCS: list with the order that the rates for the negative charge states were read
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readChargeStates(files, dir_path, z):
+    &#34;&#34;&#34;
+    Function to read the rates files in the files list
+        
+        Args:
+            files: list of the file names to read
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+        
+        Returns:
+            linerates_PCS: lists of the rates read for each positive charge state
+            linerates_NCS: lists of the rates read for each negative charge state
+            PCS: list with the order that the rates for the positive charge states were read
+            NCS: list with the order that the rates for the negative charge states were read
+    &#34;&#34;&#34;
+    linerates_PCS = []
+    linerates_NCS = []
+
+    PCS = []
+    NCS = []
+
+    # Loop for each charge state file
+    for file in files:
+        # Path to the selected file
+        tmp_file = dir_path / str(z) / &#39;Charge_States&#39; / file
+        try:
+            with open(tmp_file, &#39;r&#39;) as rates:
+                if &#39;+&#39; in file:
+                    # Write the lines into a list and append it to the total rates for all charge states
+                    linerates_PCS.append([x.strip(&#39;\n&#39;).split() for x in rates.readlines()])
+                    # Remove empty strings from possible uneven formating in the appended list
+                    linerates_PCS[-1] = list(filter(None, linerates_PCS[-1]))
+                    # Delete the header rows from the last list
+                    del linerates_PCS[-1][0:2]
+                    
+                    # Append the charge state value to identify the rates we just appended
+                    PCS.append(&#39;+&#39; + file.split(&#39;+&#39;)[1].split(&#39;.&#39;)[0])
+                else:
+                    # Write the lines into a list and append it to the total rates for all charge states
+                    linerates_NCS.append([x.strip(&#39;\n&#39;).split() for x in rates.readlines()])
+                    # Remove empty strings from possible uneven formating in the appended list
+                    linerates_NCS[-1] = list(filter(None, linerates_NCS[-1]))
+                    # Delete the header rows from the last list
+                    del linerates_NCS[-1][0:2]
+                    
+                    # Append the charge state value to identify the rates we just appended
+                    NCS.append(&#39;-&#39; + file.split(&#39;-&#39;)[1].split(&#39;.&#39;)[0])
+        except FileNotFoundError:
+            messagebox.showwarning(&#34;Error&#34;, &#34;Charge State File is not Avaliable: &#34; + file)
+    
+    return linerates_PCS, linerates_NCS, PCS, NCS</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.readIonPop"><code class="name flex">
+<span>def <span class="ident">readIonPop</span></span>(<span>ionpop_file)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the ion population file</p>
+<pre><code>Args:
+    ionpop_file: full path of the ion population file
+
+Returns:
+    True: if the ion population file could be open
+    ionpopdata: list with the ion population data
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readIonPop(ionpop_file):
+    &#34;&#34;&#34;
+    Function to read the ion population file
+        
+        Args:
+            ionpop_file: full path of the ion population file
+            
+        Returns:
+            True: if the ion population file could be open
+            ionpopdata: list with the ion population data
+    &#34;&#34;&#34;
+    try:
+        with open(ionpop_file, &#39;r&#39;) as ionpop:
+            # Write the lines into a list
+            ionpopdata = [x.strip(&#39;\n&#39;).split() for x in ionpop.readlines()]
+            # Remove empty strings from possible uneven formating
+            ionpopdata = list(filter(None, ionpopdata))
+        
+        return True, ionpopdata
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Ion Population File is not Avaliable&#34;)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.readRates"><code class="name flex">
+<span>def <span class="ident">readRates</span></span>(<span>rates_file)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the rates file</p>
+<pre><code>Args:
+    rates_file: file path of the rates file
+
+Returns:
+    linerates: list with the data still in string format
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readRates(rates_file):
+    &#34;&#34;&#34;
+    Function to read the rates file
+        
+        Args:
+            rates_file: file path of the rates file
+            
+        Returns:
+            linerates: list with the data still in string format
+    &#34;&#34;&#34;
+    try:
+        with open(rates_file, &#39;r&#39;) as rates:
+            # Write the lines into a list
+            linerates = [x.strip(&#39;\n&#39;).split() for x in rates.readlines()]
+            # Remove empty strings from possible uneven formating
+            linerates = list(filter(None, linerates))
+            # Delete the header rows
+            del linerates[0:2]
+            
+            return linerates
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Rates File is not Avaliable: &#34; + rates_file)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.readShakeWeights"><code class="name flex">
+<span>def <span class="ident">readShakeWeights</span></span>(<span>shakeweights_file)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to read the shake weights file</p>
+<pre><code>Args:
+    shakeweights_file: file path of the shake weights file
+
+Returns:
+    shakeweights: list with the shake weights in float
+    label1: list with the shake labels
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def readShakeWeights(shakeweights_file):
+    &#34;&#34;&#34;
+    Function to read the shake weights file
+        
+        Args:
+            shakeweights_file: file path of the shake weights file
+            
+        Returns:
+            shakeweights: list with the shake weights in float
+            label1: list with the shake labels
+    &#34;&#34;&#34;
+    try:
+        with open(shakeweights_file, &#39;r&#39;) as shakeweights_f:
+            # Write the lines into a list
+            shakeweights_m = [x.strip(&#39;\n&#39;).split(&#39;,&#39;) for x in shakeweights_f.readlines()]
+            shakeweights = []
+            label1 = []
+            
+            # Loop the read values and store them in two lists
+            for i in range(len(shakeweights_m)):
+                shakeweights.append(float(shakeweights_m[i][1]))
+                label1.append(shakeweights_m[i][0])
+            
+            return shakeweights, label1
+    except FileNotFoundError:
+        messagebox.showwarning(&#34;Error&#34;, &#34;Shake Weigths File is not Avaliable&#34;)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.searchChargeStates"><code class="name flex">
+<span>def <span class="ident">searchChargeStates</span></span>(<span>dir_path, z, identifyer)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to search the Charge_States folder for all "identifyer" rate files</p>
+<pre><code>Args:
+    dir_path: full path of the simulation
+    z: z value of the element to simulate
+    identifyer: identifyer of the rate files we want to search (intensity, satinty, augrate)
+
+Returns:
+    files: file names found in the Charge_States folder with the identifyer
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def searchChargeStates(dir_path, z, identifyer):
+    &#34;&#34;&#34;
+    Function to search the Charge_States folder for all &#34;identifyer&#34; rate files
+        
+        Args:
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+            identifyer: identifyer of the rate files we want to search (intensity, satinty, augrate)
+            
+        Returns:
+            files: file names found in the Charge_States folder with the identifyer
+    &#34;&#34;&#34;
+    files = []
+    # Loop all files in the folder
+    for f in os.listdir(dir_path / str(z) / &#39;Charge_States&#39;):
+        # If the name format matches a radiative rates files then append it to the list
+        if os.path.isfile(os.path.join(dir_path / str(z) / &#39;Charge_States&#39;, f)) and identifyer in f:
+            files.append(f)
+    
+    return files</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.fileIO.write_to_xls"><code class="name flex">
+<span>def <span class="ident">write_to_xls</span></span>(<span>type_t, xfinal, enoffset, y0, exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, date_and_time)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to save the current simulation data into an excel file</p>
+<pre><code>Args:
+    type_t: type of transitions simulated (diagram, satellite, diagram + satellite, auger)
+    xfinal: simulated x values
+    enoffset: energy offset chosen in the simulation
+    y0: intensity offset chosen in the simulation
+    exp_x: loaded experimental spectrum x values
+    exp_y: loaded experimental spectrum y values
+    residues_graph: residues graph object from where we will extract the calculated residues
+    radiative_files: radiative rates file names found for each charge state
+    auger_files: auger rates file names found for each charge state
+    label1: shake weights labels read from the shake weigths file
+    date_and_time: timestamp of the simulation for the name of the file saved
+
+Returns:
+    Nothing, the file is saved and a message box is shown to the used
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_to_xls(type_t, xfinal, enoffset, y0, exp_x, exp_y, residues_graph, radiative_files, auger_files, label1, date_and_time):
+    &#34;&#34;&#34;
+    Function to save the current simulation data into an excel file
+        
+        Args:
+            type_t: type of transitions simulated (diagram, satellite, diagram + satellite, auger)
+            xfinal: simulated x values
+            enoffset: energy offset chosen in the simulation
+            y0: intensity offset chosen in the simulation
+            exp_x: loaded experimental spectrum x values
+            exp_y: loaded experimental spectrum y values
+            residues_graph: residues graph object from where we will extract the calculated residues
+            radiative_files: radiative rates file names found for each charge state
+            auger_files: auger rates file names found for each charge state
+            label1: shake weights labels read from the shake weigths file
+            date_and_time: timestamp of the simulation for the name of the file saved
+            
+        Returns:
+            Nothing, the file is saved and a message box is shown to the used
+    &#34;&#34;&#34;
+    #Print the timestamp of the simulation
+    print(date_and_time)
+    
+    #Generate filename to save the data
+    file_title = file_namer(&#34;Simulation&#34;, date_and_time, &#34;.csv&#34;)
+    &#34;&#34;&#34;
+    Name of the file that is going to be saved. Please use the :func:`file_namer` function to generate names
+    &#34;&#34;&#34;
+    
+    # Initialize the header row of the excel file
+    first_line = [&#39;Energy (eV)&#39;]
+    &#34;&#34;&#34;
+    Variable that holds the header row of the file
+    &#34;&#34;&#34;
+    # Add an energy offset column if the offset is not 0
+    if enoffset != 0:
+        first_line += [&#39;Energy Off (eV)&#39;]
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the selected radiative and satellite transition labels into a seperate column
+    if type_t != &#39;Auger&#39;:
+        for index, transition in enumerate(the_dictionary):
+            if the_dictionary[transition][&#34;selected_state&#34;]:
+                # Add the diagram transitions
+                if max(data.variables.yfinal[index]) != 0:
+                    first_line += [the_dictionary[transition][&#34;readable_name&#34;]]
+                # Add the satellite transitions
+                for l, m in enumerate(data.variables.yfinals[index]):
+                    if max(m) != 0:
+                        first_line += [the_dictionary[transition][&#34;readable_name&#34;] + &#39;-&#39; + labeldict[label1[l]]]
+    else:
+        for index, transition in enumerate(the_aug_dictionary):
+            if the_aug_dictionary[transition][&#34;selected_state&#34;]:
+                # Add the diagram transitions
+                if max(data.variables.yfinal[index]) != 0:
+                    first_line += [the_aug_dictionary[transition][&#34;readable_name&#34;]]
+                # Add the satellite transitions
+                for l, m in enumerate(data.variables.yfinals[index]):
+                    if max(m) != 0:
+                        first_line += [the_aug_dictionary[transition][&#34;readable_name&#34;] + &#39;-&#39; + labeldict[label1[l]]]
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the column for the total y
+    first_line += [&#39;Total&#39;]
+    
+    # Add an intensity offset column if the offset is not 0
+    if y0 != 0:
+        first_line += [&#39;Total Off&#39;]
+    
+    # Add 2 columns for the experimental spectrum if it is loaded
+    if exp_x != None and exp_y != None:
+        first_line += [&#39;Exp Energy (eV)&#39;, &#39;Intensity&#39;]
+
+    # Add 4 columns for the residue data if it was calculated. An extra spacing column is added before the chi^2 value
+    if residues_graph != None:
+        first_line += [&#39;Residues (arb. units)&#39;, &#39;std+&#39;, &#39;std-&#39;, &#39;&#39;, &#39;red chi 2&#39;]
+
+    # Add a spacing column and 2 columns for the charge state mixture weights if they were used in the simulation
+    if len(data.variables.PCS_radMixValues) &gt; 0 or len(data.variables.NCS_radMixValues) &gt; 0 or len(data.variables.PCS_augMixValues) &gt; 0 or len(data.variables.NCS_augMixValues) &gt; 0:
+        first_line += [&#39;&#39;, &#39;Charge States&#39;, &#39;Percentage&#39;]
+
+    # Now that we have the header line configured we can initialize a matrix to save in excel
+    # If we have loaded an experimental spectrum we use the largest dimention between the x values grid and the experimental spectrum
+    # Matrix = len(first_line) x max(len(xfinal), len(exp_x))
+    if exp_x != None:
+        matrix = [[None for x in range(len(first_line))] for y in range(max(len(xfinal), len(exp_x)))]
+        &#34;&#34;&#34;
+        Variable that holds the data to be saved in matrix form
+        &#34;&#34;&#34;
+    else:
+        matrix = [[None for x in range(len(first_line))] for y in range(len(xfinal))]
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Variable to control which column we need to write to
+    transition_columns = 1
+    &#34;&#34;&#34;
+    Variable to control which column we need to write to
+    &#34;&#34;&#34;
+
+    # Write the x and x + offset values in the matrix if the offset is not 0, otherwise write only the x
+    if enoffset != 0:
+        for i, x in enumerate(xfinal):
+            matrix[i][0] = x
+            matrix[i][1] = x + enoffset
+
+        transition_columns += 1
+    else:
+        for i, x in enumerate(xfinal):
+            matrix[i][0] = x
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the transition data in the respective columns
+    for i, y in enumerate(data.variables.yfinal):
+        # If we have data for this transition
+        if max(y) != 0:
+            # Write the values in the column
+            for row in range(len(y)):
+                matrix[row][transition_columns] = y[row]
+            
+            transition_columns += 1
+        
+        # Same for the satellite transitions but we require and extra loop
+        if any(data.variables.yfinals[i]) != 0:
+            for j, ys in enumerate(data.variables.yfinals[i]):
+                if max(ys) != 0:
+                    for row in range(len(y)):
+                        matrix[row][transition_columns] = ys[row]
+                    
+                    transition_columns += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the total y and y + offset values in the matrix if the offset is not 0, otherwise write only the total y
+    if y0 != 0:
+        for j in range(len(data.variables.ytot)):
+            matrix[j][transition_columns] = data.variables.ytot[j]
+            matrix[j][transition_columns + 1] = data.variables.ytot[j] + y0
+    
+        transition_columns += 1
+    else:
+        for j in range(len(data.variables.ytot)):
+            matrix[j][transition_columns] = data.variables.ytot[j]
+
+    transition_columns += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the experimental spectrum values
+    if exp_x == None and exp_y == None:
+        print(&#34;No experimental spectrum loaded. Skipping...&#34;)
+    else:
+        for i in range(len(exp_x)):
+            matrix[i][transition_columns] = exp_x[i]
+            matrix[i][transition_columns + 1] = exp_y[i]
+
+        transition_columns += 2
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Retrieve the residue data from the graph object
+    if residues_graph == None:
+        print(&#34;No residues calculated. Skipping...&#34;)
+    else:
+        # Retrieve the data from the graph
+        lines = residues_graph.get_lines()
+        &#34;&#34;&#34;
+        Lines from the residue graph
+        &#34;&#34;&#34;
+        sigp, sigm, res = lines[0].get_ydata(), lines[1].get_ydata(), lines[2].get_ydata()
+        &#34;&#34;&#34;
+        sigp: positive sigma (std. deviation) values for the residues calculate
+        sigm: negative sigma (std. deviation) values for the residues calculate
+        res: residue values calculated
+        &#34;&#34;&#34;
+        # Write the data in the respective columns
+        for i in range(len(exp_x)):
+            matrix[i][transition_columns] = res[i]
+            matrix[i][transition_columns + 1] = sigp[i]
+            matrix[i][transition_columns + 2] = sigm[i]
+
+        matrix[0][transition_columns + 4] = data.variables.chi_sqrd
+
+        transition_columns += 5
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the mix values in the matrix
+    if type_t != &#39;Auger&#39;:
+        if len(data.variables.PCS_radMixValues) &gt; 0 or len(data.variables.NCS_radMixValues) &gt; 0:
+            idx_p = 0
+            idx_n = 0
+            # Loop all loaded charge states
+            for i, cs in enumerate(radiative_files):
+                # Write the charge state label
+                matrix[i][transition_columns + 1] = cs.split(&#39;-intensity_&#39;)[1].split(&#39;.out&#39;)[0] + &#39;_&#39;
+
+                # As the mixture values are split by positive and negative charge states we need to diferenciate them
+                if &#39;+&#39; in cs:
+                    matrix[i][transition_columns + 2] = data.variables.PCS_radMixValues[idx_p].get()
+                    idx_p += 1
+                else:
+                    matrix[i][transition_columns + 2] = data.variables.NCS_radMixValues[idx_n].get()
+                    idx_n += 1
+    else:
+        if len(data.variables.PCS_augMixValues) &gt; 0 or len(data.variables.NCS_augMixValues) &gt; 0:
+            idx_p = 0
+            idx_n = 0
+
+            # Add an extra label to know this mixture is for an auger simulation
+            matrix[1][transition_columns + 1] = &#34;Auger Mix Values&#34;
+
+            # Loop all loaded charge states
+            for i, cs in enumerate(auger_files):
+                matrix[i + 1][transition_columns + 1] = cs.split(&#39;-augrate_&#39;)[1].split(&#39;.out&#39;)[0] + &#39;_&#39;
+
+                # As the mixture values are split by positive and negative charge states we need to diferenciate them
+                if &#39;+&#39; in cs:
+                    matrix[i + 1][transition_columns + 2] = data.variables.PCS_augMixValues[idx_p].get()
+                    idx_p += 1
+                else:
+                    matrix[i + 1][transition_columns + 2] = data.variables.NCS_augMixValues[idx_n].get()
+                    idx_n += 1
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the header row
+    matrix = [first_line] + matrix
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Print the matrix values in the console to debug
+    # for row in matrix:
+    #     print(&#39; &#39;.join(map(str, row)))
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Write the matrix in the file. First open as write to create the file, then we append the remaining lines
+    for i, item in enumerate(matrix):
+        if i == 0:
+            with open(file_title, &#39;w&#39;, newline=&#39;&#39;) as csvfile:
+                w1 = csv.writer(csvfile, delimiter=&#39;,&#39;, quotechar=&#39;|&#39;, quoting=csv.QUOTE_MINIMAL)
+                w1.writerow(matrix[i])
+        else:
+            with open(file_title, &#39;a&#39;, newline=&#39;&#39;) as csvfile2:
+                w1 = csv.writer(csvfile2, delimiter=&#39;,&#39;, quotechar=&#39;|&#39;, quoting=csv.QUOTE_MINIMAL)
+                w1.writerow(matrix[i])
+    
+    # Prompt that the data was saved
+    messagebox.showinfo(&#34;File Saved&#34;, &#34;Data file has been saved&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="SpectraSimulations_git.utils" href="index.html">SpectraSimulations_git.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="two-column">
+<li><code><a title="SpectraSimulations_git.utils.fileIO.exportFit" href="#SpectraSimulations_git.utils.fileIO.exportFit">exportFit</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.file_namer" href="#SpectraSimulations_git.utils.fileIO.file_namer">file_namer</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.load" href="#SpectraSimulations_git.utils.fileIO.load">load</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.loadEfficiency" href="#SpectraSimulations_git.utils.fileIO.loadEfficiency">loadEfficiency</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.loadExp" href="#SpectraSimulations_git.utils.fileIO.loadExp">loadExp</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.load_effic_file" href="#SpectraSimulations_git.utils.fileIO.load_effic_file">load_effic_file</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.readChargeStates" href="#SpectraSimulations_git.utils.fileIO.readChargeStates">readChargeStates</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.readIonPop" href="#SpectraSimulations_git.utils.fileIO.readIonPop">readIonPop</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.readRates" href="#SpectraSimulations_git.utils.fileIO.readRates">readRates</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.readShakeWeights" href="#SpectraSimulations_git.utils.fileIO.readShakeWeights">readShakeWeights</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.searchChargeStates" href="#SpectraSimulations_git.utils.fileIO.searchChargeStates">searchChargeStates</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.fileIO.write_to_xls" href="#SpectraSimulations_git.utils.fileIO.write_to_xls">write_to_xls</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

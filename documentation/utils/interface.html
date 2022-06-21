@@ -1,0 +1,2640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>SpectraSimulations_git.utils.interface API documentation</title>
+<meta name="description" content="Module for interface variables and functions.
+Here we define the variables bound to the interface elements, window management functions, keybinds,
+…" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>SpectraSimulations_git.utils.interface</code></h1>
+</header>
+<section id="section-intro">
+<p>Module for interface variables and functions.
+Here we define the variables bound to the interface elements, window management functions, keybinds,
+functions to initialize interface elements, functions to update the elements and functions to plot external data</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Module for interface variables and functions.
+Here we define the variables bound to the interface elements, window management functions, keybinds,
+functions to initialize interface elements, functions to update the elements and functions to plot external data
+&#34;&#34;&#34;
+
+#GUI Imports
+from tkinter import *
+from tkinter import ttk
+
+#Matplotlib imports for plotting and tkinter compatibility
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+from matplotlib import gridspec
+from matplotlib.backend_bases import key_press_handler
+
+#Data import for variable management
+from data.variables import labeldict, the_dictionary, the_aug_dictionary
+import data.variables as generalVars
+
+#Import file loaders for the interface
+from utils.fileIO import load, load_effic_file, loadExp
+
+#Import the main functions to bind them to the interface
+from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
+
+#Import numpy
+import numpy as np
+
+#Math import for interpolation
+from scipy.interpolate import interp1d
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#         DEFINE THE VARIABLES TO INITIALIZE LATER          #
+#                                                           #
+# --------------------------------------------------------- #
+
+# -----------------------------------------------------------------------------------------------------------------------------
+# Private variables to hold current parent, window and plotting spaces.
+# The parent is required to know where the GUI variables need to be bound to
+# Might cause some confusion but when we split the code it was easier to do this instead of passing these between the functions
+_parent = None
+&#34;&#34;&#34;
+Private variable for the current tkinter parent object
+&#34;&#34;&#34;
+_a = None
+&#34;&#34;&#34;
+Private variable for the matplotlib plot area object
+&#34;&#34;&#34;
+_sim = None
+&#34;&#34;&#34;
+Private variable for the tkinter simulation window object
+&#34;&#34;&#34;
+_f = None
+&#34;&#34;&#34;
+Private variable for the matplotlib simulation figure object
+&#34;&#34;&#34;
+
+
+# --------------------------------------------------------------------
+# VARIABLES TO HOLD THE VALUES OF THE INTERFACE ENTRIES
+
+# Variable to know if the total intensity needs to be shown
+totalvar = None
+&#34;&#34;&#34;
+Variable to know if the total intensity needs to be shown
+&#34;&#34;&#34;
+# Variable to know if the y axis needs to be set as logarithmic
+yscale_log = None
+&#34;&#34;&#34;
+Variable to know if the y axis needs to be set as logarithmic
+&#34;&#34;&#34;
+# Variable to know if the x axis needs to be set as logarithmic
+xscale_log = None
+&#34;&#34;&#34;
+Variable to know if the x axis needs to be set as logarithmic
+&#34;&#34;&#34;
+# Variable to know if we need to perform an autofit to the simulation
+autofitvar = None
+&#34;&#34;&#34;
+Variable to know if we need to perform an autofit to the simulation
+&#34;&#34;&#34;
+# Variable to know which normalization was chosen, if any
+normalizevar = None
+&#34;&#34;&#34;
+Variable to know which normalization was chosen, if any
+&#34;&#34;&#34;
+# Variable to know where the experimental spectrum to load is located, if any
+loadvar = None
+&#34;&#34;&#34;
+Variable to know where the experimental spectrum to load is located, if any
+&#34;&#34;&#34;
+# Variable to know where the detector efficiency to load is located, if any
+effic_var = None
+&#34;&#34;&#34;
+Variable to know where the detector efficiency to load is located, if any
+&#34;&#34;&#34;
+# Variable to hold the value of the experimental resolution introduced by the user in the interface
+exp_resolution = None
+&#34;&#34;&#34;
+Variable to hold the value of the experimental resolution introduced by the user in the interface
+&#34;&#34;&#34;
+# Variable to hold the value of the intensity offset introduced by the user in the interface
+yoffset = None
+&#34;&#34;&#34;
+Variable to hold the value of the intensity offset introduced by the user in the interface
+&#34;&#34;&#34;
+# Variable to hold the value of the energy introduced by the user in the interface
+energy_offset = None
+&#34;&#34;&#34;
+Variable to hold the value of the energy introduced by the user in the interface
+&#34;&#34;&#34;
+# Variable to hold the number of points introduced by the user in the interface, to calculate the energy grid where we simulate the spectrum
+number_points = None
+&#34;&#34;&#34;
+Variable to hold the number of points introduced by the user in the interface, to calculate the energy grid where we simulate the spectrum
+&#34;&#34;&#34;
+# Variable to hold the value of the maximum energy to simulate introduced by the user in the interface
+x_max = None
+&#34;&#34;&#34;
+Variable to hold the value of the maximum energy to simulate introduced by the user in the interface
+&#34;&#34;&#34;
+# Variable to hold the value of the minimum energy to simulate introduced by the user in the interface
+x_min = None
+&#34;&#34;&#34;
+Variable to hold the value of the minimum energy to simulate introduced by the user in the interface
+&#34;&#34;&#34;
+# Variable to hold the value of the progress to show in the progress bar at the bottom of the interface
+progress_var = None
+&#34;&#34;&#34;
+Variable to hold the value of the progress to show in the progress bar at the bottom of the interface
+&#34;&#34;&#34;
+# Variable to hold the names of the transitions selected for the simulation
+transition_list = []
+&#34;&#34;&#34;
+Variable to hold the names of the transitions selected for the simulation
+&#34;&#34;&#34;
+# Variable to hold the text to show in the interface corresponding to the transition_list
+label_text = None
+&#34;&#34;&#34;
+Variable to hold the text to show in the interface corresponding to the transition_list
+&#34;&#34;&#34;
+
+
+# Variable to know which types of transitions to simulate (radiative, auger, satellites)
+satelite_var = None
+&#34;&#34;&#34;
+Variable to know which types of transitions to simulate (radiative, auger, satellites)
+&#34;&#34;&#34;
+# Variable to know which type of simulation to perform (stick, simulation, with or without multiple charge states)
+choice_var = None
+&#34;&#34;&#34;
+Variable to know which type of simulation to perform (stick, simulation, with or without multiple charge states)
+&#34;&#34;&#34;
+# Variable to know which type of profile we want to simulate fro each line
+type_var = None
+&#34;&#34;&#34;
+Variable to know which type of profile we want to simulate fro each line
+&#34;&#34;&#34;
+# Variable to know which type of exiting mechanism we want to consider in the simulation (currently not implemented)
+exc_mech_var = None
+&#34;&#34;&#34;
+Variable to know which type of exiting mechanism we want to consider in the simulation (currently not implemented)
+&#34;&#34;&#34;
+
+# ---------------------------------------------------------------------
+# VARIABLES TO HOLD THE TKINTER ENTRIES AND LABELS
+
+# Dropdown from where to choose the transitions to simulate
+drop_menu = None
+&#34;&#34;&#34;
+Dropdown from where to choose the transitions to simulate
+&#34;&#34;&#34;
+# Label where to write the label_text
+trans_lable = None
+&#34;&#34;&#34;
+Label where to write the label_text
+&#34;&#34;&#34;
+
+# Entry where to type the number of points to simulate
+points = None
+&#34;&#34;&#34;
+Entry where to type the number of points to simulate
+&#34;&#34;&#34;
+# Entry where to type the maximum energy to simulate
+max_x = None
+&#34;&#34;&#34;
+Entry where to type the maximum energy to simulate
+&#34;&#34;&#34;
+# Entry where to type the minimum energy to simulate
+min_x = None
+&#34;&#34;&#34;
+Entry where to type the minimum energy to simulate
+&#34;&#34;&#34;
+# Entry where to type the experimental resolution to simulate
+res_entry = None
+&#34;&#34;&#34;
+Entry where to type the experimental resolution to simulate
+&#34;&#34;&#34;
+# Progress bar on the bottom of the interface to show the simulation progress
+progressbar = None
+&#34;&#34;&#34;
+Progress bar on the bottom of the interface to show the simulation progress
+&#34;&#34;&#34;
+
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#               WINDOW MANAGEMENT FUNCTIONS                 #
+#                                                           #
+# --------------------------------------------------------- #
+
+# Function to destroy the window and free memory properly
+def destroy(window):
+    &#34;&#34;&#34;
+    Function to destroy the window and free memory properly
+    
+        Args:
+            window: the window to be disposed of
+        
+        Returns:
+            Nothing, the window is disposed of and the program continues
+    &#34;&#34;&#34;
+    window.destroy()
+
+# Function to deselect all selected transitions when exiting the simulation window
+def _quit():
+    &#34;&#34;&#34;
+    Private function to deselect all selected transitions when exiting the simulation window
+        
+        Args:
+            
+        
+        Returns:
+            Nothing, the transition dictionaries are reset and the simulation window is disposed of
+    &#34;&#34;&#34;
+    original = satelite_var.get()
+
+    satelite_var.set(&#39;Diagram&#39;)
+
+    for transition in the_dictionary:
+        if the_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(&#39;Auger&#39;)
+
+    for transition in the_aug_dictionary:
+        if the_aug_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(original)
+
+    _sim.quit()  # stops mainloop
+    _sim.destroy()  # this is necessary on Windows to prevent fatal Python Error: PyEval_RestoreThread: NULL tstate
+
+# Function to deselect all selected transitions and restart the whole app
+def restarter():
+    &#34;&#34;&#34;
+    Private function to deselect all selected transitions and restart the whole application
+        
+        Args:
+            
+        
+        Returns:
+            Nothing, the transition dictionaries are reset and the tkinter windows are disposed of
+    &#34;&#34;&#34;
+    original = satelite_var.get()
+
+    satelite_var.set(&#39;Diagram&#39;)
+
+    for transition in the_dictionary:
+        if the_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(&#39;Auger&#39;)
+
+    for transition in the_aug_dictionary:
+        if the_aug_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(original)
+
+    _sim.quit()  # stops mainloop
+    _sim.destroy()
+    _parent.destroy()
+    main()  # this is necessary on Windows to prevent fatal Python Error: PyEval_RestoreThread: NULL tstate
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#                     KEYBIND FUNCTIONS                     #
+#                                                           #
+# --------------------------------------------------------- #
+
+# Function to bind the default matplotlib hotkeys
+def on_key_event(event):
+    &#34;&#34;&#34;
+    Function to bind the default matplotlib hotkeys
+        
+        Args:
+            event: which key event was triggered
+        
+        Returns:
+            Nothing, the key event is passed to the default matplotlib key handler and the correct action is performed
+    &#34;&#34;&#34;
+    print(&#39;you pressed %s&#39; % event.key)
+    key_press_handler(event, canvas, toolbar)
+
+# Function to bind the simulation function to the enter key
+def enter_function(event):
+    &#34;&#34;&#34;
+    Function to bind the simulation function to the enter key
+        
+        Args:
+            event: which key event was triggered
+        
+        Returns:
+            Nothing, the simulation function is executed
+    &#34;&#34;&#34;
+    plot_stick(_sim, _f, _a)
+
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#          FUNCTIONS TO UPDATE INTERFACE ELEMENTS           #
+#                                                           #
+# --------------------------------------------------------- #
+
+# Update the transition that was just selected from the dropdown into the list of transitions to simulate
+# This function runs whenever we one transition is selected from the dropdown
+def selected(event):
+    &#34;&#34;&#34;
+    Function to update the transition that was just selected from the dropdown into the list of transitions to simulate.
+    This function runs whenever we one transition is selected from the dropdown
+        
+        Args:
+            event: which dropdown element was selected
+        
+        Returns:
+            Nothing, the selected transition toggled in the dictionary and is added to the label in the interface
+    &#34;&#34;&#34;
+    # Read which transition was selected
+    text_T = drop_menu.get()
+    # Update the dictionary for the transition
+    dict_updater(text_T)
+    
+    if satelite_var.get() != &#39;Auger&#39;:
+        # If the transition added to the selection
+        if the_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.append(text_T)
+        # If it was removed
+        elif not the_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.remove(text_T)
+    else:
+        # Same for Auger
+        if the_aug_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.append(text_T)
+        elif not the_aug_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.remove(text_T)
+    
+    # Variable with the text to be shown in the interface with the selected transitions
+    to_print = &#39;, &#39;.join(transition_list)
+    
+    # Set the interface label to the text
+    label_text.set(&#39;Selected Transitions: &#39; + to_print)
+
+# Function to properly reset the x limits in the interface (bound to the reset button)
+def reset_limits():
+    &#34;&#34;&#34;
+    Function to properly reset the x limits in the interface (bound to the reset button).
+    &#34;&#34;&#34;
+    global number_points, x_max, x_min
+    
+    number_points.set(500)
+    x_max.set(&#39;Auto&#39;)
+    x_min.set(&#39;Auto&#39;)
+
+# Update the selection state of a transition in the correct dictionary
+def dict_updater(transition):
+    &#34;&#34;&#34;
+    Function to update the selection state of a transition in the correct dictionary
+        
+        Args:
+            transition: which transition to update
+        
+        Returns:
+            Nothing, the transition is updated in the dictionaries
+    &#34;&#34;&#34;
+    if satelite_var.get() != &#39;Auger&#39;:
+        # Toggle the current state of the transition
+        the_dictionary[transition][&#34;selected_state&#34;] = not the_dictionary[transition][&#34;selected_state&#34;]
+    else:
+        # Toggle the current state of the transition
+        the_aug_dictionary[transition][&#34;selected_state&#34;] = not the_aug_dictionary[transition][&#34;selected_state&#34;]
+
+# Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
+def update_transition_dropdown():
+    &#34;&#34;&#34;
+    Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
+    &#34;&#34;&#34;
+    global transition_list
+    
+    if satelite_var.get() != &#39;Auger&#39;:
+        # Update the values on the dropdown
+        drop_menu[&#39;values&#39;] = [transition for transition in the_dictionary]
+        if not any([the_dictionary[transition][&#34;selected_state&#34;] for transition in the_dictionary]):
+            # Reset the interface text
+            label_text.set(&#39;Select a Transition: &#39;)
+            drop_menu.set(&#39;Transitions:&#39;)
+            # Deselect transitions
+            for transition in the_aug_dictionary:
+                the_aug_dictionary[transition][&#34;selected_state&#34;] = False
+    else:
+        # Update the values on the dropdown
+        drop_menu[&#39;values&#39;] = [transition for transition in the_aug_dictionary]
+        if not any([the_aug_dictionary[transition][&#34;selected_state&#34;] for transition in the_aug_dictionary]):
+            # Reset the interface text
+            label_text.set(&#39;Select a Transition: &#39;)
+            drop_menu.set(&#39;Transitions:&#39;)
+            # Deselect transitions
+            for transition in the_dictionary:
+                the_dictionary[transition][&#34;selected_state&#34;] = False
+
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#      FUNCTIONS TO INITIALIZE AND CONFIGURE ELEMENTS       #
+#                                                           #
+# --------------------------------------------------------- #
+
+# Initialize and configure the simulation plot
+def configureSimuPlot():
+    &#34;&#34;&#34;
+    Function to initialize and configure the simulation window and plot
+        
+        Args:
+            
+        
+        Returns:
+            sim: tkinter simulation window object
+            panel_1: tkinter panel object to hold the simulation frame
+            f: matplotlib figure object for the simulation plot
+            a: maplotlib plot object where we will plot the simulation data
+            figure_frame: tkinter frame object to hold the tkinter simulation figure object
+            canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+    &#34;&#34;&#34;
+    global _sim, _a, _f, _parent
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Start a new window for the simulation plot. We use TopLevel as we want this window to be the main interface
+    sim = Toplevel(master=_parent)
+    # Define the title
+    sim.title(&#34;Spectrum Simulation&#34;)
+    # Pack a panel into the window where we will place our canvas to plot the simulations. This way the window will properly resize
+    panel_1 = PanedWindow(sim, orient=VERTICAL)
+    panel_1.pack(fill=BOTH, expand=1)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Matplotlib figure where we will place the graph objects
+    f = Figure(figsize=(10, 5), dpi=100)
+    # Add a plotting space to the figure
+    a = f.add_subplot(111)
+    # Set labels for the axis
+    a.set_xlabel(&#39;Energy (eV)&#39;)
+    a.set_ylabel(&#39;Intensity (arb. units)&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Frame where we will place the figure with the graph
+    figure_frame = Frame(panel_1, relief=GROOVE) # grooved border style
+    # Add the frame to the panel
+    panel_1.add(figure_frame)
+    # Create the tk widget canvas to place the figure in the frame
+    canvas = FigureCanvasTkAgg(f, master=figure_frame)
+    # pack the canvas in the frame
+    canvas.get_tk_widget().pack(fill=BOTH, expand=1)
+
+    # Store the interface objects for use in other functions across the file
+    _a = a
+    _f = f
+    _sim = sim
+    
+    return sim, panel_1, f, a, figure_frame, canvas
+
+# Initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters
+def configureButtonArea(sim, canvas):
+    &#34;&#34;&#34;
+    Function to initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters
+        
+        Args:
+            sim: tkinter simulation window object
+            canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+        
+        Returns:
+            panel_2: tkinter panel placed below the simulation plot
+            toolbar_frame: tkinter frame for the matplotlib graph buttons
+            toolbar: tkinter object for the matplotlib default toolbar
+            full_frame: tkinter frame for the remaining buttons
+            buttons_frame: tkinter frame for the transition dropdown
+            buttons_frame2: tkinter frame for the bounds entries and reset button
+            buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+            buttons_frame4: tkinter frame for the progress bar
+    &#34;&#34;&#34;
+    # Panel for the area below the plot
+    panel_2 = PanedWindow(sim, orient=VERTICAL)
+    panel_2.pack(fill=X, expand=0)
+
+    # Matplotlib toolbar
+    toolbar_frame = Frame(panel_2, bd=1, relief=GROOVE)
+    panel_2.add(toolbar_frame)
+    toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
+
+    # Frame for the buttons
+    full_frame = Frame(panel_2, relief=GROOVE)
+    panel_2.add(full_frame)
+    buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame.pack(fill=BOTH, expand=1)
+    # Max, min &amp; Points Frame
+    buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame2.pack(fill=BOTH, expand=1)
+    # Frame  yoffset, Energy offset and Calculate
+    buttons_frame3 = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame3.pack(fill=BOTH, expand=1)
+    # Frame progress bar
+    buttons_frame4 = Frame(full_frame)
+    buttons_frame4.pack(fill=BOTH, expand=1)
+
+    return panel_2, toolbar_frame, toolbar, full_frame, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4
+
+# Setup the variables to hold the values of the interface entries
+def setupVars(p):
+    &#34;&#34;&#34;
+    Function to setup the variables to hold the values of the interface entries
+        
+        Args:
+            p: tkinter parent object
+        
+        Returns:
+            Nothing, all the variables initalized in the function are global module variables that can be used in other modules directly
+    &#34;&#34;&#34;
+    # Use global to be able to initialize and change the values of the global interface variables
+    global _parent, totalvar, yscale_log, xscale_log, autofitvar, normalizevar, loadvar, effic_var
+    global exp_resolution, yoffset, energy_offset, number_points, x_max, x_min, progress_var, label_text
+    global satelite_var, choice_var, type_var, exc_mech_var
+    
+    # setup the parent object to bind stuff to
+    _parent = p
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Variable to know if we need to show the total y in the plot
+    totalvar = StringVar(master = _parent)
+    # Initialize it as false
+    totalvar.set(&#39;No&#39;)
+    # Variable to know if we need to make the y axis logarithmic or linear
+    yscale_log = StringVar(master = _parent)
+    # Initialize it as false
+    yscale_log.set(&#39;No&#39;)
+    # Variable to know if we need to make the x axis logarithmic or linear
+    xscale_log = StringVar(master = _parent)
+    # Initialize it as false
+    xscale_log.set(&#39;No&#39;)
+    # Variable to know if we need to perform an autofit of the simulation to experimental data
+    autofitvar = StringVar(master = _parent)
+    # Initialize it as false
+    autofitvar.set(&#39;No&#39;)
+    # Variable to know what normalization we need to perform (no normalization, normalize to unity, normalize to experimental maximum)
+    normalizevar = StringVar(master = _parent)
+    # Initialize to no normalization
+    normalizevar.set(&#39;No&#39;)
+    # Variable to know if we need to load an experimental spectrum and if so where it is located
+    loadvar = StringVar(master = _parent)
+    # Initialize to no file
+    loadvar.set(&#39;No&#39;)
+    # Variable to know if we need to load detector efficiency data and if so where it is located
+    effic_var = StringVar(master = _parent)
+    # Initialize to no file
+    effic_var.set(&#39;No&#39;)
+
+    # Variable to hold the experimental resolution value introduced in the interface
+    exp_resolution = DoubleVar(master = _parent, value=1.0)
+    # Variable to hold the experimental background offset value introduced in the interface
+    yoffset = DoubleVar(master = _parent, value=0.0)
+    # Variable to hold the experimental energy offset value introduced in the interface
+    energy_offset = DoubleVar(master = _parent, value=0.0)
+    # Variable to hold the number of points to simulate introduced in the interface
+    number_points = IntVar(master = _parent, value=500)
+    
+    # Variable to hold the maximum x value to be simulated introduced in the interface
+    x_max = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_max.set(&#39;Auto&#39;)
+    # Variable to hold the minimum x value to be simulated introduced in the interface
+    x_min = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_min.set(&#39;Auto&#39;)
+    
+    # Variable to hold the percentage of current progress to be displayed in the bottom of the interface
+    progress_var = DoubleVar(master = _parent)
+    
+    # Variable to hold the text with the selected transitions that will be shown in the interface label
+    label_text = StringVar(master = _parent)
+    
+    # Initialize the transition type to diagram
+    satelite_var = StringVar(value=&#39;Diagram&#39;)
+    # Initialize the simulation type to simulation
+    choice_var = StringVar(value=&#39;Simulation&#39;)
+    # Initialize the profile type to lorentzian
+    type_var = StringVar(value=&#39;Lorentzian&#39;)
+    # Initialize the exitation mechanism to empty as this is not yet implemented
+    exc_mech_var = StringVar(value=&#39;&#39;)
+ 
+# Setup the buttons in the button area
+def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4):
+    &#34;&#34;&#34;
+    Function to setup the buttons in the button area
+        
+        Args:
+            buttons_frame: tkinter frame for the transition dropdown
+            buttons_frame2: tkinter frame for the bounds entries and reset button
+            buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+            buttons_frame4: tkinter frame for the progress bar
+        
+        Returns:
+            Nothing, we just configure the interface elements in the various button frames below the simulation plot
+    &#34;&#34;&#34;
+    global trans_lable, drop_menu, points, max_x, min_x, res_entry, progressbar, transition_list
+    
+    # Antes de se selecionar alguma transição aparece isto
+    label_text.set(&#39;Select a Transition: &#39;)
+    trans_lable = Label(buttons_frame, textvariable=label_text).grid(row=0, column=1)
+    
+    
+    # DropList das transições, Labels e botão calculate a apresentar na janela
+    drop_menu = ttk.Combobox(buttons_frame, value=[transition for transition in the_dictionary], height=5, width=10)
+    drop_menu.set(&#39;Transitions:&#39;)
+    drop_menu.bind(&#34;&lt;&lt;ComboboxSelected&gt;&gt;&#34;, selected)
+    drop_menu.grid(row=0, column=0)
+    
+    # Min Max e Nº Pontos
+    ttk.Label(buttons_frame2, text=&#34;Points&#34;).pack(side=LEFT)
+    points = ttk.Entry(buttons_frame2, width=7, textvariable=number_points).pack(side=LEFT)
+    ttk.Label(buttons_frame2, text=&#34;x Max&#34;).pack(side=LEFT)
+    max_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_max).pack(side=LEFT)
+    ttk.Label(buttons_frame2, text=&#34;x Min&#34;).pack(side=LEFT)
+    min_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_min).pack(side=LEFT)
+    ttk.Button(master=buttons_frame2, text=&#34;Reset&#34;, command=lambda: reset_limits()).pack(side=LEFT, padx=(30, 0))
+
+    # Res, Offsets e Calculate
+    # , font = (&#39;Sans&#39;,&#39;10&#39;,&#39;bold&#39;))  #definicoes botao &#34;calculate&#34;
+    ttk.Style().configure(&#39;red/black.TButton&#39;, foreground=&#39;red&#39;, background=&#39;black&#39;)
+    ttk.Button(master=buttons_frame3, text=&#34;Calculate&#34;, command=lambda: plot_stick(_sim, _f, _a), style=&#39;red/black.TButton&#39;).pack(side=RIGHT, padx=(30, 0))
+    # yoffset
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=yoffset).pack(side=RIGHT)
+    ttk.Label(buttons_frame3, text=&#34;y Offset&#34;).pack(side=RIGHT)
+    # En. Offset
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=energy_offset).pack(side=RIGHT, padx=(0, 30))
+    ttk.Label(buttons_frame3, text=&#34;En. offset (eV)&#34;).pack(side=RIGHT)
+    # Energy Resolution
+    ttk.Label(buttons_frame3, text=&#34;Experimental Resolution (eV)&#34;).pack(side=LEFT)
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=exp_resolution).pack(side=LEFT)
+
+    # Barra progresso
+    progressbar = ttk.Progressbar(buttons_frame4, variable=progress_var, maximum=100)
+    progressbar.pack(fill=X, expand=1)
+
+# Setup the dropdown menus on the top toolbar
+def setupMenus(CS_exists):
+    &#34;&#34;&#34;
+    Function to setup the dropdown menus on the top toolbar
+        
+        Args:
+            CS_exists: boolean if the charge states folder exists for the current element
+        
+        Returns:
+            Nothing, we just setup the top toolbar and bind the necessary variables and functions to the interface elements
+    &#34;&#34;&#34;
+    global totalvar, yscale_log, xscale_log, autofitvar, energy_offset, yoffset, normalizevar, satelite_var, choice_var, type_var, exc_mech_var, _sim
+    global loadvar, effic_var
+    
+    # Initialize the menus
+    my_menu = Menu(_sim)
+    _sim.config(menu=my_menu)
+    options_menu = Menu(my_menu, tearoff=0)
+    stick_plot_menu = Menu(my_menu, tearoff=0)
+    transition_type_menu = Menu(my_menu, tearoff=0)
+    fit_type_menu = Menu(my_menu, tearoff=0)
+    norm_menu = Menu(my_menu, tearoff=0)
+    exc_mech_menu = Menu(my_menu, tearoff=0)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Options dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Options&#34;, menu=options_menu)
+    options_menu.add_checkbutton(label=&#39;Show Total Y&#39;, variable=totalvar, onvalue=&#39;Total&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_checkbutton(label=&#39;Log Scale Y Axis&#39;, variable=yscale_log, onvalue=&#39;Ylog&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_checkbutton(label=&#39;Log Scale X Axis&#39;, variable=xscale_log, onvalue=&#39;Xlog&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Load Experimental Spectrum&#34;, command=lambda: load(loadvar))
+    options_menu.add_checkbutton(label=&#39;Perform Autofit&#39;, variable=autofitvar, onvalue=&#39;Yes&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_checkbutton(label=&#34;Import Detector Efficiency&#34;, command=lambda: load_effic_file(effic_var))
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Export Spectrum&#34;, command=lambda: write_to_xls(satelite_var.get(), xfinal, energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, generalVars.label1, time_of_click))
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Choose New Element&#34;, command=restarter)
+    options_menu.add_command(label=&#34;Quit&#34;, command=_quit)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Spectrum type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Spectrum Type&#34;, menu=stick_plot_menu)
+    stick_plot_menu.add_checkbutton(label=&#39;Stick&#39;, variable=choice_var, onvalue=&#39;Stick&#39;, offvalue=&#39;&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;Simulation&#39;, variable=choice_var, onvalue=&#39;Simulation&#39;, offvalue=&#39;&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;CS Mixture: Stick&#39;, variable=choice_var, onvalue=&#39;M_Stick&#39;, offvalue=&#39;&#39;, command=lambda: configureCSMix(), state=&#39;disabled&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;CS Mixture: Simulation&#39;, variable=choice_var, onvalue=&#39;M_Simulation&#39;, offvalue=&#39;&#39;, command=lambda: configureCSMix(), state=&#39;disabled&#39;)
+    # Active and deactivate the charge state mixture options if they exist
+    if CS_exists:
+        stick_plot_menu.entryconfigure(2, state=NORMAL)
+        # Good TK documentation: https://tkdocs.com/tutorial/menus.html
+        stick_plot_menu.entryconfigure(3, state=NORMAL)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Transition type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Transition Type&#34;, menu=transition_type_menu)
+    transition_type_menu.add_checkbutton(label=&#39;Diagram&#39;, variable=satelite_var, onvalue=&#39;Diagram&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Satellites&#39;, variable=satelite_var, onvalue=&#39;Satellites&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Diagram + Satellites&#39;, variable=satelite_var, onvalue=&#39;Diagram + Satellites&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Auger&#39;, variable=satelite_var, onvalue=&#39;Auger&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Fit type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Fit Type&#34;, menu=fit_type_menu)
+    fit_type_menu.add_checkbutton(label=&#39;Voigt&#39;, variable=type_var, onvalue=&#39;Voigt&#39;, offvalue=&#39;&#39;)
+    fit_type_menu.add_checkbutton(label=&#39;Lorentzian&#39;, variable=type_var, onvalue=&#39;Lorentzian&#39;, offvalue=&#39;&#39;)
+    fit_type_menu.add_checkbutton(label=&#39;Gaussian&#39;, variable=type_var, onvalue=&#39;Gaussian&#39;, offvalue=&#39;&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Normalization options dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Normalization Options&#34;, menu=norm_menu)
+    norm_menu.add_checkbutton(label=&#39;to Experimental Maximum&#39;, variable=normalizevar, onvalue=&#39;ExpMax&#39;, offvalue=&#39;No&#39;)
+    norm_menu.add_checkbutton(label=&#39;to Unity&#39;, variable=normalizevar, onvalue=&#39;One&#39;, offvalue=&#39;No&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Excitation mechanism dropdown menu and the buttons bound to the corresponding variables and functions (disables as it is not implemented)
+    my_menu.add_cascade(label=&#34;Excitation Mechanism&#34;, menu=exc_mech_menu, state=&#34;disabled&#34;)
+    exc_mech_menu.add_checkbutton(label=&#39;Nuclear Electron Capture&#39;, variable=exc_mech_var, onvalue=&#39;NEC&#39;, offvalue=&#39;&#39;)
+    exc_mech_menu.add_checkbutton(label=&#39;Photoionization&#39;, variable=exc_mech_var, onvalue=&#39;PIon&#39;, offvalue=&#39;&#39;)
+    exc_mech_menu.add_checkbutton(label=&#39;Electron Impact Ionization&#39;, variable=exc_mech_var, onvalue=&#39;EII&#39;, offvalue=&#39;&#39;)
+
+# Initialize and configure the charge state mixture interface where we configure the mixture
+def configureCSMix():
+    &#34;&#34;&#34;
+    Function to initialize and configure the charge state mixture interface where we configure the mixture
+    &#34;&#34;&#34;
+    mixer = Toplevel(_sim)
+    mixer.title(&#34;Charge State Mixer&#34;)
+    mixer.grab_set()  # Make this window the only interactable one until its closed
+
+    mixer.geometry(&#34;700x300&#34;)
+
+    # Input check for the percentage number in the entry
+    import re
+    def check_num(newval):
+        &#34;&#34;&#34;
+        Function to input check for the percentage number in the entry
+            
+            Args:
+                newval: the value trying to be introduced
+            
+            Returns:
+                regex match to check if the new value is a numric percentage format
+        &#34;&#34;&#34;
+        return re.match(&#39;^(?:[0-9]*[.]?[0-9]*)$&#39;, newval) is not None
+    # Bind the function
+    check_num_wrapper = (mixer.register(check_num), &#39;%P&#39;)
+    &#34;&#34;&#34;
+    Function wrapper to bind this validate command
+    &#34;&#34;&#34;
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    # RADIATIVE
+
+    # Lists to hold the interface objects for the radiative section
+    slidersRad = []
+    CS_labelsRad = []
+    # Fetch the order of the positive and negative charge states to show in the interface
+    PCS_order = [int(cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;+&#39;)[-1]) for cs in generalVars.radiative_files if &#39;+&#39; in cs]
+    NCS_order = [int(cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;-&#39;)[-1]) for cs in generalVars.radiative_files if &#39;+&#39; not in cs]
+
+    # List to hold the entries where we can type a mix percentage for each charge state
+    CS_mixEntriesRad = []
+
+    # Title label for the radiative section
+    labelRad = ttk.Label(mixer, text=&#34;Charge States With Radiative Transitions For Selected Atom:&#34;)
+    labelRad.grid(column=0, row=0, columnspan=len(generalVars.radiative_files), pady=40)
+
+    # If this is the first time we show tins interface we will need to initialize the elements
+    if len(generalVars.PCS_radMixValues) == 0:
+        # For each found charge state with radiative rates we initialize a set of slider, entry, label and variable to hold the value
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; in cs:
+                generalVars.PCS_radMixValues.append(StringVar())
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.PCS_radMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_radMixValues[-1]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+                slidersRad[-1].set(0.0)
+    else:
+        # If we already initialized the variables we only need to reinitialize the interface elements
+        i = 0
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; in cs:
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.PCS_radMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_radMixValues[i]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                i += 1
+
+    # Same as the positive charge states. This split helps organize the interface when several different charge states are present
+    if len(generalVars.NCS_radMixValues) == 0:
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; not in cs:
+                generalVars.NCS_radMixValues.append(StringVar())
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.NCS_radMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_radMixValues[-1]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+                slidersRad[-1].set(0.0)
+    else:
+        i = 0
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; not in cs:
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.NCS_radMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_radMixValues[i]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                i += 1
+
+    # Copy the orders to a new array to organize the interface order
+    initial_PCS_Order = PCS_order.copy()
+    initial_NCS_Order = NCS_order.copy()
+    colIndex = 0
+    
+    # Place the interface elements in the order of most negative charge state first
+    while len(NCS_order) &gt; 0:
+        # Find the most negative charge state
+        idx = initial_NCS_Order.index(min(NCS_order))
+
+        # Initialize the interface elements
+        CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
+        slidersRad[idx].grid(column=colIndex, row=2, sticky=(N, S), pady=5)
+        CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W, E), padx=5)
+
+        # Configure the grid column resizing
+        mixer.columnconfigure(colIndex, weight=1)
+
+        # Update the column index and remove the charge state we just initialized
+        colIndex += 1
+        del NCS_order[NCS_order.index(min(NCS_order))]
+
+    # Place the positive charge states afterwards, in a similar order as the negative ones
+    while len(PCS_order) &gt; 0:
+        idx = initial_PCS_Order.index(min(PCS_order))
+
+        CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
+        slidersRad[idx].grid(column=colIndex, row=2, sticky=(N, S), pady=5)
+        CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W, E), padx=5)
+
+        mixer.columnconfigure(colIndex, weight=1)
+
+        colIndex += 1
+        del PCS_order[PCS_order.index(min(PCS_order))]
+
+    # Configure the resizing of the row
+    mixer.rowconfigure(2, weight=1)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------
+    # AUGER
+    
+    # Same as the radiative section
+    if len(generalVars.auger_files) &gt; 0:
+        mixer.geometry(&#34;800x600&#34;)
+
+        slidersAug = []
+        CS_labelsAug = []
+        PCS_order = [int(cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;+&#39;)[-1]) for cs in generalVars.auger_files if &#39;+&#39; in cs]
+        NCS_order = [int(cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;-&#39;)[-1]) for cs in generalVars.auger_files if &#39;+&#39; not in cs]
+
+        CS_mixEntriesAug = []
+
+        labelAug = ttk.Label(
+            mixer, text=&#34;Charge States With Auger Transitions For Selected Atom:&#34;)
+        labelAug.grid(column=0, row=4, columnspan=len(generalVars.radiative_files), pady=40)
+
+        if len(generalVars.PCS_augMixValues) == 0:
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; in cs:
+                    generalVars.PCS_augMixValues.append(StringVar())
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.PCS_augMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_augMixValues[-1]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+                    slidersAug[-1].set(0.0)
+        else:
+            i = 0
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; in cs:
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.PCS_augMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_augMixValues[i]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                    i += 1
+
+        if len(generalVars.NCS_augMixValues) == 0:
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; not in cs:
+                    generalVars.NCS_augMixValues.append(StringVar())
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.NCS_augMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_augMixValues[-1]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+                    slidersAug[-1].set(0.0)
+        else:
+            i = 0
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; not in cs:
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.NCS_augMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_augMixValues[i]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                    i += 1
+
+        initial_PCS_Order = PCS_order.copy()
+        initial_NCS_Order = NCS_order.copy()
+        colIndex = 0
+        while len(NCS_order) &gt; 0:
+            idx = initial_NCS_Order.index(min(NCS_order))
+
+            CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
+            slidersAug[idx].grid(column=colIndex, row=6, sticky=(N, S), pady=5)
+            CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W, E), padx=5)
+
+            mixer.columnconfigure(colIndex, weight=1)
+
+            colIndex += 1
+            del NCS_order[NCS_order.index(min(NCS_order))]
+
+        while len(PCS_order) &gt; 0:
+            idx = initial_PCS_Order.index(min(PCS_order))
+
+            CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
+            slidersAug[idx].grid(column=colIndex, row=6, sticky=(N, S), pady=5)
+            CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W, E), padx=5)
+
+            mixer.columnconfigure(colIndex, weight=1)
+
+            colIndex += 1
+            del PCS_order[PCS_order.index(min(PCS_order))]
+
+        mixer.rowconfigure(6, weight=1)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------
+    # Ion Population slider
+
+    Ion_Populations = {}
+
+    combined_x = []
+    combined_y = []
+
+    # Organize the data from the ion population file into a dictionary for interpolation and plotting
+    for i, cs in enumerate(generalVars.ionpopdata[0]):
+        Ion_Populations[cs + &#39;_x&#39;] = []
+        Ion_Populations[cs + &#39;_y&#39;] = []
+
+        col = i * 2
+
+        for vals in generalVars.ionpopdata[1:]:
+            # A predifined spacing of at least 3 dashes is used in the file to keep the structure
+            if &#39;---&#39; not in vals[col]:
+                combined_x.append(float(vals[col]))
+                combined_y.append(float(vals[col + 1]))
+                if float(vals[col]) not in Ion_Populations[cs + &#39;_x&#39;]:
+                    Ion_Populations[cs + &#39;_x&#39;].append(float(vals[col]))
+                    Ion_Populations[cs +&#39;_y&#39;].append(float(vals[col + 1]))
+
+    # Normalize the ion populations
+    y_max = max(combined_y)
+    for cs in generalVars.ionpopdata[0]:
+        Ion_Populations[cs + &#39;_y&#39;] = [pop * 100 / y_max for pop in Ion_Populations[cs + &#39;_y&#39;]]
+
+    # Interpolate the ion populations
+    Ion_Population_Functions = {}
+    # linear interpolation because of &#34;corners&#34; in the distribution functions
+    for cs in generalVars.ionpopdata[0]:
+        order = np.argsort(Ion_Populations[cs + &#39;_x&#39;])
+        Ion_Population_Functions[cs] = interp1d(np.array(Ion_Populations[cs + &#39;_x&#39;])[order], np.array(Ion_Populations[cs + &#39;_y&#39;])[order], kind=&#39;linear&#39;)
+
+    # Remove duplicate values of x on the combined ion population data
+    combined_x = list(set(combined_x))
+
+    # Max and min of the x values (by default they are temperature, i.e. plasma temperature)
+    temperature_max = max(combined_x)
+    temperature_min = min(combined_x)
+
+    # Configure the grid if there are auger charge states
+    if len(generalVars.auger_files) &gt; 0:
+        fig_row = 7
+    else:
+        fig_row = 4
+
+    # Figura onde o gráfico vai ser desenhado
+    # canvas para o gráfico do espectro
+    f = Figure(figsize=(10, 5), dpi=100)
+    # plt.style.use(&#39;ggplot&#39;) Estilo para os plots
+    a = f.add_subplot(111)  # zona onde estara o gráfico
+    a.set_xlabel(&#39;Temperature (K)&#39;)
+    a.set_ylabel(&#39;Population&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Frames onde se vão pôr a figura e os labels e botões e etc
+    figure_frame = Frame(mixer, relief=GROOVE)  # frame para o gráfico
+
+    # Position the frame for the figure in the grid
+    figure_frame.grid(column=0, row=fig_row, columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)), pady=20)
+
+    canvas = FigureCanvasTkAgg(f, master=figure_frame)
+    canvas.get_tk_widget().pack(fill=BOTH, expand=1)
+
+    mixer.rowconfigure(fig_row, weight=1)
+
+    # Variable and vertical line for the x value to use for the ion population mixture values
+    temperature = StringVar()
+    temperature.set(str(temperature_min))
+    prev_line = a.axvline(x=float(temperature.get()), color=&#39;b&#39;)
+
+    # Function to update the vertical line in the plot and the mixture values
+    def update_temp_line(event, arg1, arg2):
+        &#34;&#34;&#34;
+        Function to update the vertical line in the plot and the mixture values
+            
+            Args:
+                event: which event triggered this function call. the function is only bound to write calls
+                arg1, arg2: arguments required for the write callback
+            
+            Returns:
+                Nothing, the values are updated in the global variables and the line is redrawn in the interface
+        &#34;&#34;&#34;
+        # Update line position
+        prev_line.set_xdata(float(temperature.get()))
+
+        # Update the plot
+        f.canvas.draw()
+        f.canvas.flush_events()
+
+        # Loop the existing interpolated functions and update the mix values acording to the chosen x
+        for cs in Ion_Population_Functions:
+            if len(generalVars.PCS_radMixValues) &gt; 0:
+                i = 0
+                for cs_file in generalVars.radiative_files:
+                    if cs in cs_file:
+                        # If the x value is outside interpolation range we just set it to 0
+                        try:
+                            generalVars.PCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                        except:
+                            generalVars.PCS_radMixValues[i].set(&#34;0.0&#34;)
+
+                        break
+
+                    if &#39;+&#39; in cs:
+                        i += 1
+
+            if len(generalVars.NCS_radMixValues) &gt; 0:
+                i = 0
+                for cs_file in generalVars.radiative_files:
+                    if cs in cs_file:
+                        # If the x value is outside interpolation range we just set it to 0
+                        try:
+                            generalVars.NCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                        except:
+                            generalVars.NCS_radMixValues[i].set(&#34;0.0&#34;)
+
+                        break
+
+                    if &#39;+&#39; not in cs:
+                        i += 1
+
+        # If there is auger rate files make the same updates to the auger mix values
+        if len(generalVars.auger_files) &gt; 0:
+            for cs in Ion_Population_Functions:
+                if len(generalVars.PCS_augMixValues) &gt; 0:
+                    i = 0
+                    for cs_file in generalVars.auger_files:
+                        if cs in cs_file:
+                            try:
+                                generalVars.PCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                            except:
+                                generalVars.PCS_augMixValues[i].set(&#34;0.0&#34;)
+
+                            break
+
+                        if &#39;+&#39; in cs:
+                            i += 1
+
+                if len(generalVars.NCS_augMixValues) &gt; 0:
+                    i = 0
+                    for cs_file in generalVars.auger_files:
+                        if cs in cs_file:
+                            try:
+                                generalVars.NCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                            except:
+                                generalVars.NCS_augMixValues[i].set(&#34;0.0&#34;)
+
+                            break
+
+                        if &#39;+&#39; not in cs:
+                            i += 1
+
+    # Whenever we update the x value we also update the line and mix values
+    temperature.trace_add(&#34;write&#34;, update_temp_line)
+    # Add the slider and entry and position them in the grid
+    temp_slider = ttk.Scale(mixer, orient=HORIZONTAL, length=200, from_=temperature_min, to=temperature_max, variable=temperature)
+    temp_entry = ttk.Entry(mixer, textvariable=temperature, validate=&#39;key&#39;, validatecommand=check_num_wrapper)
+    temp_slider.grid(column=0, row=fig_row + 1, columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, sticky=(W, E), padx=10, pady=20)
+    temp_entry.grid(column=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, row=fig_row + 1, sticky=(W, E), padx=5)
+
+    # Configure the resizing
+    mixer.rowconfigure(fig_row + 1, weight=1)
+
+    # Plot the ion population functions
+    for cs in generalVars.ionpopdata[0]:
+        x_min = min(Ion_Populations[cs + &#39;_x&#39;])
+        x_max = max(Ion_Populations[cs + &#39;_x&#39;])
+
+        temp_new = np.arange(x_min, x_max, (x_max - x_min) / 100)
+        pop_new = Ion_Population_Functions[cs](temp_new)
+
+        a.plot(temp_new, pop_new, label=cs)
+    
+    
+    a.legend()
+
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#           FUNCTIONS TO PLOT EXPERIMENTAL DATA             #
+#                                                           #
+# --------------------------------------------------------- #
+
+# Function to setup the experimental plot when we load one and the residue plot
+def setupExpPlot(f, load, element_name):
+    &#34;&#34;&#34;
+    Function to setup the experimental plot when we load one and the residue plot
+        
+        Args:
+            f: matplotlib figure object
+            load: file path to the experimental spectrum selected
+            element_name: name of the element we are simulating
+        
+        Returns:
+            graph_area: new matplotlib plot configured to make space for the residue graph
+            residues_graph: matplotlib plot for the residue data
+            exp_spectrum: experimental spectrum data loaded from file
+    &#34;&#34;&#34;
+    # Clear the plot
+    f.clf()
+    # Split the figure plot into two with the first having 3 times the height
+    gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1])
+    # Add the first subplot to the figure
+    graph_area = f.add_subplot(gs[0])
+    
+    # Set the logarithmic axes if needed
+    if yscale_log.get() == &#39;Ylog&#39;:
+        graph_area.set_yscale(&#39;log&#39;)
+    if xscale_log.get() == &#39;Xlog&#39;:
+        graph_area.set_xscale(&#39;log&#39;)
+    # Add the name of the plot
+    graph_area.legend(title=element_name)
+    # Add the second subplot for the residues
+    residues_graph = f.add_subplot(gs[1])
+    # Set the axes labels
+    residues_graph.set_xlabel(&#39;Energy (eV)&#39;)
+    residues_graph.set_ylabel(&#39;Residues (arb. units)&#39;)
+    
+    # Read and load the experimental spectrum file
+    exp_spectrum = loadExp(load)
+    
+    return graph_area, residues_graph, exp_spectrum
+
+# Function to plot the experimental data and std deviation on the residue plot
+def plotExp(graph_area, residues_graph, exp_x, exp_y, exp_sigma, normalize):
+    &#34;&#34;&#34;
+    Function to plot the experimental data and std deviation on the residue plot
+    
+        Args:
+            graph_area: new matplotlib plot configured to make space for the residue graph
+            residues_graph: matplotlib plot for the residue data
+            exp_x: energy values from the experimental spectrum
+            exp_y: intensity values from the experimental spectrum
+            exp_sigma: error values from the experimental spectrum
+            normalize: normalization type selected in the interface
+        
+        Returns:
+            Nothing, the function plots the normalized experimetnal spectrum in the simulation plot and the experimental errors in the residue plot
+    &#34;&#34;&#34;
+    if normalize == &#39;One&#39;:
+        # Plot dos dados experimentais normalizados à unidade
+        graph_area.scatter(exp_x, exp_y / max(exp_y), marker=&#39;.&#39;, label=&#39;Exp.&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), &#39;k--&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), &#39;k--&#39;)
+    else:
+        # Plot dos dados experimentais
+        graph_area.scatter(exp_x, exp_y, marker=&#39;.&#39;, label=&#39;Exp.&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        residues_graph.plot(exp_x, np.array(exp_sigma), &#39;k--&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        residues_graph.plot(exp_x, -np.array(exp_sigma), &#39;k--&#39;)
+
+    graph_area.legend()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="SpectraSimulations_git.utils.interface.autofitvar"><code class="name">var <span class="ident">autofitvar</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know if we need to perform an autofit to the simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.choice_var"><code class="name">var <span class="ident">choice_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know which type of simulation to perform (stick, simulation, with or without multiple charge states)</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.drop_menu"><code class="name">var <span class="ident">drop_menu</span></code></dt>
+<dd>
+<div class="desc"><p>Dropdown from where to choose the transitions to simulate</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.effic_var"><code class="name">var <span class="ident">effic_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know where the detector efficiency to load is located, if any</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.energy_offset"><code class="name">var <span class="ident">energy_offset</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the energy introduced by the user in the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.exc_mech_var"><code class="name">var <span class="ident">exc_mech_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know which type of exiting mechanism we want to consider in the simulation (currently not implemented)</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.exp_resolution"><code class="name">var <span class="ident">exp_resolution</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the experimental resolution introduced by the user in the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.label_text"><code class="name">var <span class="ident">label_text</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the text to show in the interface corresponding to the transition_list</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.loadvar"><code class="name">var <span class="ident">loadvar</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know where the experimental spectrum to load is located, if any</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.max_x"><code class="name">var <span class="ident">max_x</span></code></dt>
+<dd>
+<div class="desc"><p>Entry where to type the maximum energy to simulate</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.min_x"><code class="name">var <span class="ident">min_x</span></code></dt>
+<dd>
+<div class="desc"><p>Entry where to type the minimum energy to simulate</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.normalizevar"><code class="name">var <span class="ident">normalizevar</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know which normalization was chosen, if any</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.number_points"><code class="name">var <span class="ident">number_points</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the number of points introduced by the user in the interface, to calculate the energy grid where we simulate the spectrum</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.points"><code class="name">var <span class="ident">points</span></code></dt>
+<dd>
+<div class="desc"><p>Entry where to type the number of points to simulate</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.progress_var"><code class="name">var <span class="ident">progress_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the progress to show in the progress bar at the bottom of the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.progressbar"><code class="name">var <span class="ident">progressbar</span></code></dt>
+<dd>
+<div class="desc"><p>Progress bar on the bottom of the interface to show the simulation progress</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.res_entry"><code class="name">var <span class="ident">res_entry</span></code></dt>
+<dd>
+<div class="desc"><p>Entry where to type the experimental resolution to simulate</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.satelite_var"><code class="name">var <span class="ident">satelite_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know which types of transitions to simulate (radiative, auger, satellites)</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.totalvar"><code class="name">var <span class="ident">totalvar</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know if the total intensity needs to be shown</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.trans_lable"><code class="name">var <span class="ident">trans_lable</span></code></dt>
+<dd>
+<div class="desc"><p>Label where to write the label_text</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.transition_list"><code class="name">var <span class="ident">transition_list</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the names of the transitions selected for the simulation</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.type_var"><code class="name">var <span class="ident">type_var</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know which type of profile we want to simulate fro each line</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.x_max"><code class="name">var <span class="ident">x_max</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the maximum energy to simulate introduced by the user in the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.x_min"><code class="name">var <span class="ident">x_min</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the minimum energy to simulate introduced by the user in the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.xscale_log"><code class="name">var <span class="ident">xscale_log</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know if the x axis needs to be set as logarithmic</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.yoffset"><code class="name">var <span class="ident">yoffset</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to hold the value of the intensity offset introduced by the user in the interface</p></div>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.yscale_log"><code class="name">var <span class="ident">yscale_log</span></code></dt>
+<dd>
+<div class="desc"><p>Variable to know if the y axis needs to be set as logarithmic</p></div>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="SpectraSimulations_git.utils.interface.configureButtonArea"><code class="name flex">
+<span>def <span class="ident">configureButtonArea</span></span>(<span>sim, canvas)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters</p>
+<pre><code>Args:
+    sim: tkinter simulation window object
+    canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+
+Returns:
+    panel_2: tkinter panel placed below the simulation plot
+    toolbar_frame: tkinter frame for the matplotlib graph buttons
+    toolbar: tkinter object for the matplotlib default toolbar
+    full_frame: tkinter frame for the remaining buttons
+    buttons_frame: tkinter frame for the transition dropdown
+    buttons_frame2: tkinter frame for the bounds entries and reset button
+    buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+    buttons_frame4: tkinter frame for the progress bar
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def configureButtonArea(sim, canvas):
+    &#34;&#34;&#34;
+    Function to initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters
+        
+        Args:
+            sim: tkinter simulation window object
+            canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+        
+        Returns:
+            panel_2: tkinter panel placed below the simulation plot
+            toolbar_frame: tkinter frame for the matplotlib graph buttons
+            toolbar: tkinter object for the matplotlib default toolbar
+            full_frame: tkinter frame for the remaining buttons
+            buttons_frame: tkinter frame for the transition dropdown
+            buttons_frame2: tkinter frame for the bounds entries and reset button
+            buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+            buttons_frame4: tkinter frame for the progress bar
+    &#34;&#34;&#34;
+    # Panel for the area below the plot
+    panel_2 = PanedWindow(sim, orient=VERTICAL)
+    panel_2.pack(fill=X, expand=0)
+
+    # Matplotlib toolbar
+    toolbar_frame = Frame(panel_2, bd=1, relief=GROOVE)
+    panel_2.add(toolbar_frame)
+    toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
+
+    # Frame for the buttons
+    full_frame = Frame(panel_2, relief=GROOVE)
+    panel_2.add(full_frame)
+    buttons_frame = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame.pack(fill=BOTH, expand=1)
+    # Max, min &amp; Points Frame
+    buttons_frame2 = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame2.pack(fill=BOTH, expand=1)
+    # Frame  yoffset, Energy offset and Calculate
+    buttons_frame3 = Frame(full_frame, bd=1, relief=GROOVE)
+    buttons_frame3.pack(fill=BOTH, expand=1)
+    # Frame progress bar
+    buttons_frame4 = Frame(full_frame)
+    buttons_frame4.pack(fill=BOTH, expand=1)
+
+    return panel_2, toolbar_frame, toolbar, full_frame, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.configureCSMix"><code class="name flex">
+<span>def <span class="ident">configureCSMix</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to initialize and configure the charge state mixture interface where we configure the mixture</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def configureCSMix():
+    &#34;&#34;&#34;
+    Function to initialize and configure the charge state mixture interface where we configure the mixture
+    &#34;&#34;&#34;
+    mixer = Toplevel(_sim)
+    mixer.title(&#34;Charge State Mixer&#34;)
+    mixer.grab_set()  # Make this window the only interactable one until its closed
+
+    mixer.geometry(&#34;700x300&#34;)
+
+    # Input check for the percentage number in the entry
+    import re
+    def check_num(newval):
+        &#34;&#34;&#34;
+        Function to input check for the percentage number in the entry
+            
+            Args:
+                newval: the value trying to be introduced
+            
+            Returns:
+                regex match to check if the new value is a numric percentage format
+        &#34;&#34;&#34;
+        return re.match(&#39;^(?:[0-9]*[.]?[0-9]*)$&#39;, newval) is not None
+    # Bind the function
+    check_num_wrapper = (mixer.register(check_num), &#39;%P&#39;)
+    &#34;&#34;&#34;
+    Function wrapper to bind this validate command
+    &#34;&#34;&#34;
+
+    # -------------------------------------------------------------------------------------------------------------------------------------------
+    # RADIATIVE
+
+    # Lists to hold the interface objects for the radiative section
+    slidersRad = []
+    CS_labelsRad = []
+    # Fetch the order of the positive and negative charge states to show in the interface
+    PCS_order = [int(cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;+&#39;)[-1]) for cs in generalVars.radiative_files if &#39;+&#39; in cs]
+    NCS_order = [int(cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;-&#39;)[-1]) for cs in generalVars.radiative_files if &#39;+&#39; not in cs]
+
+    # List to hold the entries where we can type a mix percentage for each charge state
+    CS_mixEntriesRad = []
+
+    # Title label for the radiative section
+    labelRad = ttk.Label(mixer, text=&#34;Charge States With Radiative Transitions For Selected Atom:&#34;)
+    labelRad.grid(column=0, row=0, columnspan=len(generalVars.radiative_files), pady=40)
+
+    # If this is the first time we show tins interface we will need to initialize the elements
+    if len(generalVars.PCS_radMixValues) == 0:
+        # For each found charge state with radiative rates we initialize a set of slider, entry, label and variable to hold the value
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; in cs:
+                generalVars.PCS_radMixValues.append(StringVar())
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.PCS_radMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_radMixValues[-1]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+                slidersRad[-1].set(0.0)
+    else:
+        # If we already initialized the variables we only need to reinitialize the interface elements
+        i = 0
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; in cs:
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.PCS_radMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_radMixValues[i]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                i += 1
+
+    # Same as the positive charge states. This split helps organize the interface when several different charge states are present
+    if len(generalVars.NCS_radMixValues) == 0:
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; not in cs:
+                generalVars.NCS_radMixValues.append(StringVar())
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.NCS_radMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_radMixValues[-1]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+                slidersRad[-1].set(0.0)
+    else:
+        i = 0
+        for cs in generalVars.radiative_files:
+            if &#39;+&#39; not in cs:
+                CS_mixEntriesRad.append(ttk.Entry(mixer, textvariable=generalVars.NCS_radMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                slidersRad.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_radMixValues[i]))
+                CS_labelsRad.append(ttk.Label(mixer, text=cs.split(&#39;intensity_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                i += 1
+
+    # Copy the orders to a new array to organize the interface order
+    initial_PCS_Order = PCS_order.copy()
+    initial_NCS_Order = NCS_order.copy()
+    colIndex = 0
+    
+    # Place the interface elements in the order of most negative charge state first
+    while len(NCS_order) &gt; 0:
+        # Find the most negative charge state
+        idx = initial_NCS_Order.index(min(NCS_order))
+
+        # Initialize the interface elements
+        CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
+        slidersRad[idx].grid(column=colIndex, row=2, sticky=(N, S), pady=5)
+        CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W, E), padx=5)
+
+        # Configure the grid column resizing
+        mixer.columnconfigure(colIndex, weight=1)
+
+        # Update the column index and remove the charge state we just initialized
+        colIndex += 1
+        del NCS_order[NCS_order.index(min(NCS_order))]
+
+    # Place the positive charge states afterwards, in a similar order as the negative ones
+    while len(PCS_order) &gt; 0:
+        idx = initial_PCS_Order.index(min(PCS_order))
+
+        CS_labelsRad[idx].grid(column=colIndex, row=1, sticky=(N), pady=5)
+        slidersRad[idx].grid(column=colIndex, row=2, sticky=(N, S), pady=5)
+        CS_mixEntriesRad[idx].grid(column=colIndex, row=3, sticky=(W, E), padx=5)
+
+        mixer.columnconfigure(colIndex, weight=1)
+
+        colIndex += 1
+        del PCS_order[PCS_order.index(min(PCS_order))]
+
+    # Configure the resizing of the row
+    mixer.rowconfigure(2, weight=1)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------
+    # AUGER
+    
+    # Same as the radiative section
+    if len(generalVars.auger_files) &gt; 0:
+        mixer.geometry(&#34;800x600&#34;)
+
+        slidersAug = []
+        CS_labelsAug = []
+        PCS_order = [int(cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;+&#39;)[-1]) for cs in generalVars.auger_files if &#39;+&#39; in cs]
+        NCS_order = [int(cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0].split(&#39;-&#39;)[-1]) for cs in generalVars.auger_files if &#39;+&#39; not in cs]
+
+        CS_mixEntriesAug = []
+
+        labelAug = ttk.Label(
+            mixer, text=&#34;Charge States With Auger Transitions For Selected Atom:&#34;)
+        labelAug.grid(column=0, row=4, columnspan=len(generalVars.radiative_files), pady=40)
+
+        if len(generalVars.PCS_augMixValues) == 0:
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; in cs:
+                    generalVars.PCS_augMixValues.append(StringVar())
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.PCS_augMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_augMixValues[-1]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+                    slidersAug[-1].set(0.0)
+        else:
+            i = 0
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; in cs:
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.PCS_augMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.PCS_augMixValues[i]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                    i += 1
+
+        if len(generalVars.NCS_augMixValues) == 0:
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; not in cs:
+                    generalVars.NCS_augMixValues.append(StringVar())
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.NCS_augMixValues[-1], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_augMixValues[-1]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+                    slidersAug[-1].set(0.0)
+        else:
+            i = 0
+            for cs in generalVars.auger_files:
+                if &#39;+&#39; not in cs:
+                    CS_mixEntriesAug.append(ttk.Entry(mixer, textvariable=generalVars.NCS_augMixValues[i], validate=&#39;key&#39;, validatecommand=check_num_wrapper))
+                    slidersAug.append(ttk.Scale(mixer, orient=VERTICAL, length=200, from_=100.0, to=0.0, variable=generalVars.NCS_augMixValues[i]))
+                    CS_labelsAug.append(ttk.Label(mixer, text=cs.split(&#39;augrate_&#39;)[1].split(&#39;.out&#39;)[0]))
+
+                    i += 1
+
+        initial_PCS_Order = PCS_order.copy()
+        initial_NCS_Order = NCS_order.copy()
+        colIndex = 0
+        while len(NCS_order) &gt; 0:
+            idx = initial_NCS_Order.index(min(NCS_order))
+
+            CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
+            slidersAug[idx].grid(column=colIndex, row=6, sticky=(N, S), pady=5)
+            CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W, E), padx=5)
+
+            mixer.columnconfigure(colIndex, weight=1)
+
+            colIndex += 1
+            del NCS_order[NCS_order.index(min(NCS_order))]
+
+        while len(PCS_order) &gt; 0:
+            idx = initial_PCS_Order.index(min(PCS_order))
+
+            CS_labelsAug[idx].grid(column=colIndex, row=5, sticky=(N), pady=5)
+            slidersAug[idx].grid(column=colIndex, row=6, sticky=(N, S), pady=5)
+            CS_mixEntriesAug[idx].grid(column=colIndex, row=7, sticky=(W, E), padx=5)
+
+            mixer.columnconfigure(colIndex, weight=1)
+
+            colIndex += 1
+            del PCS_order[PCS_order.index(min(PCS_order))]
+
+        mixer.rowconfigure(6, weight=1)
+
+    # ------------------------------------------------------------------------------------------------------------------------------------
+    # Ion Population slider
+
+    Ion_Populations = {}
+
+    combined_x = []
+    combined_y = []
+
+    # Organize the data from the ion population file into a dictionary for interpolation and plotting
+    for i, cs in enumerate(generalVars.ionpopdata[0]):
+        Ion_Populations[cs + &#39;_x&#39;] = []
+        Ion_Populations[cs + &#39;_y&#39;] = []
+
+        col = i * 2
+
+        for vals in generalVars.ionpopdata[1:]:
+            # A predifined spacing of at least 3 dashes is used in the file to keep the structure
+            if &#39;---&#39; not in vals[col]:
+                combined_x.append(float(vals[col]))
+                combined_y.append(float(vals[col + 1]))
+                if float(vals[col]) not in Ion_Populations[cs + &#39;_x&#39;]:
+                    Ion_Populations[cs + &#39;_x&#39;].append(float(vals[col]))
+                    Ion_Populations[cs +&#39;_y&#39;].append(float(vals[col + 1]))
+
+    # Normalize the ion populations
+    y_max = max(combined_y)
+    for cs in generalVars.ionpopdata[0]:
+        Ion_Populations[cs + &#39;_y&#39;] = [pop * 100 / y_max for pop in Ion_Populations[cs + &#39;_y&#39;]]
+
+    # Interpolate the ion populations
+    Ion_Population_Functions = {}
+    # linear interpolation because of &#34;corners&#34; in the distribution functions
+    for cs in generalVars.ionpopdata[0]:
+        order = np.argsort(Ion_Populations[cs + &#39;_x&#39;])
+        Ion_Population_Functions[cs] = interp1d(np.array(Ion_Populations[cs + &#39;_x&#39;])[order], np.array(Ion_Populations[cs + &#39;_y&#39;])[order], kind=&#39;linear&#39;)
+
+    # Remove duplicate values of x on the combined ion population data
+    combined_x = list(set(combined_x))
+
+    # Max and min of the x values (by default they are temperature, i.e. plasma temperature)
+    temperature_max = max(combined_x)
+    temperature_min = min(combined_x)
+
+    # Configure the grid if there are auger charge states
+    if len(generalVars.auger_files) &gt; 0:
+        fig_row = 7
+    else:
+        fig_row = 4
+
+    # Figura onde o gráfico vai ser desenhado
+    # canvas para o gráfico do espectro
+    f = Figure(figsize=(10, 5), dpi=100)
+    # plt.style.use(&#39;ggplot&#39;) Estilo para os plots
+    a = f.add_subplot(111)  # zona onde estara o gráfico
+    a.set_xlabel(&#39;Temperature (K)&#39;)
+    a.set_ylabel(&#39;Population&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Frames onde se vão pôr a figura e os labels e botões e etc
+    figure_frame = Frame(mixer, relief=GROOVE)  # frame para o gráfico
+
+    # Position the frame for the figure in the grid
+    figure_frame.grid(column=0, row=fig_row, columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)), pady=20)
+
+    canvas = FigureCanvasTkAgg(f, master=figure_frame)
+    canvas.get_tk_widget().pack(fill=BOTH, expand=1)
+
+    mixer.rowconfigure(fig_row, weight=1)
+
+    # Variable and vertical line for the x value to use for the ion population mixture values
+    temperature = StringVar()
+    temperature.set(str(temperature_min))
+    prev_line = a.axvline(x=float(temperature.get()), color=&#39;b&#39;)
+
+    # Function to update the vertical line in the plot and the mixture values
+    def update_temp_line(event, arg1, arg2):
+        &#34;&#34;&#34;
+        Function to update the vertical line in the plot and the mixture values
+            
+            Args:
+                event: which event triggered this function call. the function is only bound to write calls
+                arg1, arg2: arguments required for the write callback
+            
+            Returns:
+                Nothing, the values are updated in the global variables and the line is redrawn in the interface
+        &#34;&#34;&#34;
+        # Update line position
+        prev_line.set_xdata(float(temperature.get()))
+
+        # Update the plot
+        f.canvas.draw()
+        f.canvas.flush_events()
+
+        # Loop the existing interpolated functions and update the mix values acording to the chosen x
+        for cs in Ion_Population_Functions:
+            if len(generalVars.PCS_radMixValues) &gt; 0:
+                i = 0
+                for cs_file in generalVars.radiative_files:
+                    if cs in cs_file:
+                        # If the x value is outside interpolation range we just set it to 0
+                        try:
+                            generalVars.PCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                        except:
+                            generalVars.PCS_radMixValues[i].set(&#34;0.0&#34;)
+
+                        break
+
+                    if &#39;+&#39; in cs:
+                        i += 1
+
+            if len(generalVars.NCS_radMixValues) &gt; 0:
+                i = 0
+                for cs_file in generalVars.radiative_files:
+                    if cs in cs_file:
+                        # If the x value is outside interpolation range we just set it to 0
+                        try:
+                            generalVars.NCS_radMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                        except:
+                            generalVars.NCS_radMixValues[i].set(&#34;0.0&#34;)
+
+                        break
+
+                    if &#39;+&#39; not in cs:
+                        i += 1
+
+        # If there is auger rate files make the same updates to the auger mix values
+        if len(generalVars.auger_files) &gt; 0:
+            for cs in Ion_Population_Functions:
+                if len(generalVars.PCS_augMixValues) &gt; 0:
+                    i = 0
+                    for cs_file in generalVars.auger_files:
+                        if cs in cs_file:
+                            try:
+                                generalVars.PCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                            except:
+                                generalVars.PCS_augMixValues[i].set(&#34;0.0&#34;)
+
+                            break
+
+                        if &#39;+&#39; in cs:
+                            i += 1
+
+                if len(generalVars.NCS_augMixValues) &gt; 0:
+                    i = 0
+                    for cs_file in generalVars.auger_files:
+                        if cs in cs_file:
+                            try:
+                                generalVars.NCS_augMixValues[i].set(str(Ion_Population_Functions[cs](float(temperature.get()))))
+                            except:
+                                generalVars.NCS_augMixValues[i].set(&#34;0.0&#34;)
+
+                            break
+
+                        if &#39;+&#39; not in cs:
+                            i += 1
+
+    # Whenever we update the x value we also update the line and mix values
+    temperature.trace_add(&#34;write&#34;, update_temp_line)
+    # Add the slider and entry and position them in the grid
+    temp_slider = ttk.Scale(mixer, orient=HORIZONTAL, length=200, from_=temperature_min, to=temperature_max, variable=temperature)
+    temp_entry = ttk.Entry(mixer, textvariable=temperature, validate=&#39;key&#39;, validatecommand=check_num_wrapper)
+    temp_slider.grid(column=0, row=fig_row + 1, columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, sticky=(W, E), padx=10, pady=20)
+    temp_entry.grid(column=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, row=fig_row + 1, sticky=(W, E), padx=5)
+
+    # Configure the resizing
+    mixer.rowconfigure(fig_row + 1, weight=1)
+
+    # Plot the ion population functions
+    for cs in generalVars.ionpopdata[0]:
+        x_min = min(Ion_Populations[cs + &#39;_x&#39;])
+        x_max = max(Ion_Populations[cs + &#39;_x&#39;])
+
+        temp_new = np.arange(x_min, x_max, (x_max - x_min) / 100)
+        pop_new = Ion_Population_Functions[cs](temp_new)
+
+        a.plot(temp_new, pop_new, label=cs)
+    
+    
+    a.legend()</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.configureSimuPlot"><code class="name flex">
+<span>def <span class="ident">configureSimuPlot</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to initialize and configure the simulation window and plot</p>
+<pre><code>Args:
+
+
+Returns:
+    sim: tkinter simulation window object
+    panel_1: tkinter panel object to hold the simulation frame
+    f: matplotlib figure object for the simulation plot
+    a: maplotlib plot object where we will plot the simulation data
+    figure_frame: tkinter frame object to hold the tkinter simulation figure object
+    canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def configureSimuPlot():
+    &#34;&#34;&#34;
+    Function to initialize and configure the simulation window and plot
+        
+        Args:
+            
+        
+        Returns:
+            sim: tkinter simulation window object
+            panel_1: tkinter panel object to hold the simulation frame
+            f: matplotlib figure object for the simulation plot
+            a: maplotlib plot object where we will plot the simulation data
+            figure_frame: tkinter frame object to hold the tkinter simulation figure object
+            canvas: tkinter object we can place in the frame which is created from the matplotlib figure
+    &#34;&#34;&#34;
+    global _sim, _a, _f, _parent
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Start a new window for the simulation plot. We use TopLevel as we want this window to be the main interface
+    sim = Toplevel(master=_parent)
+    # Define the title
+    sim.title(&#34;Spectrum Simulation&#34;)
+    # Pack a panel into the window where we will place our canvas to plot the simulations. This way the window will properly resize
+    panel_1 = PanedWindow(sim, orient=VERTICAL)
+    panel_1.pack(fill=BOTH, expand=1)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Matplotlib figure where we will place the graph objects
+    f = Figure(figsize=(10, 5), dpi=100)
+    # Add a plotting space to the figure
+    a = f.add_subplot(111)
+    # Set labels for the axis
+    a.set_xlabel(&#39;Energy (eV)&#39;)
+    a.set_ylabel(&#39;Intensity (arb. units)&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Frame where we will place the figure with the graph
+    figure_frame = Frame(panel_1, relief=GROOVE) # grooved border style
+    # Add the frame to the panel
+    panel_1.add(figure_frame)
+    # Create the tk widget canvas to place the figure in the frame
+    canvas = FigureCanvasTkAgg(f, master=figure_frame)
+    # pack the canvas in the frame
+    canvas.get_tk_widget().pack(fill=BOTH, expand=1)
+
+    # Store the interface objects for use in other functions across the file
+    _a = a
+    _f = f
+    _sim = sim
+    
+    return sim, panel_1, f, a, figure_frame, canvas</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.destroy"><code class="name flex">
+<span>def <span class="ident">destroy</span></span>(<span>window)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to destroy the window and free memory properly</p>
+<pre><code>Args:
+    window: the window to be disposed of
+
+Returns:
+    Nothing, the window is disposed of and the program continues
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def destroy(window):
+    &#34;&#34;&#34;
+    Function to destroy the window and free memory properly
+    
+        Args:
+            window: the window to be disposed of
+        
+        Returns:
+            Nothing, the window is disposed of and the program continues
+    &#34;&#34;&#34;
+    window.destroy()</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.dict_updater"><code class="name flex">
+<span>def <span class="ident">dict_updater</span></span>(<span>transition)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to update the selection state of a transition in the correct dictionary</p>
+<pre><code>Args:
+    transition: which transition to update
+
+Returns:
+    Nothing, the transition is updated in the dictionaries
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dict_updater(transition):
+    &#34;&#34;&#34;
+    Function to update the selection state of a transition in the correct dictionary
+        
+        Args:
+            transition: which transition to update
+        
+        Returns:
+            Nothing, the transition is updated in the dictionaries
+    &#34;&#34;&#34;
+    if satelite_var.get() != &#39;Auger&#39;:
+        # Toggle the current state of the transition
+        the_dictionary[transition][&#34;selected_state&#34;] = not the_dictionary[transition][&#34;selected_state&#34;]
+    else:
+        # Toggle the current state of the transition
+        the_aug_dictionary[transition][&#34;selected_state&#34;] = not the_aug_dictionary[transition][&#34;selected_state&#34;]</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.enter_function"><code class="name flex">
+<span>def <span class="ident">enter_function</span></span>(<span>event)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to bind the simulation function to the enter key</p>
+<pre><code>Args:
+    event: which key event was triggered
+
+Returns:
+    Nothing, the simulation function is executed
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def enter_function(event):
+    &#34;&#34;&#34;
+    Function to bind the simulation function to the enter key
+        
+        Args:
+            event: which key event was triggered
+        
+        Returns:
+            Nothing, the simulation function is executed
+    &#34;&#34;&#34;
+    plot_stick(_sim, _f, _a)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.on_key_event"><code class="name flex">
+<span>def <span class="ident">on_key_event</span></span>(<span>event)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to bind the default matplotlib hotkeys</p>
+<pre><code>Args:
+    event: which key event was triggered
+
+Returns:
+    Nothing, the key event is passed to the default matplotlib key handler and the correct action is performed
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def on_key_event(event):
+    &#34;&#34;&#34;
+    Function to bind the default matplotlib hotkeys
+        
+        Args:
+            event: which key event was triggered
+        
+        Returns:
+            Nothing, the key event is passed to the default matplotlib key handler and the correct action is performed
+    &#34;&#34;&#34;
+    print(&#39;you pressed %s&#39; % event.key)
+    key_press_handler(event, canvas, toolbar)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.plotExp"><code class="name flex">
+<span>def <span class="ident">plotExp</span></span>(<span>graph_area, residues_graph, exp_x, exp_y, exp_sigma, normalize)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to plot the experimental data and std deviation on the residue plot</p>
+<pre><code>Args:
+    graph_area: new matplotlib plot configured to make space for the residue graph
+    residues_graph: matplotlib plot for the residue data
+    exp_x: energy values from the experimental spectrum
+    exp_y: intensity values from the experimental spectrum
+    exp_sigma: error values from the experimental spectrum
+    normalize: normalization type selected in the interface
+
+Returns:
+    Nothing, the function plots the normalized experimetnal spectrum in the simulation plot and the experimental errors in the residue plot
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plotExp(graph_area, residues_graph, exp_x, exp_y, exp_sigma, normalize):
+    &#34;&#34;&#34;
+    Function to plot the experimental data and std deviation on the residue plot
+    
+        Args:
+            graph_area: new matplotlib plot configured to make space for the residue graph
+            residues_graph: matplotlib plot for the residue data
+            exp_x: energy values from the experimental spectrum
+            exp_y: intensity values from the experimental spectrum
+            exp_sigma: error values from the experimental spectrum
+            normalize: normalization type selected in the interface
+        
+        Returns:
+            Nothing, the function plots the normalized experimetnal spectrum in the simulation plot and the experimental errors in the residue plot
+    &#34;&#34;&#34;
+    if normalize == &#39;One&#39;:
+        # Plot dos dados experimentais normalizados à unidade
+        graph_area.scatter(exp_x, exp_y / max(exp_y), marker=&#39;.&#39;, label=&#39;Exp.&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), &#39;k--&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), &#39;k--&#39;)
+    else:
+        # Plot dos dados experimentais
+        graph_area.scatter(exp_x, exp_y, marker=&#39;.&#39;, label=&#39;Exp.&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        residues_graph.plot(exp_x, np.array(exp_sigma), &#39;k--&#39;)
+        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        residues_graph.plot(exp_x, -np.array(exp_sigma), &#39;k--&#39;)
+
+    graph_area.legend()</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.reset_limits"><code class="name flex">
+<span>def <span class="ident">reset_limits</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to properly reset the x limits in the interface (bound to the reset button).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reset_limits():
+    &#34;&#34;&#34;
+    Function to properly reset the x limits in the interface (bound to the reset button).
+    &#34;&#34;&#34;
+    global number_points, x_max, x_min
+    
+    number_points.set(500)
+    x_max.set(&#39;Auto&#39;)
+    x_min.set(&#39;Auto&#39;)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.restarter"><code class="name flex">
+<span>def <span class="ident">restarter</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Private function to deselect all selected transitions and restart the whole application</p>
+<pre><code>Args:
+
+
+Returns:
+    Nothing, the transition dictionaries are reset and the tkinter windows are disposed of
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def restarter():
+    &#34;&#34;&#34;
+    Private function to deselect all selected transitions and restart the whole application
+        
+        Args:
+            
+        
+        Returns:
+            Nothing, the transition dictionaries are reset and the tkinter windows are disposed of
+    &#34;&#34;&#34;
+    original = satelite_var.get()
+
+    satelite_var.set(&#39;Diagram&#39;)
+
+    for transition in the_dictionary:
+        if the_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(&#39;Auger&#39;)
+
+    for transition in the_aug_dictionary:
+        if the_aug_dictionary[transition][&#34;selected_state&#34;]:
+            dict_updater(transition)
+
+    satelite_var.set(original)
+
+    _sim.quit()  # stops mainloop
+    _sim.destroy()
+    _parent.destroy()
+    main()  # this is necessary on Windows to prevent fatal Python Error: PyEval_RestoreThread: NULL tstate</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.selected"><code class="name flex">
+<span>def <span class="ident">selected</span></span>(<span>event)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to update the transition that was just selected from the dropdown into the list of transitions to simulate.
+This function runs whenever we one transition is selected from the dropdown</p>
+<pre><code>Args:
+    event: which dropdown element was selected
+
+Returns:
+    Nothing, the selected transition toggled in the dictionary and is added to the label in the interface
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def selected(event):
+    &#34;&#34;&#34;
+    Function to update the transition that was just selected from the dropdown into the list of transitions to simulate.
+    This function runs whenever we one transition is selected from the dropdown
+        
+        Args:
+            event: which dropdown element was selected
+        
+        Returns:
+            Nothing, the selected transition toggled in the dictionary and is added to the label in the interface
+    &#34;&#34;&#34;
+    # Read which transition was selected
+    text_T = drop_menu.get()
+    # Update the dictionary for the transition
+    dict_updater(text_T)
+    
+    if satelite_var.get() != &#39;Auger&#39;:
+        # If the transition added to the selection
+        if the_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.append(text_T)
+        # If it was removed
+        elif not the_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.remove(text_T)
+    else:
+        # Same for Auger
+        if the_aug_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.append(text_T)
+        elif not the_aug_dictionary[text_T][&#34;selected_state&#34;]:
+            transition_list.remove(text_T)
+    
+    # Variable with the text to be shown in the interface with the selected transitions
+    to_print = &#39;, &#39;.join(transition_list)
+    
+    # Set the interface label to the text
+    label_text.set(&#39;Selected Transitions: &#39; + to_print)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.setupButtonArea"><code class="name flex">
+<span>def <span class="ident">setupButtonArea</span></span>(<span>buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to setup the buttons in the button area</p>
+<pre><code>Args:
+    buttons_frame: tkinter frame for the transition dropdown
+    buttons_frame2: tkinter frame for the bounds entries and reset button
+    buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+    buttons_frame4: tkinter frame for the progress bar
+
+Returns:
+    Nothing, we just configure the interface elements in the various button frames below the simulation plot
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4):
+    &#34;&#34;&#34;
+    Function to setup the buttons in the button area
+        
+        Args:
+            buttons_frame: tkinter frame for the transition dropdown
+            buttons_frame2: tkinter frame for the bounds entries and reset button
+            buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
+            buttons_frame4: tkinter frame for the progress bar
+        
+        Returns:
+            Nothing, we just configure the interface elements in the various button frames below the simulation plot
+    &#34;&#34;&#34;
+    global trans_lable, drop_menu, points, max_x, min_x, res_entry, progressbar, transition_list
+    
+    # Antes de se selecionar alguma transição aparece isto
+    label_text.set(&#39;Select a Transition: &#39;)
+    trans_lable = Label(buttons_frame, textvariable=label_text).grid(row=0, column=1)
+    
+    
+    # DropList das transições, Labels e botão calculate a apresentar na janela
+    drop_menu = ttk.Combobox(buttons_frame, value=[transition for transition in the_dictionary], height=5, width=10)
+    drop_menu.set(&#39;Transitions:&#39;)
+    drop_menu.bind(&#34;&lt;&lt;ComboboxSelected&gt;&gt;&#34;, selected)
+    drop_menu.grid(row=0, column=0)
+    
+    # Min Max e Nº Pontos
+    ttk.Label(buttons_frame2, text=&#34;Points&#34;).pack(side=LEFT)
+    points = ttk.Entry(buttons_frame2, width=7, textvariable=number_points).pack(side=LEFT)
+    ttk.Label(buttons_frame2, text=&#34;x Max&#34;).pack(side=LEFT)
+    max_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_max).pack(side=LEFT)
+    ttk.Label(buttons_frame2, text=&#34;x Min&#34;).pack(side=LEFT)
+    min_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_min).pack(side=LEFT)
+    ttk.Button(master=buttons_frame2, text=&#34;Reset&#34;, command=lambda: reset_limits()).pack(side=LEFT, padx=(30, 0))
+
+    # Res, Offsets e Calculate
+    # , font = (&#39;Sans&#39;,&#39;10&#39;,&#39;bold&#39;))  #definicoes botao &#34;calculate&#34;
+    ttk.Style().configure(&#39;red/black.TButton&#39;, foreground=&#39;red&#39;, background=&#39;black&#39;)
+    ttk.Button(master=buttons_frame3, text=&#34;Calculate&#34;, command=lambda: plot_stick(_sim, _f, _a), style=&#39;red/black.TButton&#39;).pack(side=RIGHT, padx=(30, 0))
+    # yoffset
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=yoffset).pack(side=RIGHT)
+    ttk.Label(buttons_frame3, text=&#34;y Offset&#34;).pack(side=RIGHT)
+    # En. Offset
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=energy_offset).pack(side=RIGHT, padx=(0, 30))
+    ttk.Label(buttons_frame3, text=&#34;En. offset (eV)&#34;).pack(side=RIGHT)
+    # Energy Resolution
+    ttk.Label(buttons_frame3, text=&#34;Experimental Resolution (eV)&#34;).pack(side=LEFT)
+    res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=exp_resolution).pack(side=LEFT)
+
+    # Barra progresso
+    progressbar = ttk.Progressbar(buttons_frame4, variable=progress_var, maximum=100)
+    progressbar.pack(fill=X, expand=1)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.setupExpPlot"><code class="name flex">
+<span>def <span class="ident">setupExpPlot</span></span>(<span>f, load, element_name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to setup the experimental plot when we load one and the residue plot</p>
+<pre><code>Args:
+    f: matplotlib figure object
+    load: file path to the experimental spectrum selected
+    element_name: name of the element we are simulating
+
+Returns:
+    graph_area: new matplotlib plot configured to make space for the residue graph
+    residues_graph: matplotlib plot for the residue data
+    exp_spectrum: experimental spectrum data loaded from file
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setupExpPlot(f, load, element_name):
+    &#34;&#34;&#34;
+    Function to setup the experimental plot when we load one and the residue plot
+        
+        Args:
+            f: matplotlib figure object
+            load: file path to the experimental spectrum selected
+            element_name: name of the element we are simulating
+        
+        Returns:
+            graph_area: new matplotlib plot configured to make space for the residue graph
+            residues_graph: matplotlib plot for the residue data
+            exp_spectrum: experimental spectrum data loaded from file
+    &#34;&#34;&#34;
+    # Clear the plot
+    f.clf()
+    # Split the figure plot into two with the first having 3 times the height
+    gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1])
+    # Add the first subplot to the figure
+    graph_area = f.add_subplot(gs[0])
+    
+    # Set the logarithmic axes if needed
+    if yscale_log.get() == &#39;Ylog&#39;:
+        graph_area.set_yscale(&#39;log&#39;)
+    if xscale_log.get() == &#39;Xlog&#39;:
+        graph_area.set_xscale(&#39;log&#39;)
+    # Add the name of the plot
+    graph_area.legend(title=element_name)
+    # Add the second subplot for the residues
+    residues_graph = f.add_subplot(gs[1])
+    # Set the axes labels
+    residues_graph.set_xlabel(&#39;Energy (eV)&#39;)
+    residues_graph.set_ylabel(&#39;Residues (arb. units)&#39;)
+    
+    # Read and load the experimental spectrum file
+    exp_spectrum = loadExp(load)
+    
+    return graph_area, residues_graph, exp_spectrum</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.setupMenus"><code class="name flex">
+<span>def <span class="ident">setupMenus</span></span>(<span>CS_exists)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to setup the dropdown menus on the top toolbar</p>
+<pre><code>Args:
+    CS_exists: boolean if the charge states folder exists for the current element
+
+Returns:
+    Nothing, we just setup the top toolbar and bind the necessary variables and functions to the interface elements
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setupMenus(CS_exists):
+    &#34;&#34;&#34;
+    Function to setup the dropdown menus on the top toolbar
+        
+        Args:
+            CS_exists: boolean if the charge states folder exists for the current element
+        
+        Returns:
+            Nothing, we just setup the top toolbar and bind the necessary variables and functions to the interface elements
+    &#34;&#34;&#34;
+    global totalvar, yscale_log, xscale_log, autofitvar, energy_offset, yoffset, normalizevar, satelite_var, choice_var, type_var, exc_mech_var, _sim
+    global loadvar, effic_var
+    
+    # Initialize the menus
+    my_menu = Menu(_sim)
+    _sim.config(menu=my_menu)
+    options_menu = Menu(my_menu, tearoff=0)
+    stick_plot_menu = Menu(my_menu, tearoff=0)
+    transition_type_menu = Menu(my_menu, tearoff=0)
+    fit_type_menu = Menu(my_menu, tearoff=0)
+    norm_menu = Menu(my_menu, tearoff=0)
+    exc_mech_menu = Menu(my_menu, tearoff=0)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Options dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Options&#34;, menu=options_menu)
+    options_menu.add_checkbutton(label=&#39;Show Total Y&#39;, variable=totalvar, onvalue=&#39;Total&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_checkbutton(label=&#39;Log Scale Y Axis&#39;, variable=yscale_log, onvalue=&#39;Ylog&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_checkbutton(label=&#39;Log Scale X Axis&#39;, variable=xscale_log, onvalue=&#39;Xlog&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Load Experimental Spectrum&#34;, command=lambda: load(loadvar))
+    options_menu.add_checkbutton(label=&#39;Perform Autofit&#39;, variable=autofitvar, onvalue=&#39;Yes&#39;, offvalue=&#39;No&#39;)
+    options_menu.add_separator()
+    options_menu.add_checkbutton(label=&#34;Import Detector Efficiency&#34;, command=lambda: load_effic_file(effic_var))
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Export Spectrum&#34;, command=lambda: write_to_xls(satelite_var.get(), xfinal, energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, generalVars.label1, time_of_click))
+    options_menu.add_separator()
+    options_menu.add_command(label=&#34;Choose New Element&#34;, command=restarter)
+    options_menu.add_command(label=&#34;Quit&#34;, command=_quit)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Spectrum type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Spectrum Type&#34;, menu=stick_plot_menu)
+    stick_plot_menu.add_checkbutton(label=&#39;Stick&#39;, variable=choice_var, onvalue=&#39;Stick&#39;, offvalue=&#39;&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;Simulation&#39;, variable=choice_var, onvalue=&#39;Simulation&#39;, offvalue=&#39;&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;CS Mixture: Stick&#39;, variable=choice_var, onvalue=&#39;M_Stick&#39;, offvalue=&#39;&#39;, command=lambda: configureCSMix(), state=&#39;disabled&#39;)
+    stick_plot_menu.add_checkbutton(label=&#39;CS Mixture: Simulation&#39;, variable=choice_var, onvalue=&#39;M_Simulation&#39;, offvalue=&#39;&#39;, command=lambda: configureCSMix(), state=&#39;disabled&#39;)
+    # Active and deactivate the charge state mixture options if they exist
+    if CS_exists:
+        stick_plot_menu.entryconfigure(2, state=NORMAL)
+        # Good TK documentation: https://tkdocs.com/tutorial/menus.html
+        stick_plot_menu.entryconfigure(3, state=NORMAL)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Transition type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Transition Type&#34;, menu=transition_type_menu)
+    transition_type_menu.add_checkbutton(label=&#39;Diagram&#39;, variable=satelite_var, onvalue=&#39;Diagram&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Satellites&#39;, variable=satelite_var, onvalue=&#39;Satellites&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Diagram + Satellites&#39;, variable=satelite_var, onvalue=&#39;Diagram + Satellites&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    transition_type_menu.add_checkbutton(label=&#39;Auger&#39;, variable=satelite_var, onvalue=&#39;Auger&#39;, offvalue=&#39;&#39;, command=update_transition_dropdown)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Fit type dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Fit Type&#34;, menu=fit_type_menu)
+    fit_type_menu.add_checkbutton(label=&#39;Voigt&#39;, variable=type_var, onvalue=&#39;Voigt&#39;, offvalue=&#39;&#39;)
+    fit_type_menu.add_checkbutton(label=&#39;Lorentzian&#39;, variable=type_var, onvalue=&#39;Lorentzian&#39;, offvalue=&#39;&#39;)
+    fit_type_menu.add_checkbutton(label=&#39;Gaussian&#39;, variable=type_var, onvalue=&#39;Gaussian&#39;, offvalue=&#39;&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Normalization options dropdown menu and the buttons bound to the corresponding variables and functions
+    my_menu.add_cascade(label=&#34;Normalization Options&#34;, menu=norm_menu)
+    norm_menu.add_checkbutton(label=&#39;to Experimental Maximum&#39;, variable=normalizevar, onvalue=&#39;ExpMax&#39;, offvalue=&#39;No&#39;)
+    norm_menu.add_checkbutton(label=&#39;to Unity&#39;, variable=normalizevar, onvalue=&#39;One&#39;, offvalue=&#39;No&#39;)
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Add the Excitation mechanism dropdown menu and the buttons bound to the corresponding variables and functions (disables as it is not implemented)
+    my_menu.add_cascade(label=&#34;Excitation Mechanism&#34;, menu=exc_mech_menu, state=&#34;disabled&#34;)
+    exc_mech_menu.add_checkbutton(label=&#39;Nuclear Electron Capture&#39;, variable=exc_mech_var, onvalue=&#39;NEC&#39;, offvalue=&#39;&#39;)
+    exc_mech_menu.add_checkbutton(label=&#39;Photoionization&#39;, variable=exc_mech_var, onvalue=&#39;PIon&#39;, offvalue=&#39;&#39;)
+    exc_mech_menu.add_checkbutton(label=&#39;Electron Impact Ionization&#39;, variable=exc_mech_var, onvalue=&#39;EII&#39;, offvalue=&#39;&#39;)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.setupVars"><code class="name flex">
+<span>def <span class="ident">setupVars</span></span>(<span>p)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to setup the variables to hold the values of the interface entries</p>
+<pre><code>Args:
+    p: tkinter parent object
+
+Returns:
+    Nothing, all the variables initalized in the function are global module variables that can be used in other modules directly
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setupVars(p):
+    &#34;&#34;&#34;
+    Function to setup the variables to hold the values of the interface entries
+        
+        Args:
+            p: tkinter parent object
+        
+        Returns:
+            Nothing, all the variables initalized in the function are global module variables that can be used in other modules directly
+    &#34;&#34;&#34;
+    # Use global to be able to initialize and change the values of the global interface variables
+    global _parent, totalvar, yscale_log, xscale_log, autofitvar, normalizevar, loadvar, effic_var
+    global exp_resolution, yoffset, energy_offset, number_points, x_max, x_min, progress_var, label_text
+    global satelite_var, choice_var, type_var, exc_mech_var
+    
+    # setup the parent object to bind stuff to
+    _parent = p
+    
+    # ---------------------------------------------------------------------------------------------------------------
+    # Variable to know if we need to show the total y in the plot
+    totalvar = StringVar(master = _parent)
+    # Initialize it as false
+    totalvar.set(&#39;No&#39;)
+    # Variable to know if we need to make the y axis logarithmic or linear
+    yscale_log = StringVar(master = _parent)
+    # Initialize it as false
+    yscale_log.set(&#39;No&#39;)
+    # Variable to know if we need to make the x axis logarithmic or linear
+    xscale_log = StringVar(master = _parent)
+    # Initialize it as false
+    xscale_log.set(&#39;No&#39;)
+    # Variable to know if we need to perform an autofit of the simulation to experimental data
+    autofitvar = StringVar(master = _parent)
+    # Initialize it as false
+    autofitvar.set(&#39;No&#39;)
+    # Variable to know what normalization we need to perform (no normalization, normalize to unity, normalize to experimental maximum)
+    normalizevar = StringVar(master = _parent)
+    # Initialize to no normalization
+    normalizevar.set(&#39;No&#39;)
+    # Variable to know if we need to load an experimental spectrum and if so where it is located
+    loadvar = StringVar(master = _parent)
+    # Initialize to no file
+    loadvar.set(&#39;No&#39;)
+    # Variable to know if we need to load detector efficiency data and if so where it is located
+    effic_var = StringVar(master = _parent)
+    # Initialize to no file
+    effic_var.set(&#39;No&#39;)
+
+    # Variable to hold the experimental resolution value introduced in the interface
+    exp_resolution = DoubleVar(master = _parent, value=1.0)
+    # Variable to hold the experimental background offset value introduced in the interface
+    yoffset = DoubleVar(master = _parent, value=0.0)
+    # Variable to hold the experimental energy offset value introduced in the interface
+    energy_offset = DoubleVar(master = _parent, value=0.0)
+    # Variable to hold the number of points to simulate introduced in the interface
+    number_points = IntVar(master = _parent, value=500)
+    
+    # Variable to hold the maximum x value to be simulated introduced in the interface
+    x_max = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_max.set(&#39;Auto&#39;)
+    # Variable to hold the minimum x value to be simulated introduced in the interface
+    x_min = StringVar(master = _parent)
+    # Initialize to be calculated automatically
+    x_min.set(&#39;Auto&#39;)
+    
+    # Variable to hold the percentage of current progress to be displayed in the bottom of the interface
+    progress_var = DoubleVar(master = _parent)
+    
+    # Variable to hold the text with the selected transitions that will be shown in the interface label
+    label_text = StringVar(master = _parent)
+    
+    # Initialize the transition type to diagram
+    satelite_var = StringVar(value=&#39;Diagram&#39;)
+    # Initialize the simulation type to simulation
+    choice_var = StringVar(value=&#39;Simulation&#39;)
+    # Initialize the profile type to lorentzian
+    type_var = StringVar(value=&#39;Lorentzian&#39;)
+    # Initialize the exitation mechanism to empty as this is not yet implemented
+    exc_mech_var = StringVar(value=&#39;&#39;)</code></pre>
+</details>
+</dd>
+<dt id="SpectraSimulations_git.utils.interface.update_transition_dropdown"><code class="name flex">
+<span>def <span class="ident">update_transition_dropdown</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_transition_dropdown():
+    &#34;&#34;&#34;
+    Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
+    &#34;&#34;&#34;
+    global transition_list
+    
+    if satelite_var.get() != &#39;Auger&#39;:
+        # Update the values on the dropdown
+        drop_menu[&#39;values&#39;] = [transition for transition in the_dictionary]
+        if not any([the_dictionary[transition][&#34;selected_state&#34;] for transition in the_dictionary]):
+            # Reset the interface text
+            label_text.set(&#39;Select a Transition: &#39;)
+            drop_menu.set(&#39;Transitions:&#39;)
+            # Deselect transitions
+            for transition in the_aug_dictionary:
+                the_aug_dictionary[transition][&#34;selected_state&#34;] = False
+    else:
+        # Update the values on the dropdown
+        drop_menu[&#39;values&#39;] = [transition for transition in the_aug_dictionary]
+        if not any([the_aug_dictionary[transition][&#34;selected_state&#34;] for transition in the_aug_dictionary]):
+            # Reset the interface text
+            label_text.set(&#39;Select a Transition: &#39;)
+            drop_menu.set(&#39;Transitions:&#39;)
+            # Deselect transitions
+            for transition in the_dictionary:
+                the_dictionary[transition][&#34;selected_state&#34;] = False</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="SpectraSimulations_git.utils" href="index.html">SpectraSimulations_git.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="two-column">
+<li><code><a title="SpectraSimulations_git.utils.interface.autofitvar" href="#SpectraSimulations_git.utils.interface.autofitvar">autofitvar</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.choice_var" href="#SpectraSimulations_git.utils.interface.choice_var">choice_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.drop_menu" href="#SpectraSimulations_git.utils.interface.drop_menu">drop_menu</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.effic_var" href="#SpectraSimulations_git.utils.interface.effic_var">effic_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.energy_offset" href="#SpectraSimulations_git.utils.interface.energy_offset">energy_offset</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.exc_mech_var" href="#SpectraSimulations_git.utils.interface.exc_mech_var">exc_mech_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.exp_resolution" href="#SpectraSimulations_git.utils.interface.exp_resolution">exp_resolution</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.label_text" href="#SpectraSimulations_git.utils.interface.label_text">label_text</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.loadvar" href="#SpectraSimulations_git.utils.interface.loadvar">loadvar</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.max_x" href="#SpectraSimulations_git.utils.interface.max_x">max_x</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.min_x" href="#SpectraSimulations_git.utils.interface.min_x">min_x</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.normalizevar" href="#SpectraSimulations_git.utils.interface.normalizevar">normalizevar</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.number_points" href="#SpectraSimulations_git.utils.interface.number_points">number_points</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.points" href="#SpectraSimulations_git.utils.interface.points">points</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.progress_var" href="#SpectraSimulations_git.utils.interface.progress_var">progress_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.progressbar" href="#SpectraSimulations_git.utils.interface.progressbar">progressbar</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.res_entry" href="#SpectraSimulations_git.utils.interface.res_entry">res_entry</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.satelite_var" href="#SpectraSimulations_git.utils.interface.satelite_var">satelite_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.totalvar" href="#SpectraSimulations_git.utils.interface.totalvar">totalvar</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.trans_lable" href="#SpectraSimulations_git.utils.interface.trans_lable">trans_lable</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.transition_list" href="#SpectraSimulations_git.utils.interface.transition_list">transition_list</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.type_var" href="#SpectraSimulations_git.utils.interface.type_var">type_var</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.x_max" href="#SpectraSimulations_git.utils.interface.x_max">x_max</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.x_min" href="#SpectraSimulations_git.utils.interface.x_min">x_min</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.xscale_log" href="#SpectraSimulations_git.utils.interface.xscale_log">xscale_log</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.yoffset" href="#SpectraSimulations_git.utils.interface.yoffset">yoffset</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.yscale_log" href="#SpectraSimulations_git.utils.interface.yscale_log">yscale_log</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="SpectraSimulations_git.utils.interface.configureButtonArea" href="#SpectraSimulations_git.utils.interface.configureButtonArea">configureButtonArea</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.configureCSMix" href="#SpectraSimulations_git.utils.interface.configureCSMix">configureCSMix</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.configureSimuPlot" href="#SpectraSimulations_git.utils.interface.configureSimuPlot">configureSimuPlot</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.destroy" href="#SpectraSimulations_git.utils.interface.destroy">destroy</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.dict_updater" href="#SpectraSimulations_git.utils.interface.dict_updater">dict_updater</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.enter_function" href="#SpectraSimulations_git.utils.interface.enter_function">enter_function</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.on_key_event" href="#SpectraSimulations_git.utils.interface.on_key_event">on_key_event</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.plotExp" href="#SpectraSimulations_git.utils.interface.plotExp">plotExp</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.reset_limits" href="#SpectraSimulations_git.utils.interface.reset_limits">reset_limits</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.restarter" href="#SpectraSimulations_git.utils.interface.restarter">restarter</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.selected" href="#SpectraSimulations_git.utils.interface.selected">selected</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.setupButtonArea" href="#SpectraSimulations_git.utils.interface.setupButtonArea">setupButtonArea</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.setupExpPlot" href="#SpectraSimulations_git.utils.interface.setupExpPlot">setupExpPlot</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.setupMenus" href="#SpectraSimulations_git.utils.interface.setupMenus">setupMenus</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.setupVars" href="#SpectraSimulations_git.utils.interface.setupVars">setupVars</a></code></li>
+<li><code><a title="SpectraSimulations_git.utils.interface.update_transition_dropdown" href="#SpectraSimulations_git.utils.interface.update_transition_dropdown">update_transition_dropdown</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
