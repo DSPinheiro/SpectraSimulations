@@ -54,9 +54,8 @@ def G(T, energy, intens, res, width):
         Returns:
             y: list of y values for each of the x values in T
     """
-    y = [intens * np.sqrt(np.log(2) / np.pi) / (res + width) * np.exp(-((l - energy) / (res + width)) ** 2 * np.log(2)) for l in T]
     
-    return y
+    return [0 for x in T]
 
 # Lorentzian profile
 def L(T, energy, intens, res, width):
@@ -73,9 +72,8 @@ def L(T, energy, intens, res, width):
         Returns:
             y: list of y values for each of the x values in T
     """
-    y = [intens * (0.5 * (width + res) / np.pi) / ((l - energy) ** 2 + (0.5 * (width + res)) ** 2) for l in T]
     
-    return y
+    return [0 for x in T]
 
 # Voigt profile
 def V(T, energy, intens, res, width):
@@ -92,10 +90,8 @@ def V(T, energy, intens, res, width):
         Returns:
             y: list of y values for each of the x values in T
     """
-    sigma = res / np.sqrt(2 * np.log(2))
-    y = [np.real(intens * wofz(complex(l - energy, width / 2) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi) for l in T]
     
-    return y
+    return [0 for x in T]
 
 
 
@@ -218,28 +214,8 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
-        # Loop all the diagram or auger transitions to calculate (y parameter)
-        for j, k in enumerate(y):
-            # For each transition (high-low levels) loop all the different rates
-            for i in range(len(k)):
-                # Depending on the profile selected add the y values of the calculated profile to the y values of this transition
-                # This profile is calculated across the entire simulated range of x values
-                if fit_type == 'Voigt':
-                    yfinal[j] = np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
-                elif fit_type == 'Lorentzian':
-                    yfinal[j] = np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
-                elif fit_type == 'Gaussian':
-                    yfinal[j] = np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
-                # Add a proportionate amount of progress to the current progress value
-                b1 += 100 / (len(y) * len(k))
-                # Set the progress on the interface
-                guiVars.progress_var.set(b1)
-                # Update the interface to show the progress
-                sim.update_idletasks()
-            
-            # If the transition rates list is not empty then add the y values for this transition into the total y values for all transitions
-            if k != []:
-                ytot = np.add(ytot, yfinal[j])
+        
+        # TODO
         
         # Set and update the progress and progress bar to 100%
         b1 = 100
@@ -495,6 +471,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
         Returns:
             Nothing, the residues are plotted and the chi^2 value is updated in the variables module
     """
+<<<<<<< Updated upstream
     # Initialize a list for the interpolated experimental y values
     y_interp = [0 for i in range(len(exp_x))]
     # Interpolate the total plotted intensities
@@ -516,6 +493,10 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
         elif normalize == 'One':
             y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
             chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
+=======
+    
+    # TODO
+>>>>>>> Stashed changes
     
     # Calculate the reduced chi^2 value
     generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
@@ -525,6 +506,10 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     print("Valor Manual Chi", generalVars.chi_sqrd)
     # Put the chi^2 value in the plot legend
     residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 # --------------------------------------------------------- #
 #                                                           #
@@ -548,15 +533,6 @@ def updateRadTransitionVals(transition, num):
             diag_stick_val: rates data for the selected transition
             sat_stick_val: rates data for the possible satellite transitions for the selected transition
     """
-    # Update the number of transitions loaded (this could be done by reference as well)
-    num_of_transitions = num + 1
-    # Get the low and high levels for the selected transition
-    low_level = the_dictionary[transition]["low_level"]
-    high_level = the_dictionary[transition]["high_level"]
-    
-    # Filter the radiative and satellite rates data for the selected transition
-    diag_stick_val = [line for line in generalVars.lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]
-    sat_stick_val = [line for line in generalVars.linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
     
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 

@@ -393,18 +393,8 @@ def readRates(rates_file):
         Returns:
             linerates: list with the data still in string format
     """
-    try:
-        with open(rates_file, 'r') as rates:
-            # Write the lines into a list
-            linerates = [x.strip('\n').split() for x in rates.readlines()]
-            # Remove empty strings from possible uneven formating
-            linerates = list(filter(None, linerates))
-            # Delete the header rows
-            del linerates[0:2]
-            
-            return linerates
-    except FileNotFoundError:
-        messagebox.showwarning("Error", "Rates File is not Avaliable: " + rates_file)
+    
+    return []
 
 # Read the shake weights file and return a list with the data and a list with the labels
 def readShakeWeights(shakeweights_file):
