@@ -4,30 +4,30 @@ Here we define the variables bound to the interface elements, window management 
 functions to initialize interface elements, functions to update the elements and functions to plot external data
 """
 
-#GUI Imports
+# GUI Imports
 from tkinter import *
 from tkinter import ttk
 
-#Matplotlib imports for plotting and tkinter compatibility
+# Matplotlib imports for plotting and tkinter compatibility
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 from matplotlib import gridspec
 from matplotlib.backend_bases import key_press_handler
 
-#Data import for variable management
+# Data import for variable management
 from data.variables import labeldict, the_dictionary, the_aug_dictionary
 import data.variables as generalVars
 
-#Import file loaders for the interface
+# Import file loaders for the interface
 from utils.fileIO import load, load_effic_file, loadExp
 
-#Import the main functions to bind them to the interface
+# Import the main functions to bind them to the interface
 from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
 
-#Import numpy
+# Import numpy
 import numpy as np
 
-#Math import for interpolation
+# Math import for interpolation
 from scipy.interpolate import interp1d
 
 
@@ -206,7 +206,6 @@ Progress bar on the bottom of the interface to show the simulation progress
 """
 
 
-
 # --------------------------------------------------------- #
 #                                                           #
 #               WINDOW MANAGEMENT FUNCTIONS                 #
@@ -217,23 +216,25 @@ Progress bar on the bottom of the interface to show the simulation progress
 def destroy(window):
     """
     Function to destroy the window and free memory properly
-    
+
         Args:
             window: the window to be disposed of
-        
+
         Returns:
             Nothing, the window is disposed of and the program continues
     """
     window.destroy()
 
 # Function to deselect all selected transitions when exiting the simulation window
+
+
 def _quit():
     """
     Private function to deselect all selected transitions when exiting the simulation window
-        
+
         Args:
-            
-        
+
+
         Returns:
             Nothing, the transition dictionaries are reset and the simulation window is disposed of
     """
@@ -257,13 +258,15 @@ def _quit():
     _sim.destroy()  # this is necessary on Windows to prevent fatal Python Error: PyEval_RestoreThread: NULL tstate
 
 # Function to deselect all selected transitions and restart the whole app
+
+
 def restarter():
     """
     Private function to deselect all selected transitions and restart the whole application
-        
+
         Args:
-            
-        
+
+
         Returns:
             Nothing, the transition dictionaries are reset and the tkinter windows are disposed of
     """
@@ -299,10 +302,10 @@ def restarter():
 def on_key_event(event):
     """
     Function to bind the default matplotlib hotkeys
-        
+
         Args:
             event: which key event was triggered
-        
+
         Returns:
             Nothing, the key event is passed to the default matplotlib key handler and the correct action is performed
     """
@@ -310,18 +313,19 @@ def on_key_event(event):
     key_press_handler(event, canvas, toolbar)
 
 # Function to bind the simulation function to the enter key
+
+
 def enter_function(event):
     """
     Function to bind the simulation function to the enter key
-        
+
         Args:
             event: which key event was triggered
-        
+
         Returns:
             Nothing, the simulation function is executed
     """
     plot_stick(_sim, _f, _a)
-
 
 
 # --------------------------------------------------------- #
@@ -336,10 +340,10 @@ def selected(event):
     """
     Function to update the transition that was just selected from the dropdown into the list of transitions to simulate.
     This function runs whenever we one transition is selected from the dropdown
-        
+
         Args:
             event: which dropdown element was selected
-        
+
         Returns:
             Nothing, the selected transition toggled in the dictionary and is added to the label in the interface
     """
@@ -347,7 +351,7 @@ def selected(event):
     text_T = drop_menu.get()
     # Update the dictionary for the transition
     dict_updater(text_T)
-    
+
     if satelite_var.get() != 'Auger':
         # If the transition added to the selection
         if the_dictionary[text_T]["selected_state"]:
@@ -361,32 +365,36 @@ def selected(event):
             transition_list.append(text_T)
         elif not the_aug_dictionary[text_T]["selected_state"]:
             transition_list.remove(text_T)
-    
+
     # Variable with the text to be shown in the interface with the selected transitions
     to_print = ', '.join(transition_list)
-    
+
     # Set the interface label to the text
     label_text.set('Selected Transitions: ' + to_print)
 
 # Function to properly reset the x limits in the interface (bound to the reset button)
+
+
 def reset_limits():
     """
     Function to properly reset the x limits in the interface (bound to the reset button).
     """
     global number_points, x_max, x_min
-    
+
     number_points.set(500)
     x_max.set('Auto')
     x_min.set('Auto')
 
 # Update the selection state of a transition in the correct dictionary
+
+
 def dict_updater(transition):
     """
     Function to update the selection state of a transition in the correct dictionary
-        
+
         Args:
             transition: which transition to update
-        
+
         Returns:
             Nothing, the transition is updated in the dictionaries
     """
@@ -398,12 +406,14 @@ def dict_updater(transition):
         the_aug_dictionary[transition]["selected_state"] = not the_aug_dictionary[transition]["selected_state"]
 
 # Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
+
+
 def update_transition_dropdown():
     """
     Function to update the transitions that can be selected from the dropdown, depending on if we want to simulate radiative or auger
     """
     global transition_list
-    
+
     if satelite_var.get() != 'Auger':
         # Update the values on the dropdown
         drop_menu['values'] = [transition for transition in the_dictionary]
@@ -426,7 +436,6 @@ def update_transition_dropdown():
                 the_dictionary[transition]["selected_state"] = False
 
 
-
 # --------------------------------------------------------- #
 #                                                           #
 #      FUNCTIONS TO INITIALIZE AND CONFIGURE ELEMENTS       #
@@ -437,10 +446,10 @@ def update_transition_dropdown():
 def configureSimuPlot():
     """
     Function to initialize and configure the simulation window and plot
-        
+
         Args:
-            
-        
+
+
         Returns:
             sim: tkinter simulation window object
             panel_1: tkinter panel object to hold the simulation frame
@@ -450,7 +459,7 @@ def configureSimuPlot():
             canvas: tkinter object we can place in the frame which is created from the matplotlib figure
     """
     global _sim, _a, _f, _parent
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Start a new window for the simulation plot. We use TopLevel as we want this window to be the main interface
     sim = Toplevel(master=_parent)
@@ -459,7 +468,7 @@ def configureSimuPlot():
     # Pack a panel into the window where we will place our canvas to plot the simulations. This way the window will properly resize
     panel_1 = PanedWindow(sim, orient=VERTICAL)
     panel_1.pack(fill=BOTH, expand=1)
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Matplotlib figure where we will place the graph objects
     f = Figure(figsize=(10, 5), dpi=100)
@@ -468,10 +477,10 @@ def configureSimuPlot():
     # Set labels for the axis
     a.set_xlabel('Energy (eV)')
     a.set_ylabel('Intensity (arb. units)')
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Frame where we will place the figure with the graph
-    figure_frame = Frame(panel_1, relief=GROOVE) # grooved border style
+    figure_frame = Frame(panel_1, relief=GROOVE)  # grooved border style
     # Add the frame to the panel
     panel_1.add(figure_frame)
     # Create the tk widget canvas to place the figure in the frame
@@ -483,18 +492,20 @@ def configureSimuPlot():
     _a = a
     _f = f
     _sim = sim
-    
+
     return sim, panel_1, f, a, figure_frame, canvas
 
 # Initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters
+
+
 def configureButtonArea(sim, canvas):
     """
     Function to initialize and configure the areas where we will place the buttons, entries and labels for the simulation parameters
-        
+
         Args:
             sim: tkinter simulation window object
             canvas: tkinter object we can place in the frame which is created from the matplotlib figure
-        
+
         Returns:
             panel_2: tkinter panel placed below the simulation plot
             toolbar_frame: tkinter frame for the matplotlib graph buttons
@@ -532,13 +543,15 @@ def configureButtonArea(sim, canvas):
     return panel_2, toolbar_frame, toolbar, full_frame, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4
 
 # Setup the variables to hold the values of the interface entries
+
+
 def setupVars(p):
     """
     Function to setup the variables to hold the values of the interface entries
-        
+
         Args:
             p: tkinter parent object
-        
+
         Returns:
             Nothing, all the variables initalized in the function are global module variables that can be used in other modules directly
     """
@@ -546,64 +559,64 @@ def setupVars(p):
     global _parent, totalvar, yscale_log, xscale_log, autofitvar, normalizevar, loadvar, effic_var
     global exp_resolution, yoffset, energy_offset, number_points, x_max, x_min, progress_var, label_text
     global satelite_var, choice_var, type_var, exc_mech_var
-    
+
     # setup the parent object to bind stuff to
     _parent = p
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Variable to know if we need to show the total y in the plot
-    totalvar = StringVar(master = _parent)
+    totalvar = StringVar(master=_parent)
     # Initialize it as false
     totalvar.set('No')
     # Variable to know if we need to make the y axis logarithmic or linear
-    yscale_log = StringVar(master = _parent)
+    yscale_log = StringVar(master=_parent)
     # Initialize it as false
     yscale_log.set('No')
     # Variable to know if we need to make the x axis logarithmic or linear
-    xscale_log = StringVar(master = _parent)
+    xscale_log = StringVar(master=_parent)
     # Initialize it as false
     xscale_log.set('No')
     # Variable to know if we need to perform an autofit of the simulation to experimental data
-    autofitvar = StringVar(master = _parent)
+    autofitvar = StringVar(master=_parent)
     # Initialize it as false
     autofitvar.set('No')
     # Variable to know what normalization we need to perform (no normalization, normalize to unity, normalize to experimental maximum)
-    normalizevar = StringVar(master = _parent)
+    normalizevar = StringVar(master=_parent)
     # Initialize to no normalization
     normalizevar.set('No')
     # Variable to know if we need to load an experimental spectrum and if so where it is located
-    loadvar = StringVar(master = _parent)
+    loadvar = StringVar(master=_parent)
     # Initialize to no file
     loadvar.set('No')
     # Variable to know if we need to load detector efficiency data and if so where it is located
-    effic_var = StringVar(master = _parent)
+    effic_var = StringVar(master=_parent)
     # Initialize to no file
     effic_var.set('No')
 
     # Variable to hold the experimental resolution value introduced in the interface
-    exp_resolution = DoubleVar(master = _parent, value=1.0)
+    exp_resolution = DoubleVar(master=_parent, value=1.0)
     # Variable to hold the experimental background offset value introduced in the interface
-    yoffset = DoubleVar(master = _parent, value=0.0)
+    yoffset = DoubleVar(master=_parent, value=0.0)
     # Variable to hold the experimental energy offset value introduced in the interface
-    energy_offset = DoubleVar(master = _parent, value=0.0)
+    energy_offset = DoubleVar(master=_parent, value=0.0)
     # Variable to hold the number of points to simulate introduced in the interface
-    number_points = IntVar(master = _parent, value=500)
-    
+    number_points = IntVar(master=_parent, value=500)
+
     # Variable to hold the maximum x value to be simulated introduced in the interface
-    x_max = StringVar(master = _parent)
+    x_max = StringVar(master=_parent)
     # Initialize to be calculated automatically
     x_max.set('Auto')
     # Variable to hold the minimum x value to be simulated introduced in the interface
-    x_min = StringVar(master = _parent)
+    x_min = StringVar(master=_parent)
     # Initialize to be calculated automatically
     x_min.set('Auto')
-    
+
     # Variable to hold the percentage of current progress to be displayed in the bottom of the interface
-    progress_var = DoubleVar(master = _parent)
-    
+    progress_var = DoubleVar(master=_parent)
+
     # Variable to hold the text with the selected transitions that will be shown in the interface label
-    label_text = StringVar(master = _parent)
-    
+    label_text = StringVar(master=_parent)
+
     # Initialize the transition type to diagram
     satelite_var = StringVar(value='Diagram')
     # Initialize the simulation type to simulation
@@ -612,35 +625,37 @@ def setupVars(p):
     type_var = StringVar(value='Lorentzian')
     # Initialize the exitation mechanism to empty as this is not yet implemented
     exc_mech_var = StringVar(value='')
- 
+
 # Setup the buttons in the button area
+
+
 def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4):
     """
     Function to setup the buttons in the button area
-        
+
         Args:
             buttons_frame: tkinter frame for the transition dropdown
             buttons_frame2: tkinter frame for the bounds entries and reset button
             buttons_frame3: tkinter frame for the simulation parameters entries (offsets, resolution, calculate button)
             buttons_frame4: tkinter frame for the progress bar
-        
+
         Returns:
             Nothing, we just configure the interface elements in the various button frames below the simulation plot
     """
     global trans_lable, drop_menu, points, max_x, min_x, res_entry, progressbar, transition_list
-    
-    # Antes de se selecionar alguma transição aparece isto
+
+    # This will show before selecting any transition
     label_text.set('Select a Transition: ')
     trans_lable = Label(buttons_frame, textvariable=label_text).grid(row=0, column=1)
     
     
-    # DropList das transições, Labels e botão calculate a apresentar na janela
+    # DropList containing transitions, labels and calculate button
     drop_menu = ttk.Combobox(buttons_frame, value=[transition for transition in the_dictionary], height=5, width=10)
     drop_menu.set('Transitions:')
     drop_menu.bind("<<ComboboxSelected>>", selected)
     drop_menu.grid(row=0, column=0)
-    
-    # Min Max e Nº Pontos
+
+    # Min Max and number of points
     ttk.Label(buttons_frame2, text="Points").pack(side=LEFT)
     points = ttk.Entry(buttons_frame2, width=7, textvariable=number_points).pack(side=LEFT)
     ttk.Label(buttons_frame2, text="x Max").pack(side=LEFT)
@@ -649,8 +664,8 @@ def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame
     min_x = ttk.Entry(buttons_frame2, width=7, textvariable=x_min).pack(side=LEFT)
     ttk.Button(master=buttons_frame2, text="Reset", command=lambda: reset_limits()).pack(side=LEFT, padx=(30, 0))
 
-    # Res, Offsets e Calculate
-    # , font = ('Sans','10','bold'))  #definicoes botao "calculate"
+    # Res, Offsets and Calculate
+    # , font = ('Sans','10','bold'))  #Calculate button settings
     ttk.Style().configure('red/black.TButton', foreground='red', background='black')
     ttk.Button(master=buttons_frame3, text="Calculate", command=lambda: plot_stick(_sim, _f, _a), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0))
     # yoffset
@@ -663,24 +678,26 @@ def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame
     ttk.Label(buttons_frame3, text="Experimental Resolution (eV)").pack(side=LEFT)
     res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=exp_resolution).pack(side=LEFT)
 
-    # Barra progresso
+    # Progress bar
     progressbar = ttk.Progressbar(buttons_frame4, variable=progress_var, maximum=100)
     progressbar.pack(fill=X, expand=1)
 
 # Setup the dropdown menus on the top toolbar
+
+
 def setupMenus(CS_exists):
     """
     Function to setup the dropdown menus on the top toolbar
-        
+
         Args:
             CS_exists: boolean if the charge states folder exists for the current element
-        
+
         Returns:
             Nothing, we just setup the top toolbar and bind the necessary variables and functions to the interface elements
     """
     global totalvar, yscale_log, xscale_log, autofitvar, energy_offset, yoffset, normalizevar, satelite_var, choice_var, type_var, exc_mech_var, _sim
     global loadvar, effic_var
-    
+
     # Initialize the menus
     my_menu = Menu(_sim)
     _sim.config(menu=my_menu)
@@ -690,7 +707,7 @@ def setupMenus(CS_exists):
     fit_type_menu = Menu(my_menu, tearoff=0)
     norm_menu = Menu(my_menu, tearoff=0)
     exc_mech_menu = Menu(my_menu, tearoff=0)
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Add the Options dropdown menu and the buttons bound to the corresponding variables and functions
     my_menu.add_cascade(label="Options", menu=options_menu)
@@ -704,11 +721,12 @@ def setupMenus(CS_exists):
     options_menu.add_separator()
     options_menu.add_checkbutton(label="Import Detector Efficiency", command=lambda: load_effic_file(effic_var))
     options_menu.add_separator()
-    options_menu.add_command(label="Export Spectrum", command=lambda: write_to_xls(satelite_var.get(), xfinal, energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, generalVars.label1, time_of_click))
+    options_menu.add_command(label="Export Spectrum", command=lambda: write_to_xls(satelite_var.get(), xfinal,
+    energy_offset.get(), yoffset.get(), exp_x, exp_y, residues_graph, radiative_files, auger_files, generalVars.label1, time_of_click))
     options_menu.add_separator()
     options_menu.add_command(label="Choose New Element", command=restarter)
     options_menu.add_command(label="Quit", command=_quit)
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Add the Spectrum type dropdown menu and the buttons bound to the corresponding variables and functions
     my_menu.add_cascade(label="Spectrum Type", menu=stick_plot_menu)
@@ -721,7 +739,7 @@ def setupMenus(CS_exists):
         stick_plot_menu.entryconfigure(2, state=NORMAL)
         # Good TK documentation: https://tkdocs.com/tutorial/menus.html
         stick_plot_menu.entryconfigure(3, state=NORMAL)
-    
+
     # ---------------------------------------------------------------------------------------------------------------
     # Add the Transition type dropdown menu and the buttons bound to the corresponding variables and functions
     my_menu.add_cascade(label="Transition Type", menu=transition_type_menu)
@@ -751,6 +769,8 @@ def setupMenus(CS_exists):
     exc_mech_menu.add_checkbutton(label='Electron Impact Ionization', variable=exc_mech_var, onvalue='EII', offvalue='')
 
 # Initialize and configure the charge state mixture interface where we configure the mixture
+
+
 def configureCSMix():
     """
     Function to initialize and configure the charge state mixture interface where we configure the mixture
@@ -763,13 +783,14 @@ def configureCSMix():
 
     # Input check for the percentage number in the entry
     import re
+
     def check_num(newval):
         """
         Function to input check for the percentage number in the entry
-            
+
             Args:
                 newval: the value trying to be introduced
-            
+
             Returns:
                 regex match to check if the new value is a numric percentage format
         """
@@ -841,7 +862,7 @@ def configureCSMix():
     initial_PCS_Order = PCS_order.copy()
     initial_NCS_Order = NCS_order.copy()
     colIndex = 0
-    
+
     # Place the interface elements in the order of most negative charge state first
     while len(NCS_order) > 0:
         # Find the most negative charge state
@@ -877,7 +898,7 @@ def configureCSMix():
 
     # ------------------------------------------------------------------------------------------------------------------------------------
     # AUGER
-    
+
     # Same as the radiative section
     if len(generalVars.auger_files) > 0:
         mixer.geometry("800x600")
@@ -980,7 +1001,7 @@ def configureCSMix():
                 combined_y.append(float(vals[col + 1]))
                 if float(vals[col]) not in Ion_Populations[cs + '_x']:
                     Ion_Populations[cs + '_x'].append(float(vals[col]))
-                    Ion_Populations[cs +'_y'].append(float(vals[col + 1]))
+                    Ion_Populations[cs + '_y'].append(float(vals[col + 1]))
 
     # Normalize the ion populations
     y_max = max(combined_y)
@@ -1007,16 +1028,15 @@ def configureCSMix():
     else:
         fig_row = 4
 
-    # Figura onde o gráfico vai ser desenhado
-    # canvas para o gráfico do espectro
+    # Figure for the plot
     f = Figure(figsize=(10, 5), dpi=100)
-    # plt.style.use('ggplot') Estilo para os plots
-    a = f.add_subplot(111)  # zona onde estara o gráfico
+    # plt.style.use('ggplot') Plots style
+    a = f.add_subplot(111)  # Plot region
     a.set_xlabel('Temperature (K)')
     a.set_ylabel('Population')
-    
+
     # ---------------------------------------------------------------------------------------------------------------
-    # Frames onde se vão pôr a figura e os labels e botões e etc
+    # Frame that will display the plot, labels, buttons, etc...
     figure_frame = Frame(mixer, relief=GROOVE)  # frame para o gráfico
 
     # Position the frame for the figure in the grid
@@ -1036,11 +1056,11 @@ def configureCSMix():
     def update_temp_line(event, arg1, arg2):
         """
         Function to update the vertical line in the plot and the mixture values
-            
+
             Args:
                 event: which event triggered this function call. the function is only bound to write calls
                 arg1, arg2: arguments required for the write callback
-            
+
             Returns:
                 Nothing, the values are updated in the global variables and the line is redrawn in the interface
         """
@@ -1119,7 +1139,8 @@ def configureCSMix():
     # Add the slider and entry and position them in the grid
     temp_slider = ttk.Scale(mixer, orient=HORIZONTAL, length=200, from_=temperature_min, to=temperature_max, variable=temperature)
     temp_entry = ttk.Entry(mixer, textvariable=temperature, validate='key', validatecommand=check_num_wrapper)
-    temp_slider.grid(column=0, row=fig_row + 1, columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, sticky=(W, E), padx=10, pady=20)
+    temp_slider.grid(column=0, row=fig_row + 1,
+    columnspan=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, sticky=(W, E), padx=10, pady=20)
     temp_entry.grid(column=max(len(generalVars.radiative_files), len(generalVars.auger_files)) - 1, row=fig_row + 1, sticky=(W, E), padx=5)
 
     # Configure the resizing
@@ -1134,10 +1155,8 @@ def configureCSMix():
         pop_new = Ion_Population_Functions[cs](temp_new)
 
         a.plot(temp_new, pop_new, label=cs)
-    
-    
-    a.legend()
 
+    a.legend()
 
 
 # --------------------------------------------------------- #
@@ -1150,12 +1169,12 @@ def configureCSMix():
 def setupExpPlot(f, load, element_name):
     """
     Function to setup the experimental plot when we load one and the residue plot
-        
+
         Args:
             f: matplotlib figure object
             load: file path to the experimental spectrum selected
             element_name: name of the element we are simulating
-        
+
         Returns:
             graph_area: new matplotlib plot configured to make space for the residue graph
             residues_graph: matplotlib plot for the residue data
@@ -1167,7 +1186,7 @@ def setupExpPlot(f, load, element_name):
     gs = gridspec.GridSpec(2, 1, height_ratios=[3, 1])
     # Add the first subplot to the figure
     graph_area = f.add_subplot(gs[0])
-    
+
     # Set the logarithmic axes if needed
     if yscale_log.get() == 'Ylog':
         graph_area.set_yscale('log')
@@ -1180,17 +1199,19 @@ def setupExpPlot(f, load, element_name):
     # Set the axes labels
     residues_graph.set_xlabel('Energy (eV)')
     residues_graph.set_ylabel('Residues (arb. units)')
-    
+
     # Read and load the experimental spectrum file
     exp_spectrum = loadExp(load)
-    
+
     return graph_area, residues_graph, exp_spectrum
 
 # Function to plot the experimental data and std deviation on the residue plot
+
+
 def plotExp(graph_area, residues_graph, exp_x, exp_y, exp_sigma, normalize):
     """
     Function to plot the experimental data and std deviation on the residue plot
-    
+
         Args:
             graph_area: new matplotlib plot configured to make space for the residue graph
             residues_graph: matplotlib plot for the residue data
@@ -1198,23 +1219,23 @@ def plotExp(graph_area, residues_graph, exp_x, exp_y, exp_sigma, normalize):
             exp_y: intensity values from the experimental spectrum
             exp_sigma: error values from the experimental spectrum
             normalize: normalization type selected in the interface
-        
+
         Returns:
             Nothing, the function plots the normalized experimetnal spectrum in the simulation plot and the experimental errors in the residue plot
     """
     if normalize == 'One':
-        # Plot dos dados experimentais normalizados à unidade
+        # Normalized experimental data plot
         graph_area.scatter(exp_x, exp_y / max(exp_y), marker='.', label='Exp.')
-        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        # Standard deviation on residuals plot (positive line)
         residues_graph.plot(exp_x, np.array(exp_sigma) / max(exp_y), 'k--')
-        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        # Standard deviation on residuals plot (negative line)
         residues_graph.plot(exp_x, -np.array(exp_sigma) / max(exp_y), 'k--')
     else:
-        # Plot dos dados experimentais
+        # Experimental data plot
         graph_area.scatter(exp_x, exp_y, marker='.', label='Exp.')
-        # Plot do desvio padrão no gráfico dos resíduos (linha positiva)
+        # Standard deviation on residuals plot (positive line)
         residues_graph.plot(exp_x, np.array(exp_sigma), 'k--')
-        # Plot do desvio padrão no gráfico dos resíduos (linha negativa)
+        # Standard deviation on residuals plot (negative line)
         residues_graph.plot(exp_x, -np.array(exp_sigma), 'k--')
 
     graph_area.legend()
