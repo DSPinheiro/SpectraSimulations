@@ -4,27 +4,27 @@ In this module we define the profile functions, normalizing function, autofittin
 Other utility functions for updating the transition rates to be used and determine the bounds of the simulation are also defined.
 """
 
-#GUI Imports for warnings
+# GUI Imports for warnings
 from tkinter import messagebox
 
-#Import numpy
+# Import numpy
 import numpy as np
 
-#Math imports for interpolation and fitting
+# Math imports for interpolation and fitting
 from scipy.interpolate import interp1d
 from lmfit import Minimizer, Parameters, report_fit, fit_report
 
-#OS import for timestamps
+# OS import for timestamps
 from datetime import datetime
 
-#Data import for variable management
+# Data import for variable management
 from data.variables import labeldict, the_dictionary, the_aug_dictionary
 import data.variables as generalVars
 
-#Import file namer function
+# Import file namer function
 from utils.fileIO import file_namer, loadEfficiency
 
-#GUI utils for interface variables
+# GUI utils for interface variables
 import utils.interface as guiVars
 
 
@@ -40,17 +40,19 @@ Element name to use when sending the data to plot
 # --------------------------------------------------------- #
 
 # Gaussian profile
+
+
 def G(T, energy, intens, res, width):
     """ 
     Function to calculate the Gaussian line shape at x with HWHM alpha
-        
+
         Args:
             T: list of x values for which we want the y values of the profile
             energy: x value of the profile center
             intens: hight of the profile
             res: experimental resolution to be added to the profile width
             width: natural width of the transition for the profile
-        
+
         Returns:
             y: list of y values for each of the x values in T
     """
@@ -59,17 +61,19 @@ def G(T, energy, intens, res, width):
     return y
 
 # Lorentzian profile
+
+
 def L(T, energy, intens, res, width):
     """ 
     Function to calculate the Lorentzian line shape at x with HWHM alpha
-        
+
         Args:
             T: list of x values for which we want the y values of the profile
             energy: x value of the profile center
             intens: hight of the profile
             res: experimental resolution to be added to the profile width
             width: natural width of the transition for the profile
-        
+
         Returns:
             y: list of y values for each of the x values in T
     """
@@ -78,17 +82,19 @@ def L(T, energy, intens, res, width):
     return y
 
 # Voigt profile
+
+
 def V(T, energy, intens, res, width):
     """ 
     Function to calculate the Voigt line shape at x with HWHM alpha
-        
+
         Args:
             T: list of x values for which we want the y values of the profile
             energy: x value of the profile center
             intens: hight of the profile
             res: experimental resolution to be added to the profile width
             width: natural width of the transition for the profile
-        
+
         Returns:
             y: list of y values for each of the x values in T
     """
@@ -96,7 +102,6 @@ def V(T, energy, intens, res, width):
     y = [np.real(intens * wofz(complex(l - energy, width / 2) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi) for l in T]
     
     return y
-
 
 
 # --------------------------------------------------------- #
@@ -109,13 +114,13 @@ def V(T, energy, intens, res, width):
 def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
     """ 
     Function to interpolate the detector efficiency to the simulated x values
-        
+
         Args:
             energy_values: list of the energy values provided in the detector efficiency data
             efficiency_values: list of the efficiency values provided in the detector efficiency data
             xfinal: list of the simulated x values
             enoffset: value of the simulated x offset
-            
+
         Returns:
             interpolated_effic: list of efficiency values interpolated for the simulated x values
     """
@@ -132,15 +137,17 @@ def detector_efficiency(energy_values, efficiency_values, xfinal, enoffset):
     return interpolated_effic
 
 # Normalization function
+
+
 def normalizer(y0, expy_max, ytot_max):
     """ 
     Function to normalize the simulated intensity values
-        
+
         Args:
             y0: simulated background intensity offset
             expy_max: maximum experimental intensity
             ytot_max: maximum simulated intensity
-            
+
         Returns:
             normalization_var: value of the normalization multiplyer for the requested normalization
     """
@@ -149,7 +156,7 @@ def normalizer(y0, expy_max, ytot_max):
     """
     Value of the normalization type selected in the interface (No, to Experimental Maximum, to Unity)
     """
-    
+
     try:
         # Calculate the normalization multiplier for the normalization chosen
         if normalize == 'ExpMax':
@@ -166,7 +173,6 @@ def normalizer(y0, expy_max, ytot_max):
     return normalization_var
 
 
-
 # --------------------------------------------------------- #
 #                                                           #
 #            Y CALCULATOR AND FITTING FUNCTIONS             #
@@ -178,7 +184,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     """ 
     Function to calculate the simulated intensities for all the transitions requested, taking into account the simulated offsets.
     This function is used only to apply the selected profile to the already filtered x, y and width values for the transitions.
-        
+
         Args:
             sim: tkinter simulation window required to update the progress bar
             transition_type: type of transition to be simulated (diagram data comes in the x, y, w and satellite data in the xs, ys, ws)
@@ -194,7 +200,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
             energy_values: energy values read from the detector efficiency data
             efficiency_values: efficiency values read from the detector efficiency data
             enoffset: energy offset to simulate
-        
+
         Returns:
             yfinal: list of simulated y values for each diagrma transition we want to simulate for each of the x values in T
             ytot: list of the simulated total y values for all transitions we want to simulate for each of the x values in T
@@ -215,7 +221,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     """
     List of simulated y values for each satellite transition in each digram transition we want to simulate for each of the x values in T
     """
-    
+
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
         # Loop all the diagram or auger transitions to calculate (y parameter)
@@ -236,11 +242,11 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
                 guiVars.progress_var.set(b1)
                 # Update the interface to show the progress
                 sim.update_idletasks()
-            
+
             # If the transition rates list is not empty then add the y values for this transition into the total y values for all transitions
             if k != []:
                 ytot = np.add(ytot, yfinal[j])
-        
+
         # Set and update the progress and progress bar to 100%
         b1 = 100
         guiVars.progress_var.set(b1)
@@ -260,10 +266,10 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
                     b1 += 100 / (len(ys) * len(generalVars.label1) * len(m))
                     guiVars.progress_var.set(b1)
                     sim.update_idletasks()
-                
+
                 if m != []:
                     ytot = np.add(ytot, yfinals[j][l])
-        
+
         b1 = 100
         guiVars.progress_var.set(b1)
         sim.update_idletasks()
@@ -281,7 +287,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
                 b1 += 200 / (len(y) * len(k))
                 guiVars.progress_var.set(b1)
                 sim.update_idletasks()
-            
+
             if k != []:
                 ytot = np.add(ytot, yfinal[j])
 
@@ -289,7 +295,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
         b1 = 50
         guiVars.progress_var.set(b1)
         sim.update_idletasks()
-        
+
         # Satellite block
         for j, k in enumerate(ys):
             for l, m in enumerate(ys[j]):
@@ -303,14 +309,14 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
                     b1 += 100 / (len(ys) * len(generalVars.label1) * len(m))
                     guiVars.progress_var.set(b1)
                     sim.update_idletasks()
-                
+
                 if m != []:
                     ytot = np.add(ytot, yfinals[j][l])
-        
+
         b1 = 100
         guiVars.progress_var.set(b1)
         sim.update_idletasks()
-    
+
     # If detector efficiency data was loaded the appropriate weights are applied to the y values
     if guiVars.effic_var.get() != 'No':
         # Get the efficiency values for the x values simulated
@@ -321,23 +327,25 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
         return ytot, yfinal, yfinals
 
 # Initialize the parameters for fitting
+
+
 def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
     """
     Function to initialize the parameters for fitting
-        
+
         Args:
             exp_x: list of energy values read from the experimental spectrum
             exp_y: list of intensity values read from the experimental spectrum
             enoffset: simulated energy offset
             y0: simulated intensity offset
             res: simulated experimental resolution
-        
+
         Returns:
             params: parameter object with the parameters to be optimized
     """
     # Initialize the parameters to be optimized
     params = Parameters()
-    
+
     # --------------------------------------------------------------------------------------------------------
     # Energy offset parameter
     # We set the range of variation for this parameter during optimization to +- 10% of the simulated x range
@@ -367,22 +375,24 @@ def initializeFitParameters(exp_x, exp_y, enoffset, y0, res):
     """
     # Add the parameter to the set of parameters
     params.add('res', value=res, min=0.01, max=res + res_lim)
-    
+
     # --------------------------------------------------------------------------------------------------------
     # New maximum y value parameter
     # Add the parameter to the set of parameters
     params.add('ytot_max', value=max(generalVars.ytot))
-    
+
     return params
 
 # Extract the values of the fitted parameters
+
+
 def fetchFittedParams(result):
     """
     Function to extract the values of the fitted parameters. These values are also set in the interface
-        
+
         Args:
             result: result object from the fitting
-            
+
         Returns:
             enoffset: fitted value of the simulated energy offset
             y0: fitted value of the simulated intensity offset
@@ -393,27 +403,29 @@ def fetchFittedParams(result):
     enoffset = result.params['xoff'].value
     # Set the fitted value in the interface
     guiVars.energy_offset.set(enoffset)
-    
+
     # Get the fitted value of the y offset
     y0 = result.params['yoff'].value
     # Set the fitted value in the interface
     guiVars.yoffset.set(y0)
-    
+
     # Get the fitted value of the experimental resolution
     res = result.params['res'].value
     # Set the fitted value in the interface
     guiVars.exp_resolution.set(res)
-    
+
     # Get the fitted value of the fitted total y maximum
     ytot_max = result.params['ytot_max'].value
-    
+
     return enoffset, y0, res, ytot_max
 
 # Create the function to be minimized for the fitting
+
+
 def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset):
     """
     Function to be minimized in the fitting
-        
+
         Args:
             params: parameters to be minimized in the function
             sim: tkinter window object to update the progress bar
@@ -431,12 +443,12 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
             energy_values: energy values read from the detector efficiency data
             efficiency_values: efficiency values read from the detector efficiency data
             enoffset: energy offset to simulate
-            
+
         Returns:
             list with the differences between the simulated y values and the experimental intensities
     """
     global xfinal
-    
+
     # Normalizer for the function to match the plotted values
     normalize = guiVars.normalizevar.get()
     # Initialize the interpolated y values
@@ -444,13 +456,13 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
     """
     List for the interpolated values of the simulated y at each energy value of the experimental spectrum
     """
-    
+
     # Get the parameters from the list of initialized parameters
     xoff = params['xoff']
     y0 = params['yoff']
     res = params['res']
     ytot_max = params['ytot_max']
-    
+
     # Initialize the xfinal from which to interpolate
     xfinal = np.array(np.linspace(min(exp_x) - xoff, max(exp_x) - xoff, num=num_of_points))
     
@@ -458,17 +470,17 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
     generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
     # Calculate the normalization multiplier
     normalization_var = normalizer(y0, max(exp_y), ytot_max)
-    
+
     # Interpolate the data
     f_interpolate = interp1d(xfinal + xoff, np.array(generalVars.ytot * normalization_var) + y0, kind='cubic')
     """
     Interpolated function of the simulated points
     """
-    
+
     for g, h in enumerate(exp_x):
         # Get the values of the interpolation for the experimental x values
         y_interp[g] = f_interpolate(h)
-    
+
     # Return the normalized function
     if normalize == 'One':
         return np.array(y_interp) - np.array(exp_y) / max(exp_y)
@@ -476,10 +488,12 @@ def func2min(params, sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, y
         return np.array(y_interp) - np.array(exp_y)
 
 # Calculate the residues, reduced chi^2 and update the respective graph
+
+
 def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph):
     """
     Function to calculate the residues, reduced chi^2 and update the respective graph
-        
+
         Args:
             exp_x: energy values from the experimental spectrum
             exp_y: intensity values from the experimental spectrum
@@ -491,7 +505,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
             y0: simulated intensity offset
             number_of_fit_variables: total number of fitted variables
             residues_graph: matplotlib plot object where to plot the residue data
-        
+
         Returns:
             Nothing, the residues are plotted and the chi^2 value is updated in the variables module
     """
@@ -504,7 +518,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     y_res = [0 for x in range(len(exp_x))]
     # Temporary variable for the chi sum to calculate the chi^2
     chi_sum = 0
-    
+
     # Loop the experimental x values
     for g, h in enumerate(exp_x):
         # Get the interpolated y values
@@ -516,7 +530,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
         elif normalize == 'One':
             y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
             chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
-    
+
     # Calculate the reduced chi^2 value
     generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
     # Plot the residues
@@ -533,14 +547,16 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
 # --------------------------------------------------------- #
 
 # Update the radiative and satellite rates for the selected transition
+
+
 def updateRadTransitionVals(transition, num):
     """
     Function to update the radiative and satellite rates for the selected transition
-        
+
         Args:
             transition: which transition to fetch the rates of
             num: total number of transitions processed
-        
+
         Returns:
             num_of_transitions: total number of transitions processed
             low_level: low level of the selected transition
@@ -553,7 +569,7 @@ def updateRadTransitionVals(transition, num):
     # Get the low and high levels for the selected transition
     low_level = the_dictionary[transition]["low_level"]
     high_level = the_dictionary[transition]["high_level"]
-    
+
     # Filter the radiative and satellite rates data for the selected transition
     diag_stick_val = [line for line in generalVars.lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]
     sat_stick_val = [line for line in generalVars.linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
@@ -561,16 +577,18 @@ def updateRadTransitionVals(transition, num):
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 
 # Update the satellite rates for the selected transition
+
+
 def updateSatTransitionVals(low_level, high_level, key, sat_stick_val):
     """
     Function to update the satellite rates for the selected transition and shake level
-        
+
         Args:
             low_level: low level of the selected transition
             high_level: high level of the selected transition
             key: shake level of the satellite transition
             sat_stick_val: list with all the possible satellite transitions for the current diagram transition
-        
+
         Returns:
             sat_stick_val_ind: list with the satellite rates for the selected diagram transition and shake level
     """
@@ -584,14 +602,16 @@ def updateSatTransitionVals(low_level, high_level, key, sat_stick_val):
     return sat_stick_val_ind
 
 # Update the auger rates for the selected transition
+
+
 def updateAugTransitionVals(transition, num):
     """
     Function to update the auger rates for the selected transition
-        
+
         Args:
             transition: which transition to fetch the rates of
             num: total number of transitions processed
-        
+
         Returns:
             num_of_transitions: total number of transitions processed
             aug_stick_val: rates data for the selected transition
@@ -609,16 +629,18 @@ def updateAugTransitionVals(transition, num):
     return num_of_transitions, aug_stick_val
 
 # Update the radiative and satellite rates for the selected transition and charge state
+
+
 def updateRadCSTrantitionsVals(transition, num, ncs, cs):
     """
     Function to update the radiative and satellite rates for the selected transition and charge state
-        
+
         Args:
             transition: which transition to fetch the rates of
             num: total number of transitions processed
             ncs: boolean selecting if this is a negative charge state or not
             cs: value of the charge state
-        
+
         Returns:
             num_of_transitions: total number of transitions processed
             low_level: low level of the selected transition and charge state
@@ -631,31 +653,38 @@ def updateRadCSTrantitionsVals(transition, num, ncs, cs):
     # Get the low and high levels for the selected transition
     low_level = the_dictionary[transition]["low_level"]
     high_level = the_dictionary[transition]["high_level"]
-    
+
     # Filter the radiative and satellite rates data for the selected transition and charge state
     if not ncs:
-        diag_stick_val = [line + [generalVars.PCS_radMixValues[i].get()] for i, linerad in enumerate(generalVars.lineradrates_PCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and generalVars.rad_PCS[i] == cs]  # Cada vez que o for corre, lê o ficheiro de uma transição
+        # It will read a transition from the file every time it is run
+        diag_stick_val = [line + [generalVars.PCS_radMixValues[i].get()] for i, linerad in enumerate(generalVars.lineradrates_PCS) for line in linerad if line[1]
+                          in low_level and line[5] == high_level and float(line[8]) != 0 and generalVars.rad_PCS[i] == cs]
     else:
-        diag_stick_val = [line + [generalVars.NCS_radMixValues[i].get()] for i, linerad in enumerate(generalVars.lineradrates_NCS) for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and generalVars.rad_NCS[i] == cs]
+        diag_stick_val = [line + [generalVars.NCS_radMixValues[i].get()] for i, linerad in enumerate(generalVars.lineradrates_NCS)
+                          for line in linerad if line[1] in low_level and line[5] == high_level and float(line[8]) != 0 and generalVars.rad_NCS[i] == cs]
 
     if not ncs:
-        sat_stick_val = [line + [generalVars.PCS_radMixValues[i].get()] for i, linesat in enumerate(generalVars.linesatellites_PCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and generalVars.sat_PCS[i] == cs]
+        sat_stick_val = [line + [generalVars.PCS_radMixValues[i].get()] for i, linesat in enumerate(generalVars.linesatellites_PCS)
+                         for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and generalVars.sat_PCS[i] == cs]
     else:
-        sat_stick_val = [line + [generalVars.NCS_radMixValues[i].get()] for i, linesat in enumerate(generalVars.linesatellites_NCS) for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and generalVars.sat_NCS[i] == cs]
-    
+        sat_stick_val = [line + [generalVars.NCS_radMixValues[i].get()] for i, linesat in enumerate(generalVars.linesatellites_NCS)
+                         for line in linesat if low_level in line[1] and high_level in line[5] and float(line[8]) != 0 and generalVars.sat_NCS[i] == cs]
+
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 
 # Update the auger rates for the selected transition and charge state
+
+
 def updateAugCSTransitionsVals(transition, num, ncs, cs):
     """
     Function to update the auger rates for the selected transition and charge state
-        
+
         Args:
             transition: which transition to fetch the rates of
             num: total number of transitions processed
             ncs: boolean selecting if this is a negative charge state or not
             cs: value of the charge state
-        
+
         Returns:
             num_of_transitions: total number of transitions processed
             aug_stick_val: rates data for the selected transition and charge state
@@ -669,12 +698,13 @@ def updateAugCSTransitionsVals(transition, num, ncs, cs):
 
     # Filter the auger rates data for the selected transition and charge state
     if not ncs:
-        aug_stick_val = [line + [generalVars.PCS_augMixValues[i].get()] for i, lineaug in enumerate(generalVars.lineaugrates_PCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and generalVars.aug_PCS[i] == cs]
+        aug_stick_val = [line + [generalVars.PCS_augMixValues[i].get()] for i, lineaug in enumerate(generalVars.lineaugrates_PCS) for line in lineaug if low_level in line[1]
+                         and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and generalVars.aug_PCS[i] == cs]
     else:
-        aug_stick_val = [line + [generalVars.NCS_augMixValues[i].get()] for i, lineaug in enumerate(generalVars.lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and generalVars.aug_PCS[i] == cs]
-    
-    return num_of_transitions, aug_stick_val
+        aug_stick_val = [line + [generalVars.NCS_augMixValues[i].get()] for i, lineaug in enumerate(generalVars.lineaugrates_NCS) for line in lineaug if low_level in line[1]
+                         and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and generalVars.aug_PCS[i] == cs]
 
+    return num_of_transitions, aug_stick_val
 
 
 # --------------------------------------------------------- #
@@ -687,11 +717,11 @@ def updateAugCSTransitionsVals(transition, num, ncs, cs):
 def getBounds(x, w):
     """
     Function to calculate the x bounds from the simulated transition energy and width data (excluing satellite transitions)
-        
+
         Args:
             x: energy values for the simulated diagram transitions
             w: width values for the simulated diagram transitions
-        
+
         Returns:
             deltaE: difference between the max and min energy of each transition
             max_value: maximum value to be simulated, taking into consideration all transition energies and widths
@@ -710,14 +740,16 @@ def getBounds(x, w):
     return deltaE, max_value, min_value
 
 # Calculate the x bound from the simulated satellite transition energy and width data
+
+
 def getSatBounds(xs, ws):
     """
     Function to calculate the x bound from the simulated satellite transition energy and width data
-        
+
         Args:
             xs: energy values for the simulated satellite transitions
             ws: width values for the simulated satellite transitions
-        
+
         Returns:
             deltaE: difference between the max and min energy of each transition
             max_value: maximum value to be simulated, taking into consideration all transition energies and widths
@@ -729,18 +761,20 @@ def getSatBounds(xs, ws):
         for l, m in enumerate(xs[j]):
             if m != []:
                 deltaE.append(max(m) - min(m))
-    
+
     # Calculate the automatic min and max values of x to be plotted
-    max_value = max([max(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) + max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])  # valor max de todos os elementos de xs (satt) que tem 7 linhas(ka1, ka2, etc) e o tamanho da lista label1 dentro de cada linha
+    max_value = max([max(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) + max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
     min_value = min([min(xs[i][j]) for i in range(len(xs)) for j in range(len(xs[i])) if xs[i][j] != []]) - max([max(ws[i][j]) for i in range(len(ws)) for j in range(len(ws[i])) if ws[i][j] != []])
-    
+
     return deltaE, max_value, min_value
 
 # Update the bounds for the user selected bounds (Auto or value)
+
+
 def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
     """
     Function to update the bounds for the user selected bounds (Auto or value)
-        
+
         Args:
             x_mx: user value for the maximum x value. if set to Auto we calculate it
             x_mn: user value for the minimum x value. if set to Auto we calculate it
@@ -749,7 +783,7 @@ def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
             min_value: minimum value to be simulated, taking into consideration all transition energies and widths
             res: simulated experimental resolution
             enoffset: simulated energy offset
-        
+
         Returns:
             array_input_max: maximum x value to be plotted
             array_input_min: minimum x value to be plotted
@@ -763,7 +797,7 @@ def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
     else:
         # We use the value in the interface while also accounting for the x offset
         array_input_min = float(x_mn) - enoffset
-    
+
     if x_mx == 'Auto':
         # If we are automaticaly calculating the bounds we add extra space arround the data to show possible tails of transitions
         if res <= 0.2 * (min(deltaE)):
@@ -773,17 +807,19 @@ def updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset):
     else:
         # We use the value in the interface while also accounting for the x offset
         array_input_max = float(x_mx) - enoffset
-    
+
     return array_input_max, array_input_min
-    
+
 # Extract x, y and sigma values from the read experimental file
+
+
 def extractExpVals(exp_spectrum):
     """
     Function to extract x, y and sigma values from the read experimental file
-        
+
         Args:
             exp_spectrum: list with the experimental spectrum to be handled
-        
+
         Returns:
             xe: energy values of the experimental spectrum
             ye: intensity values of the experimental spectrum
@@ -794,27 +830,29 @@ def extractExpVals(exp_spectrum):
         for j, itm in enumerate(exp_spectrum[i]):
             if exp_spectrum[i][j] != '':
                 exp_spectrum[i][j] = float(itm)
-    
+
     # Split the values into x and y
     xe = np.array([float(row[0]) for row in exp_spectrum])
     ye = np.array([float(row[1]) for row in exp_spectrum])
-    
+
     # If the spectrum has 3 columns of data then use the third column as the uncertainty
     if len(exp_spectrum[0]) >= 3:
         sigma_exp = np.array([float(row[2]) for row in exp_spectrum])
     else:
         # Otherwise use the sqrt of the count number
         sigma_exp = np.sqrt(ye)
-    
+
     return xe, ye, sigma_exp
 
 # Bind the experimental values into the chosen bounds
+
+
 def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
     """
     Function to bind the experimental values into the chosen bounds.
     If Auto bounds are chosen the simulation will be performed for all the experimental spectrum span
     Otherwise we remove the experimental data that is outside the bounds we want
-        
+
         Args:
             xe: energy values from the experimental spectrum
             ye: intensity values from the experimental spectrum
@@ -823,7 +861,7 @@ def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
             num_of_points: number of simulated points
             x_mx: user value for the maximum x value. if set to Auto we calculate it
             x_mn: user value for the minimum x value. if set to Auto we calculate it
-        
+
         Returns:
             exp_x: list of xe values inside the bounds
             exp_y: list of ye values inside the bounds
@@ -832,7 +870,7 @@ def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
     exp_x = []
     exp_y = []
     exp_sigma = []
-    
+
     # When we have an experimental spectrum loaded we use the bounds of this spectrum
     if x_mx == 'Auto':
         max_exp_lim = max(xe)
@@ -850,9 +888,8 @@ def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
             exp_x.append(xe[i])
             exp_y.append(ye[i])
             exp_sigma.append(sigma_exp[i])
-    
-    return exp_x, exp_y, exp_sigma
 
+    return exp_x, exp_y, exp_sigma
 
 
 # --------------------------------------------------------- #
@@ -865,14 +902,14 @@ def getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn):
 def stem_ploter(transition_values, transition, spec_type, ind, key):
     """
     Stick plotter function. Plots a stick for the transition
-        
+
         Args:
             transition_values: list of the transition rates data
             transition: the selected transition to plot
             spec_type: simulation type selected in the interface (diagram, satellite, auger, diagram_cs, satellite_cs, auger_cs)
             ind: shake level index to use when plotting a satellite transition
             key: shake level label to use when plotting a satellite transition
-        
+
         Returns:
             Nothing, the transition is plotted and the interface is updated
     """
@@ -892,7 +929,7 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
     min_value = min(x)
     x.insert(0, 2 * min_value - max_value)
     x.append(2 * max_value - min_value)
-    
+
     # Calculate the y's weighted with the shake weights depending on the spectrum type and plot the sticks
     # In the case of charge state simulation the y's are also weighted by the selected mixture percentages
     if spec_type == 'Diagram' or spec_type == 'Auger':
@@ -911,7 +948,9 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
         """
         sy_points.insert(0, 0)
         sy_points.append(0)
-        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
+
+        # Plot a stemplot
+        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     elif spec_type == 'Diagram_CS' or spec_type == 'Auger_CS':
         y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) * float(row[-1]) for row in transition_values]
@@ -929,9 +968,11 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
         """
         sy_points.insert(0, 0)
         sy_points.append(0)
-        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
+
+        # Plot a stemplot
+        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)
         a.legend(loc='best', numpoints=1)
-    
+
     # --------------------------------------------------------------------------------------------------------------------------
     # Automatic legend formating
     a.legend(title=element_name, title_fontsize='large')
@@ -942,27 +983,29 @@ def stem_ploter(transition_values, transition, spec_type, ind, key):
     legend_columns = 1
     # Initialize the number of legends in each columns
     labels_per_columns = number_of_labels / legend_columns
-    
+
     # While we have more than 10 labels per column
     while labels_per_columns > 10:
         # Add one more column
         legend_columns += 1
         # Recalculate the number of labels per column
         labels_per_columns = number_of_labels / legend_columns
-    
+
     # Place the legend with the final number of columns
     a.legend(ncol=legend_columns)
 
 # Profile plotter. Plots each transition, applying the selected profile
+
+
 def plot_stick(sim, f, graph_area):
     """
     Profile plotter function. Plots each transition, applying the selected profile
-        
+
         Args:
             sim: tkinter simulation window to update the progress bar
             f: matplotlib figure object where to plot the data
             graph_area: matplotlib graph to plot the simulated transitions
-            
+
         Returns:
             Nothing, the simulation is performed, the transitions are plotted and the interface is updated
     """
@@ -972,7 +1015,7 @@ def plot_stick(sim, f, graph_area):
     Timestamp to use when saving files for this simulation plot
     """
     global xfinal, exp_x, exp_y, residues_graph
-    
+
     # Reinitialize the residues graph and experimental points
     residues_graph = None
     """
@@ -986,16 +1029,16 @@ def plot_stick(sim, f, graph_area):
     """
     List of experimental spectrum intensities
     """
-    
+
     # Reset the plot with the configurations selected
     graph_area.clear()
     if guiVars.yscale_log.get() == 'Ylog':
         graph_area.set_yscale('log')
     if guiVars.xscale_log.get() == 'Xlog':
         graph_area.set_xscale('log')
-    
+
     graph_area.legend(title=element_name)
-    
+
     # Get the values from the interface
     autofit = guiVars.autofitvar.get()
     total = guiVars.totalvar.get()
@@ -1011,15 +1054,15 @@ def plot_stick(sim, f, graph_area):
     num_of_points = guiVars.number_points.get()
     x_mx = guiVars.x_max.get()
     x_mn = guiVars.x_min.get()
-    
+
     number_of_fit_variables = 0
-    
+
     # Set of colors to choose from when plotting
     col2 = [['b'], ['g'], ['r'], ['c'], ['m'], ['y'], ['k']]
     """
     Set of colors to choose from when plotting
     """
-    
+
     # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
     x = [[] for i in range(len(the_dictionary))]
     """
@@ -1045,20 +1088,20 @@ def plot_stick(sim, f, graph_area):
     """
     Natural width values for each of the possible radiative satellite transitions
     """
-    
+
     # Initialize the normalization multiplier
     normalization_var = 1
     """
     Normalization multiplyer
     """
-    
+
     # --------------------------------------------------------------------------------------------------------------------------
     if spectype == 'Stick':
         # Variable for the total number of plotted transitions
         num_of_transitions = 0
         # Variable for the number of transitions that were selected but no rates were found
         bad_selection = 0
-        
+
         # Radiative and Auger code has to be split due to the different dictionaries used for the transitions
         if sat != 'Auger':
             # Loop possible radiative transitions
@@ -1077,7 +1120,7 @@ def plot_stick(sim, f, graph_area):
                             # Show a warning that this transition has no data and add it to the bad selection count
                             messagebox.showwarning("Wrong Transition", transition + " is not Available")
                             bad_selection += 1
-                        
+
                         # Plot the transition
                         stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
                     elif sat == 'Satellites':
@@ -1088,10 +1131,10 @@ def plot_stick(sim, f, graph_area):
                             # Show a warning that this transition has no data and add it to the bad selection count
                             messagebox.showwarning("Wrong Transition", transition + " is not Available")
                             bad_selection += 1
-                        
+
                         # Initialize a variable to control the progress bar
                         b1 = 0
-                        
+
                         # Loop all shake levels read in the shake weights file
                         for ind, key in enumerate(generalVars.label1):
                             # Filter the specific combination of radiative transition and shake level (key) to simulate
@@ -1111,7 +1154,7 @@ def plot_stick(sim, f, graph_area):
                             diag_stick_val = [['0' for i in range(16)]]
                             messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")
                             bad_selection += 1
-                        
+
                         stem_ploter(diag_stick_val, transition, 'Diagram', 0, 0)
                         
                         # Satellite block
@@ -1119,7 +1162,7 @@ def plot_stick(sim, f, graph_area):
                             sat_stick_val = [['0' for i in range(16)]]
                             messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")
                             bad_selection += 1
-                        
+
                         # Initialize a variable to control the progress bar
                         b1 = 0
                         for ind, key in enumerate(generalVars.label1):
@@ -1153,7 +1196,7 @@ def plot_stick(sim, f, graph_area):
                         # Show a warning that this transition has no data and add it to the bad selection count
                         messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available")
                         bad_selection += 1
-                    
+
                     # Plot the transition
                     stem_ploter(aug_stick_val, transition, 'Auger', 0, 0)
 
@@ -1171,7 +1214,7 @@ def plot_stick(sim, f, graph_area):
         num_of_transitions = 0
         # Variable for the number of transitions that were selected but no rates were found
         bad_selection = 0
-        
+
         # Radiative and Auger code has to be split due to the different dictionaries used for the transitions
         if sat != 'Auger':
             # Initialize the charge states we have to loop through
@@ -1190,7 +1233,7 @@ def plot_stick(sim, f, graph_area):
                 else:
                     mix_val = generalVars.NCS_radMixValues[cs_index - len(generalVars.rad_PCS)].get()
                     ncs = True
-                
+
                 # Check if the mix value is not 0, otherwise no need to plot the transitions for this charge state
                 if mix_val != '0.0':
                     # Loop the possible radiative transitions
@@ -1208,7 +1251,7 @@ def plot_stick(sim, f, graph_area):
                                     # Show a warning that this transition has no data and add it to the bad selection count
                                     messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)
                                     bad_selection += 1
-                                
+
                                 stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
                             elif sat == 'Satellites':
                                 # Check if there is no data for the selected transition
@@ -1218,10 +1261,10 @@ def plot_stick(sim, f, graph_area):
                                     # Show a warning that this transition has no data and add it to the bad selection count
                                     messagebox.showwarning("Wrong Transition", transition + " is not Available for charge state: " + cs)
                                     bad_selection += 1
-                                
+
                                 # Initialize a variable to control the progress bar
                                 b1 = 0
-                                
+
                                 # Loop the shake levels read from the shake weights file
                                 for ind, key in enumerate(generalVars.label1):
                                     # Filter the specific combination of radiative transition and shake level (key) to simulate
@@ -1241,18 +1284,18 @@ def plot_stick(sim, f, graph_area):
                                     diag_stick_val = [['0' for i in range(16)]]
                                     messagebox.showwarning("Wrong Transition", "Diagram info. for " + transition + " is not Available")
                                     bad_selection += 1
-                                
+
                                 stem_ploter(diag_stick_val, cs + ' ' + transition, 'Diagram_CS', 0, 0)
-                                
+
                                 # Satellite block
                                 if not sat_stick_val:
                                     sat_stick_val = [['0' for i in range(16)]]
                                     messagebox.showwarning("Wrong Transition", "Satellites info.  for " + transition + " is not Available")
                                     bad_selection += 1
-                                
+
                                 # Initialize a variable to control the progress bar
                                 b1 = 0
-                                
+
                                 for ind, key in enumerate(generalVars.label1):
                                     # Filter the specific combination of radiative transition and shake level (key) to simulate
                                     sat_stick_val_ind = updateSatStickTransitionVals(low_level, high_level, key, sat_stick_val)
@@ -1286,7 +1329,7 @@ def plot_stick(sim, f, graph_area):
                 else:
                     mix_val = generalVars.NCS_augMixValues[cs_index - len(generalVars.aug_PCS)].get()
                     ncs = True
-                
+
                 # Check if the mix value is not 0, otherwise no need to plot the transitions for this charge state
                 if mix_val != '0.0':
                     # Loop the possible auger transitions
@@ -1303,7 +1346,7 @@ def plot_stick(sim, f, graph_area):
                                 # Show a warning that this transition has no data and add it to the bad selection count
                                 messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available for charge state: " + cs)
                                 bad_selection += 1
-                            
+
                             stem_ploter(aug_stick_val, cs + ' ' + transition, 'Auger_CS', 0, 0)
 
                         # Set the labels for the axis
@@ -1362,7 +1405,7 @@ def plot_stick(sim, f, graph_area):
                         x[index] = x1
                         y[index] = y1
                         w[index] = w1
-                        
+
                         # -----------------------------------------------------------------------------------------------
                         # Loop the shake labels read from the shake weights file
                         for ind, key in enumerate(generalVars.label1):
@@ -1401,7 +1444,7 @@ def plot_stick(sim, f, graph_area):
                 if the_aug_dictionary[transition]["selected_state"]:
                     # Same as the stick but we dont care about the number of transitions
                     _, aug_stick_val = updateAugTransitionVals(transition, 0)
-                    
+
                     # Extract the energies, intensities and widths of the transition (different j and eigv)
                     x1 = [float(row[8]) for row in aug_sim_val]
                     y1 = [float(row[9]) * (1 - sum(generalVars.shakeweights)) for row in aug_sim_val]
@@ -1431,11 +1474,11 @@ def plot_stick(sim, f, graph_area):
             elif sat == 'Satellites' or sat == 'Diagram + Satellites':
                 # Get the bounds of the energies and widths to plot
                 deltaE, max_value, min_value = getSatBounds(xs, ws)
-            
+
             elif sat == 'Auger':
                 # Get the bounds of the energies and widths to plot
                 deltaE, max_value, min_value = getBounds(x, w)
-            
+
             # Update the bounds considering the resolution and energy offset chosen
             array_input_max, array_input_min = updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset)
             
@@ -1455,7 +1498,7 @@ def plot_stick(sim, f, graph_area):
         exp_sigma = []
         min_exp_lim = 0
         max_exp_lim = 0
-        
+
         # If we have loaded an experimental spectrum
         if load != 'No':
             # Initialize the residue plot and load the experimental spectrum
@@ -1463,7 +1506,7 @@ def plot_stick(sim, f, graph_area):
             
             # Extract the x, y, and sigma values from the loaded experimental spectrum
             xe, ye, sigma_exp = extractExpVals(exp_spectrum)
-            
+
             # Bind the experimental spectrum to the calculated bounds
             exp_x, exp_y, exp_sigma = getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn)
 
@@ -1487,10 +1530,11 @@ def plot_stick(sim, f, graph_area):
                     efficiency_values.append(float(pair[1]))
             except FileNotFoundError:
                 messagebox.showwarning("Error", "Efficiency File is not Avaliable")
-        
+
         # ---------------------------------------------------------------------------------------------------------------
         # Calculate the final y values
-        generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
+        generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator( sim, sat, peak, xfinal, x, y, w, xs,
+        ys, ws, res, energy_values, efficiency_values, enoffset)
 
         # ---------------------------------------------------------------------------------------------------------------
         # Calculate the normalization multiplyer
@@ -1503,7 +1547,7 @@ def plot_stick(sim, f, graph_area):
                 # Reset the normalizer to the default
                 guiVars.normalizevar.set('No')
             normalization_var = normalizer(y0, 1, max(generalVars.ytot))
-        
+
         # ---------------------------------------------------------------------------------------------------------------
         # Autofit:
         if autofit == 'Yes':
@@ -1514,9 +1558,10 @@ def plot_stick(sim, f, graph_area):
                 
                 # Minimize the function for the initialized parameters
                 number_of_fit_variables = len(params.valuesdict())
-                minner = Minimizer(func2min, params, fcn_args=(sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset))
+                minner = Minimizer(func2min, params, fcn_args=(sim, exp_x, exp_y, num_of_points,
+                                   sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset))
                 result = minner.minimize()
-                
+
                 # Get the fitted values
                 enoffset, y0, res, ytot_max = fetchFittedParams(result)
 
@@ -1524,17 +1569,18 @@ def plot_stick(sim, f, graph_area):
                 xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
                 # Calculate the normalizer multiplier for the fitted parameters
                 normalization_var = normalizer(y0, max(exp_y), ytot_max)
-                
+
                 # Calculate the intensities for the fitted parameters
-                generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
-                
+                generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w,
+                xs, ys, ws, res, energy_values, efficiency_values, enoffset)
+
                 # Ask to save the fit
                 if messagebox.askyesno("Fit Saving", "Do you want to save this fit?"):
                     # Get the report on the fit
                     report = fit_report(result)
                     # Export the fit to file
                     exportFit(time_of_click, report)
-                
+
             else:
                 messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
         
@@ -1544,7 +1590,8 @@ def plot_stick(sim, f, graph_area):
             for index, key in enumerate(the_dictionary):
                 if the_dictionary[key]["selected_state"]:
                     # Plot the selected transition
-                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=key,
+                    color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                     graph_area.legend()
         elif sat == 'Satellites':
             for index, key in enumerate(the_dictionary):
@@ -1553,14 +1600,16 @@ def plot_stick(sim, f, graph_area):
                         # Dont plot the satellites that have a max y value of 0
                         if max(m) != 0:
                             # Plot the selected transition
-                            graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0,
+                            label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
         elif sat == 'Diagram + Satellites':
             # Diagram block
             for index, key in enumerate(the_dictionary):
                 if the_dictionary[key]["selected_state"]:
                     # Plot the selected transition
-                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0,
+                    label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                     graph_area.legend()
 
             # Satellite block
@@ -1569,31 +1618,35 @@ def plot_stick(sim, f, graph_area):
                     for l, m in enumerate(generalVars.yfinals[index]):
                         if max(m) != 0:
                             # Plot the selected transition
-                            graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0,
+                            label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
         elif sat == 'Auger':
             for index, key in enumerate(the_aug_dictionary):
                 if the_aug_dictionary[key]["selected_state"]:
                     # Plot the selected transition
-                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                    graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0,
+                    label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                     graph_area.legend()
         if total == 'Total':
             # Plot the selected transition
-            graph_area.plot(xfinal + enoffset, (generalVars.ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')
+            graph_area.plot(xfinal + enoffset, (generalVars.ytot *
+                            normalization_var) + y0, label='Total', ls='--', lw=2, color='k')
             graph_area.legend()
-        
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Calculate the residues
         if load != 'No':
-            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph)
-        
+            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0,
+            number_of_fit_variables, residues_graph)
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Set the axis labels
         graph_area.set_ylabel('Intensity (arb. units)')
         graph_area.legend(title=element_name, title_fontsize='large')
         if load == 'No':
             graph_area.set_xlabel('Energy (eV)')
-        
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Automatic legend formating
         # Number of total labels to place in the legend
@@ -1608,14 +1661,14 @@ def plot_stick(sim, f, graph_area):
             legend_columns += 1
             # Recalculate the number of labels per column
             labels_per_columns = number_of_labels / legend_columns
-        
+
         # Place the legend with the final number of columns
         graph_area.legend(ncol=legend_columns)
     # --------------------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'M_Simulation':
         # Variable for the number of transitions that were selected but no rates were found
         bad_selection = 0
-        
+
         # Dictionary to hold the lines that arent found for each charge state
         bad_lines = {}
 
@@ -1664,7 +1717,7 @@ def plot_stick(sim, f, graph_area):
                     if the_dictionary[transition]["selected_state"]:
                         # Same as sticks but we dont care about the number of transitions
                         _, low_level, high_level, diag_sim_val, sat_sim_val = updateRadCSTrantitionsVals(transition, 0, ncs, cs)
-                        
+
                         if sat == 'Diagram':
                             # Extract the energies, intensities and widths of the transition (different j and eigv)
                             # Here we also weight int the mix value
@@ -1700,7 +1753,7 @@ def plot_stick(sim, f, graph_area):
                             x[cs_index * len(the_dictionary) + index] = x1
                             y[cs_index * len(the_dictionary) + index] = y1
                             w[cs_index * len(the_dictionary) + index] = w1
-                            
+
                             # ---------------------------------------------------------------------------------------------------------------------
                             # Loop the shake labels read from the shake weights file
                             for ind, key in enumerate(generalVars.label1):
@@ -1775,7 +1828,7 @@ def plot_stick(sim, f, graph_area):
                 else:
                     mix_val = generalVars.NCS_augMixValues[cs_index - len(generalVars.aug_PCS)].get()
                     ncs = True
-                
+
                 # Check if the mix value is not 0, otherwise no need to plot the transitions for this charge state
                 if mix_val != '0.0':
                     ploted_cs.append(cs)
@@ -1847,15 +1900,15 @@ def plot_stick(sim, f, graph_area):
             elif sat == 'Satellites' or sat == 'Diagram + Satellites':
                 # Get the bounds of the energies and widths to plot
                 deltaE, max_value, min_value = getSatBounds(xs, ws)
-                
+
             elif sat == 'Auger':
                 # Get the bounds of the energies and widths to plot
                 deltaE, max_value, min_value = getBounds(x, w)
-            
+
             # Update the bounds considering the resolution and energy offset chosen
             array_input_max, array_input_min = updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset)
-            
-            # Calcular o array com os valores de xfinal igualmente espacados
+
+            # Calculate array with xfinal values equally spaced
             xfinal = np.linspace(array_input_min, array_input_max, num=num_of_points)
         except ValueError:
             xfinal = np.zeros(num_of_points)
@@ -1871,7 +1924,7 @@ def plot_stick(sim, f, graph_area):
         exp_sigma = []
         min_exp_lim = 0
         max_exp_lim = 0
-        
+
         # If we have loaded an experimental spectrum
         if load != 'No':
             # Initialize the residue plot and load the experimental spectrum
@@ -1879,7 +1932,7 @@ def plot_stick(sim, f, graph_area):
             
             # Extract the x, y, and sigma values from the loaded experimental spectrum
             xe, ye, sigma_exp = extractExpVals(exp_spectrum)
-            
+
             # Bind the experimental spectrum to the calculated bounds
             exp_x, exp_y, exp_sigma = getBoundedExp(xe, ye, sigma_exp, enoffset, num_of_points, x_mx, x_mn)
 
@@ -1906,7 +1959,8 @@ def plot_stick(sim, f, graph_area):
         
         # ---------------------------------------------------------------------------------------------------------------
         # Calculate the final y values
-        generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
+        generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys,
+        ws, res, energy_values, efficiency_values, enoffset)
 
         # ---------------------------------------------------------------------------------------------------------------
         # Calculate the normalization multiplyer
@@ -1919,7 +1973,7 @@ def plot_stick(sim, f, graph_area):
                 # Reset the normalizer to the default
                 guiVars.normalizevar.set('No')
             normalization_var = normalizer(y0, 1, max(generalVars.ytot))
-        
+
         # ---------------------------------------------------------------------------------------------------------------
         # Autofit:
         if autofit == 'Yes':
@@ -1930,9 +1984,10 @@ def plot_stick(sim, f, graph_area):
                 
                 # Minimize the function for the initialized parameters
                 number_of_fit_variables = len(params.valuesdict())
-                minner = Minimizer(func2min, params, fcn_args=(sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, enoffset))
+                minner = Minimizer(func2min, params, fcn_args=(sim, exp_x, exp_y, num_of_points, sat, peak, x, y, w, xs,
+                ys, ws, energy_values, efficiency_values, enoffset))
                 result = minner.minimize()
-                
+
                 # Get the fitted values
                 enoffset, y0, res, ytot_max = fetchFittedParams(result)
 
@@ -1940,17 +1995,18 @@ def plot_stick(sim, f, graph_area):
                 xfinal = np.array(np.linspace(min(exp_x) - enoffset, max(exp_x) - enoffset, num=num_of_points))
                 # Calculate the normalizer multiplier for the fitted parameters
                 normalization_var = normalizer(y0, max(exp_y), ytot_max)
-                
+
                 # Calculate the intensities for the fitted parameters
-                generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset)
-                
+                generalVars.ytot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, xfinal, x, y, w, xs, ys,
+                ws, res, energy_values, efficiency_values, enoffset)
+
                 # Ask to save the fit
                 if messagebox.askyesno("Fit Saving", "Do you want to save this fit?"):
                     # Get the report on the fit
                     report = fit_report(result)
                     # Export the fit to file
                     exportFit(time_of_click, report)
-                
+
             else:
                 messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
         
@@ -1961,7 +2017,8 @@ def plot_stick(sim, f, graph_area):
                 for index, key in enumerate(the_dictionary):
                     if the_dictionary[key]["selected_state"]:
                         # Plot the selected transition
-                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0,
+                        label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                         graph_area.legend()
         elif sat == 'Satellites':
             for cs_index, cs in enumerate(ploted_cs):
@@ -1971,7 +2028,8 @@ def plot_stick(sim, f, graph_area):
                             # Dont plot the satellites that have a max y value of 0
                             if max(m) != 0:
                                 # Plot the selected transition
-                                graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0,
+                                                label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                 graph_area.legend()
         elif sat == 'Diagram + Satellites':
             for cs_index, cs in enumerate(ploted_cs):
@@ -1979,7 +2037,8 @@ def plot_stick(sim, f, graph_area):
                 for index, key in enumerate(the_dictionary):
                     if the_dictionary[key]["selected_state"]:
                         # Plot the selected transition
-                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_dictionary) + index]) * normalization_var) + y0,
+                        label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                         graph_area.legend()
 
                 # Satellite block
@@ -1988,32 +2047,36 @@ def plot_stick(sim, f, graph_area):
                         for l, m in enumerate(generalVars.yfinals[cs_index * len(the_dictionary) + index]):
                             if max(m) != 0:
                                 # Plot the selected transition
-                                graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0, label=cs + ' ' + key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                                graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinals[cs_index * len(the_dictionary) + index][l]) * normalization_var) + y0,
+                                label=cs + ' ' + key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                                 graph_area.legend()
         elif sat == 'Auger':
             for cs_index, cs in enumerate(ploted_cs):
                 for index, key in enumerate(the_aug_dictionary):
                     if the_aug_dictionary[key]["selected_state"]:
                         # Plot the selected transition
-                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_aug_dictionary) + index]) * normalization_var) + y0, label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                        graph_area.plot(xfinal + enoffset, (np.array(generalVars.yfinal[cs_index * len(the_aug_dictionary) + index]) * normalization_var) + y0,
+                        label=cs + ' ' + key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                         graph_area.legend()
         if total == 'Total':
             # Plot the selected transition
-            graph_area.plot(xfinal + enoffset, (generalVars.ytot * normalization_var) + y0, label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
+            graph_area.plot(xfinal + enoffset, (generalVars.ytot * normalization_var) + y0,
+                            label='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
             graph_area.legend()
-        
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Calculate the residues
         if load != 'No':
-            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0, number_of_fit_variables, residues_graph)
-        
+            calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_var, normalize, y0,
+            number_of_fit_variables, residues_graph)
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Set the axis labels
         graph_area.set_ylabel('Intensity (arb. units)')
         graph_area.legend(title=element_name, title_fontsize='large')
         if load == 'No':
             graph_area.set_xlabel('Energy (eV)')
-        
+
         # ------------------------------------------------------------------------------------------------------------------------
         # Automatic legend formating
         # Number of total labels to place in the legend
@@ -2028,7 +2091,7 @@ def plot_stick(sim, f, graph_area):
             legend_columns += 1
             # Recalculate the number of labels per column
             labels_per_columns = number_of_labels / legend_columns
-        
+
         # Place the legend with the final number of columns
         graph_area.legend(ncol=legend_columns)
 
