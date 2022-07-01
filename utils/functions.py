@@ -55,6 +55,8 @@ def G(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
+    # TODO T-3.2
+    
     return [0 for x in T]
 
 # Lorentzian profile
@@ -73,6 +75,8 @@ def L(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
+    # TODO T-3.1
+    
     return [0 for x in T]
 
 # Voigt profile
@@ -90,6 +94,8 @@ def V(T, energy, intens, res, width):
         Returns:
             y: list of y values for each of the x values in T
     """
+    
+    # TODO T-3.3
     
     return [0 for x in T]
 
@@ -215,7 +221,7 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
         
-        # TODO
+        # TODO T-4.3
         
         # Set and update the progress and progress bar to 100%
         b1 = 100
@@ -246,20 +252,8 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     elif transition_type == 'Diagram + Satellites':
         b1 = 0
         # Diagram block
-        for j, k in enumerate(y):
-            for i, n in enumerate(k):
-                if fit_type == 'Voigt':
-                    yfinal[j] = np.abs(np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i])))
-                elif fit_type == 'Lorentzian':
-                    yfinal[j] = np.abs(np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i])))
-                elif fit_type == 'Gaussian':
-                    yfinal[j] = np.abs(np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i])))
-                b1 += 200 / (len(y) * len(k))
-                guiVars.progress_var.set(b1)
-                sim.update_idletasks()
-            
-            if k != []:
-                ytot = np.add(ytot, yfinal[j])
+        
+        # TODO T-4.3 (copy of the diagram block in the first if)
 
         # We define the 50% mark in between the two blocks
         b1 = 50
@@ -471,7 +465,6 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
         Returns:
             Nothing, the residues are plotted and the chi^2 value is updated in the variables module
     """
-<<<<<<< Updated upstream
     # Initialize a list for the interpolated experimental y values
     y_interp = [0 for i in range(len(exp_x))]
     # Interpolate the total plotted intensities
@@ -484,19 +477,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     
     # Loop the experimental x values
     for g, h in enumerate(exp_x):
-        # Get the interpolated y values
-        y_interp[g] = f_interpolate(h)
-        # Calculate the chi sum from the interpolated values
-        if normalize == 'ExpMax' or normalize == 'No':
-            y_res[g] = (exp_y[g] - y_interp[g])
-            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
-        elif normalize == 'One':
-            y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
-            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
-=======
-    
-    # TODO
->>>>>>> Stashed changes
+        # TODO T-4.4
     
     # Calculate the reduced chi^2 value
     generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
@@ -506,10 +487,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     print("Valor Manual Chi", generalVars.chi_sqrd)
     # Put the chi^2 value in the plot legend
     residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 
 # --------------------------------------------------------- #
 #                                                           #
@@ -533,6 +511,8 @@ def updateRadTransitionVals(transition, num):
             diag_stick_val: rates data for the selected transition
             sat_stick_val: rates data for the possible satellite transitions for the selected transition
     """
+    
+    # TODO T-4.2
     
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 

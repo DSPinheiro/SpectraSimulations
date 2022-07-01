@@ -394,6 +394,8 @@ def readRates(rates_file):
             linerates: list with the data still in string format
     """
     
+    # TODO T-4.1
+    
     return []
 
 # Read the shake weights file and return a list with the data and a list with the labels
