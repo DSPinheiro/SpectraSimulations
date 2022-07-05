@@ -6,3 +6,4 @@ First install the required packages using the requirements.txt file:
     pip install -r requirements.txt
 
 After, execute the test script "importTest.py" to make sure everything is properly installed.
+The output is color coded, so if every line is green everything should be correct.
