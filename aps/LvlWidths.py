@@ -3,26 +3,26 @@ Module that implements the line and level widths interface.
 The interface barebones is implemented but no data is being processed and shown.
 """
 
-#GUI Imports
+# GUI Imports
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-#File IO Imports
+# File IO Imports
 from utils.fileIO import file_namer, write_to_xls
 
-#GUI utils: destroy window
+# GUI utils: destroy window
 from utils.interface import destroy
 
 
 def fetchWidths(dir_path, z):
     """
     Function to run the cross sections interface
-        
+
         Args:
             dir_path: full path to the location where the application is ran
             z: z value of the element to simulate
-            
+
         Returns:
             Not fully implemented, only the base interface
     """
@@ -43,7 +43,7 @@ def fetchWidths(dir_path, z):
         """
         # Window title
         atdata.title("Level and Line Widths")
-        
+
         # Make a frame in the window and initialize a grid positioning and resising for the results
         atdatayields = ttk.Frame(atdata, padding="3 3 12 12")
         """
@@ -52,17 +52,16 @@ def fetchWidths(dir_path, z):
         atdatayields.grid(column=0, row=0, sticky=(N, W, E, S))
         atdatayields.columnconfigure(0, weight=1)
         atdatayields.rowconfigure(0, weight=1)
-        
+
         # Label objects to show the level and line widths
         ttk.Label(atdatayields, text="Level Widths").grid(column=0, row=0, sticky=W, columnspan=2)
         ttk.Label(atdatayields, text="Line Widths").grid(column=5, row=0, sticky=W, columnspan=2)
-        
+
         # Buttons for the export and program flow functions
         ttk.Button(master=atdatayields, text='Export', command=lambda: write_to_xls(2)).grid(column=12, row=0, sticky=W, columnspan=2)
         ttk.Button(master=atdatayields, text='Back', command=lambda: destroy(atdata)).grid(column=12, row=1, sticky=W, columnspan=2)
         ttk.Button(master=atdatayields, text='Exit', command=lambda: destroy(atdata)).grid(column=12, row=2, sticky=W, columnspan=2)
-        
+
         # NOT FURTHER IMPLEMENTED
-        
     except FileNotFoundError:
         messagebox.showerror("Error", "Required File is Missing")
