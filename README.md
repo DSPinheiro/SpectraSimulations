@@ -4,7 +4,6 @@
 # SpectraSimulations
 Latestest version of the spectra simulation program, including simulation for ionic mixtures. 
 
-
 ## Install instructions (Anaconda)
 
 First install the anaconda distribution for your system.
