@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 numpy
 scipy
 lmfit
-=======
-tk
-numpy
-scipy
-lmfit
->>>>>>> 0d2c767d68d4f133c6480f31da97b9ba5cb37e43
 matplotlib
