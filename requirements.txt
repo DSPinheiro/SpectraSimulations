@@ -1,4 +1,3 @@
-tk
 numpy
 scipy
 lmfit
