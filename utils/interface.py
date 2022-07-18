@@ -22,7 +22,8 @@ import data.variables as generalVars
 from utils.fileIO import load, load_effic_file, loadExp
 
 #Import the main functions to bind them to the interface
-from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
+#from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
+from utils.functions import * # Avoids circular imports from the tester
 
 #Import numpy
 import numpy as np

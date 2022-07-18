@@ -478,6 +478,7 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     # Loop the experimental x values
     for g, h in enumerate(exp_x):
         # TODO T-4.4
+        pass
     
     # Calculate the reduced chi^2 value
     generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
