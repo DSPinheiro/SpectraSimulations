@@ -1,50 +1,77 @@
-from numpy import linspace
+from numpy import linspace, array, append
 from utils.functions import G, L, V, V2
 from utils.fileIO import readRates
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
+from matplotlib.widgets import Slider, Button
 from tkinter import Tk, Label, StringVar, IntVar, messagebox, Radiobutton, LEFT, W, Toplevel
 
 
 def task_3():
-    x = linspace(-5, 5, 500)
-    u = 0
-    intens = 1
+    x = linspace(3100, 3107, 140)
+    u = 3104.17
+    intens = 2
     res = 0
-    width = 1
+    gaussian_width = .5
+    lorentzian_width = .5
     fraction = .3
 
-    fig = plt.figure()
-    ax = fig.subplots()
-    ax.plot(x, V(x, u, intens, res, width, fraction),
-            "r-", label="Pseudo-voigt profile")
-    ax.plot(x, G(x, u, intens, res, width), "b:", label="Gaussian profile")
-    ax.plot(x, L(x, u, intens, res, width), "g--", label="Lorentzian profile")
-    ax.plot(x, V2(x, u, intens, res, width/2.5), "k-", label="Voigt profile")
+    hw = array([])
+    counts = array([])
+    counts_err = array([])
+    with open("exp-SIMPA-ECRIS_2.csv", 'r') as file:
+        for line in file.readlines():
+            row = line.split(',')
+            hw = append(hw, float(row[0]))
+            counts = append(counts, float(row[1]))
+            counts_err = append(counts_err, float(row[3]))
+
+    fig = plt.figure(figsize=(12, 6))
+    ax = fig.add_subplot(111)
+    fig.subplots_adjust(left=.25, bottom=.35)
+
+    ax.plot(hw, counts, 'ko', linewidth=.75, markersize=3, label='Experimental data', mfc='none')
+    ax.errorbar(hw, counts, yerr=counts_err, fmt='none', ecolor='k', elinewidth=.5, capsize=1, zorder=1)
+    ax.plot(x, G(x, u, intens, res, gaussian_width), "b:", label="Gaussian profile")
+    ax.plot(x, L(x, u, intens, res, lorentzian_width), "g--", label="Lorentzian profile")
+    ax.plot(x, V(x, u, intens, res, gaussian_width, lorentzian_width, fraction), "r-", label="Pseudo-voigt profile")
+    #ax.plot(hw, V2(hw, u, intens, res, width/2.5), "k-", label="Voigt profile")
+    ax.set_xlabel('Energy (eV)')
+    ax.set_ylabel('Counts/s')
     ax.legend()
 
-    ax_slide = plt.axes([.25, .9, .65, .03])
-    #ax_slide2 = plt.axes([.25, .85, .65, .03])
-    #ax_slide3 = plt.axes([.25, .8, .65, .03])
-    v_factor = Slider(ax_slide, "Pseudo-Voigt Factor", valmin=0,
-                      valmax=1, valinit=fraction, valstep=.05)
-    #v_intens = Slider(ax_slide2, "Intens", valmin=0, valmax=2, valinit=intens, valstep=.05)
-    #v_width = Slider(ax_slide3, "Width", valmin=0, valmax=4, valinit=width, valstep=.05)
+    u_slider_ax = fig.add_axes([.25, .25, .65, .03])
+    u_slider = Slider(u_slider_ax, 'Pseudo-Voigt fraction', 0, 1, valinit=fraction, valstep=.01)
+    intensity_slider_ax = fig.add_axes([.25, .20, .65, .03])
+    intensity_slider = Slider(intensity_slider_ax, 'Intensity', 1, 20, valinit=intens, valstep=.1)
+    gaussian_width_slider_ax = fig.add_axes([.25, .15, .65, .03])
+    gaussian_width_slider = Slider(gaussian_width_slider_ax, 'Gaussian width', .05, 5, valinit=gaussian_width, valstep=.05)
+    lorentzian_width_slider_ax = fig.add_axes([.25, .1, .65, .03])
+    lorentzian_width_slider = Slider(lorentzian_width_slider_ax, 'Lorentzian width', .05, 5, valinit=lorentzian_width, valstep=.05)
 
-    def update(val):
+    def sliders_on_changed(val):
         ax.clear()
-        ax.plot(x, V(x, u, intens, res, width, v_factor.val),
-                "r-", label="Pseudo-voigt profile")
-        ax.plot(x, G(x, u, intens, res, width), "b:", label="Gaussian profile")
-        ax.plot(x, L(x, u, intens, res, width),
-                "g--", label="Lorentzian profile")
-        ax.plot(x, V2(x, u, intens, res, width/2.5),
-                "k-", label="Voigt profile")
+        ax.plot(hw, counts, 'ko', linewidth=.75, markersize=3, label='Experimental data', mfc='none')
+        ax.errorbar(hw, counts, yerr=counts_err, fmt='none', ecolor='k', elinewidth=.5, capsize=1, zorder=1)
+        ax.plot(x, G(x, u, intensity_slider.val, res, gaussian_width_slider.val), "b:", label="Gaussian profile")
+        ax.plot(x, L(x, u, intensity_slider.val, res, lorentzian_width_slider.val), "g--", label="Lorentzian profile")
+        ax.plot(x, V(x, u, intensity_slider.val, res, gaussian_width_slider.val, lorentzian_width_slider.val, u_slider.val), "r-", label="Pseudo-voigt profile")
+        #ax.plot(hw, V2(hw, u_slider.val, intensity_slider.val, res, width/2.5), "k-", label="Voigt profile")
+        ax.set_xlabel('Energy (eV)')
+        ax.set_ylabel('Counts/s')
         ax.legend()
         fig.canvas.draw_idle()
-    v_factor.on_changed(update)
-    # v_intens.on_changed(update)
-    # v_width.on_changed(update)
+    u_slider.on_changed(sliders_on_changed)
+    intensity_slider.on_changed(sliders_on_changed)
+    gaussian_width_slider.on_changed(sliders_on_changed)
+    lorentzian_width_slider.on_changed(sliders_on_changed)
+
+    reset_button_ax = fig.add_axes([0.8, 0.025, 0.1, 0.04])
+    reset_button = Button(reset_button_ax, 'Reset', hovercolor='0.975')
+    def reset_button_on_clicked(mouse_event):
+        u_slider.reset()
+        intensity_slider.reset()
+    reset_button.on_clicked(reset_button_on_clicked)
+
     plt.show()
 
 
@@ -98,7 +125,7 @@ def main():
     languages = [("Task 3", 3),
                  ("Task 4", 4.1)]
 
-    def ShowChoice():
+    def show_choice():
         option = v.get()
         if option == 3:
             task_3()
@@ -115,11 +142,11 @@ def main():
                     text=language,
                     padx=20,
                     variable=v,
-                    command=ShowChoice,
+                    command=show_choice,
                     value=val).pack(anchor=W)
 
     root.mainloop()
 
 
 if __name__ == "__main__":
-    main()
+    task_3()
