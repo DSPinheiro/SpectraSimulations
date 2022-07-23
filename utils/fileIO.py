@@ -394,9 +394,11 @@ def readRates(rates_file):
             linerates: list with the data still in string format
     """
     
-    # TODO T-4.1
-    
-    return []
+    try:
+        pass # TODO T-4.1
+        
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Rate File is not Available: " + rates_file)
 
 # Read the shake weights file and return a list with the data and a list with the labels
 def readShakeWeights(shakeweights_file):
