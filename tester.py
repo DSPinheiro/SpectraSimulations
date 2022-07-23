@@ -253,4 +253,4 @@ def main():
 
 
 if __name__ == "__main__":
-    task_3()
+    main()
