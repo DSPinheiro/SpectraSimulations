@@ -27,6 +27,7 @@ from utils.fileIO import file_namer, loadEfficiency
 #GUI utils for interface variables
 import utils.interface as guiVars
 
+from scipy.special import wofz
 
 element_name = None
 """
@@ -55,7 +56,7 @@ def G(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
-    # TODO T-3.2
+    # TODO T-3.1
     
     return [0 for x in T]
 
@@ -75,8 +76,30 @@ def L(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
-    # TODO T-3.1
+    # TODO T-3.2
     
+    return [0 for x in T]
+
+# pseudo-Voigt profile
+def pseudoV(T, energy, intens, res, gaussian_width, lorentzian_width, fraction):
+    """ 
+    Function to calculate the pseudo-Voigt line shape at x with a fraction of Gaussian and Lorentzian
+        
+        Args:
+            T: list of x values for which we want the y values of the profile
+            energy: x value of the profile center
+            intens: hight of the profile
+            res: experimental resolution to be added to the profile width
+            gaussian_width: gaussian width of the transition for the profile
+            lorentzian_width: lorentzian width of the transition for the profile
+            fraction: fraction between a gaussian and lorentzian profile
+        
+        Returns:
+            y: list of y values for each of the x values in T
+    """
+
+    # TODO T-3.3
+
     return [0 for x in T]
 
 # Voigt profile
@@ -94,10 +117,11 @@ def V(T, energy, intens, res, width):
         Returns:
             y: list of y values for each of the x values in T
     """
-    
-    # TODO T-3.3
-    
-    return [0 for x in T]
+
+    sigma = res / np.sqrt(2 * np.log(2))
+    y = [np.real(intens * wofz(complex(l - energy, width / 2) / sigma / np.sqrt(2))) / sigma / np.sqrt(2 * np.pi) for l in T]
+
+    return y
 
 
 
@@ -221,8 +245,28 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
         
-        # TODO T-4.3
-        
+        for j, k in enumerate(y):
+            # For each transition (high-low levels) loop all the different rates
+            for i in range(len(k)):
+                # Depending on the profile selected add the y values of the calculated profile to the y values of this transition
+                # This profile is calculated across the entire simulated range of x values
+                if fit_type == 'Voigt':
+                    yfinal[j] = np.add(yfinal[j], V(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                elif fit_type == 'Lorentzian':
+                    yfinal[j] = np.add(yfinal[j], L(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                elif fit_type == 'Gaussian':
+                    yfinal[j] = np.add(yfinal[j], G(xfinal, x[j][i], y[j][i], res, w[j][i]))
+                # Add a proportionate amount of progress to the current progress value
+                b1 += 100 / (len(y) * len(k))
+                # Set the progress on the interface
+                guiVars.progress_var.set(b1)
+                # Update the interface to show the progress
+                sim.update_idletasks()
+
+            # If the transition rates list is not empty then add the y values for this transition into the total y values for all transitions
+            if k != []:
+                ytot = np.add(ytot, yfinal[j])
+
         # Set and update the progress and progress bar to 100%
         b1 = 100
         guiVars.progress_var.set(b1)
@@ -476,17 +520,34 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     chi_sum = 0
     
     # Loop the experimental x values
-    for g, h in enumerate(exp_x):
-        # TODO T-4.4
-    
+    for i, x in enumerate(exp_x):
+        # Get the interpolated y values
+        y_interp[i] = f_interpolate(x)
+        # Calculate the chi sum from the interpolated values
+        if normalize == 'ExpMax' or normalize == 'No':
+            normalization = 1
+        elif normalize == 'One':
+            normalization = max(exp_y)
+
+        # TODO T-4.3
+        y_res[i] = 0 # TODO
+        chi_sum += 0 # TODO
+
+    red_chi_sum = 0 # TODO
     # Calculate the reduced chi^2 value
-    generalVars.chi_sqrd = chi_sum / (len(exp_x) - number_of_fit_variables)
-    # Plot the residues
-    residues_graph.plot(exp_x, y_res)
-    # Print the value in the console
-    print("Valor Manual Chi", generalVars.chi_sqrd)
-    # Put the chi^2 value in the plot legend
-    residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
+    generalVars.chi_sqrd = red_chi_sum
+    try :
+        # Plot the residues
+        residues_graph.plot(exp_x, y_res)
+        # Print the value in the console
+        print("Valor Manual Chi", generalVars.chi_sqrd)
+        # Put the chi^2 value in the plot legend
+        residues_graph.legend(title="Red. \u03C7\u00B2 = " + "{:.5f}".format(generalVars.chi_sqrd))
+    except:
+        pass
+
+    return red_chi_sum
+
 
 
 # --------------------------------------------------------- #
@@ -512,8 +573,18 @@ def updateRadTransitionVals(transition, num):
             sat_stick_val: rates data for the possible satellite transitions for the selected transition
     """
     
+    # Update the number of transitions loaded (this could be done by reference as well)
+    num_of_transitions = num + 1
+
+    # Get the low and high levels for the selected transition
+    low_level = the_dictionary[transition]["low_level"]
+    high_level = the_dictionary[transition]["high_level"]
+
     # TODO T-4.2
-    
+    # Filter the radiative and satellite rates data for the selected transition
+    diag_stick_val = [] # TODO
+    sat_stick_val = [] # TODO
+
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 
 # Update the satellite rates for the selected transition
