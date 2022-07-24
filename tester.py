@@ -35,9 +35,9 @@ def test_pseudo_voigt():
     ax = fig.add_subplot(111)
     fig.subplots_adjust(left=.1, bottom=.35)
 
-    gaussian, = ax.plot(x, offset + G(x, u, intens, res, gaussian_width), "b:", label="Gaussian profile")
-    lorentzian, = ax.plot(x, offset + L(x, u, intens, res, lorentzian_width), "g--", label="Lorentzian profile")
-    voigt, = ax.plot(x, offset + pseudoV(x, u, intens, res, gaussian_width, lorentzian_width, fraction), "r-", label="Pseudo-voigt profile")
+    gaussian, = ax.plot(x, G(x, u, intens, res, gaussian_width), "b:", label="Gaussian profile")
+    lorentzian, = ax.plot(x, L(x, u, intens, res, lorentzian_width), "g--", label="Lorentzian profile")
+    voigt, = ax.plot(x, pseudoV(x, u, intens, res, gaussian_width, lorentzian_width, fraction), "r-", label="Pseudo-voigt profile")
     ax.set_xlabel('Energy (eV)')
     ax.set_ylabel('Counts/s')
     ax.legend()

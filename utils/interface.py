@@ -22,8 +22,11 @@ import data.variables as generalVars
 from utils.fileIO import load, load_effic_file, loadExp
 
 #Import the main functions to bind them to the interface
-#from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
-from utils.functions import * # Avoids circular imports from the tester
+#Try/except avoids tester.py errors
+try:
+    from utils.functions import y_calculator, func2min, stem_ploter, plot_stick
+except:
+    pass
 
 #Import numpy
 import numpy as np
@@ -321,7 +324,7 @@ def enter_function(event):
         Returns:
             Nothing, the simulation function is executed
     """
-    utils.functions.plot_stick(_sim, _f, _a)
+    plot_stick(_sim, _f, _a)
 
 
 
@@ -653,7 +656,7 @@ def setupButtonArea(buttons_frame, buttons_frame2, buttons_frame3, buttons_frame
     # Res, Offsets e Calculate
     # , font = ('Sans','10','bold'))  #definicoes botao "calculate"
     ttk.Style().configure('red/black.TButton', foreground='red', background='black')
-    ttk.Button(master=buttons_frame3, text="Calculate", command=lambda: utils.functions.plot_stick(_sim, _f, _a), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0))
+    ttk.Button(master=buttons_frame3, text="Calculate", command=lambda: plot_stick(_sim, _f, _a), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0))
     # yoffset
     res_entry = ttk.Entry(buttons_frame3, width=7, textvariable=yoffset).pack(side=RIGHT)
     ttk.Label(buttons_frame3, text="y Offset").pack(side=RIGHT)
