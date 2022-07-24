@@ -47,13 +47,13 @@ def calculate(element, ap, parent):
             If the function executed correctly it will return 0 (C style)
     """
     if ap == 1:
-        fetchYields(dir_path, z)
+        fetchYields(dir_path, element)
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 2:
-        fetchWidths(dir_path, z)
+        fetchWidths(dir_path, element)
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 3:
-        fetchSections(dir_path, z)
+        fetchSections(dir_path, element)
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 4:
         simulateSpectra(dir_path, element, parent)
