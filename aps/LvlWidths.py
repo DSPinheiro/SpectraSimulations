@@ -14,18 +14,24 @@ from utils.fileIO import file_namer, write_to_xls
 #GUI utils: destroy window
 from utils.interface import destroy
 
+#Data import for variable management
+import data.variables as generalVars
 
-def fetchWidths(dir_path, z):
+
+def fetchWidths(dir_path, element):
     """
     Function to run the cross sections interface
         
         Args:
             dir_path: full path to the location where the application is ran
-            z: z value of the element to simulate
+            element: list with the [z value, element name] to simulate
             
         Returns:
             Not fully implemented, only the base interface
     """
+    
+    z = element[0]
+    
     try:
         # This can be moved to the fileIO module later
         # Path to the file with the widths for this element

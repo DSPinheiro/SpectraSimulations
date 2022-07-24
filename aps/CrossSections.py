@@ -6,13 +6,13 @@ This interface has not yet been implemented.
 #GUI Imports
 from tkinter import messagebox
 
-def fetchSections(dir_path, z):
+def fetchSections(dir_path, element):
     """
     Function to run the cross sections interface
         
         Args:
             dir_path: full path to the location where the application is ran
-            z: z value of the element to simulate
+            element: list with the [z value, element name] to simulate
             
         Returns:
             Not yet implemented

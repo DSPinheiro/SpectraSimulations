@@ -16,17 +16,20 @@ from utils.fileIO import file_namer, write_to_xls
 from utils.interface import destroy
 
 
-def fetchYields(dir_path, z):
+def fetchYields(dir_path, element):
     """
     Function to run the yields interface
         
         Args:
             dir_path: full path to the location where the application is ran
-            z: z value of the element to simulate
+            element: list with the [z value, element name] to simulate
             
         Returns:
             Nothing, we just setup the interface and all commands are bound and performed through the interface
     """
+    
+    z = element[0]
+    
     # This can be moved to the fileIO module later
     # Path to the file with the yields for this element
     yields_file = dir_path / str(z) / (str(z) + '-yields.out')
