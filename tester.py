@@ -60,7 +60,7 @@ def test_pseudo_voigt():
             ax.legend(title=r"$\chi_{red}^2 = $" + "{:.2f}".format(red_chi_sum))
         else:
             gaussian.set_ydata(offset_slider.val + G(x, u, intensity_slider.val, res, gaussian_width_slider.val))
-            lorentzian.set_ydata(offset_slider.val + L(x, u, intensity_slider.val, res, gaussian_width_slider.val))
+            lorentzian.set_ydata(offset_slider.val + L(x, u, intensity_slider.val, res, lorentzian_width_slider.val))
         voigt.set_ydata(offset_slider.val + pseudoV(x, u, intensity_slider.val, res, gaussian_width_slider.val, lorentzian_width_slider.val, fraction_slider.val))
         ax.relim()
         ax.autoscale_view()
@@ -138,21 +138,21 @@ def test_read_rates():
                     break
                 Label(root, text=row.split('\t')[j]).grid(row=i, column=j+1)
 
-        augrate_lines = readRates("26/26-augrate.out")
-        print("\nAuger rates:\n")
-        print(intensity_lines[:5])
+        sat_lines = readRates("26/26-satinty.out")
+        print("\Satellite rates:\n")
+        print(sat_lines[:5])
 
-        augrate_title = StringVar()
-        augrate_label = Label(root, textvariable=augrate_title)
-        augrate_title.set("Auger rates file: 26-augrate.out")
-        augrate_label.grid(row=14, column=1, padx=40)
+        sat_title = StringVar()
+        sat_label = Label(root, textvariable=sat_title)
+        sat_title.set("Satellite rates file: 26-satinty.out")
+        sat_label.grid(row=14, column=1, padx=40)
 
-        col_names = ('# Record', 'Shelli', '2Ji', 'Eigi', '--->', 'Shellf',
-                     '2Jf', 'Eigf', 'Energy (eV)', 'Rate (1/s)', 'Width (eV)')
+        #col_names = ('# Record', 'Shelli', '2Ji', 'Eigi', '--->', 'Shellf',
+        #             '2Jf', 'Eigf', 'Energy (eV)', 'Rate (1/s)', 'Width (eV)')
         for i, col_name in enumerate(col_names, start=1):
             Label(root, text=col_name).grid(row=15, column=i, padx=40)
 
-        table = ['\t'.join(line) for line in augrate_lines[:10]]
+        table = ['\t'.join(line) for line in sat_lines[:10]]
         for i, row in enumerate(table, start=16):
             for j, _ in enumerate(col_names, start=0):
                 if j >= len(row.split('\t')):
@@ -181,18 +181,15 @@ def test_update_trans_vals():
 
         def runOption(_):
             option = clicked.get()
-            num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val = updateRadTransitionVals(
-                option, 0)
+            _, low_level, high_level, diag_stick_val, sat_stick_val = updateRadTransitionVals(option, 0)
             Label(root, text=option).grid(row=3, column=2, sticky="W")
-            Label(root, text=str(num_of_transitions)).grid(
-                row=4, column=2, sticky="W")
             Label(root, text=str(low_level)).grid(
                 row=5, column=2, sticky="W")
             Label(root, text=str(high_level)).grid(
                 row=6, column=2, sticky="W")
-            Label(root, text=str(diag_stick_val[:2]).replace(
+            Label(root, text=str(diag_stick_val[:3]).replace(
                 "], [", "],\n[")).grid(row=7, column=2, sticky="W")
-            Label(root, text=str(sat_stick_val[:2]).replace(
+            Label(root, text=str(sat_stick_val[:3]).replace(
                 "], [", "],\n[")).grid(row=8, column=2, sticky="W")
 
         options = [transition for transition in generalVars.the_dictionary]
@@ -202,11 +199,10 @@ def test_update_trans_vals():
         drop_menu = OptionMenu(root, clicked, *options, command=runOption)
         drop_menu.grid(row=2, column=2, sticky="W")
 
-        Label(root, text="Transition: ").grid(row=3, column=1, sticky="E")
         Label(root, text="Number of transitions: ").grid(row=4, column=1, sticky="E")
         Label(root, text="Low level: ").grid(row=5, column=1, sticky="E")
         Label(root, text="High level: ").grid(row=6, column=1, sticky="E")
-        Label(root, text="Diagram stick val: ").grid(row=7, column=1, sticky="E")
+        Label(root, text="Diagram transitions: ").grid(row=7, column=1, sticky="E")
         Label(root, text="Sattelite transintions: ").grid(row=8, column=1, sticky="E")
 
         root.mainloop()
@@ -220,11 +216,12 @@ def main():
     root.title("Tester")
 
     v = IntVar()
-    v.set(1)
+    v.set(2)
 
-    options = [("Pseudo-Voigt profile fit", 1),
-               ("Read database file", 2),
-               ("Test the radiative and satellite rates updater", 3)]
+    options = [("Read database file", 2),
+               ("Test the radiative and satellite rates updater", 3),
+               ("Pseudo-Voigt profile fit", 1),
+               ]
 
     def run_choice():
         option = v.get()
