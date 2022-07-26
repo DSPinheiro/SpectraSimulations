@@ -395,7 +395,7 @@ def readRates(rates_file):
     """
     
     try:
-        pass # TODO T-4.1
+        pass # TODO T-3.1
         
     except FileNotFoundError:
         messagebox.showwarning("Error", "Rate File is not Available: " + rates_file)

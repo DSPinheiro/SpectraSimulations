@@ -56,7 +56,7 @@ def G(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
-    # TODO T-3.1
+    # TODO T-4.1
     
     return [0 for x in T]
 
@@ -76,7 +76,7 @@ def L(T, energy, intens, res, width):
             y: list of y values for each of the x values in T
     """
     
-    # TODO T-3.2
+    # TODO T-4.2
     
     return [0 for x in T]
 
@@ -98,7 +98,7 @@ def pseudoV(T, energy, intens, res, gaussian_width, lorentzian_width, fraction):
             y: list of y values for each of the x values in T
     """
 
-    # TODO T-3.3
+    # TODO T-4.3
 
     return [0 for x in T]
 
@@ -520,23 +520,21 @@ def calculateResidues(exp_x, exp_y, exp_sigma, xfinal, enoffset, normalization_v
     chi_sum = 0
     
     # Loop the experimental x values
-    for i, x in enumerate(exp_x):
+    for g, h in enumerate(exp_x):
         # Get the interpolated y values
-        y_interp[i] = f_interpolate(x)
+        y_interp[g] = f_interpolate(h)
         # Calculate the chi sum from the interpolated values
         if normalize == 'ExpMax' or normalize == 'No':
-            normalization = 1
+            y_res[g] = (exp_y[g] - y_interp[g])
+            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g]**2))
         elif normalize == 'One':
-            normalization = max(exp_y)
-
-        # TODO T-4.3
-        y_res[i] = 0 # TODO
-        chi_sum += 0 # TODO
-
-    red_chi_sum = 0 # TODO
+            y_res[g] = ((exp_y[g] / max(exp_y)) - y_interp[g])
+            chi_sum += (y_res[g] ** 2) / ((exp_sigma[g] / max(exp_y))**2)
+    
     # Calculate the reduced chi^2 value
+    red_chi_sum = chi_sum / (len(exp_x) - number_of_fit_variables)
     generalVars.chi_sqrd = red_chi_sum
-    try :
+    try:
         # Plot the residues
         residues_graph.plot(exp_x, y_res)
         # Print the value in the console
@@ -575,17 +573,20 @@ def updateRadTransitionVals(transition, num):
     
     # Update the number of transitions loaded (this could be done by reference as well)
     num_of_transitions = num + 1
-
     # Get the low and high levels for the selected transition
     low_level = the_dictionary[transition]["low_level"]
     high_level = the_dictionary[transition]["high_level"]
-
-    # TODO T-4.2
+    
+    # TODO 3.2
     # Filter the radiative and satellite rates data for the selected transition
-    diag_stick_val = [] # TODO
-    sat_stick_val = [] # TODO
+    rad_stick_val = []
+    for line in generalVars.lineradrates:
+        pass # TODO
 
-    return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
+    sat_stick_val = []
+    for line in generalVars.linesatellites:
+        pass # TODO
+    return num_of_transitions, low_level, high_level, rad_stick_val, sat_stick_val
 
 # Update the satellite rates for the selected transition
 def updateSatTransitionVals(low_level, high_level, key, sat_stick_val):
