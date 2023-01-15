@@ -221,12 +221,86 @@ def setupELAMPhotoIoniz():
             break
         if found:
             values = line.split()
-            x.append(math.exp(float(values[0])))
+            x.append(float(values[0]))
             y.append(math.exp(float(values[1])))
         if 'Photo' in line:
             found = True
     
     generalVars.ELAMPhotoSpline = interp1d(x, y)
+
+
+# --------------------------------------------------------- #
+#                                                           #
+#        FUNCTIONS TO HANDLE THE SHAKE PROBABILITIES        #
+#                                                           #
+# --------------------------------------------------------- #
+
+
+def setupShakeUP():
+    shakeValues = {}
+    shakeOrbitals = {}
+    
+    for shake in generalVars.shakeup:
+        if shake[2] != 'SUM':
+            if shake[1] + '_' + shake[3] in shakeValues and shake[1] + '_' + shake[3] in shakeOrbitals:
+                shakeValues[shake[1] + '_' + shake[3]].append(float(shake[4]))
+                shakeOrbitals[shake[1] + '_' + shake[3]].append(int(shake[2][:-1]))
+            else:
+                shakeValues[shake[1] + '_' + shake[3]] = [float(shake[4])]
+                shakeOrbitals[shake[1] + '_' + shake[3]] = [int(shake[2][:-1])]
+    
+    for key in shakeValues:
+        generalVars.shakeUPSplines[key] = interp1d(shakeOrbitals[key], shakeValues[key])
+    
+
+# Calculate the total shake probability from shake-up and shake-off probabilities
+def calculateTotalShake(JJ2):
+    """
+    Function to calculate the total shake probabilities for a transition with an initial level with 2JJ of JJ2
+    
+        Args:
+            JJ2: 2*J value of the transition for which we want the total shake probability
+        
+        Returns:
+            sum of the total shake-up + shake-off probabilities to modify the population of an initial level with 2*J value of JJ2
+    """
+    return sum([float(shake[3]) for shake in generalVars.shakeoff if shake[2] == JJ2]) + sum([float(shake[4]) for shake in generalVars.shakeup if shake[3] == JJ2 and shake[2] == 'SUM'])
+
+# Search for the shake-off probability for the shake electron key
+def get_shakeoff(key):
+    """
+    Function to search for the shake-off probability for a shake electron from the orbital key
+    
+        Args:
+            key: electron shake-off orbital label
+        
+        Returns:
+            shake-off probability for the requested level
+    """
+    probs = []
+    for shake in generalVars.shakeoff:
+        if shake[1] == key:
+            probs.append(shake)
+    
+    return float(probs[0][3]) * (int(probs[0][2]) + 1) + float(probs[1][3]) * (int(probs[1][2]) + 1) / (int(probs[0][2]) + int(probs[1][2]) + 2)
+
+
+# Search for the shake-up probability for the shake electron key and 2*J value JJ2
+def get_shakeup(key, shakeF, JJ2):
+    """
+    Function to search for the shake-up probability for a shake electron from the orbital key with an initial level with 2JJ of JJ2
+    
+        Args:
+            key: electron shake-up orbital label
+            JJ2: 2*J value of the transition for which we want the shake-up probability
+        
+        Returns:
+            shake-up probability for the requested level
+    """
+    try:
+        return generalVars.shakeUPSplines[key + '_' + JJ2](int(shakeF[:-1]))
+    except KeyError:
+        return 0.0
 
 
 # --------------------------------------------------------- #
@@ -341,10 +415,16 @@ def y_calculator(sim, transition_type, fit_type, xfinal, x, y, w, xs, ys, ws, re
     List of the simulated total y values for all transitions we want to simulate for each of the x values in T
     """
     # Initialize a list to store the final y values for each satellite transition for each of the selected transitions
-    yfinals = [[[0 for n in range(len(xfinal))] for i in generalVars.label1] for j in range(len(xs))]
+    yfinals = []
     """
     List of simulated y values for each satellite transition in each digram transition we want to simulate for each of the x values in T
     """
+    
+    for j in range(len(xs)):
+        yfinals.append([])
+        for i in generalVars.label1:
+            yfinals[-1].append([0 for n in range(len(xfinal))])
+            yfinals[-1].append([0 for n in range(len(xfinal))])
     
     if transition_type == 'Diagram' or transition_type == 'Auger':
         b1 = 0
@@ -674,44 +754,73 @@ def get_overlap(line, beam, FWHM):
             line: the data line of the transition that we want to find the ionization energy
             beam: the beam energy introduced in the interface
             FWHM: the beam energy FWHM introduced in the interface
+            shakeup: orbital where the shake-up electron ends in. If empty it is not a shake-up transition
 
         Returns:
             overlap: the overlap
     """
     EcrossSection = guiVars.exc_mech_var.get()
     
-    if len(line[1]) == 2:
-        for level in generalVars.ionizationsrad:
-            if level[1] == line[1] and level[2] == line[2] and level[3] == line[3]:
-                formationEnergy = float(level[5])
-                pWidth = float(level[6])
-                
-                def integrand(x):
-                    l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
-                    if x > beam:
-                        g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
-                    else:
-                        g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+    if len(line[1]) <= 4:
+        if len(line[1]) == 2:
+            for level in generalVars.ionizationsrad:
+                if level[1] == line[1] and level[2] == line[2] and level[3] == line[3]:
+                    formationEnergy = float(level[5])
+                    pWidth = float(level[6])
                     
-                    if EcrossSection == 'EII':
-                        return min(l, g) * generalVars.elementMRBEB[line[1]](formationEnergy, x)
-                    elif EcrossSection == 'PIon':
-                        return min(l, g) * generalVars.ELAMPhotoSpline(x)
+                    def integrand(x):
+                        l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
+                        if x > beam:
+                            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
+                        else:
+                            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+                        
+                        if EcrossSection == 'EII':
+                            return min(l, g) * generalVars.elementMRBEB[line[1]](formationEnergy, x)
+                        elif EcrossSection == 'PIon':
+                            return min(l, g) * generalVars.ELAMPhotoSpline(np.log(x))
+                        else:
+                            return min(l, g)
+                    
+                    if beam > formationEnergy + 10 * pWidth:
+                        return integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)[0]
+                    elif beam < formationEnergy - 10 * pWidth:
+                        return 0.0
                     else:
-                        return min(l, g)
-                
-                if beam > formationEnergy + 10 * pWidth:
-                    return integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)[0]
-                elif beam < formationEnergy - 10 * pWidth:
-                    return 0.0
-                else:
-                    overlap = integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)
-                    return overlap[0]
+                        overlap = integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)
+                        return overlap[0]
+        else:
+            for level in generalVars.ionizationssat:
+                if level[1] == line[1] and level[2] == line[2] and level[3] == line[3]:
+                    formationEnergy = float(level[5])
+                    pWidth = float(level[6])
+                    
+                    def integrand(x):
+                        l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
+                        if x > beam:
+                            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
+                        else:
+                            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+                        
+                        if EcrossSection == 'EIon':
+                            return min(l, g) * min(generalVars.elementMRBEB[line[1][:2]](formationEnergy, x), generalVars.elementMRBEB[line[1][2:]](formationEnergy, x))
+                        elif EcrossSection == 'PIon':
+                            return min(l, g) * generalVars.ELAMPhotoSpline(np.log(x))
+                        else:
+                            return min(l, g)
+                    
+                    if beam > formationEnergy + 10 * pWidth:
+                        return integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)[0]
+                    elif beam < formationEnergy - 10 * pWidth:
+                        return 0.0
+                    else:
+                        overlap = integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)
+                        return overlap[0]
     else:
-        for level in generalVars.ionizationssat:
+        for level in generalVars.ionizationsshakeup:
             if level[1] == line[1] and level[2] == line[2] and level[3] == line[3]:
                 formationEnergy = float(level[5])
-                pWidth = float(level[6])
+                pWidth = max(float(level[6]), 1E-100)
                 
                 def integrand(x):
                     l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
@@ -723,7 +832,7 @@ def get_overlap(line, beam, FWHM):
                     if EcrossSection == 'EIon':
                         return min(l, g) * min(generalVars.elementMRBEB[line[1][:2]](formationEnergy, x), generalVars.elementMRBEB[line[1][2:]](formationEnergy, x))
                     elif EcrossSection == 'PIon':
-                        return min(l, g) * generalVars.ELAMPhotoSpline(x)
+                        return min(l, g) * generalVars.ELAMPhotoSpline(np.log(x))
                     else:
                         return min(l, g)
                 
@@ -734,6 +843,8 @@ def get_overlap(line, beam, FWHM):
                 else:
                     overlap = integrate.quad(integrand, formationEnergy, formationEnergy + 10 * pWidth)
                     return overlap[0]
+    
+    return 0.0
 
 # Find the branching ratio from Auger process of a higher shell for the satellite transition
 def get_AugerBR(line):
@@ -797,15 +908,22 @@ def updateRadTransitionVals(transition, num, beam, FWHM):
         # Filter the radiative and satellite rates data for the selected transition
         diag_stick_val = [line + [get_overlap(line, beam, FWHM)] for line in generalVars.lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]
         sat_stick_val = [line + [get_overlap(line, beam, FWHM)] for line in generalVars.linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
+        
+        # Filter the shake-up satellite rates data for the selected transition
+        sat_stick_val += [line + [get_overlap(line, beam, FWHM)] for line in generalVars.lineshakeup if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
+        
     else:
         # Filter the radiative and satellite rates data for the selected transition
         diag_stick_val = [line for line in generalVars.lineradrates if line[1] in low_level and line[5] == high_level and float(line[8]) != 0]
         sat_stick_val = [line for line in generalVars.linesatellites if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
+        
+        # Filter the shake-up satellite rates data for the selected transition
+        sat_stick_val += [line for line in generalVars.lineshakeup if low_level in line[1] and high_level in line[5] and float(line[8]) != 0]
     
     return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
 
 # Update the satellite rates for the selected transition
-def updateSatTransitionVals(low_level, high_level, key, sat_stick_val, beam, FWHM):
+def updateSatTransitionVals(low_level, high_level, key, sat_stick_val, beam, FWHM, free = False):
     """
     Function to update the satellite rates for the selected transition and shake level
         
@@ -819,18 +937,18 @@ def updateSatTransitionVals(low_level, high_level, key, sat_stick_val, beam, FWH
         Returns:
             sat_stick_val_ind: list with the satellite rates for the selected diagram transition and shake level
     """
-    if beam > 0:
-        # Filter the satellite rates data for the combinations of selected levels
-        sat_stick_val_ind1 = [line + [get_overlap(line, beam, FWHM)] for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
-        sat_stick_val_ind2 = [line + [get_overlap(line, beam, FWHM)] for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5]]
-        sat_stick_val_ind3 = [line + [get_overlap(line, beam, FWHM)] for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
-        sat_stick_val_ind4 = [line + [get_overlap(line, beam, FWHM)] for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5]]
-    else:
+    if not free:
         # Filter the satellite rates data for the combinations of selected levels
         sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1] and key + high_level in line[5]]
         sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1] and high_level + key in line[5]]
         sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1] and key + high_level in line[5]]
         sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1] and high_level + key in line[5]]
+    else:
+        # Filter the satellite rates data for the combinations of selected levels
+        sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line[1]]
+        sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line[1]]
+        sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line[1]]
+        sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line[1]]
     
     sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
     
@@ -953,7 +1071,6 @@ def updateAugCSTransitionsVals(transition, num, ncs, cs, beam, FWHM):
             aug_stick_val = [line + [generalVars.NCS_augMixValues[i].get()] for i, lineaug in enumerate(generalVars.lineaugrates_NCS) for line in lineaug if low_level in line[1] and high_level in line[5][:2] and auger_level in line[5][2:4] and float(line[8]) != 0 and generalVars.aug_PCS[i] == cs]
     
     return num_of_transitions, aug_stick_val
-
 
 
 # --------------------------------------------------------- #
@@ -1179,7 +1296,7 @@ def stem_ploter(a, transition_values, transition, spec_type, ind, key):
     # Calculate the y's weighted with the shake weights depending on the spectrum type and plot the sticks
     # In the case of charge state simulation the y's are also weighted by the selected mixture percentages
     if spec_type == 'Diagram' or spec_type == 'Auger':
-        y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) * row[-1] for row in transition_values]
+        y = [float(row[11]) * (1 - calculateTotalShake(row[2])) * row[-1] for row in transition_values]
         """
         Intensity values for the selected diagram or auger transition
         """
@@ -1188,7 +1305,7 @@ def stem_ploter(a, transition_values, transition, spec_type, ind, key):
         a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites':
-        sy_points = [float(float(row[11]) * 0.01 * generalVars.shakeweights[ind]) * row[-1] for row in transition_values]
+        sy_points = [float(float(row[11]) * get_shakeoff(key)) * row[-1] for row in transition_values if len(row[1]) <= 4]
         """
         Intensity values for the selected satellite transition
         """
@@ -1196,8 +1313,18 @@ def stem_ploter(a, transition_values, transition, spec_type, ind, key):
         sy_points.append(0)
         a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
         a.legend(loc='best', numpoints=1)
+        
+        # SHAKE-UP
+        sy_points = [float(float(row[11]) * get_shakeup(key, row[1][4:], row[2])) * row[-1] for row in transition_values if len(row[1]) > 4]
+        """
+        Intensity values for the selected satellite transition
+        """
+        sy_points.insert(0, 0)
+        sy_points.append(0)
+        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
+        a.legend(loc='best', numpoints=1)
     elif spec_type == 'Diagram_CS' or spec_type == 'Auger_CS':
-        y = [float(row[11]) * (1 - 0.01 * sum(generalVars.shakeweights)) * float(row[-2]) * row[-1] for row in transition_values]
+        y = [float(row[11]) * (1 - calculateTotalShake(row[2])) * float(row[-2]) * row[-1] for row in transition_values]
         """
         Intensity values for the selected diagram or auger transition weight by the charge state mix value
         """
@@ -1206,13 +1333,23 @@ def stem_ploter(a, transition_values, transition, spec_type, ind, key):
         a.stem(x, y, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=str(transition), use_line_collection=True)
         a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites_CS':
-        sy_points = [float(float(row[11]) * 0.01 * generalVars.shakeweights[ind] * float(row[-2])) * row[-1] for row in transition_values]
+        sy_points = [float(float(row[11]) * get_shakeoff(key) * float(row[-2])) * row[-1] for row in transition_values if len(row[1]) <= 4]
         """
         Intensity values for the selected satellite transition weight by the charge state mix value
         """
         sy_points.insert(0, 0)
         sy_points.append(0)
         a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key], use_line_collection=True)  # Plot a stemplot
+        a.legend(loc='best', numpoints=1)
+        
+        # SHAKE-UP
+        sy_points = [float(float(row[11]) * get_shakeup(key, row[1][4:], row[2]) * float(row[-2])) * row[-1] for row in transition_values if len(row[1]) > 4]
+        """
+        Intensity values for the selected satellite transition weight by the charge state mix value
+        """
+        sy_points.insert(0, 0)
+        sy_points.append(0)
+        a.stem(x, sy_points, markerfmt=' ', linefmt=str(col2[np.random.randint(0, 7)][0]), label=transition + ' - ' + labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
         a.legend(loc='best', numpoints=1)
     
     # --------------------------------------------------------------------------------------------------------------------------
@@ -1518,11 +1655,11 @@ def simu_diagram(diag_sim_val, beam, cs = False):
     w1 = [float(row[15]) for row in diag_sim_val]
     
     if beam > 0 and cs:
-        y1 = [float(row[11]) * (1 - sum(generalVars.shakeweights) + get_DiagramBR(row)) * row[-2] * row[-1] for row in diag_sim_val]
+        y1 = [float(row[11]) * (1 - calculateTotalShake(row[2]) + get_DiagramBR(row)) * row[-2] * row[-1] for row in diag_sim_val]
     elif beam > 0 or cs:
-        y1 = [float(row[11]) * (1 - sum(generalVars.shakeweights) + get_DiagramBR(row)) * row[-1] for row in diag_sim_val]
+        y1 = [float(row[11]) * (1 - calculateTotalShake(row[2]) + get_DiagramBR(row)) * row[-1] for row in diag_sim_val]
     else:
-        y1 = [float(row[11]) * (1 - sum(generalVars.shakeweights)) for row in diag_sim_val]
+        y1 = [float(row[11]) * (1 - calculateTotalShake(row[2])) for row in diag_sim_val]
     
     return x1, y1, w1
 
@@ -1549,6 +1686,7 @@ def simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, cs = False):
     ys_inds = []
     ws_inds = []
     
+    # SHAKE-OFF
     # Loop the shake labels read from the shake weights file
     for ind, key in enumerate(generalVars.label1):
         # Filter the specific combination of radiative transition and shake level (key) to simulate
@@ -1557,15 +1695,42 @@ def simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, cs = False):
         # Check if there is at least one satellite transition
         if len(sat_sim_val_ind) > 0:
             # Extract the energies, intensities and widths of the transition (different j and eigv)
-            x1s = [float(row[8]) for row in sat_sim_val_ind]
-            w1s = [float(row[15]) for row in sat_sim_val_ind]
+            x1s = [float(row[8]) for row in sat_sim_val_ind if len(row[1]) <= 4]
+            w1s = [float(row[15]) for row in sat_sim_val_ind if len(row[1]) <= 4]
             
             if beam > 0 and cs:
-                y1s = [float(float(row[11]) * (generalVars.shakeweights[ind] + get_AugerBR(row))) * row[-2] * row[-1] for row in sat_sim_val_ind]
+                y1s = [float(float(row[11]) * (get_shakeoff(key) + get_AugerBR(row))) * row[-2] * row[-1] for row in sat_sim_val_ind if len(row[1]) <= 4]
             elif beam > 0 or cs:
-                y1s = [float(float(row[11]) * (generalVars.shakeweights[ind] + get_AugerBR(row))) * row[-1] for row in sat_sim_val_ind]
+                y1s = [float(float(row[11]) * (get_shakeoff(key) + get_AugerBR(row))) * row[-1] for row in sat_sim_val_ind if len(row[1]) <= 4]
             else:
-                y1s = [float(float(row[11]) * generalVars.shakeweights[ind]) for row in sat_sim_val_ind]
+                y1s = [float(float(row[11]) * get_shakeoff(key)) for row in sat_sim_val_ind if len(row[1]) <= 4]
+            
+            xs_inds.append(x1s)
+            ys_inds.append(y1s)
+            ws_inds.append(w1s)
+        else:
+            xs_inds.append([])
+            ys_inds.append([])
+            ws_inds.append([])
+    
+    # SHAKE-UP
+    # Loop the shake labels read from the shake weights file
+    for ind, key in enumerate(generalVars.label1):
+        # Filter the specific combination of radiative transition and shake level (key) to simulate
+        sat_sim_val_ind = updateSatTransitionVals(low_level, high_level, key, sat_sim_val, beam, FWHM, True)
+        
+        # Check if there is at least one satellite transition
+        if len(sat_sim_val_ind) > 0:
+            # Extract the energies, intensities and widths of the transition (different j and eigv)
+            x1s = [float(row[8]) for row in sat_sim_val_ind if len(row[1]) > 4]
+            w1s = [float(row[15]) for row in sat_sim_val_ind if len(row[1]) > 4]
+            
+            if beam > 0 and cs:
+                y1s = [float(float(row[11]) * (get_shakeup(key, row[1][4:], row[2]) + get_AugerBR(row))) * row[-2] * row[-1] for row in sat_sim_val_ind if len(row[1]) > 4]
+            elif beam > 0 or cs:
+                y1s = [float(float(row[11]) * (get_shakeup(key, row[1][4:], row[2]) + get_AugerBR(row))) * row[-1] for row in sat_sim_val_ind if len(row[1]) > 4]
+            else:
+                y1s = [float(float(row[11]) * get_shakeup(key, row[1][4:], row[2])) for row in sat_sim_val_ind if len(row[1]) > 4]
             
             xs_inds.append(x1s)
             ys_inds.append(y1s)
@@ -1597,11 +1762,11 @@ def simu_auger(aug_sim_val, beam, cs = False):
     w1 = [float(row[10]) for row in aug_sim_val]
     
     if beam > 0 and cs:
-        y1 = [float(row[9]) * (1 - sum(generalVars.shakeweights)) * row[-2] * row[-1] for row in aug_sim_val]
+        y1 = [float(row[9]) * (1 - calculateTotalShake(row[2])) * row[-2] * row[-1] for row in aug_sim_val]
     elif beam > 0 or cs:
-        y1 = [float(row[9]) * (1 - sum(generalVars.shakeweights)) * row[-1] for row in aug_sim_val]
+        y1 = [float(row[9]) * (1 - calculateTotalShake(row[2])) * row[-1] for row in aug_sim_val]
     else:
-        y1 = [float(row[9]) * (1 - sum(generalVars.shakeweights)) for row in aug_sim_val]
+        y1 = [float(row[9]) * (1 - calculateTotalShake(row[2])) for row in aug_sim_val]
     
     return x1, y1, w1
 
@@ -1855,18 +2020,25 @@ def simu_plot(sat, graph_area, enoffset, normalization_var, y0, total, plotSimu)
                     graph_area.plot(generalVars.xfinal + enoffset, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=key, color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                     graph_area.legend()
     if 'Satellites' in sat:
-        totalSatInt = []
+        totalShakeoffInt = []
+        totalShakeupInt = []
         for index, key in enumerate(the_dictionary):
             if the_dictionary[key]["selected_state"]:
                 for l, m in enumerate(generalVars.yfinals[index]):
                     # Dont plot the satellites that have a max y value of 0
                     if max(m) != 0:
-                        totalSatInt.append(sum(m))
+                        if l < len(generalVars.label1):
+                            totalShakeoffInt.append(sum(m))
+                        else:
+                            totalShakeupInt.append(sum(m))
                         if plotSimu:
                             # Plot the selected transition
-                            graph_area.plot(generalVars.xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            if l < len(generalVars.label1):
+                                graph_area.plot(generalVars.xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l]], color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
+                            else:
+                                graph_area.plot(generalVars.xfinal + enoffset, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=key + ' - ' + labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', color=str(col2[np.random.randint(0, 7)][0]))  # Plot the simulation of all lines
                             graph_area.legend()
-        print(str(guiVars.excitation_energy.get()) + "; " + str(sum(totalDiagInt)) + "; " + str(sum(totalSatInt)))
+        print(str(guiVars.excitation_energy.get()) + "; " + str(sum(totalDiagInt)) + "; " + str(sum(totalShakeoffInt)) + "; " + str(sum(totalShakeupInt)))
     if sat == 'Auger':
         for index, key in enumerate(the_aug_dictionary):
             if the_aug_dictionary[key]["selected_state"]:
@@ -1939,9 +2111,27 @@ def initialize_XYW(type_simu, ploted_cs = []):
     x = [[] for i in range(len(trans_dict) * cs_mult)]
     y = [[] for i in range(len(trans_dict) * cs_mult)]
     w = [[] for i in range(len(trans_dict) * cs_mult)]
-    xs = [[[] for i in generalVars.label1] for j in x]
-    ys = [[[] for i in generalVars.label1] for j in y]
-    ws = [[[] for i in generalVars.label1] for j in w]
+    
+    xs = []
+    for j in x:
+        xs.append([])
+        for i in generalVars.label1:
+            xs[-1].append([])
+            xs[-1].append([])
+    
+    ys = []
+    for j in y:
+        ys.append([])
+        for i in generalVars.label1:
+            ys[-1].append([])
+            ys[-1].append([])
+    
+    ws = []
+    for j in w:
+        ws.append([])
+        for i in generalVars.label1:
+            ws[-1].append([])
+            ws[-1].append([])
     
     return x, y, w, xs, ys, ws
     
@@ -2476,6 +2666,7 @@ def plot_stick(sim, f, graph_area):
     
     setupMRBEB()
     setupELAMPhotoIoniz()
+    setupShakeUP()
     
     # --------------------------------------------------------------------------------------------------------------------------
     if spectype == 'Stick':
@@ -2486,9 +2677,9 @@ def plot_stick(sim, f, graph_area):
     # --------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'Simulation':
         make_simulation(sim, f, graph_area, time_of_click)
-        #for energ in np.linspace(9900, 11200, 600):
-        #    guiVars.excitation_energy.set(energ)
-        #    make_simulation(sim, f, graph_area, time_of_click, False)
+        for energ in np.linspace(8995, 10500, 5000):
+            guiVars.excitation_energy.set(energ)
+            make_simulation(sim, f, graph_area, time_of_click, False)
     # --------------------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'M_Simulation':
         make_Msimulation(sim, f, graph_area, time_of_click)

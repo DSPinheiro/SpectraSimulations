@@ -637,6 +637,30 @@ def readELAMelement(ELAM_file, z):
         messagebox.showwarning("Error", "ELAM database File is not Avaliable: " + str(ELAM_file))
     
 
+# Read the shake up/off file and return a list with the data
+def readShake(shake_file):
+    """
+    Function to read the shake-up/off file
+        
+        Args:
+            shake_file: file path of the shake file
+            
+        Returns:
+            shake_prob: list with the shake probabilities still in string format
+    """
+    try:
+        with open(shake_file, 'r') as shake:
+            # Write the lines into a list
+            shake_prob = [x.strip('\n').split() for x in shake.readlines()]
+            # Remove empty strings from possible uneven formating
+            shake_prob = list(filter(None, shake_prob))
+            # Delete the header rows
+            del shake_prob[0:2]
+            
+            return shake_prob
+    except FileNotFoundError:
+        messagebox.showwarning("Error", "Shake Probabilities File is not Avaliable: " + str(shake_file))
+
 # ----------------------------------------------------- #
 #                                                       #
 #    READ RATES AND IONPOP FILES FOR CHARGE STATES      #

@@ -85,38 +85,37 @@ def main():
             Shellf[record] = "N1"
         
         if Shelli[record] == "2p":
-            if "2p*1" in Configi[record]:
+            if "2p4" in Configi[record]:
                 Shelli[record] = "L2"
-            elif "2p3" in Configi[record]:
+            elif "2p*2" in Configi[record]:
                 Shelli[record] = "L3"
         if Shellf[record] == "2p":
-            if "2p*1" in Configf[record]:
+            if "2p4" in Configf[record]:
                 Shellf[record] = "L2"
-            elif "2p3" in Configf[record]:
+            elif "2p*2" in Configf[record]:
                 Shellf[record] = "L3"
         
         if Shelli[record] == "3p":
-            if "3p*1" in Configi[record]:
+            if "3p4" in Configi[record]:
                 Shelli[record] = "M2"
-            elif "3p3" in Configi[record]:
+            elif "3p3" in Configi[record] or "3p2" in Configi[record]:
                 Shelli[record] = "M3"
         if Shellf[record] == "3p":
-            if "3p*1" in Configf[record]:
+            if "3p4" in Configf[record]:
                 Shellf[record] = "M2"
-            elif "3p3" in Configf[record]:
+            elif "3p3" in Configf[record] or "3p2" in Configf[record]:
                 Shellf[record] = "M3"
         
         if Shelli[record] == "3d":
             if "3d*3" in Configi[record]:
                 Shelli[record] = "M4"
-            elif "3d5" in Configi[record]:
+            elif "3d*4" in Configi[record]:
                 Shelli[record] = "M5"
         if Shellf[record] == "3d":
             if "3d*3" in Configf[record]:
                 Shellf[record] = "M4"
-            elif "3d5" in Configf[record]:
+            elif "3d*4" in Configf[record]:
                 Shellf[record] = "M5"
-
 
     with open("29-intensity.out", "w") as output:
         output.write("# Atomic number Z= 29  Date:" + datetime.today().strftime('%d-%m-%Y') + "\n\n")

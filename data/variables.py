@@ -134,6 +134,29 @@ label1 = []
 Variable to hold the shake labels read from file
 """
 
+#Raw data read from the shake-up file to be simulated
+shakeup = []
+"""
+Variable to hold the shake-up probabilities read from file
+"""
+#Raw data read from the shake-off file to be simulated
+shakeoff = []
+"""
+Variable to hold the shake-off probabilities read from file
+"""
+
+
+#Raw data read from the shake-up transitions file to be simulated, for each orbital the shake-up electron is promoted to
+lineshakeup = []
+"""
+Variable to hold the data from the shake-up rates read from file for each orbital the shake-up electron is promoted to
+"""
+
+#Raw data read from the shake-up ionization energies file to be simulated, for each orbital the shake-up electron is promoted to
+ionizationsshakeup = []
+"""
+Variable to hold the data from the shake-up ionization energies read from file for each orbital the shake-up electron is promoted to
+"""
 
 #Raw data read from the radiative transitions files to be simulated, for each charge state split by positive and negative CS
 lineradrates_PCS = []
@@ -250,6 +273,13 @@ ELAMPhotoSpline = None
 """
 Variable to hold the spline interpolation to use when calculating the cross section
 """
+
+#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
+shakeUPSplines = {}
+"""
+Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
+"""
+
 
 #Correspondence between Siegbahn notation and relativistic orbitals
 labeldict = {'K1': '1s', 'L1': '2s', 'L2': '2p*', 'L3': '2p', 'M1': '3s', 'M2': '3p*', 'M3': '3p', 'M4': '3d*',

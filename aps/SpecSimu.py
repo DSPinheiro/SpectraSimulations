@@ -15,7 +15,7 @@ import data.variables as generalVars
 
 #File IO Imports
 from utils.fileIO import readRates, readShakeWeights, readIonizationEnergies, readDiagramWidths, readSatelliteWidths, readMeanR, readELAMelement
-from utils.fileIO import searchChargeStates, readChargeStates, readIonPop
+from utils.fileIO import searchChargeStates, readChargeStates, readIonPop, readShake
 
 #Function Imports
 import utils.functions
@@ -90,6 +90,30 @@ def simulateSpectra(dir_path, element, parent):
     # Read the shake weights file
     generalVars.shakeweights, generalVars.label1 = readShakeWeights(shakeweights_file)
 
+    # Path to the shake-up file for this element
+    shakeup_file = dir_path / str(z) / (str(z) + '-shakeup.out')
+    """
+    Variable with the full path to the shake-up file of this element
+    """
+    # Read the shake-up file
+    generalVars.shakeup = readShake(shakeup_file)
+
+    # Path to the shake-up rates file for this element
+    shakeuprates_file = dir_path / str(z) / (str(z) + '-shakeupinty.out')
+    """
+    Variable with the full path to the shake-up rates file of this element
+    """
+    # Read the rates file
+    generalVars.lineshakeup = readRates(shakeuprates_file)
+
+    # Path to the shake-off file for this element
+    shakeoff_file = dir_path / str(z) / (str(z) + '-shakeoff.out')
+    """
+    Variable with the full path to the shake-off file of this element
+    """
+    # Read the shake-off file
+    generalVars.shakeoff = readShake(shakeoff_file)
+
     # Path to the 1 hole ionization energies energies file for this element
     ioniz_file = dir_path / str(z) / (str(z) + '-grounddiagenergy.out')
     """
@@ -101,10 +125,18 @@ def simulateSpectra(dir_path, element, parent):
     # Path to the 2 hole ionization energies energies file for this element
     ioniz_file = dir_path / str(z) / (str(z) + '-groundsatenergy.out')
     """
-    Variable with the full path to the 1 hole ionization energies file of this element
+    Variable with the full path to the 2 hole ionization energies file of this element
     """
     # Read the ionization energies energies file
     generalVars.ionizationssat = readIonizationEnergies(ioniz_file)
+    
+    # Path to the 2 hole ionization energies energies file for this element
+    ioniz_file = dir_path / str(z) / (str(z) + '-groundshakeupenergy.out')
+    """
+    Variable with the full path to the shake-up ionization energies file of this element
+    """
+    # Read the ionization energies energies file
+    generalVars.ionizationsshakeup = readIonizationEnergies(ioniz_file)
     
     # Path to the diagram rates with partial widths file for this element
     radrateswidths_file = dir_path / str(z) / (str(z) + '-radrate.out')
@@ -178,6 +210,7 @@ def simulateSpectra(dir_path, element, parent):
         # Check if the ion population data exists and load it
         generalVars.Ionpop_exists, generalVars.ionpopdata = readIonPop(ionpop_file)
 
+    
     
     # ----------------------------------------------------------------------------------------------#
     #                                                                                               #

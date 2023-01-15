@@ -85,15 +85,15 @@ def main():
             Shellf[record] = Shellf[record].replace("4s", "N1").replace("_", "")
         
         if "2p" in Shelli[record]:
-            if "2p*1" in Configf[record] and "2p4" in Configf[record]:
+            if "2p*1" in Configi[record] and "2p4" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("2p", "L2").replace("_", "")
-            elif "2p*2" in Configf[record] and "2p3" in Configf[record]:
+            elif "2p*2" in Configi[record] and "2p3" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("2p", "L3").replace("_", "")
-            elif "2p4" in Configf[record] and "2p*1" not in Configf[record]:
+            elif "2p4" in Configi[record] and "2p*1" not in Configi[record]:
                 Shelli[record] = Shelli[record].replace("2p", "L2").replace("_", "")
-            elif "2p2" in Configf[record]:
+            elif "2p2" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("2p", "L3").replace("_", "")
-            elif "2p*1" in Configf[record] and "2p3" in Configf[record]:
+            elif "2p*1" in Configi[record] and "2p3" in Configi[record]:
                 Shelli[record] = "L2L3"
         if "2p" in Shellf[record]:
             if "2p*1" in Configf[record] and "2p4" in Configf[record]:
@@ -108,15 +108,15 @@ def main():
                 Shellf[record] = "L2L3"
         
         if "3p" in Shelli[record]:
-            if "3p*1" in Configf[record] and "3p4" in Configf[record]:
+            if "3p*1" in Configi[record] and "3p4" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3p", "M2").replace("_", "")
-            elif "3p*2" in Configf[record] and "3p3" in Configf[record]:
+            elif "3p*2" in Configi[record] and "3p3" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3p", "M3").replace("_", "")
-            elif "3p4" in Configf[record] and "3p*1" not in Configf[record]:
+            elif "3p4" in Configi[record] and "3p*1" not in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3p", "M2").replace("_", "")
-            elif "3p2" in Configf[record]:
+            elif "3p2" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3p", "M3").replace("_", "")
-            elif "3p*1" in Configf[record] and "3p3" in Configf[record]:
+            elif "3p*1" in Configi[record] and "3p3" in Configi[record]:
                 Shelli[record] = "M2M3"
         if "3p" in Shellf[record]:
             if "3p*1" in Configf[record] and "3p4" in Configf[record]:
@@ -131,15 +131,15 @@ def main():
                 Shellf[record] = "M2M3"
         
         if "3d" in Shelli[record]:
-            if "3d*3" in Configf[record] and "3d6" in Configf[record]:
+            if "3d*3" in Configi[record] and "3d6" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3d", "M4").replace("_", "")
-            elif "3d*4" in Configf[record] and "3d5" in Configf[record]:
+            elif "3d*4" in Configi[record] and "3d5" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3d", "M5").replace("_", "")
-            elif "3d6" in Configf[record] and "3d*2" in Configf[record]:
+            elif "3d6" in Configi[record] and "3d*2" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3d", "M4").replace("_", "")
-            elif "3d4" in Configf[record]:
+            elif "3d4" in Configi[record]:
                 Shelli[record] = Shelli[record].replace("3d", "M5").replace("_", "")
-            elif "3d*3" in Configf[record] and "3d5" in Configf[record]:
+            elif "3d*3" in Configi[record] and "3d5" in Configi[record]:
                 Shelli[record] = "M4M5"
         if "3d" in Shellf[record]:
             if "3d*3" in Configf[record] and "3d6" in Configf[record]:

@@ -17,7 +17,7 @@ Width = []
 Configs = []
 
 def main():
-    with open("../29/29-satrate.out", "r") as lines:
+    with open("29-satrate_5d.out", "r") as lines:
         header = lines.readline().strip() #header line
         lines.readline().strip() #header line
         lines.readline().strip() #header line
@@ -39,7 +39,7 @@ def main():
             Width.append(values[10].strip())
             
     
-    with open("../29/29-groundsatenergy.out", "r") as lines:
+    with open("../29/Shake_up/29-groundsatenergy_5d.out", "r") as lines:
         header = lines.readline().strip() #header line
         lines.readline().strip() #header line
         lines.readline().strip() #header line
