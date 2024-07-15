@@ -1,0 +1,37 @@
+Alpha Parameters
+ Hf 	1.0
+ Ta 	2.0
+ W 	1.2
+ Re 	1.0
+ Os 	1.0
+ Ir 	0.8
+ Ni 	1.0
+ Cu 	1.15
+Spectra Standard Targets
+29-exp_spec.csv
+ Hf 	0.2	0.0	0.0	mg/kg
+ Ta 	0.0	0.0	0.0	w%
+ W 	0.0	0.2	0.0	ug/kg
+ Re 	0.0	0.0	0.0	w%
+ Os 	0.2	0.0	0.0	ppm
+ Ir 	0.0	0.0	0.0	w%
+ Ni 	0.0	0.15	0.0	w%
+ Cu 	0.15	0.0	0.1	ppm
+29-exp_spec_NIST.csv
+ Hf 	0.0	0.0	0.0	w%
+ Ta 	0.0	0.15	0.0	ppm
+ W 	0.0	0.0	0.2	w%
+ Re 	0.2	0.0	0.0	w%
+ Os 	0.0	0.0	0.0	mg/kg
+ Ir 	0.0	0.15	0.0	w%
+ Ni 	0.0	0.0	0.25	w%
+ Cu 	0.0	0.0	0.0	ug/kg
+29-exp-aug-L2M45M45-L3M45M45.csv
+ Hf 	0.0	0.0	0.0	w%
+ Ta 	0.0	0.0	0.0	w%
+ W 	0.0	0.0	0.0	w%
+ Re 	0.0	0.0	0.0	w%
+ Os 	0.0	0.0	0.0	w%
+ Ir 	0.0	0.0	0.0	w%
+ Ni 	0.0	0.0	0.0	w%
+ Cu 	0.0	0.0	0.0	w%

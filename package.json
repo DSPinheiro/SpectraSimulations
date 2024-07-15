@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@formatjs/intl-localematcher": "^0.4.2"
+  }
+}

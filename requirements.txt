@@ -1,0 +1,11 @@
+tk
+numpy
+scipy
+lmfit
+matplotlib
+plotly
+mplcursors
+scikit-learn
+pybaselines
+iminuit
+scienceplots
