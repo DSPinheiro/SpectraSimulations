@@ -46,8 +46,13 @@ def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str,
         # Make a 0 vector to still have data to plot
         diag_stick_val = [Line() for i in range(16)]
         # Show a warning that this transition has no data and add it to the bad selection count
-        messagebox.showwarning("Wrong Transition", transition + " is not Available")
+        if len(generalVars.jj_vals) == 0:
+            messagebox.showwarning("Wrong Transition", transition + " is not Available")
+        else:
+            messagebox.showwarning("Wrong Transition", transition + " is not Available for the selected jj values")
         bad += 1
+        
+        return bad, graph_area
     
     # Extract the energy values
     x = [row.energy for row in diag_stick_val]
@@ -66,6 +71,12 @@ def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str,
     """
     
     JJ = [row.jji for row in diag_stick_val]
+    
+    if generalVars.verbose >= 3:
+        print(x)
+        print(y)
+        
+        print(JJ)
     
     graph_area = stem_ploter(graph_area, x, y, JJ,
                              transition if cs == '' else cs + ' ' + transition,

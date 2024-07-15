@@ -80,86 +80,94 @@ def stem_ploter(a: Axes, x: List[float], y: List[float], JJ: List[int], transiti
             xs_up[i].append(x_up[h])
     
     # Add extra values before and after to make the y start and terminate on 0
-    max_value = max(x)
-    min_value = min(x)
+    max_value = max(x) if len(x) > 0 else 0.0
+    min_value = min(x) if len(x) > 0 else 0.0
+    delta = (min_value + max_value) / 2.0
     
     x_tmp = x.copy()
     
     if guiVars.x_min.get() == "Auto": # type: ignore
-        x_tmp.insert(0, 2 * min_value - max_value)
+        x_tmp.insert(0, min_value - delta * 0.2)
+        y.insert(0, 0)
     else:
-        x_tmp.insert(0, float(guiVars.x_min.get())) # type: ignore
+        a.set_xlim(xmin=float(guiVars.x_min.get())) # type: ignore
     
     if guiVars.x_max.get() == "Auto": # type: ignore
-        x_tmp.append(2 * max_value - min_value)
+        x_tmp.append(max_value + delta * 0.2)
+        y.append(0)
     else:
-        x_tmp.append(float(guiVars.x_max.get())) # type: ignore
+        a.set_xlim(xmax=float(guiVars.x_max.get())) # type: ignore
     
-    y.insert(0, 0)
-    y.append(0)
+    
+    tr_readable = str(generalVars.the_dictionary[transition]['readable_name'])
+    tr_latex = str(generalVars.the_dictionary[transition]['latex_name'])
     
     # Calculate the y's weighted with the shake weights depending on the spectrum type and plot the sticks
     # In the case of charge state simulation the y's are also weighted by the selected mixture percentages
     if spec_type == 'Diagram' or spec_type == 'Auger':
         with open("debug_sticks.txt", "a") as debug:
             debug.write("\nDiagram Sticks:\n\n")
-            debug.write(str(transition) + "\n")
+            debug.write(tr_readable + "\n")
         if not guiVars.JJ_colors.get(): # type: ignore
             with open("debug_sticks.txt", "a") as debug:
                 for x1, y1 in zip(x_tmp, y):
                     debug.write(str(x1) + ", " + str(y1) + "\n")
-            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=str(transition), use_line_collection=True)
+            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=tr_latex, use_line_collection=True)
             a.legend(loc='best', numpoints=1)
         else:
             for i in range(len(xs)):
-                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=str(transition) + "_" + str(JJ[i]), use_line_collection=True)
+                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=tr_latex + "_" + str(JJ[i]), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites':
         if not guiVars.JJ_colors.get(): # type: ignore
-            with open("debug_sticks.txt", "a") as debug:
-                debug.write("\nShake-off Sticks:\n\n")
-                debug.write(transition + ' - ' + generalVars.labeldict[key] + "\n")
-                for x1, y1 in zip(x_tmp, y):
-                    debug.write(str(x1) + ", " + str(y1) + "\n")
-            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=transition + ' - ' + generalVars.labeldict[key], use_line_collection=True)  # Plot a stemplot
-            a.legend(loc='best', numpoints=1)
+            if len(x_tmp) > 0 and len(y) > 0:
+                with open("debug_sticks.txt", "a") as debug:
+                    debug.write("\nShake-off Sticks:\n\n")
+                    debug.write(tr_readable + ' - ' + generalVars.labeldict[key] + "\n")
+                    for x1, y1 in zip(x_tmp, y):
+                        debug.write(str(x1) + ", " + str(y1) + "\n")
+                a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=tr_latex + ' - ' + generalVars.labeldict[key], use_line_collection=True)  # Plot a stemplot
+                a.legend(loc='best', numpoints=1)
             
-            with open("debug_sticks.txt", "a") as debug:
-                debug.write("\nShake-up Sticks:\n\n")
-                debug.write(transition + ' - ' + generalVars.labeldict[key] + ' - shakeup\n')
-                for x1, y1 in zip(x_up, y_up):
-                    debug.write(str(x1) + ", " + str(y1) + "\n")
-            a.stem(x_up, y_up, markerfmt=' ', linefmt=select_color(), label=transition + ' - ' + generalVars.labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
-            a.legend(loc='best', numpoints=1)
+            if len(x_up) > 0 and len(y_up) > 0:
+                with open("debug_sticks.txt", "a") as debug:
+                    debug.write("\nShake-up Sticks:\n\n")
+                    debug.write(tr_readable + ' - ' + generalVars.labeldict[key] + ' - shakeup\n')
+                    for x1, y1 in zip(x_up, y_up):
+                        debug.write(str(x1) + ", " + str(y1) + "\n")
+                a.stem(x_up, y_up, markerfmt=' ', linefmt=select_color(), label=tr_latex + ' - ' + generalVars.labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
+                a.legend(loc='best', numpoints=1)
         else:
-            for i in range(len(xs)):
-                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=transition + ' - ' + generalVars.labeldict[key] + '_' + str(JJ[i]), use_line_collection=True)  # Plot a stemplot
-                a.legend(loc='best', numpoints=1)
-            
-            for i in range(len(xs_up)):
-                a.stem(xs_up[i], ys_up[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ_up[i]]), label=transition + ' - ' + generalVars.labeldict[key] + ' - shakeup_' + str(JJ_up[i]), use_line_collection=True)  # Plot a stemplot
-                a.legend(loc='best', numpoints=1)
+            if len(xs) > 0 and len(ys) > 0 and len(JJ) > 0:
+                for i in range(len(xs)):
+                    a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=tr_latex + ' - ' + generalVars.labeldict[key] + '_' + str(JJ[i]), use_line_collection=True)  # Plot a stemplot
+                    a.legend(loc='best', numpoints=1)
+                
+            if len(x_up) > 0 and len(y_up) > 0 and len(JJ_up) > 0:
+                for i in range(len(xs_up)):
+                    a.stem(xs_up[i], ys_up[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ_up[i]]), label=tr_latex + ' - ' + generalVars.labeldict[key] + ' - shakeup_' + str(JJ_up[i]), use_line_collection=True)  # Plot a stemplot
+                    a.legend(loc='best', numpoints=1)
     elif spec_type == 'Diagram_CS' or spec_type == 'Auger_CS':
         if not guiVars.JJ_colors.get(): # type: ignore
-            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=str(transition), use_line_collection=True)
+            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=tr_latex, use_line_collection=True)
             a.legend(loc='best', numpoints=1)
         else:
             for i in range(len(xs)):
-                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=str(transition) + "_" + str(JJ[i]), use_line_collection=True)
+                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=tr_latex + "_" + str(JJ[i]), use_line_collection=True)
                 a.legend(loc='best', numpoints=1)
     elif spec_type == 'Satellites_CS':
         if not guiVars.JJ_colors.get(): # type: ignore
-            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=transition + ' - ' + generalVars.labeldict[key], use_line_collection=True)  # Plot a stemplot
+            a.stem(x_tmp, y, markerfmt=' ', linefmt=select_color(), label=tr_latex + ' - ' + generalVars.labeldict[key], use_line_collection=True)  # Plot a stemplot
             a.legend(loc='best', numpoints=1)
             
-            a.stem(x_up, y_up, markerfmt=' ', linefmt=select_color(), label=transition + ' - ' + generalVars.labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
+            a.stem(x_up, y_up, markerfmt=' ', linefmt=select_color(), label=tr_latex + ' - ' + generalVars.labeldict[key] + ' - shakeup', use_line_collection=True)  # Plot a stemplot
             a.legend(loc='best', numpoints=1)
         else:
             for i in range(len(xs_up)):
-                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=transition + ' - ' + generalVars.labeldict[key] + "_" + str(JJ[i]), use_line_collection=True)  # Plot a stemplot
+                a.stem(xs[i], ys[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ[i]]), label=tr_latex + ' - ' + generalVars.labeldict[key] + "_" + str(JJ[i]), use_line_collection=True)  # Plot a stemplot
                 a.legend(loc='best', numpoints=1)
                 
-                a.stem(xs_up[i], ys_up[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ_up[i]]), label=transition + ' - ' + generalVars.labeldict[key] + ' - shakeup_' + str(JJ_up[i]), use_line_collection=True)  # Plot a stemplot
+                a.stem(xs_up[i], ys_up[i], markerfmt=' ', linefmt=str(generalVars.colors_2J[JJ_up[i]]), label=tr_latex + ' - ' + generalVars.labeldict[key] + ' - shakeup_' + str(JJ_up[i]), use_line_collection=True)  # Plot a stemplot
                 a.legend(loc='best', numpoints=1)
     
     # --------------------------------------------------------------------------------------------------------------------------
@@ -173,8 +181,8 @@ def stem_ploter(a: Axes, x: List[float], y: List[float], JJ: List[int], transiti
     # Initialize the number of legends in each columns
     labels_per_columns = number_of_labels / legend_columns
     
-    # While we have more than 10 labels per column
-    while labels_per_columns > 10:
+    # While we have more than 25 labels per column
+    while labels_per_columns >= 25:
         # Add one more column
         legend_columns += 1
         # Recalculate the number of labels per column

@@ -54,9 +54,14 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
         # Make a 0 vector to still have data to plot
         sat_stick_val = [Line() for i in range(16)]
         # Show a warning that this transition has no data and add it to the bad selection count
-        messagebox.showwarning("Wrong Transition", transition + " is not Available")
+        if len(generalVars.jj_vals) == 0:
+            messagebox.showwarning("Wrong Transition", transition + " is not Available")
+        else:
+            messagebox.showwarning("Wrong Transition", transition + " is not Available for the selected jj values")
         bad += 1
-    
+
+        return bad, graph_area
+
     # Initialize a variable to control the progress bar
     b1 = 0
     
@@ -87,7 +92,7 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
             """
             Intensity values for the selected satellite transition
             """    
-                
+            
             # SHAKE-UP
             sy_points_up = [row.effectiveIntensity(-1.0, 1.0, 1.0, guiVars.include_cascades.get(), 'shakeup', key) for row in sat_stick_val if len(row.Shelli) > 4] # type: ignore
             """
@@ -96,6 +101,13 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
             
             JJ = [row.jji for row in sat_stick_val if len(row.Shelli) <= 4]
             JJ_up = [row.jji for row in sat_stick_val if len(row.Shelli) > 4]
+            
+            if generalVars.verbose >= 3:
+                print(x_up)
+                print(sy_points_up)
+                print(JJ_up)
+                
+                print(sat_stick_val)
             
             graph_area = stem_ploter(graph_area, x, sy_points, JJ,
                                      transition if cs == '' else cs + ' ' + transition,
