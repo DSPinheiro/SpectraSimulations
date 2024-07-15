@@ -137,3 +137,6 @@ conversionScripts/output/
 Fit_from_*
 Simulation_from_*
 plotChannelOpen.py
+
+# Multi-remote ignore
+git_push

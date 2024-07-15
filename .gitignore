@@ -140,3 +140,6 @@ plotChannelOpen.py
 
 # Element Data files
 [0-9]*/
+
+# Multi-remote ignore
+git_push
