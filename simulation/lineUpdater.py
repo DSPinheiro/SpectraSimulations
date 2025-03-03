@@ -9,7 +9,7 @@ import data.variables as generalVars
 
 import interface.variables as guiVars
 
-from simulation.shake import avgDiagramOverlap
+from simulation.shake import avgDiagramOverlap, avgDiagramOverlapExc
 
 from data.definitions import Line
 
@@ -71,12 +71,15 @@ def updateRadTransitionVals(transition: str, num: int, beam: float, FWHM: float,
         else:
             list_to_process_up = generalVars.lineshakeup
     
-    
     if len(generalVars.jj_vals) == 0:
         # Filter the radiative and satellite rates data for the selected transition
         diag_stick_val = [line for line in list_to_process if line.filterLevel(low_level, high_level, strict='h')]
-        avgDOverlap = avgDiagramOverlap(diag_stick_val, beam, FWHM)
         
+        if len(generalVars.ionizationsrad) > 0 or len(generalVars.ionizationssat) > 0:
+            avgDOverlap = avgDiagramOverlap(diag_stick_val, beam, FWHM)
+        else:
+            avgDOverlap = 1.0
+
         if linelist_sat != None:
             sat_stick_val = [line.setDiagramOverlap(avgDOverlap) for line in list_to_process_sat if line.filterLevel(low_level, high_level, strict='na')]
         
@@ -89,8 +92,12 @@ def updateRadTransitionVals(transition: str, num: int, beam: float, FWHM: float,
     else:
         # Filter the radiative and satellite rates data for the selected transition
         diag_stick_val = [line for line in list_to_process if line.filterLevel(low_level, high_level, strict='h') and line.filterJJI()]
-        avgDOverlap = avgDiagramOverlap(diag_stick_val, beam, FWHM)
         
+        if len(generalVars.ionizationsrad) > 0 or len(generalVars.ionizationssat) > 0:
+            avgDOverlap = avgDiagramOverlap(diag_stick_val, beam, FWHM)
+        else:
+            avgDOverlap = 1.0
+
         if linelist_sat != None:
             sat_stick_val = [line.setDiagramOverlap(avgDOverlap) for line in list_to_process_sat if line.filterLevel(low_level, high_level, strict='na') and line.filterJJI()]
             
@@ -134,6 +141,56 @@ def updateSatTransitionVals(low_level: str, high_level: str, key: str, sat_stick
     sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
     
     return sat_stick_val_ind
+
+
+# Update the radiative and satellite rates for the selected transition and charge state
+def updateRadExcitationVals(transition: str, num: int, beam: float, FWHM: float, exc_index: int, exc: str):
+    """
+    Function to update the radiative and satellite rates for the selected transition and excitation
+        
+        Args:
+            transition: which transition to fetch the rates of
+            num: total number of transitions processed
+            cs: excitation orbital
+            beam: beam energy user value from the interface
+        
+        Returns:
+            num_of_transitions: total number of transitions processed
+            low_level: low level of the selected transition and excitation
+            high_level: high level of the selected transition and excitation
+            diag_stick_val: rates data for the selected transition and excitation
+            sat_stick_val: rates data for the possible satellite transitions for the selected transition and excitation
+    """
+    # Update the number of transitions loaded (this could be done by reference as well)
+    num_of_transitions = num + 1
+    # Get the low and high levels for the selected transition
+    low_level: str = generalVars.the_dictionary[transition]["low_level"] # type: ignore
+    high_level: str = generalVars.the_dictionary[transition]["high_level"] # type: ignore
+    
+    if len(generalVars.jj_vals) == 0:
+        # Filter the radiative and satellite rates data for the selected transition and charge state
+        # diag_stick_val = [line for i, linerad in enumerate(generalVars.lineradrates_EXC) for line in linerad if line.filterLevel(low_level, high_level, strict='h') and generalVars.rad_EXC[i] == exc]
+        diag_stick_val = [line for i, linerad in enumerate(generalVars.lineradrates_EXC) for line in linerad if line.filterLevel(low_level, high_level, strict='na') and generalVars.rad_EXC[i] == exc]
+
+        if len(generalVars.ionizationsrad_exc) > 0 or len(generalVars.ionizationssat_exc) > 0:
+            avgDOverlap = avgDiagramOverlapExc(diag_stick_val, beam, FWHM, exc_index)
+        else:
+            avgDOverlap = 1.0
+
+        sat_stick_val = [line.setDiagramOverlap(avgDOverlap) for i, linesat in enumerate(generalVars.linesatellites_EXC) for line in linesat if line.filterLevel(low_level, high_level, strict='na') and generalVars.sat_EXC[i] == exc]
+    else:
+        # Filter the radiative and satellite rates data for the selected transition and charge state
+        # diag_stick_val = [line for i, linerad in enumerate(generalVars.lineradrates_EXC) for line in linerad if line.filterLevel(low_level, high_level, strict='h') and generalVars.rad_EXC[i] == exc and line.filterJJI()]
+        diag_stick_val = [line for i, linerad in enumerate(generalVars.lineradrates_EXC) for line in linerad if line.filterLevel(low_level, high_level, strict='na') and generalVars.rad_EXC[i] == exc and line.filterJJI()]
+        if len(generalVars.ionizationsrad_exc) > 0 or len(generalVars.ionizationssat_exc) > 0:
+            avgDOverlap = avgDiagramOverlapExc(diag_stick_val, beam, FWHM, exc_index)
+        else:
+            avgDOverlap = 1.0
+        
+        sat_stick_val = [line.setDiagramOverlap(avgDOverlap) for i, linesat in enumerate(generalVars.linesatellites_EXC) for line in linesat if line.filterLevel(low_level, high_level, strict='na') and generalVars.sat_EXC[i] == exc and line.filterJJI()]
+        
+    return num_of_transitions, low_level, high_level, diag_stick_val, sat_stick_val
+
 
 # Update the auger rates for the selected transition
 def updateAugTransitionVals(transition: str, num: int):

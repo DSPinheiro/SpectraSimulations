@@ -8,7 +8,8 @@ from simulation.satellite import simu_sattelite
 from simulation.initializers import initialize_XYW
 
 from simulation.lineUpdater import updateRadTransitionVals, updateAugTransitionVals,\
-                                    updateRadCSTrantitionsVals, updateAugCSTransitionsVals
+                                    updateRadCSTrantitionsVals, updateAugCSTransitionsVals,\
+                                    updateRadExcitationVals
 
 from utils.misc.badReporters import simu_check_bads, simu_quantify_check_bads, Msimu_check_bads, report_MbadSelection
 
@@ -16,24 +17,42 @@ from utils.misc.badReporters import simu_check_bads, simu_quantify_check_bads, M
 from utils.crossSections.EIICS import setupMRBEB
 from utils.crossSections.PhotoCS import setupELAMPhotoIoniz
 from utils.crossSections.energies import setupFormationEnergies, setupPartialWidths
+from utils.crossSections.energies import setupFormationEnergiesExc, setupPartialWidthsExc
 
-#Shake vaulues setup
-from simulation.shake import setupShake
+#Shake values setup
+from simulation.shake import setupShake, setupShakeExc
+
+#Excitation yield ratios (from decays)
+from simulation.mults import setupExcitationYields
 
 from typing import List
 
 
-def process_excitation_data(quantify: bool):
+def process_ionization_shake_data(excitation: bool, quantify: bool):
     if not quantify:
         if generalVars.meanR_exists:
             setupMRBEB()
         if generalVars.ELAM_exists:
             setupELAMPhotoIoniz()
 
-        setupShake()
+        if generalVars.shakeoff[0] != [''] and generalVars.shakeup[0] != ['']:
+            setupShake()
+        else:
+            print("Skipping shake setup as no shake lines were read.")
         
-        setupFormationEnergies()
-        setupPartialWidths()
+        if len(generalVars.ionizationsrad) > 0 or len(generalVars.ionizationssat) > 0:
+            setupFormationEnergies()
+            setupPartialWidths()
+        else:
+            print("Skipping level data setup as no ground energy file was read.")
+
+        if excitation:
+            setupShakeExc()
+            
+            setupFormationEnergiesExc()
+            setupPartialWidthsExc()
+            
+            setupExcitationYields()
     else:
         for element in guiVars.elementList:
             if element[1] in generalVars.meanR_exists_quant:
@@ -71,31 +90,61 @@ def process_simulation(shake_amps: dict = {}, prompt: bool = True):
     beam: float = guiVars.excitation_energy.get() # type: ignore
     FWHM: float = guiVars.excitation_energyFWHM.get() # type: ignore
     
+    # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
+    x, y, w, xs, ys, ws = initialize_XYW('Radiative')
+    # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
+    xe, ye, we, xse, yse, wse = initialize_XYW('Excitation', generalVars.rad_EXC)
+    
+    bad_selection = 0
+    bad_selection_e = 0
+    
     # Radiative and Auger code has to be split due to the different dictionaries used for the transitions
     if sat != 'Auger':
-        # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
-        x, y, w, xs, ys, ws = initialize_XYW('Radiative')
-        
-        # Read the selected transitions
-        # In this case we first store all the values for the transitions and then we calculate the y values to be plotted according to a profile
-        for index, transition in enumerate(generalVars.the_dictionary):
-            if generalVars.the_dictionary[transition]["selected_state"]:
-                # Same filter as the sticks but we dont keep track of the number of selected transitions
-                _, low_level, high_level, diag_sim_val, sat_sim_val = updateRadTransitionVals(transition, 0, beam, FWHM)
-                
-                if 'Diagram' in sat:
-                    # Store the values in a list containing all the transitions to simulate
-                    x[index], y[index], w[index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps)
-                if 'Satellites' in sat:
-                    # Store the values in a list containing all the transitions to simulate
-                    xs[index], ys[index], ws[index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps)
-        
-        # -------------------------------------------------------------------------------------------
-        # Check if there are any transitions with missing rates
-        bad_selection, bads = simu_check_bads(x, xs, True, prompt)
-        for index in bads:
-            x[index] = []
-        
+        if 'Diagram' in sat or 'Satellites' in sat:
+            
+            # Read the selected transitions
+            # In this case we first store all the values for the transitions and then we calculate the y values to be plotted according to a profile
+            for index, transition in enumerate(generalVars.the_dictionary):
+                if generalVars.the_dictionary[transition]["selected_state"]:
+                    # Same filter as the sticks but we dont keep track of the number of selected transitions
+                    _, low_level, high_level, diag_sim_val, sat_sim_val = updateRadTransitionVals(transition, 0, beam, FWHM)
+                    
+                    if 'Diagram' in sat:
+                        # Store the values in a list containing all the transitions to simulate
+                        x[index], y[index], w[index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps)
+                    if 'Satellites' in sat:
+                        # Store the values in a list containing all the transitions to simulate
+                        xs[index], ys[index], ws[index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps)
+            
+            # -------------------------------------------------------------------------------------------
+            # Check if there are any transitions with missing rates
+            bad_selection, bads = simu_check_bads(x, xs, True, prompt)
+            for index in bads:
+                x[index] = []
+        if 'Excitation' in sat or 'ESat' in sat:
+            bad_lines = {}
+
+            # Loop the existing excitations
+            for exc_index, exc in enumerate(generalVars.rad_EXC):
+                # -------------------------------------------------------------------------------------------
+                # Read the selected transitions
+                # In this case we first store all the values for the transitions and then we calculate the y values to be plotted according to a profile
+                for index, transition in enumerate(generalVars.the_dictionary):
+                    if generalVars.the_dictionary[transition]["selected_state"]:
+                        # Same as sticks but we dont care about the number of transitions
+                        _, low_level, high_level, diag_sim_val, sat_sim_val = updateRadExcitationVals(transition, 0, beam, FWHM, exc_index, exc)
+                        
+                        if 'Excitation' in sat:
+                            # Store the values in a list containing all the transitions and charge states to simulate
+                            xe[exc_index * len(generalVars.the_dictionary) + index], ye[exc_index * len(generalVars.the_dictionary) + index], we[exc_index * len(generalVars.the_dictionary) + index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps, exc_index=exc_index)
+                        if 'ESat' in sat:
+                            # Store the values in a list containing all the charge states and transitions to simulate
+                            xse[exc_index * len(generalVars.the_dictionary) + index], yse[exc_index * len(generalVars.the_dictionary) + index], wse[exc_index * len(generalVars.the_dictionary) + index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps, exc_index=exc_index)
+                # -------------------------------------------------------------------------------------------
+                # Check if there are any transitions with missing rates
+                bad_selection_e, bad_lines_e = Msimu_check_bads(exc_index, exc, xe, xse, True)
+            if prompt:
+                report_MbadSelection(bad_lines, generalVars.rad_EXC)
     else:
         # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
         x, y, w, xs, ys, ws = initialize_XYW('Auger')
@@ -115,7 +164,7 @@ def process_simulation(shake_amps: dict = {}, prompt: bool = True):
         for index in bads:
             x[index] = []
     
-    return x, y, w, xs, ys, ws, bad_selection
+    return x, y, w, xs, ys, ws, bad_selection, xe, ye, we, xse, yse, wse, bad_selection_e
 
 
 def process_quantify_simu(shake_amps: dict = {}, prompt: bool = True):
@@ -279,4 +328,4 @@ def process_Msimulation(shake_amps: dict = {}, prompt: bool = True):
             report_MbadSelection(bad_lines, ploted_cs)
     
     
-    return x, y, w, xs, ys, ws, bad_selection
+    return x, y, w, xs, ys, ws, bad_selection, ploted_cs

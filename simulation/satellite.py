@@ -14,7 +14,7 @@ from simulation.mults import get_cascadeBoost
 
 from simulation.shake import calculateTotalShake, get_shakeoff, get_shakeup
 
-from data.definitions import Line
+from data.definitions import Line, processLine
 
 from typing import List
 
@@ -22,6 +22,8 @@ from typing import List
 from tkinter import messagebox, Toplevel
 
 from matplotlib.pyplot import Axes
+
+import copy
 
 # ---------------------------------------------------------------------- #
 #                                                                        #
@@ -52,7 +54,7 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
     # Check if there is no data for the selected transition
     if not sat_stick_val:
         # Make a 0 vector to still have data to plot
-        sat_stick_val = [Line() for i in range(16)]
+        sat_stick_val = [processLine() for i in range(16)]
         # Show a warning that this transition has no data and add it to the bad selection count
         if len(generalVars.jj_vals) == 0:
             messagebox.showwarning("Wrong Transition", transition + " is not Available")
@@ -123,7 +125,8 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
 
 
 def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
-                   beam: float, FWHM: float, shake_amps: dict = {}, element: str = ''):
+                   beam: float, FWHM: float, shake_amps: dict = {}, element: str = '',
+                   exc_index: int = -1):
     """
     Function to check and send the data to the stick plotter function for sattelite transitions.
     
@@ -154,7 +157,7 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
     # Loop the shake labels read from the shake weights file
     for ind, key in enumerate(generalVars.label1):
         # Filter the specific combination of radiative transition and shake level (key) to simulate
-        sat_sim_val_ind = updateSatTransitionVals(low_level, high_level, key, sat_sim_val)
+        sat_sim_val_ind = updateSatTransitionVals(low_level, high_level, key, sat_sim_val, True)
         
         # Check if there is at least one satellite transition
         if len(sat_sim_val_ind) > 0:
@@ -173,7 +176,7 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
             
             if element == '':
                 y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                              'satellite', key, shake_amps) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
+                                              'satellite', key, shake_amps, exc_index=exc_index) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
             else:
                 y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
                                               'satellite', key, shake_amps,
@@ -196,6 +199,7 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
         for ind, key in enumerate(generalVars.label1):
             # Filter the specific combination of radiative transition and shake level (key) to simulate
             sat_sim_val_ind = updateSatTransitionVals(low_level, high_level, key, sat_sim_val, True)
+            # sat_sim_val_ind = updateSatTransitionVals(low_level, high_level, key, sat_sim_val)
             
             # Check if there is at least one satellite transition
             if len(sat_sim_val_ind) > 0:
@@ -232,4 +236,3 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                 ws_inds.append([])
         
     return xs_inds, ys_inds, ws_inds
-

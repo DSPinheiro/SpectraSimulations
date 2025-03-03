@@ -16,6 +16,8 @@ import numpy.typing as npt
 #GUI Imports for warnings
 from tkinter import messagebox
 
+import traceback
+
 # --------------------------------------------------------- #
 #                                                           #
 #       FUNCTIONS TO UPDATE X BOUNDS AND REBIND DATA        #
@@ -45,7 +47,7 @@ def getBounds(x: List[List[float]], w: List[List[float]]) -> Tuple[List[float], 
     # Calculate the automatic min and max values of x to be plotted
     max_value = max([max(x[i]) for i in range(len(x)) if x[i] != []]) + 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
     min_value = min([min(x[i]) for i in range(len(x)) if x[i] != []]) - 4 * max([max(w[i]) for i in range(len(w)) if w[i] != []])
-    
+
     return deltaE, max_value, min_value
 
 # Calculate the x bound from the simulated satellite transition energy and width data
@@ -231,7 +233,7 @@ def calculate_xfinal(sat: str, x: List[List[float]], w: List[List[float]],
     bounds = []
     
     try:
-        if 'Diagram' in sat or 'Auger' in sat:
+        if 'Diagram' in sat or 'Excitation' in sat or 'Auger' in sat:
             # Get the bounds of the energies and widths to plot
             if not quantify:
                 deltaEdiag, max_valuediag, min_valuediag = getBounds(x, w)
@@ -272,14 +274,14 @@ def calculate_xfinal(sat: str, x: List[List[float]], w: List[List[float]],
             diag = False
     except ValueError:
         diag = False
-        
+        # print(traceback.format_exc())
         if not bad_selection:
             messagebox.showerror("No Diagram Transition", "No transition was chosen")
         else:
             messagebox.showerror("Wrong Diagram Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
         
     try:
-        if 'Satellites' in sat:
+        if 'Satellites' in sat or 'ESat' in sat:
             # Get the bounds of the energies and widths to plot
             if not quantify:
                 deltaEsat, max_valuesat, min_valuesat = getSatBounds(xs, ws)
@@ -310,7 +312,6 @@ def calculate_xfinal(sat: str, x: List[List[float]], w: List[List[float]],
             messagebox.showerror("No Satellite Transition", "No transition was chosen")
         else:
             messagebox.showerror("Wrong Satellite Transition", "You chose " + str(bad_selection) + " invalid transition(s)")
-    
     
     
     
@@ -378,6 +379,9 @@ def calculate_xfinal(sat: str, x: List[List[float]], w: List[List[float]],
             
             # Update the bounds considering the resolution and energy offset chosen
             array_input_max, array_input_min = updateMaxMinVals(x_mx, x_mn, deltaE, max_value, min_value, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset) # type: ignore
+            
+            # Calculate the grid of x values to use in the simulation
+            generalVars.xfinal = np.linspace(array_input_min, array_input_max, num=num_of_points)
         else:
             for el_idx in range(len(guiVars.elementList)):
                 deltaE = max(deltaEdiag[el_idx]) # type: ignore
@@ -437,3 +441,12 @@ def calculate_xfinal(sat: str, x: List[List[float]], w: List[List[float]],
             print(f'Occurences of bound value {bound[1]} = {occurences[bound[1]]}')
     
     return generalVars.xfinal, bounds
+
+
+def mergeXFinals(xfinal1, xfinal2):
+    new_min = min(min(xfinal1), min(xfinal2))
+    new_max = max(max(xfinal1), max(xfinal2))
+    
+    generalVars.xfinal = np.linspace(new_min, new_max, len(xfinal1))
+    
+    return generalVars.xfinal

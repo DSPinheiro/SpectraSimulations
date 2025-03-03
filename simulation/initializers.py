@@ -33,12 +33,12 @@ def initialize_XYW(type_simu: str, ploted_cs: List[str] = []):
             ws: natural width values for each of the possible radiative satellite transitions
     """
     
-    if 'Radiative' in type_simu:
+    if 'Radiative' in type_simu or 'Excitation' in type_simu:
         trans_dict = the_dictionary
     else:
         trans_dict = the_aug_dictionary
     
-    if 'CS' in type_simu:
+    if 'CS' in type_simu or 'Excitation' in type_simu:
         cs_mult = len(ploted_cs)
     else:
         cs_mult = 1

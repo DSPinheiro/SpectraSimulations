@@ -12,7 +12,7 @@ from simulation.shake import calculateTotalShake
 
 from simulation.mults import get_cascadeBoost
 
-from data.definitions import Line
+from data.definitions import Line, processLine
 
 from typing import List
 
@@ -46,7 +46,7 @@ def stick_auger(graph_area: Axes, aug_stick_val: List[Line], transition: str, ba
     # Check if there is no data for the selected transition
     if not aug_stick_val:
         # Make a 0 vector to still have data to plot
-        aug_stick_val = [Line() for i in range(16)]
+        aug_stick_val = [processLine() for i in range(16)]
         # Show a warning that this transition has no data and add it to the bad selection count
         if len(generalVars.jj_vals) == 0:
             messagebox.showwarning("Wrong Transition", "Auger info. for " + transition + " is not Available")

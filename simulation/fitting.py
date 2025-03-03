@@ -16,7 +16,7 @@ import simulation.shake as shakes
 
 from simulation.ycalc import y_calculator, normalizer, add_fitting_components, add_baseline
 
-from simulation.bounds import calculate_xfinal
+from simulation.bounds import calculate_xfinal, mergeXFinals
 
 from utils.misc.fileIO import exportFit
 
@@ -639,7 +639,10 @@ def func2min(params: Parameters, sim: Toplevel,
              sat: str, peak: str,
              x: List[List[float]], y: List[List[float]], w: List[List[float]],
              xs: List[List[List[float]]], ys: List[List[List[float]]], ws: List[List[List[float]]],
-             energy_values: List[float], efficiency_values: List[float], baseline: bool = False):
+             energy_values: List[float], efficiency_values: List[float], baseline: bool = False,
+             xe: List[List[float]] = [], ye: List[List[float]] = [], we: List[List[float]] = [],
+             xse: List[List[List[float]]] = [], yse: List[List[List[float]]] = [],
+             wse: List[List[List[float]]] = []):
     """
     Function to be minimized in the fitting
         
@@ -721,6 +724,9 @@ def func2min(params: Parameters, sim: Toplevel,
     x_mn = guiVars.x_min.get() # type: ignore
     
     generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, xoff, sat_xoff, shkoff_xoff, shkup_xoff, num_of_points, 0, baseline) #np.array(np.linspace(min(exp_x), max(exp_x), num=num_of_points))
+    if 'Excitation' in sat or 'ESat' in sat:
+        xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, xoff, sat_xoff, shkoff_xoff, shkup_xoff, num_of_points, 0, baseline)
+        generalVars.xfinal = mergeXFinals(generalVars.xfinal, xfinal)
     
     if guiVars.fit_shake_prob.get(): # type: ignore
         shake_amps = {}
@@ -767,14 +773,22 @@ def func2min(params: Parameters, sim: Toplevel,
         #             return res
         
         if guiVars.choice_var.get()[:2] == "M_": # type: ignore
-            x, y, w, xs, ys, ws, _ = process_Msimulation(shake_amps, False) ##  para vários estados de carga
+            x, y, w, xs, ys, ws, _, _ = process_Msimulation(shake_amps, False) ##  para vários estados de carga
         else:
-            x, y, w, xs, ys, ws, _ = process_simulation(shake_amps, False) ## consideramos apenas o átomo
+            x, y, w, xs, ys, ws, _, xe, ye, we, xse, yse, wse, _ = process_simulation(shake_amps, False) ## consideramos apenas o átomo
     
     
     # Calculate the simulated values
+    if 'Excitation' in sat or 'ESat' in sat:
+        generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
+        generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
+                energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
+    
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
-        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
+        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, \
+                energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
     
     if len(generalVars.extra_fitting_functions) > 0:
         for key in generalVars.extra_fitting_functions:
@@ -809,7 +823,11 @@ def func2min(params: Parameters, sim: Toplevel,
     normalization_var = normalizer(y0, max(exp_y), ytot_max)# if not baseline else max(generalVars.ytot))
     
     # Interpolate the data
-    norm_simu = (np.array(generalVars.ytot) * normalization_var) + y0
+    if 'Excitation' in sat or 'ESat' in sat:
+        norm_simu = ((np.array(generalVars.ytot) + np.array(generalVars.ytot_exc)) * normalization_var) + y0
+    else:
+        norm_simu = (np.array(generalVars.ytot) * normalization_var) + y0
+    
     exp_interpolate = interp1d(exp_x, exp_y, kind='cubic')
     
     if generalVars.verbose >= 3:
@@ -878,7 +896,10 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
              sat: str, peak: str,
              x: List[List[float]], y: List[List[float]], w: List[List[float]],
              xs: List[List[List[float]]], ys: List[List[List[float]]], ws: List[List[List[float]]],
-             energy_values: List[float], efficiency_values: List[float], baseline: bool = False):
+             energy_values: List[float], efficiency_values: List[float], baseline: bool = False,
+             xe: List[List[float]] = [], ye: List[List[float]] = [], we: List[List[float]] = [],
+             xse: List[List[List[float]]] = [], yse: List[List[List[float]]] = [],
+             wse: List[List[List[float]]] = []):
     """
     Function to be minimized in the fitting
         
@@ -955,6 +976,9 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
     x_mn = guiVars.x_min.get() # type: ignore
     
     generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, xoff, sat_xoff, shkoff_xoff, shkup_xoff, num_of_points, 0, baseline) #np.array(np.linspace(min(exp_x), max(exp_x), num=num_of_points))
+    if 'Excitation' in sat or 'ESat' in sat:
+        xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, xoff, sat_xoff, shkoff_xoff, shkup_xoff, num_of_points, 0, baseline)
+        generalVars.xfinal = mergeXFinals(generalVars.xfinal, xfinal)
     
     if baseline:
         exp_base = interp1d(generalVars.xfinal, generalVars.currentBaseline, 'cubic')
@@ -976,9 +1000,9 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
         print(shake_amps)
         
         if guiVars.choice_var.get()[:2] == "M_": # type: ignore
-            x, y, w, xs, ys, ws, _ = process_Msimulation(shake_amps, False) ##  para vários estados de carga
+            x, y, w, xs, ys, ws, _, _ = process_Msimulation(shake_amps, False) ##  para vários estados de carga
         else:
-            x, y, w, xs, ys, ws, _ = process_simulation(shake_amps, False) ## consideramos apenas o átomo
+            x, y, w, xs, ys, ws, _, xe, ye, we, xse, yse, wse, _ = process_simulation(shake_amps, False) ## consideramos apenas o átomo
     
     
     if baseline:
@@ -989,8 +1013,16 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
     
     
     # Calculate the simulated values
+    if 'Excitation' in sat or 'ESat' in sat:
+        generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
+        generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
+                energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
+    
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
-        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
+        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, \
+                energy_values, efficiency_values, xoff, sat_xoff, shkoff_xoff, shkup_xoff)
     
     if len(generalVars.extra_fitting_functions) > 0:
         for key in generalVars.extra_fitting_functions:
@@ -1028,8 +1060,12 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
     # Calculate the normalization multiplier
     normalization_var = normalizer(y0, max(eff_y), ytot_max)
     
+    
     # Interpolate the data
-    f_interpolate = interp1d(generalVars.xfinal, np.array(np.array(generalVars.ytot) * normalization_var) + y0, kind='cubic')
+    if 'Excitation' in sat or 'ESat' in sat:
+        f_interpolate = interp1d(generalVars.xfinal, np.array((np.array(generalVars.ytot) + np.array(generalVars.ytot_exc)) * normalization_var) + y0, kind='cubic')
+    else:
+        f_interpolate = interp1d(generalVars.xfinal, np.array(np.array(generalVars.ytot) * normalization_var) + y0, kind='cubic')
     
     """
     Interpolated function of the simulated points
@@ -1049,6 +1085,7 @@ def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
             exp_y_f.append(eff_y[g])  ## para cada valor de energia experimmental vai buscar o seu valor de intensidade correspondente
     
     var = np.sqrt(exp_y_f)
+    
     neg_log1 = template_nll_asy(mu=exp_y_f, n=y_interp, mu_var=var) 
     return (neg_log1)
     
@@ -1131,7 +1168,10 @@ def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: floa
                     num_of_points: int, peak: str, x: List[List[float]], y: List[List[float]],
                     w: List[List[float]], xs: List[List[List[float]]], ys: List[List[List[float]]],
                     ws: List[List[List[float]]], energy_values: List[float],
-                    efficiency_values: List[float], time_of_click: datetime, quantify: bool = False):
+                    efficiency_values: List[float], time_of_click: datetime, quantify: bool = False,
+                    xe: List[List[float]] = [], ye: List[List[float]] = [], we: List[List[float]] = [],
+                    xse: List[List[List[float]]] = [], yse: List[List[List[float]]] = [],
+                    wse: List[List[List[float]]] = []):
     """
     Execute the autofit for the current simulation to the loaded experimental values.
     Fitting is currently performed with the LMfit package.
@@ -1172,6 +1212,9 @@ def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: floa
     x_mn = guiVars.x_min.get() # type: ignore
     
     generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, 0, quantify) #np.array(np.linspace(min(exp_x), max(exp_x), num=num_of_points))
+    if 'Excitation' in sat or 'ESat' in sat:
+        xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, 0, quantify)
+        generalVars.xfinal = mergeXFinals(generalVars.xfinal, xfinal)
     
     # Initialize the fit parameters
     if quantify:
@@ -1188,7 +1231,10 @@ def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: floa
     
     # Minimize the function for the initialized parameters
     number_of_fit_variables = len(params.valuesdict())
-    minner = Minimizer(func2min, params, fcn_args=(sim, generalVars.exp_x, eff_y, num_of_points, sat, peak, x, y, w, xs, ys, ws, energy_values, efficiency_values, quantify))
+    minner = Minimizer(func2min, params,
+                       fcn_args=(sim, generalVars.exp_x, eff_y, num_of_points, sat, peak,
+                                 x, y, w, xs, ys, ws, energy_values, efficiency_values, quantify,
+                                 xe, ye, we, xse, yse, wse))
     
     result = minner.minimize()
     
@@ -1205,17 +1251,28 @@ def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: floa
     # Reprocess the effective line intensities for the fitted satelite probabilities
     if len(shake_amps) > 0:
         if guiVars.choice_var.get()[:2] == "M_": # type: ignore
-            x, y, w, xs, ys, ws, _ = process_Msimulation(shake_amps, False)
+            x, y, w, xs, ys, ws, _, _ = process_Msimulation(shake_amps, False)
         else:
-            x, y, w, xs, ys, ws, _ = process_simulation(shake_amps, False)
+            x, y, w, xs, ys, ws, _, xe, ye, we, xse, yse, wse, _ = process_simulation(shake_amps, False)
 
     
     # Calculate the normalizer multiplier for the fitted parameters
-    normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot)) # ytot_max)
+    if 'Excitation' in sat or 'ESat' in sat:
+        normalization_var = normalizer(y0, max(eff_y), max(max(generalVars.ytot), max(generalVars.ytot_exc))) # ytot_max)
+    else:
+        normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot)) # ytot_max)
     
     # Calculate the intensities for the fitted parameters
+    if 'Excitation' in sat or 'ESat' in sat:
+        generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
+        generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+    
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
-        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+        generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, \
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
     
     if len(extra_pars) > 0:
         generalVars.yextras.resize((len(generalVars.extra_fitting_functions), len(generalVars.xfinal)))
@@ -1258,7 +1315,10 @@ def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffse
                     num_of_points: int, peak: str, x: List[List[float]], y: List[List[float]],
                     w: List[List[float]], xs: List[List[List[float]]], ys: List[List[List[float]]],
                     ws: List[List[List[float]]], energy_values: List[float],
-                    efficiency_values: List[float], time_of_click: datetime, quantify: bool = False):
+                    efficiency_values: List[float], time_of_click: datetime, quantify: bool = False,
+                    xe: List[List[float]] = [], ye: List[List[float]] = [], we: List[List[float]] = [],
+                    xse: List[List[List[float]]] = [], yse: List[List[List[float]]] = [],
+                    wse: List[List[List[float]]] = []):
     """
     Execute the autofit for the current simulation to the loaded experimental values.
     Fitting is currently performed with the LMfit package.
@@ -1305,7 +1365,11 @@ def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffse
     # Minimize the function for the initialized parameters
     number_of_fit_variables = len(params)
     
-    fun_min_minuit = partial(func2min_minuit,name = name, sim = sim , exp_x = list(generalVars.exp_x), exp_y = list(generalVars.exp_y), num_of_points=num_of_points, sat = sat, peak = peak, x = x, y = y, w = w, xs = xs, ys = ys, ws = ws, energy_values = energy_values, efficiency_values = efficiency_values, baseline = quantify)
+    fun_min_minuit = partial(func2min_minuit, name = name, sim = sim , exp_x = list(generalVars.exp_x),
+                             exp_y = list(generalVars.exp_y), num_of_points=num_of_points,
+                             sat = sat, peak = peak, x = x, y = y, w = w, xs = xs, ys = ys, ws = ws,
+                             energy_values = energy_values, efficiency_values = efficiency_values,
+                             baseline = quantify, xe = xe, ye = ye, we = we, xse = xse, yse = yse, wse = wse)
     
     m = Minuit(fun_min_minuit, params, name = name) # type: ignore
     
@@ -1320,9 +1384,9 @@ def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffse
     # Reprocess the effective line intensities for the fitted satelite probabilities
     if len(shake_amps) > 0:
         if guiVars.choice_var.get()[:2] == "M_": # type: ignore
-            x, y, w, xs, ys, ws, _ = process_Msimulation(shake_amps, False)
+            x, y, w, xs, ys, ws, _, _ = process_Msimulation(shake_amps, False)
         else:
-            x, y, w, xs, ys, ws, _ = process_simulation(shake_amps, False)
+            x, y, w, xs, ys, ws, _, xe, ye, we, xse, yse, wse, _ = process_simulation(shake_amps, False)
 
     
     # Calculate the energy values for the fitted parameters
@@ -1330,6 +1394,9 @@ def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffse
     x_mn = guiVars.x_min.get() # type: ignore
     
     generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, 0, quantify) #np.array(np.linspace(min(exp_x), max(exp_x), num=num_of_points))
+    if 'Excitation' in sat or 'ESat' in sat:
+        xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, 0, quantify)
+        generalVars.xfinal = mergeXFinals(generalVars.xfinal, xfinal)
     
     # Calculate the normalizer multiplier for the fitted parameters
     if quantify:
@@ -1338,6 +1405,12 @@ def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffse
         normalization_var = normalizer(y0, max(generalVars.exp_y), ytot_max)
     
     # Calculate the intensities for the fitted parameters
+    if 'Excitation' in sat or 'ESat' in sat:
+        generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
+        generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+    
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
         generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
     

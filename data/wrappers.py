@@ -12,10 +12,12 @@ from pathlib import Path
 
 #Data Imports for variable management
 import data.variables as generalVars
+from data.definitions import Line
 
 #File IO Imports
 from utils.misc.fileIO import readRates, readIonizationEnergies, readWidths, readMeanR, readELAMelement
 from utils.misc.fileIO import searchChargeStates, readChargeStates, readIonPop, readShake
+from utils.misc.fileIO import searchExcitations, readExcitations
 
 #FileIO utils
 from utils.misc.fileIO import load, loadQuantConfigs, readNISTXrayLines, readNISTClusterLines, findElements
@@ -23,6 +25,9 @@ from utils.misc.fileIO import load, loadQuantConfigs, readNISTXrayLines, readNIS
 
 from typing import List, Dict
 
+
+def InitializeUserDefinitions(userLine: type[Line] | None):
+    generalVars.userLine = userLine
 
 
 def InitializeMCDFData(dir_path: Path, element: tuple[int, str], filter: Dict[str, bool] = {}):
@@ -91,19 +96,19 @@ def InitializeMCDFData(dir_path: Path, element: tuple[int, str], filter: Dict[st
     """
     
     # Path to the 1 hole ionization energies energies file for this element
-    ioniz_file = dir_path / str(z) / (str(z) + '-grounddiagenergy.out')
+    ioniz_file_diag = dir_path / str(z) / (str(z) + '-grounddiagenergy.out')
     """
     Variable with the full path to the 1 hole ionization energies file of this element
     """
     
     # Path to the 2 hole ionization energies energies file for this element
-    ioniz_file = dir_path / str(z) / (str(z) + '-groundsatenergy.out')
+    ioniz_file_sat = dir_path / str(z) / (str(z) + '-groundsatenergy.out')
     """
     Variable with the full path to the 2 hole ionization energies file of this element
     """
     
     # Path to the 2 hole ionization energies energies file for this element
-    ioniz_file = dir_path / str(z) / (str(z) + '-groundshakeupenergy.out')
+    ioniz_file_up = dir_path / str(z) / (str(z) + '-groundshakeupenergy.out')
     """
     Variable with the full path to the shake-up ionization energies file of this element
     """
@@ -203,23 +208,23 @@ def InitializeMCDFData(dir_path: Path, element: tuple[int, str], filter: Dict[st
     # Read the ionization energies energies file
     if "irad" in filter:
         if filter["irad"]:
-            generalVars.ionizationsrad = readIonizationEnergies(ioniz_file)
+            generalVars.ionizationsrad = readIonizationEnergies(ioniz_file_diag)
     else:
-        generalVars.ionizationsrad = readIonizationEnergies(ioniz_file)
+        generalVars.ionizationsrad = readIonizationEnergies(ioniz_file_diag)
     
     # Read the ionization energies energies file
     if "isat" in filter:
         if filter["isat"]:
-            generalVars.ionizationssat = readIonizationEnergies(ioniz_file)
+            generalVars.ionizationssat = readIonizationEnergies(ioniz_file_sat)
     else:
-        generalVars.ionizationssat = readIonizationEnergies(ioniz_file)
+        generalVars.ionizationssat = readIonizationEnergies(ioniz_file_sat)
     
     # Read the ionization energies energies file
     if "iup" in filter:
         if filter["iup"]:
-            generalVars.ionizationsshakeup = readIonizationEnergies(ioniz_file)
+            generalVars.ionizationsshakeup = readIonizationEnergies(ioniz_file_up)
     else:
-        generalVars.ionizationsshakeup = readIonizationEnergies(ioniz_file)
+        generalVars.ionizationsshakeup = readIonizationEnergies(ioniz_file_up)
 
     # Read the diagram rates file
     if "dw" in filter:
@@ -258,6 +263,196 @@ def InitializeMCDFData(dir_path: Path, element: tuple[int, str], filter: Dict[st
     
     
     return generalVars.lineradrates, generalVars.linesatellites, generalVars.lineauger, generalVars.shakeup, generalVars.lineshakeup, generalVars.Shakeup_exists, generalVars.shakeoff, generalVars.label1, generalVars.ionizationsrad, generalVars.ionizationssat, generalVars.ionizationsshakeup, generalVars.diagramwidths, generalVars.augerwidths, generalVars.satellitewidths, generalVars.shakeupwidths, generalVars.meanRs
+
+
+def InitializeMCDFDataExc(dir_path: Path, element: tuple[int, str], filter: Dict[str, bool] = {}):
+    # Retrieve the z and name of the element to simulate
+    z: int = element[0]
+    """
+    Variable with the z value of the element to simulate
+    """
+    element_name: str = element[1]
+    """
+    Variable with the element name to simulate
+    """
+    
+    # Initialize the element name for the functions module
+    generalVars.element_name = element_name
+    generalVars.Z = z
+    
+    if generalVars.verbose >= 3:
+        print(element_name)
+        print(z)
+    
+    
+    for exc in generalVars.rad_EXC:
+        
+        # ------------------------------------------------- #
+        #                                                   #
+        #                   FILE PATHS                      #
+        #                                                   #
+        # ------------------------------------------------- #
+        
+        # The spectrum lines data is being loaded in the CheckExcitation function so we skip it here
+        
+        # Path to the shake-up file for this element
+        shakeup_file = dir_path / str(z) / 'Excitations' / (str(z) + '-shakeup_' + exc + '.out')
+        """
+        Variable with the full path to the shake-up file of this element
+        """
+        
+        # Path to the shake-up rates file for this element
+        shakeuprates_file = dir_path / str(z) / 'Excitations' / (str(z) + '-shakeupinty_' + exc + '.out')
+        """
+        Variable with the full path to the shake-up rates file of this element
+        """
+        
+        # Path to the shake-off file for this element
+        shakeoff_file = dir_path / str(z) / 'Excitations' / (str(z) + '-shakeoff_' + exc + '.out')
+        """
+        Variable with the full path to the shake-off file of this element
+        """
+        
+        # Path to the 1 hole ionization energies energies file for this element
+        ioniz_file_diag = dir_path / str(z) / 'Excitations' / (str(z) + '-grounddiagenergy_' + exc + '.out')
+        """
+        Variable with the full path to the 1 hole ionization energies file of this element
+        """
+        
+        # Path to the 2 hole ionization energies energies file for this element
+        ioniz_file_sat = dir_path / str(z) / 'Excitations' / (str(z) + '-groundsatenergy_' + exc + '.out')
+        """
+        Variable with the full path to the 2 hole ionization energies file of this element
+        """
+        
+        # Path to the 2 hole ionization energies energies file for this element
+        ioniz_file_up = dir_path / str(z) / 'Excitations' / (str(z) + '-groundshakeupenergy_' + exc + '.out')
+        """
+        Variable with the full path to the shake-up ionization energies file of this element
+        """
+        
+        # Path to the diagram rates with partial widths file for this element
+        radrateswidths_file = dir_path / str(z) / 'Excitations' / (str(z) + '-radrate_' + exc + '.out')
+        """
+        Variable with the full path to the diagram rates with partial widths file for this element
+        """
+        
+        # Path to the satellite rates with partial widths file for this element
+        satrateswidths_file = dir_path / str(z) / 'Excitations' / (str(z) + '-satrate_' + exc + '.out')
+        """
+        Variable with the full path to the satellite rates with partial widths file for this element
+        """
+        
+        # Path to the satellite rates with partial widths file for this element
+        shakeuprateswidths_file = dir_path / str(z) / 'Excitations' / (str(z) + '-shakeuprates_' + exc + '.out')
+        """
+        Variable with the full path to the shake-up rates with partial widths file for this element
+        """
+        
+        # Path to the neutral rates file for this element
+        neutralrates_file = dir_path / str(z) / 'Excitations' / (str(z) + '-nurate_' + exc + '.out')
+        """
+        Variable with the full path to the neutral rates file for this element
+        """
+        
+        # ------------------------------------------------- #
+        #                                                   #
+        #                   READ FILES                      #
+        #                                                   #
+        # ------------------------------------------------- #
+        
+        # The spectrum lines data is being loaded in the CheckExcitation function so we skip it here
+        
+        # Read the shake-up file
+        if "up" in filter:
+            if filter["up"]:
+                generalVars.shakeup_exc.append(readShake(shakeup_file)[0])
+        else:
+            generalVars.shakeup_exc.append(readShake(shakeup_file)[0])
+        
+        # Read the rates file
+        if "up" in filter:
+            if filter["up"]:
+                generalVars.lineshakeup_EXC.append(readRates(shakeuprates_file))
+                
+                if len(generalVars.lineshakeup_EXC[-1]) == 0:
+                    generalVars.Shakeup_exists_exc.append(False)
+                else:
+                    generalVars.Shakeup_exists_exc.append(True)
+            else:
+                generalVars.Shakeup_exists_exc.append(False)
+        else:
+            generalVars.lineshakeup_EXC.append(readRates(shakeuprates_file))
+            
+            if len(generalVars.lineshakeup_EXC[-1]) == 0:
+                generalVars.Shakeup_exists_exc.append(False)
+            else:
+                generalVars.Shakeup_exists_exc.append(True)
+        
+        # Read the shake-off file
+        if "sat" in filter:
+            if filter["sat"]:
+                res = readShake(shakeoff_file)
+                generalVars.shakeoff_exc.append(res[0])
+                generalVars.label1_exc.append(res[1])
+        else:
+            res = readShake(shakeoff_file)
+            generalVars.shakeoff_exc.append(res[0])
+            generalVars.label1_exc.append(res[1])
+        
+        # Read the neutral decay rates file
+        if "nu" in filter:
+            if filter["nu"]:
+                generalVars.linenurates_EXC.append(readRates(neutralrates_file))
+        else:
+            generalVars.linenurates_EXC.append(readRates(neutralrates_file))
+        
+        
+        # Read the ionization energies energies file
+        if "irad" in filter:
+            if filter["irad"]:
+                generalVars.ionizationsrad_exc.append(readIonizationEnergies(ioniz_file_diag))
+        else:
+            generalVars.ionizationsrad_exc.append(readIonizationEnergies(ioniz_file_diag))
+        
+        # Read the ionization energies energies file
+        if "isat" in filter:
+            if filter["isat"]:
+                generalVars.ionizationssat_exc.append(readIonizationEnergies(ioniz_file_sat))
+        else:
+            generalVars.ionizationssat_exc.append(readIonizationEnergies(ioniz_file_sat))
+        
+        # Read the ionization energies energies file
+        if "iup" in filter:
+            if filter["iup"]:
+                generalVars.ionizationsshakeup_exc.append(readIonizationEnergies(ioniz_file_up))
+        else:
+            generalVars.ionizationsshakeup_exc.append(readIonizationEnergies(ioniz_file_up))
+
+        # Read the diagram rates file
+        if "dw" in filter:
+            if filter["dw"]:
+                generalVars.diagramwidths_exc.append(readWidths(radrateswidths_file))
+        else:
+            generalVars.diagramwidths_exc.append(readWidths(radrateswidths_file))
+        
+        # Read the satellite rates file
+        if "sw" in filter:
+            if filter["sw"]:
+                generalVars.satellitewidths_exc.append(readWidths(satrateswidths_file))
+        else:
+            generalVars.satellitewidths_exc.append(readWidths(satrateswidths_file))
+        
+        # Read the satellite rates file
+        if "upw" in filter:
+            if filter["upw"]:
+                generalVars.shakeupwidths_exc.append(readWidths(shakeuprateswidths_file))
+        else:
+            generalVars.shakeupwidths_exc.append(readWidths(shakeuprateswidths_file))
+        
+    
+    return generalVars.lineradrates, generalVars.linesatellites, generalVars.lineauger, generalVars.shakeup, generalVars.lineshakeup, generalVars.Shakeup_exists, generalVars.shakeoff, generalVars.label1, generalVars.ionizationsrad, generalVars.ionizationssat, generalVars.ionizationsshakeup, generalVars.diagramwidths, generalVars.augerwidths, generalVars.satellitewidths, generalVars.shakeupwidths, generalVars.meanRs
+
 
 
 def CleanElementsMCDFData(elements: List[tuple[int, str, str]]):
@@ -452,6 +647,41 @@ def InitializeDBData(dir_path: Path, element: tuple[int, str]):
     # Read the ELAM database File
     generalVars.ELAMelement = readELAMelement(ELAM_file, z)
 
+
+def CheckExcitation(dir_path: Path, element: tuple[int, str]):
+    # Retrieve the z and name of the element to simulate
+    z: int = element[0]
+    """
+    Variable with the z value of the element to simulate
+    """
+    element_name: str = element[1]
+    """
+    Variable with the element name to simulate
+    """
+    
+    Exc_exists: bool = False
+    
+    if os.path.isdir(dir_path / str(z) / 'Excitations'):
+        Exc_exists = True
+        
+        # Search for the existing radiative files inside the excitations folder
+        generalVars.radiative_exc_files = searchExcitations(dir_path, z, '-intensity_')
+        # Load the raw data from the found files and the order in which they were loaded
+        generalVars.lineradrates_EXC, generalVars.rad_EXC = readExcitations(generalVars.radiative_exc_files, dir_path, z)
+
+        # Search for the existing satellite files inside the excitations folder
+        generalVars.sat_exc_files = searchExcitations(dir_path, z, '-satinty_')
+        # Load the raw data from the found files and the order in which they were loaded
+        generalVars.linesatellites_EXC, generalVars.sat_EXC = readExcitations(generalVars.sat_exc_files, dir_path, z)
+
+        # Check for a missmatch in the read radiative and satellite files.
+        # There should be 1 satellite for each radiative file if you want to simulate a full rad + sat spectrum
+        # Otherwise, if you know what you are doing just ignore the warning
+        if len(generalVars.linesatellites_EXC) != len(generalVars.lineradrates_EXC):
+            messagebox.showwarning("Warning", "Missmatch of radiative and satellite files for Excitations to the orbitals: " + ', '.join([orb for orb in generalVars.rad_EXC if orb not in generalVars.sat_EXC]))
+
+    return Exc_exists
+    
 
 def CheckCS(dir_path: Path, element: tuple[int, str]):
     # Retrieve the z and name of the element to simulate

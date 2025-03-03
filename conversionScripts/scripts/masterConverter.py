@@ -13,8 +13,10 @@ Z = 29
 input_dir = '../input/'
 output_dir = '../output/'
 
-eig_keywrd = "eigv_"
+eig_keywrd = "eig_"
 eig_offset = 0
+
+header_count = 1
 
 arguments = {}
 
@@ -31,15 +33,15 @@ if "-rs" not in sys.argv or "-itr" not in sys.argv or "-cfg" not in sys.argv or 
     print("-cfg: output configurations filename.")
     print("-is: [Optional] input spectrum filename.")
     print("-os: [Optional] output spectrum filename.")
-    print("-t: transition type to convert (diagram, auger).")
-    print("-br: corresponding auger rates file for the branching ratio calculation.")
+    print("-t: transition type to convert (excitation, diagram, auger).")
+    print("-br: [Optional] corresponding auger rates file for the branching ratio calculation.")
     exit(-1)
 else:
     for i, arg in enumerate(sys.argv[1:]):
         if arg in flags:
             arguments[arg] = sys.argv[1:][i + 1]
     
-    if arguments["-t"] != 'diagram' and arguments["-t"] != 'auger':
+    if arguments["-t"] != 'diagram' and arguments["-t"] != 'auger' and arguments["-t"] != 'excitation':
         print("Unsupported transition type requested: " + arguments["-t"])
         print("Supported types are diagram and auger.")
         exit(-2)
@@ -308,10 +310,11 @@ print("\nDetermining partial widths from rates file...")
 # Add the partial widths
 partialWidths = {}
 with open(input_dir + "/" + arguments["-itr"], "r") as lines:
-    header = lines.readline().strip() #header line
-    header = lines.readline().strip() #header line
+    for _ in range(header_count):
+        header = lines.readline().strip() #header line
     #print(header.split("\t"))
     for i, line in enumerate(lines):
+        # print(line)
         print("Processing rate: " + str(i + 1) + "/" + str(transition_num), end='\r')
         
         values = line.strip().split("\t")
@@ -320,7 +323,10 @@ with open(input_dir + "/" + arguments["-itr"], "r") as lines:
         JJi = values[3].strip()
         Eigeni = values[4].strip()
         
-        Width = float(values[14].strip()) * h
+        try:
+            Width = float(values[14].strip()) * h
+        except ValueError:
+            Width = 0.0
         
         key = Shelli + '_' + JJi + '_' + Eigeni
         
@@ -328,7 +334,7 @@ with open(input_dir + "/" + arguments["-itr"], "r") as lines:
             partialWidths[key] += Width
         else:
             partialWidths[key] = Width
-
+# print(partialWidths)
 
 print("\nWriting master files with the notation conversion, level energies and partial widths...")
 
@@ -368,7 +374,8 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                 highest_identifier = search_highest_percentage(input_file, 'List of jj configurations with a weight >= 0.01%', 'Configuration(s)         1 to         1')
                                 
                                 #Fetch the partial width for this level
-                                key = dir1 + '_' + dir2.split("2jj_")[1] + '_' + dir3.split(eig_keywrd)[1]
+                                key = dir1 + '_' + dir2.split("2jj_")[1] + '_' + str(int(dir3.split(eig_keywrd)[1]) + eig_offset)
+                                
                                 if key in partialWidths:
                                     partialWidth = partialWidths[key]
                                 else:
@@ -411,8 +418,8 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                     shells = shells.replace('_', '')
                                     shells = shells.replace('-', '')
                                     
-                                    out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
-                                    out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                    out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                    out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
                                 elif value:
                                     # No multi configuration weights, i.e. only one configuration for this level
                                     #Replace any inconclusive occupations left, with the first found
@@ -428,8 +435,8 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                     shells = shells.replace('_', '')
                                     shells = shells.replace('-', '')
                                     
-                                    out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
-                                    out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                    out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                    out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
                                 elif highest_identifier:
                                     #Calculate the relevant occupation numbers for this configuration
                                     occupations = get_occupations(highest_identifier)
@@ -497,7 +504,7 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                     highest_identifier = search_highest_percentage(input_file, 'List of jj configurations with a weight >= 0.01%', 'Configuration(s)         1 to         1')
                                     
                                     #Fetch the partial width for this level
-                                    key = dir1 + '_' + dir2.split("2jj_")[1] + '_' + dir3.split(eig_keywrd)[1]
+                                    key = dir1 + '_' + dir2.split("2jj_")[1] + '_' + str(int(dir3.split(eig_keywrd)[1]) + eig_offset)
                                     if key in partialWidths:
                                         partialWidth = partialWidths[key]
                                     else:
@@ -540,8 +547,8 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                         shells = shells.replace('_', '')
                                         shells = shells.replace('-', '')
                                         
-                                        out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
-                                        out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                        out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                        out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
                                     elif value:
                                         # No multi configuration weights, i.e. only one configuration for this level
                                         #Replace any inconclusive occupations left, with the first found
@@ -557,8 +564,8 @@ with open(output_dir + arguments["-cfg"].split(".")[0] + "_master." + arguments[
                                         shells = shells.replace('_', '')
                                         shells = shells.replace('-', '')
                                         
-                                        out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
-                                        out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                        out.write(f'\t{register}\t\t{shells}\t {dir1}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
+                                        out_clean.write(f'\t{register}\t\t{shells}\t {dir2.split("2jj_")[1]}\t {int(dir3.split(eig_keywrd)[1]) + eig_offset}\t\t{value}\t\t{round(float(value) - ground_energy, 5)}\t\t{partialWidth}\t0.0\t\t{overlap}\t\t{percent}\t\t{acc}\t\t{diff}\n')
                                     elif highest_identifier:
                                         #Calculate the relevant occupation numbers for this configuration
                                         occupations = get_occupations(highest_identifier)
@@ -605,22 +612,34 @@ print("\nWriting the rates file with the new format and notation...")
 if arguments["-t"] == 'diagram':
     os.chdir("./diagram")
     os.system("python ConversionScript_intensity_rates.py " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-otr"])
+elif arguments["-t"] == 'excitation':
+    os.chdir("./excitation")
+    os.system("python ConversionScript_intensity_rates.py " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-otr"])
 elif arguments["-t"] == 'auger':
     os.chdir("./auger")
     os.system("python ConversionScript_auger_rates.py " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-otr"])
 
+print()
 
 if "-is" in arguments and "-os" in arguments:
     print("\nWriting the spectrum file with the new format and notation...")
 
     if arguments["-t"] == 'diagram':
         os.system("python ConversionScript_intensity_spectra.py " + arguments["-is"] + " " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-os"])
+    elif arguments["-t"] == 'excitation':
+        os.system("python ConversionScript_excitation_spectra.py " + arguments["-is"] + " " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-os"])
     elif arguments["-t"] == 'auger':
         os.system("python ConversionScript_auger_spectra.py " + arguments["-is"] + " " + arguments["-itr"] + " " + arguments["-cfg"].split(".")[0] + "_master." + arguments["-cfg"].split(".")[1] + " " + arguments["-os"])
+
+    print()
 
 if "-br" in arguments:
     print("\nUpdating conversion file with the total branching ratios for cascade calculations...")
     if arguments["-t"] == 'diagram':
         os.system("python Calculate_diagram_BR.py " + arguments["-otr"] + " " + arguments["-br"] + " " + arguments["-cfg"])
+    elif arguments["-t"] == 'excitation':
+        os.system("python Calculate_excitation_BR.py " + arguments["-otr"] + " " + arguments["-br"] + " " + arguments["-cfg"])
     elif arguments["-t"] == 'auger':
         os.system("python Calculate_auger_BR.py " + arguments["-otr"] + " " + arguments["-br"] + " " + arguments["-cfg"])
+
+    print()

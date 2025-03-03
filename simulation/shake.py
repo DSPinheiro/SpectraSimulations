@@ -97,10 +97,10 @@ def setupShake(sat_lines: List[Line] | None = [], up_lines: List[Line] | None = 
         for key in shakeValues:
             generalVars.shakeUPSplines[key] = interp1d(shakeOrbitals[key], shakeValues[key])
         
-        
         # Setup the missing shake-up probabilities
         
         existing_shakeups = dict.fromkeys([row.Shelli[2:4] + "_" + str(row.jji) for row in shkup_lines], 0.0)
+        total_per_excitation = dict.fromkeys([row.Shelli[4:] for row in shkup_lines], 0.0)
         found_excitations = {}
         
         for row in shkup_lines:
@@ -108,9 +108,18 @@ def setupShake(sat_lines: List[Line] | None = [], up_lines: List[Line] | None = 
             if key + "_" + str(row.jji) not in found_excitations:
                 found_excitations[key + "_" + str(row.jji)] = []
             
+            if row.Shelli[4:] not in total_per_excitation:
+                total_per_excitation[row.Shelli[4:]] = row.intensity
+            else:
+                total_per_excitation[row.Shelli[4:]] += row.intensity
+            
             if row.Shelli[4:-1] not in found_excitations[key + "_" + str(row.jji)]:
                 existing_shakeups[key + "_" + str(row.jji)] += get_shakeup(key, row.Shelli[4:], row.jji)
                 found_excitations[key + "_" + str(row.jji)].append(row.Shelli[4:-1])
+        
+        # Setup the shake-up ratios between excitations
+        for exc in total_per_excitation:
+            generalVars.totalShakeOrbRatios[exc] = total_per_excitation[exc] / sum([total_per_excitation[k] for k in total_per_excitation])
         
         shakeup_sums = {}
         
@@ -149,6 +158,7 @@ def setupShake(sat_lines: List[Line] | None = [], up_lines: List[Line] | None = 
         if key not in existing_shakeoffs:
             missing_shakeoff[key + "_" + shake[2]] = float(shake[3])
     
+    # TODO: FIX THE MISSING SHAKEOFF CALCULATION
     missing_shake = 0.0
     missing_shake_key = dict.fromkeys(label1, 0.0)
     missing_shake_key_jjs = dict.fromkeys(label1, 0)
@@ -162,6 +172,8 @@ def setupShake(sat_lines: List[Line] | None = [], up_lines: List[Line] | None = 
     missing_shake /= (len(label1) - (len(missing_shakeoff) / 2))
     generalVars.missing_shakeoff = missing_shake
     
+    # print(existing_shakeoffs)
+    # print(generalVars.missing_shakeoff)
     
     # Setup shakeoff relations
     
@@ -173,6 +185,165 @@ def setupShake(sat_lines: List[Line] | None = [], up_lines: List[Line] | None = 
                         ">" if float(shake1[3]) > float(shake2[3]) else "<="
 
     return generalVars.shakeUPSplines, generalVars.missing_shakeup, generalVars.shake_relations, generalVars.missing_shakeoff, generalVars.shake_relations, generalVars.shake_relations
+
+
+def setupShakeExc(sat_lines: List[List[Line]] | None = [], up_lines: List[List[Line]] | None = [],
+               shakeoff_lines: List[List[List[str]]] | None = [], shakeup_lines: List[List[List[str]]] | None = [],
+               labels: List[List[str]] | None = [], shakeup_flag: List[bool] | None = None):
+    """
+    Function to setup the shake-up spline interpolations to calculate the probability, even if we don't have the specific excitation.
+    """
+    
+    shakeoff = []
+    shakeup = []
+    satellite_lines = []
+    shkup_lines = []
+    label1 = []
+    up_flag = False
+    
+    if shakeup_lines != None:
+        if shakeup_lines != []:
+            shakeup = shakeup_lines
+        else:
+            shakeup = generalVars.shakeup_exc
+    else:
+        shakeup = generalVars.shakeup_exc
+    
+    if shakeoff_lines != None:
+        if shakeoff_lines != []:
+            shakeoff = shakeoff_lines
+        else:
+            shakeoff = generalVars.shakeoff_exc
+    else:
+        shakeoff = generalVars.shakeoff_exc
+    
+    if sat_lines != None:
+        if sat_lines != []:
+            satellite_lines = sat_lines
+        else:
+            satellite_lines = generalVars.linesatellites_EXC
+    else:
+        satellite_lines = generalVars.linesatellites_EXC
+    
+    if up_lines != None:
+        if up_lines != []:
+            shkup_lines = up_lines
+        else:
+            shkup_lines = generalVars.lineshakeup_EXC
+    else:
+        shkup_lines = generalVars.lineshakeup_EXC
+    
+    if labels != None:
+        if labels != []:
+            label1 = labels
+        else:
+            label1 = generalVars.label1_exc
+    else:
+        label1 = generalVars.label1_exc
+    
+    if shakeup_flag != None:
+        up_flag = shakeup_flag
+    else:
+        up_flag = generalVars.Shakeup_exists_exc
+    
+    for exc_index, shakes in enumerate(shakeup):
+        if up_flag[exc_index]:
+            shakeValues = {}
+            shakeOrbitals = {}
+            
+            for shake in shakes:
+                if shake[2] != 'SUM':
+                    if shake[1] + '_' + shake[3] in shakeValues and shake[1] + '_' + shake[3] in shakeOrbitals:
+                        shakeValues[shake[1] + '_' + shake[3]].append(float(shake[4]))
+                        shakeOrbitals[shake[1] + '_' + shake[3]].append(int(shake[2][:-1]))
+                    else:
+                        shakeValues[shake[1] + '_' + shake[3]] = [float(shake[4])]
+                        shakeOrbitals[shake[1] + '_' + shake[3]] = [int(shake[2][:-1])]
+        
+            for key in shakeValues:
+                generalVars.shakeUPSplines_exc[exc_index][key] = interp1d(shakeOrbitals[key], shakeValues[key])
+            
+        
+            # Setup the missing shake-up probabilities
+            
+            existing_shakeups = dict.fromkeys([row.Shelli[2:4] + "_" + str(row.jji) for row in shkup_lines[exc_index]], 0.0)
+            found_excitations = {}
+            
+            for row in shkup_lines[exc_index]:
+                key = row.Shelli[2:4]
+                if key + "_" + str(row.jji) not in found_excitations:
+                    found_excitations[key + "_" + str(row.jji)] = []
+                
+                if row.Shelli[4:-1] not in found_excitations[key + "_" + str(row.jji)]:
+                    existing_shakeups[key + "_" + str(row.jji)] += get_shakeup_exc(key, row.Shelli[4:], row.jji, exc_index)
+                    found_excitations[key + "_" + str(row.jji)].append(row.Shelli[4:-1])
+            
+            shakeup_sums = {}
+            
+            for shake in shakes:
+                key = shake[1]
+                if shake[2] == 'SUM':
+                    shakeup_sums[key + "_" + shake[3]] = float(shake[4])
+            
+            for key in existing_shakeups:
+                generalVars.missing_shakeup_exc[exc_index][key] = (shakeup_sums[key] - existing_shakeups[key]) / len(found_excitations[key])
+            
+            # Setup shakeup relations
+            
+            for shake1 in shakes:
+                if len(generalVars.shake_relations_exc) <= exc_index:
+                    generalVars.shake_relations_exc.append({})
+                generalVars.shake_relations_exc[exc_index][shake1[1] + "_" + shake1[3]] = {}
+                for shake2 in shakes:
+                    if shake1 != shake2:
+                        generalVars.shake_relations_exc[exc_index][shake1[1] + "_" + shake1[3]][shake2[1] + "_" + shake2[3]] = \
+                                ">" if float(shake1[4]) > float(shake2[4]) else "<="
+            
+            # print(existing_shakeups_exc[exc_index])
+            # print(generalVars.missing_shakeup_exc[exc_index])
+    
+    # Setup the missing shake-off probabilities
+    for exc_index, lines in enumerate(satellite_lines):
+        missing_shakeoff = {}
+        
+        if shakeoff[exc_index][0][0] != '':
+            existing_shakeoffs = {}
+            for row in lines:
+                key = row.Shelli[2:4]
+                if key not in existing_shakeoffs:
+                    existing_shakeoffs[key] = get_shakeoff_exc(key, exc_index, shakeoff[exc_index])
+        
+            for shake in shakeoff[exc_index]:
+                key = shake[1]
+                if key not in existing_shakeoffs:
+                    missing_shakeoff[key + "_" + shake[2]] = float(shake[3])
+        
+        missing_shake = 0.0
+        missing_shake_key = dict.fromkeys(label1[exc_index], 0.0)
+        missing_shake_key_jjs = dict.fromkeys(label1[exc_index], 0)
+        for key_ms in missing_shakeoff:
+            missing_shake_key[key_ms.split("_")[0]] += missing_shakeoff[key_ms] * (int(key_ms.split("_")[1]) + 1)
+            missing_shake_key_jjs[key_ms.split("_")[0]] += int(key_ms.split("_")[1]) + 1
+        
+        for key_ms in missing_shake_key:
+            missing_shake += (missing_shake_key[key_ms] / missing_shake_key_jjs[key_ms]) if missing_shake_key[key_ms] > 0.0 else 0.0
+        
+        missing_shake /= (len(label1[exc_index]) - (len(missing_shakeoff) / 2))
+        generalVars.missing_shakeoff_exc.append(missing_shake)
+        
+        
+        if shakeoff[exc_index][0][0] != '':
+            # Setup shakeoff relations
+            for shake1 in shakeoff[exc_index]:
+                if len(generalVars.shake_relations_exc) <= exc_index:
+                    generalVars.shake_relations_exc.append({})
+                generalVars.shake_relations_exc[exc_index][shake1[1]] = {}
+                for shake2 in shakeoff[exc_index]:
+                    if shake1 != shake2:
+                        generalVars.shake_relations_exc[exc_index][shake1[1]][shake2[1]] = \
+                                ">" if float(shake1[3]) > float(shake2[3]) else "<="
+
+    return generalVars.shakeUPSplines_exc, generalVars.missing_shakeup_exc, generalVars.shake_relations_exc, generalVars.missing_shakeoff_exc, generalVars.shake_relations_exc, generalVars.shake_relations_exc
 
 
 # Calculate the total shake probability from shake-up and shake-off probabilities
@@ -247,14 +418,14 @@ def calculateAvgTotalShake(shake_amps: dict = {}, shakeoff_lines: List[List[str]
         shakeoff = generalVars.shakeoff
     
     if len(shakeup) > 0 and len(shakeup[0]) > 1:
-        avgShakeup = sum([float(shake[4]) * \
+        avgShakeup = sum([float(shake[4]) * (int(shake[3]) + 1) * \
                             (shake_amps['shakeup_amps_' + shake[1]] if 'shakeup_amps_' + shake[1] in shake_amps else 1.0) \
                             for shake in shakeup if shake[2] == 'SUM']) / \
                         sum(list(set([int(shake[3]) + 1 for shake in shakeup])))
     else:
         avgShakeup = 0.0
     
-    return (sum([float(shake[3]) * \
+    return (sum([float(shake[3]) * (int(shake[3]) + 1) * \
                 (shake_amps['shake_amps_' + shake[1]] if 'shake_amps_' + shake[1] in shake_amps else 1.0) \
                 for shake in shakeoff]) / \
             sum(list(set([int(shake[2]) + 1 for shake in shakeoff])))) + \
@@ -287,9 +458,40 @@ def get_shakeoff(key: str, shakelines: List[List[str]] | None = []):
         if shake[1] == key:
             probs.append(shake)
     
+    
     total_shakeoff = sum([float(prob[3]) * (int(prob[2]) + 1) for prob in probs]) / sum([(int(prob[2]) + 1) for prob in probs])
     
     return total_shakeoff + generalVars.missing_shakeoff
+
+# Search for the shake-off probability for the shake electron key
+def get_shakeoff_exc(key: str, exc_index: int, shakelines: List[List[str]] | None = []):
+    """
+    Function to search for the shake-off probability for a shake electron from the orbital key
+    
+        Args:
+            key: electron shake-off orbital label
+        
+        Returns:
+            shake-off probability for the requested level
+    """
+    probs = []
+    
+    lines = []
+    if shakelines != None:
+        if shakelines != []:
+            lines = shakelines
+        else:
+            lines = generalVars.shakeoff_exc[exc_index]
+    else:
+        lines = generalVars.shakeoff_exc[exc_index]
+    
+    for shake in lines:
+        if shake[1] == key:
+            probs.append(shake)
+    
+    total_shakeoff = sum([float(prob[3]) * (int(prob[2]) + 1) for prob in probs])# / sum([(int(prob[2]) + 1) for prob in probs])
+    
+    return total_shakeoff + generalVars.missing_shakeoff_exc[exc_index]
 
 
 # Search for the shake-up probability for the shake electron key and 2*J value JJ2
@@ -323,13 +525,58 @@ def get_shakeup(key: str, shakeF: str, JJ2: int, splines = {}, missing: Dict[str
     
     if key + '_' + str(JJ2) not in missing_shakeup:
         try:
+            # print(f'{(JJ2 + 1)} * {shakeUPSplines[key + "_" + str(JJ2)](int(shakeF[:-1]))} = {(JJ2+1) * shakeUPSplines[key + "_" + str(JJ2)](int(shakeF[:-1]))}')
             return shakeUPSplines[key + '_' + str(JJ2)](int(shakeF[:-1]))
         except ValueError:
             # print("Warning: Out of bounds excitation orbital in shake-up probability calculation!")
             return 0.0
     else:
         try:
-            return shakeUPSplines[key + '_' + str(JJ2)](int(shakeF[:-1])) + missing_shakeup[key + "_" + str(JJ2)]
+            # print(f'{(JJ2 + 1)} * {(shakeUPSplines[key + "_" + str(JJ2)](int(shakeF[:-1])) + missing_shakeup[key + "_" + str(JJ2)])} = {(JJ2 + 1) * (shakeUPSplines[key + "_" + str(JJ2)](int(shakeF[:-1])) + missing_shakeup[key + "_" + str(JJ2)])}')
+            return (shakeUPSplines[key + '_' + str(JJ2)](int(shakeF[:-1])) + missing_shakeup[key + "_" + str(JJ2)])
+        except ValueError:
+            # print("Warning: Out of bounds excitation orbital in shake-up probability calculation!")
+            return 0.0
+
+
+# Search for the shake-up probability for the shake electron key and 2*J value JJ2
+def get_shakeup_exc(key: str, shakeF: str, JJ2: int, exc_index: int, splines = {}, missing: Dict[str, float] = {}) -> float:
+    """
+    Function to search for the shake-up probability for a shake electron from the orbital key with an initial level with 2JJ of JJ2
+    
+        Args:
+            key: electron shake-up orbital label
+            JJ2: 2*J value of the transition for which we want the shake-up probability
+        
+        Returns:
+            shake-up probability for the requested level
+    """
+    shakeUPSplines = {}
+    missing_shakeup = {}
+    
+    if splines != {}:
+        shakeUPSplines = splines
+    else:
+        shakeUPSplines = generalVars.shakeUPSplines_exc[exc_index]
+    
+    if missing != {}:
+        missing_shakeup = missing
+    else:
+        missing_shakeup = generalVars.missing_shakeup_exc[exc_index]
+    
+    
+    if key + '_' + str(JJ2) not in shakeUPSplines:
+        return 0.0
+    
+    if key + '_' + str(JJ2) not in missing_shakeup:
+        try:
+            return shakeUPSplines[key + '_' + str(JJ2)](int(shakeF[:-1]))
+        except ValueError:
+            # print("Warning: Out of bounds excitation orbital in shake-up probability calculation!")
+            return 0.0
+    else:
+        try:
+            return (shakeUPSplines[key + '_' + str(JJ2)](int(shakeF[:-1])) + missing_shakeup[key + "_" + str(JJ2)])
         except ValueError:
             # print("Warning: Out of bounds excitation orbital in shake-up probability calculation!")
             return 0.0
@@ -510,3 +757,24 @@ def avgDiagramOverlap(diagram_source: List[Line], beam: float, FWHM: float):
         return 0.0
     
     return sum([get_overlap(line, beam, FWHM) for line in diagram_source]) / len(diagram_source)
+
+
+
+def avgDiagramOverlapExc(diagram_source: List[Line], beam: float, FWHM: float, exc_index: int):
+    """Function to calculate for excitations the average diagram overlap with the beam for a set of diagram lines.
+    This is used to scale/modulate the formation rate of shake transitions with the diagram overlap
+
+    Args:
+        diagram_source (List[Line]): list of the excitation diagram lines to use
+        beam (float): beam energy to consider in the total intensity calculation
+        FWHM (float): beam FWHM to consider in the total intensity calculation
+
+    Returns:
+        float: average diagram overlap
+    """
+    from simulation.mults import get_overlap_exc
+    
+    if len(diagram_source) == 0:
+        return 0.0
+    
+    return sum([get_overlap_exc(line, beam, FWHM, exc_index) for line in diagram_source]) / len(diagram_source)

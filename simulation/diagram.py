@@ -11,7 +11,7 @@ from simulation.mults import get_cascadeBoost
 
 from simulation.shake import calculateTotalShake
 
-from data.definitions import Line
+from data.definitions import Line, processLine
 
 from typing import List
 
@@ -44,7 +44,7 @@ def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str,
     # Check if there is no data for the selected transition
     if not diag_stick_val:
         # Make a 0 vector to still have data to plot
-        diag_stick_val = [Line() for i in range(16)]
+        diag_stick_val = [processLine() for i in range(16)]
         # Show a warning that this transition has no data and add it to the bad selection count
         if len(generalVars.jj_vals) == 0:
             messagebox.showwarning("Wrong Transition", transition + " is not Available")
@@ -86,7 +86,7 @@ def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str,
 
 
 def simu_diagram(diag_sim_val: List[Line], beam: float, FWHM: float,
-                 shake_amps: dict = {}, element: str = ''):
+                 shake_amps: dict = {}, element: str = '', exc_index: int = -1):
     """
     Function to organize the data to be sent to the plotter function for diagram transitions.
     
@@ -119,7 +119,7 @@ def simu_diagram(diag_sim_val: List[Line], beam: float, FWHM: float,
     
     if element == '':
         y1 = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                    'diagram', shake_amps = shake_amps) for row in diag_sim_val]
+                                    'diagram', shake_amps = shake_amps, exc_index=exc_index) for row in diag_sim_val]
     else:
         y1 = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
                                     'diagram', shake_amps = shake_amps,

@@ -100,6 +100,12 @@ class Line():
                 self.totalWidth = float(vals[6])
                 if len(vals) == 8:
                     self.br = float(vals[7])
+            elif len(vals) == 5:
+                self.Num = int(vals[0])
+                self.Shelli = vals[1]
+                self.jji = int(vals[2])
+                self.eigvi = int(vals[3])
+                self.rate = float(vals[4])
             else:
                 print(vals)
                 raise RuntimeError("Error reading line from file. Unexpected format with " + str(len(vals) - (len(vals) >= 11)) + " values to process")
@@ -228,9 +234,10 @@ class Line():
                            shake_amps: dict = {}, shakeoff_lines: List[List[str]] | None = [],
                            shakeup_lines: List[List[str]] | None = [],
                            shakeup_splines = {}, shake_missing: Dict[str, float] = {},
-                           alpha: float = 1.0) -> float:
+                           alpha: float = 1.0, exc_index: int = -1) -> float:
         from simulation.shake import calculateTotalShake, get_shakeoff, get_shakeup
-        from simulation.mults import get_overlap
+        from simulation.shake import get_shakeoff_exc, get_shakeup_exc
+        from simulation.mults import get_overlap, get_overlap_exc, get_ExcRatio
         
         if boost_type == 'diagram':
             boostDict = generalVars.radBoostMatrixDict
@@ -250,12 +257,32 @@ class Line():
         
         absIntensity = self.intensity
         boostMult = boostDict[self.key()] if include_cascades and self.key() in boostDict else 0.0
-        overlapMult = get_overlap(self, beamEnergy, FWHM) if beam > 0.0 else 1.0
+        if exc_index == -1:
+            overlapMult = get_overlap(self, beamEnergy, FWHM) if beam > 0.0 else 1.0
+        else:
+            overlapMult = get_overlap_exc(self, beamEnergy, FWHM, exc_index) if beam > 0.0 else 1.0
         crossMult = crossSection[crossKey](generalVars.formationEnergies[boost_type][self.keyI()], generalVars.defaultBeam) if type(crossSection) != type(1.0) and beam <= 0.0 else crossSection
         mixMult = self.mix if hasattr(self, 'mix') else 1.0
-        diagramMult = (1 - calculateTotalShake(self.jji, shake_amps, shakeoff_lines, shakeup_lines)) if boost_type == 'diagram' or boost_type == 'auger' else 1.0
-        shakeoffMult = self.diagramOverlap * get_shakeoff(key, shakeoff_lines) if boost_type == 'satellite' else 1.0
-        shakeupMult = self.diagramOverlap * get_shakeup(key, self.Shelli[4:], self.jji, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
+        
+        if generalVars.shakeoff[0] != [''] and generalVars.shakeup[0] != ['']:
+            diagramMult = (1 - calculateTotalShake(self.jji, shake_amps, shakeoff_lines, shakeup_lines)) if boost_type == 'diagram' or boost_type == 'auger' else 1.0
+        else:
+            diagramMult = 1.0
+        
+        if exc_index == -1:
+            shakeoffMult = self.diagramOverlap * get_shakeoff(key, shakeoff_lines) if boost_type == 'satellite' else 1.0
+            shakeupMult = self.diagramOverlap * generalVars.totalShakeOrbRatios[self.Shelli[4:]] * get_shakeup(key, self.Shelli[4:], self.jji, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
+        else:
+            # shakeoffMult = self.diagramOverlap * get_shakeoff_exc(key, exc_index, shakeoff_lines) if boost_type == 'satellite' else 1.0
+            shakeoffMult = 1.0
+            # shakeupMult = self.diagramOverlap * get_shakeup_exc(key, self.Shelli[4:], self.jji, exc_index, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
+            shakeupMult = 1.0
+        
+        if exc_index == -1:
+            exc_ratio = 1.0
+        else:
+            exc_ratio = get_ExcRatio(self, exc_index)
+        
         if len(shake_amps) > 0:
             shakeoffMod = shake_amps['shake_amp_' + key] if "shake_amp_" + key in shake_amps else 1.0 if boost_type == 'satellite' else 1.0
             shakeupMod = shake_amps['shakeup_amp_' + key] if "shakeup_amp_" + key in shake_amps else 1.0 if boost_type == 'shakeup' else 1.0
@@ -268,20 +295,45 @@ class Line():
         # if boost_type == 'shakeup':
         #     generalVars.control_shakeup[key + "_" + str(self.jji) + "_" + self.Shelli[4:-1]] = get_shakeup(key, self.Shelli[4:], self.jji)
         
-        # if boost_type == 'shakeup' and shakeupMult > 0.0:# and 'M2' in self.Shelli:
-        #     with open("shakeup_debug.txt", "a") as f:
-        #         f.write(self.key() + ": " + str(absIntensity) + ', ' + \
-        #         str(crossMult) + ', ' + \
-        #         str(boostMult) + ', ' + \
-        #         str(diagramMult) + ', ' + \
-        #         str(mixMult) + ', ' + \
-        #         str(overlapMult) + ', ' + \
-        #         str(shakeoffMult) + ', ' + \
-        #         str(shakeupMult) + "\n")
+        # if boost_type == 'satellite':# and shakeupMult > 0.0:# and 'M2' in self.Shelli:
+        #     # with open("shakeup_debug.txt", "a") as f:
+        # print(self.key() + ": " + \
+        # str(absIntensity) + ', ' + \
+        # str(crossMult) + ', ' + \
+        # str(diagramMult) + ', ' + \
+        # str(mixMult) + ', overlapMult -> ' + \
+        # str(overlapMult) + ', ' + \
+        # str(shakeoffMod) + ', shakeoffMult -> ' + \
+        # str(shakeoffMult) + ', ' + \
+        # str(shakeupMod) + ', shakeupMult -> ' + \
+        # str(shakeupMult) + ', ' + \
+        # str(boostMult))
         
-        # Effective intensity = direct decay + cascade decay (boost mult)
+        # Effective intensity = direct decay + cascade decay
+        
+        # direct decay (diagram) = abs intensity * cross section * 
+        #                           * (diagram ratio || excitation ratio) * mix ratio * beam overlap
+        # direct decay (shake) = abs intensity * cross section * mix ratio * beam overlap * 
+        #                          * (shakeoff ratio * fitting mods || shakeup ratio * fitting mods)
+        # +
+        # cascade decay = boostMult <- pre calculated
+        
+        # alpha = XRF matrix alpha coeficient (WIP)
         return absIntensity * \
-            (crossMult * diagramMult * mixMult * overlapMult * \
+            (crossMult * diagramMult * exc_ratio * mixMult * overlapMult * \
             shakeoffMod * shakeoffMult * shakeupMod * shakeupMult + \
             boostMult) * \
             alpha
+
+
+def processLine(Num: int = 0, Shelli: str = '', jji: int = 0, eigvi: int = 0,
+                Shellf: str = '', jjf: int = 0, eigvf: int = 0,
+                energy: float = 0.0, br: float = 0.0, levelRadYield: float = 0.0,
+                intensity: float = 0.0, weight: float = 0.0, radWidth: float = 0.0,
+                augWidth: float = 0.0, totalWidth: float = 0.0, line: str = ''):
+    if generalVars.userLine:
+        return generalVars.userLine(Num, Shelli, jji, eigvi, Shellf, jjf, eigvf, energy, br,
+                        levelRadYield, intensity, weight, radWidth, augWidth, totalWidth, line)
+    else:
+        return Line(Num, Shelli, jji, eigvi, Shellf, jjf, eigvf, energy, br,
+                    levelRadYield, intensity, weight, radWidth, augWidth, totalWidth, line)

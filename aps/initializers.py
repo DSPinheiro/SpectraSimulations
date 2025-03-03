@@ -22,7 +22,7 @@ from interface.base import clear
 
 # ---------------------------------------------------------------------------------------------------------------
 # Function to choose the type of atomic parameters we want to fetch after selecting the element
-def calculate(dir_path: Path, element: tuple[int, str], ap: int, root: Tk):
+def calculate(dir_path: Path, element: tuple[int, str], ap: int, root: Tk, userLine = None):
     """
     Function that launches the correct atomic parameter simulation after selection on the interface.
         
@@ -46,5 +46,5 @@ def calculate(dir_path: Path, element: tuple[int, str], ap: int, root: Tk):
         quantifyXRF(dir_path, root)
     # ---------------------------------------------------------------------------------------------------------------
     elif ap == 4:
-        simulateSpectra(dir_path, element, root)
+        simulateSpectra(dir_path, element, root, userLine)
     return 0

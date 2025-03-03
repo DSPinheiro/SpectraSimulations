@@ -125,7 +125,7 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
         profile = G
     
     b1max = 100 if '+' not in transition_type else 50
-    if 'Diagram' in transition_type or 'Auger' in transition_type:
+    if 'Diagram' in transition_type or 'Excitation' in transition_type or 'Auger' in transition_type:
         b1 = 0
         # Loop all the diagram or auger transitions to calculate (y parameter)
         for j, k in enumerate(y):
@@ -136,7 +136,6 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
             tr_idx: int = j % len(generalVars.the_dictionary)
             
             # print(f'{el_idx}, {tr_idx}')
-            
             for i in range(len(k)):
                 # Depending on the profile selected add the y values of the calculated profile to the y values of this transition
                 # This profile is calculated across the entire simulated range of x values
@@ -164,7 +163,7 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
         guiVars.progress_var.set(b1) # type: ignore
         sim.update_idletasks()
     
-    if 'Satellites' in transition_type:
+    if 'Satellites' in transition_type or 'ESat' in transition_type:
         b1 = 0 if b1max == 100 else b1max
         # Similar to the diagram transitions but we need an extra for loop to get the rates of each satellite in each diagram transition
         for j, k in enumerate(ys):

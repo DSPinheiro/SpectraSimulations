@@ -22,7 +22,7 @@ from interface.experimental import initialize_expElements
 
 
 
-def SimulationWindow(dir_path: Path, root: Tk, CS_exists: bool = False, quantify: bool = False):
+def SimulationWindow(dir_path: Path, root: Tk, CS_exists: bool = False, Exc_exists: bool = False, quantify: bool = False):
     # Setup the variables to use in the GUI entries
     setupVars(root)
     
@@ -48,7 +48,7 @@ def SimulationWindow(dir_path: Path, root: Tk, CS_exists: bool = False, quantify
     buttons_frame4: frame for the progress bar
     """
     # Finish the button area setup and bind the variables to the GUI elements
-    setupButtonArea(dir_path, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4, quantify)
+    setupButtonArea(dir_path, buttons_frame, buttons_frame2, buttons_frame3, buttons_frame4, Exc_exists, quantify)
     
     # Bind the default matplotlib shortcuts
     canvas.mpl_connect('key_press_event', on_key_event)
@@ -57,7 +57,7 @@ def SimulationWindow(dir_path: Path, root: Tk, CS_exists: bool = False, quantify
     root.bind('<Return>', func=str(enter_function))
     
     # Setup the dropdown menus on the toolbar on the top of the window
-    setupMenus(root, CS_exists, quantify)
+    setupMenus(root, CS_exists, Exc_exists, quantify)
     
     if quantify:
         guiVars.graph_area, guiVars._residues_graph, _ = initialize_expElements(f, generalVars.currentSpectraList[0],

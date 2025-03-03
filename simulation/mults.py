@@ -13,7 +13,7 @@ import numpy as np
 
 import scipy.integrate as integrate
 
-from typing import List, Dict
+from typing import List, Dict, Type
 
 # --------------------------------------------------------- #
 #                                                           #
@@ -62,7 +62,82 @@ def get_overlap(line: Line, beam: float, FWHM: float) -> float:
         return min(l, g)
     
     x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
+    
     return integrate.simpson([integrand(x1) for x1 in x], x)
+    # if formationEnergy > beam:
+    #     return np.exp(-((formationEnergy - beam) / FWHM) ** 2 * np.log(2))
+    # else:
+    #     return 1.0
+
+
+# Calculate the overlap for excitations between the beam energy profile and the energy necessary to reach the level
+def get_overlap_exc(line: Line, beam: float, FWHM: float, exc_index: int) -> float:
+    """
+    Function to calculate for excitations the levels overlap with the beam energy profile.
+    For excitations we keep the resonant nature of the lorentz, gaussian convolution
+        
+        Args:
+            line: the excitation data line of the transition that we want to find the ionization energy
+            beam: the beam energy introduced in the interface
+            FWHM: the beam energy FWHM introduced in the interface
+
+        Returns:
+            overlap: the overlap
+    """
+    
+    if beam <= 0.0:
+        return 1.0
+    
+    if len(line.Shelli) <= 4:
+        if len(line.Shelli) == 2:
+            # print(f'{generalVars.rad_EXC[exc_index]} -> {line.keyI()}')
+            formationEnergy = generalVars.formationEnergies_exc[exc_index]['diagram'][line.keyI()]
+            pWidth = generalVars.partialWidths_exc[exc_index]['diagram'][line.keyI()]
+            pWidth = max(pWidth, 1E-100)
+        else:
+            # print(f'{generalVars.rad_EXC[exc_index]} -> {line.keyI()}')
+            formationEnergy = generalVars.formationEnergies_exc[exc_index]['satellite'][line.keyI()]
+            pWidth = generalVars.partialWidths_exc[exc_index]['satellite'][line.keyI()]
+            pWidth = max(pWidth, 1E-100)
+    else:
+        formationEnergy = generalVars.formationEnergies_exc[exc_index]['shakeup'][line.keyI()]
+        pWidth = max(generalVars.partialWidths_exc[exc_index]['shakeup'][line.keyI()], 1E-100)
+    
+    
+    def integrand(x):
+        l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
+        g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
+        
+        return min(l, g)
+    
+    x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
+    return integrate.simpson([integrand(x1) for x1 in x], x)
+
+
+# Calculate the total yields and ratios for each existing excitation and level
+def setupExcitationYields():
+    for exc_index, _ in enumerate(generalVars.rad_EXC):
+        generalVars.total_decayrates_exc.append(sum([line.rate for line in generalVars.linenurates_EXC[exc_index]]))
+    
+    for exc_index, _ in enumerate(generalVars.rad_EXC):
+        generalVars.level_decayrates_exc.append({})
+        for line in generalVars.linenurates_EXC[exc_index]:
+            generalVars.level_decayrates_exc[exc_index][line.keyI()] = line.rate
+
+
+# Calculate the excitaion ratio normalized for all loaded excitations
+def get_ExcRatio(line: Line, exc_index: int) -> float:
+    excitation_ratio: float = generalVars.total_decayrates_exc[exc_index] / sum(generalVars.total_decayrates_exc)
+    
+    if len(line.keyI().split("_")[0]) == 4:
+        totalDirectDecays: float = sum([generalVars.level_decayrates_exc[exc_index][key] for key in generalVars.level_decayrates_exc[exc_index] if line.keyI()[:2] in key])
+        avgDirectDecay: float = totalDirectDecays / sum([line.keyI()[:2] in key for key in generalVars.level_decayrates_exc[exc_index]])
+        level_ratio: float = avgDirectDecay / sum(generalVars.level_decayrates_exc[exc_index][key] for key in generalVars.level_decayrates_exc[exc_index] if line.keyI()[:2] in key)
+    else:
+        level_ratio: float = generalVars.level_decayrates_exc[exc_index][line.keyI()] / sum(generalVars.level_decayrates_exc[exc_index][key] for key in generalVars.level_decayrates_exc[exc_index] if line.keyI()[:2] in key)
+    
+    return excitation_ratio * level_ratio
+
 
 # Find the branching ratio from Auger process of a higher shell for the satellite transition
 def get_AugerBR(line: Line):

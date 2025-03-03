@@ -39,4 +39,5 @@ def enter_function(event: KeyEvent):
         Returns:
             Nothing, the simulation function is executed
     """
+    # TODO: Add dir_path argument
     simulate(guiVars._sim, guiVars._f, guiVars._a) # type: ignore

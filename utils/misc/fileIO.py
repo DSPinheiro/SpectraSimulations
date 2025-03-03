@@ -25,7 +25,7 @@ from pathlib import Path
 #OS import for timestamps
 from datetime import datetime
 
-from data.definitions import Line
+from data.definitions import Line, processLine
 
 from matplotlib.pyplot import Axes
 
@@ -597,10 +597,11 @@ def readRates(rates_file: Path):
     try:
         with open(rates_file, 'r') as rates:
             # Write the lines into a list
-            return [Line(line=x) for x in rates.readlines()[3:]]
+            return [processLine(line=x) for x in rates.readlines()[3:]]
 
     except FileNotFoundError:
         messagebox.showwarning("Error", "Rates File is not Avaliable: " + str(rates_file))
+        return []
 
 # Read the ionization energies file and return a list with the data
 def readIonizationEnergies(ioniz_file: Path):
@@ -616,10 +617,11 @@ def readIonizationEnergies(ioniz_file: Path):
     try:
         with open(ioniz_file, 'r') as ioniz:
             # Write the lines into a list
-            return [Line(line=x) for x in ioniz.readlines()[3:]]
+            return [processLine(line=x) for x in ioniz.readlines()[3:]]
             
     except FileNotFoundError:
         messagebox.showwarning("Error", "Ionization Energies File is not Avaliable: " + str(ioniz_file))
+        return []
 
 # Read the widths file and return a list with the data
 def readWidths(widthsfile: Path):
@@ -635,10 +637,11 @@ def readWidths(widthsfile: Path):
     try:
         with open(widthsfile, 'r') as widths:
             # Write the lines into a list
-            return [Line(line=x) for x in widths.readlines()[3:]]
+            return [processLine(line=x) for x in widths.readlines()[3:]]
             
     except FileNotFoundError:
         messagebox.showwarning("Error", "Widths File is not Avaliable: " + str(widthsfile))
+        return []
 
 
 # Read the mean radius file and return a list with the data
@@ -667,6 +670,7 @@ def readMeanR(meanR_file: Path):
     except FileNotFoundError:
         generalVars.meanR_exists = False
         messagebox.showwarning("Error", "Mean Radius File is not Avaliable: " + str(meanR_file))
+        return [['']]
 
 
 # Read the shake up/off file and return a list with the data
@@ -756,13 +760,13 @@ def readChargeStates(files: List[str], dir_path: Path, z: int):
             with open(tmp_file, 'r') as rates:
                 if '+' in file:
                     # Write the lines into a list and append it to the total rates for all charge states
-                    linerates_PCS.append([Line(line=x) for x in rates.readlines()[3:]])
+                    linerates_PCS.append([processLine(line=x) for x in rates.readlines()[3:]])
                     
                     # Append the charge state value to identify the rates we just appended
                     PCS.append('+' + file.split('+')[1].split('.')[0])
                 else:
                     # Write the lines into a list and append it to the total rates for all charge states
-                    linerates_NCS.append([Line(line=x) for x in rates.readlines()[3:]])
+                    linerates_NCS.append([processLine(line=x) for x in rates.readlines()[3:]])
                     
                     # Append the charge state value to identify the rates we just appended
                     NCS.append('-' + file.split('-')[1].split('.')[0])
@@ -795,6 +799,72 @@ def readIonPop(ionpop_file: Path):
         messagebox.showwarning("Error", "Ion Population File is not Avaliable")
         
         return False, [['']]
+
+
+# ----------------------------------------------------- #
+#                                                       #
+#           READ RATES FILES FOR EXCITATIONS            #
+#                                                       #
+# ----------------------------------------------------- #
+
+# Search the Excitations folder for all "identifyer" rate files and return a list with their names
+def searchExcitations(dir_path: Path, z: int, identifyer: str):
+    """
+    Function to search the Excitations folder for all "identifyer" rate files
+        
+        Args:
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+            identifyer: identifyer of the rate files we want to search (intensity, satinty, augrate)
+            
+        Returns:
+            files: file names found in the Excitations folder with the identifyer
+    """
+    files: List[str] = []
+    # Loop all files in the folder
+    for f in os.listdir(dir_path / str(z) / 'Excitations'):
+        # If the name format matches a rates files then append it to the list
+        if os.path.isfile(os.path.join(dir_path / str(z) / 'Excitations', f)) and identifyer in f:
+            files.append(f)
+    
+    return files
+
+
+# Read the rates files in the files list and return a list with the data split by positive and negative charge states.
+# Also return a list with the order in which the data was stored in the lists
+def readExcitations(files: List[str], dir_path: Path, z: int):
+    """
+    Function to read the rates files in the files list
+        
+        Args:
+            files: list of the file names to read
+            dir_path: full path of the simulation
+            z: z value of the element to simulate
+        
+        Returns:
+            linerates: lists of the rates read
+            EXC: list with the order that the rates for the excitations were read
+    """
+    linerates: List[List[Line]] = []
+    
+    EXC: List[str] = []
+    
+    # Loop for each charge state file
+    for file in files:
+        # Path to the selected file
+        tmp_file = dir_path / str(z) / 'Excitations' / file
+        try:
+            with open(tmp_file, 'r') as rates:
+                # Write the lines into a list and append it to the total rates for all charge states
+                linerates.append([processLine(line=x) for x in rates.readlines()[3:]])
+                
+                # Append the charge state value to identify the rates we just appended
+                EXC.append(file.split('_')[-1].split('.')[0])
+        except FileNotFoundError:
+            messagebox.showwarning("Error", "Excitation File is not Avaliable: " + file)
+    
+    return linerates, EXC
+
 
 
 # ----------------------------------------------------- #

@@ -8,7 +8,7 @@ No functions should be defined in this module.
 from __future__ import annotations
 from typing import List, Dict, Tuple
 
-from .definitions import Line
+from data.definitions import Line
 
 import numpy as np
 import numpy.typing as npt
@@ -96,6 +96,43 @@ Data from the satellite spectrum read from file for each of the negative charge 
 
 # endregion
 
+# RATES DATA (EXCITATIONS)
+# region
+
+#Raw data read from the radiative transitions files to be simulated, for each excitation
+lineradrates_EXC: List[List[Line]] = []
+"""
+Data from the radiative spectrum read from file for each excitation
+"""
+#Raw data read from the satellite transitions files to be simulated, for each excitation
+linesatellites_EXC: List[List[Line]] = []
+"""
+Data from the satellite spectrum read from file for each excitation
+"""
+#Raw data read from the shake-up transitions file to be simulated, for each orbital the shake-up electron is promoted to
+lineshakeup_EXC: List[List[Line]] = []
+"""
+Data from the shake-up spectrum read from file for each orbital the shake-up electron is promoted to
+"""
+#Raw data read from the shake-up file to be simulated
+shakeup_exc: List[List[List[str]]] = []
+"""
+Shake-up probabilities read from file
+"""
+#Raw data read from the shake-off file to be simulated
+shakeoff_exc: List[List[List[str]]] = []
+"""
+Shake-off probabilities read from file
+"""
+#Raw data read from the neutral transitions files to be simulated, for each excitation (excitation probability)
+linenurates_EXC: List[List[Line]] = []
+"""
+Data from the neutral decay spectrum read from file for each excitation
+"""
+
+
+# endregion
+
 # RATES DATA (QUANTIFICATION)
 # region
 
@@ -161,6 +198,40 @@ Data from the shake-up ionization energies read from file for each orbital the s
 
 # endregion
 
+
+# IONIZATION DATA (EXCITATIONS)
+# region
+
+#Raw data read from the 1 hole ionization energies file
+ionizationsrad_exc: List[List[Line]] = []
+"""
+Data from the ionization energies file for 1 hole radiative transitions
+"""
+#Raw data read from the 2 hole ionization energies file
+ionizationssat_exc: List[List[Line]] = []
+"""
+Data from the ionization energies file for 2 hole radiative transitions
+"""
+#Raw data read from the shake-up ionization energies file to be simulated, for each orbital the shake-up electron is promoted to
+ionizationsshakeup_exc: List[List[Line]] = []
+"""
+Data from the shake-up ionization energies read from file for each orbital the shake-up electron is promoted to
+"""
+#Total decay rates summed for all levels of each excitation
+total_decayrates_exc: List[float] = []
+"""
+Total decay rates summed for all levels of each excitation
+"""
+
+#Total decay rates summed for all levels of each excitation
+level_decayrates_exc: List[Dict[str, float]] = []
+"""
+Total decay rates summed for all levels of each excitation
+"""
+
+# endregion
+
+
 # IONIZATION DATA (QUANTIFICATION)
 # region
 
@@ -215,6 +286,38 @@ Dictionary to hold the partial widths for each level to calculate the overlap in
 
 # endregion
 
+# WIDTHS DATA (EXCITATIONS)
+# region
+
+#Raw data read from the diagram rates file
+diagramwidths_exc: List[List[Line]] = []
+"""
+Data from the diagram rates with partial widths file for this element
+"""
+#Raw data read from the auger rates file
+augerwidths_exc: List[List[Line]] = []
+"""
+Data from the auger rates with partial widths file for this element
+"""
+#Raw data read from the satellite rates file
+satellitewidths_exc: List[List[Line]] = []
+"""
+Data from the satellite rates with partial widths file for this element
+"""
+#Raw data read from the shakeup rates file
+shakeupwidths_exc: List[List[Line]] = []
+"""
+Data from the shake-up rates with partial widths file for this element
+"""
+
+#Dictionary to hold the partial widths for each level to calculate the overlap integral with the excitation beam
+partialWidths_exc: List[Dict[str, Dict[str, float]]] = [{}]
+"""
+Dictionary to hold the partial widths for each level to calculate the overlap integral with the excitation beam
+"""
+
+# endregion
+
 # WIDTHS DATA (QUANTIFICATION)
 # region
 
@@ -243,7 +346,7 @@ Dictionary to hold the partial widths for each level to calculate the overlap in
 
 # endregion
 
-# EXCITATION DATA (SINGLE)
+# IONIZATION DATA (SINGLE)
 # region
 
 #Raw data read from the mean radius file
@@ -269,15 +372,26 @@ ELAMPhotoSpline = None
 Spline interpolation to use when calculating the cross section
 """
 
-#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
-shakeUPSplines = {}
+# endregion
+
+# IONIZATION DATA (EXCITATIONS)
+# region
+
+#Dictionary to hold the formation energies for each level to calculate cross sections with the parameters
+formationEnergies_exc: List[Dict[str, Dict[str, float]]] = [{}]
 """
-Splines for the shake-up probabilities as a function of the excited orbital n
+Formation energies to calculate cross sections. Optimized to use in filtering loops
+"""
+
+#Photo absorption spline interpolation to use for the cross section calculation
+ELAMPhotoSpline_exc = None
+"""
+Spline interpolation to use when calculating the cross section
 """
 
 # endregion
 
-# EXCITATION DATA (QUANTIFICATION)
+# IONIZATION DATA (QUANTIFICATION)
 # region
 
 #Flag to check if a file containing the meanRs data for MRBEB cross section exists
@@ -301,12 +415,6 @@ Formation energies to calculate cross sections. Optimized to use in filtering lo
 ELAMPhotoSpline_quant = {}
 """
 Spline interpolation to use when calculating the cross section
-"""
-
-#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
-shakeUPSplines_quant = {}
-"""
-Splines for the shake-up probabilities as a function of the excited orbital n
 """
 
 # endregion
@@ -359,6 +467,76 @@ existing_shakeoffs = {}
 Variable to hold the existing shakeoffs in the spectrum
 """
 
+#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
+shakeUPSplines = {}
+"""
+Splines for the shake-up probabilities as a function of the excited orbital n
+"""
+
+#Dictionary to hold the ratios for each loaded excited shake-up orbital. This was intensity independent of existing shake-ups
+totalShakeOrbRatios = {}
+"""
+Dictionary to hold the ratios for each loaded excited shake-up orbital. This was intensity independent of existing shake-ups.
+This happens because the original MCDF spectrum is calculated seperatly for each excited orbital
+"""
+
+
+# endregion
+
+# SHAKE DATA (EXCITATIONS)
+# region
+
+#Values of the missing shakeup probability calculated from the existing shakeup transitions
+#These values are added to the shakeup probability to fullfill 100% total spectral intensity
+missing_shakeup_exc: List[Dict[str, float]] = [{}]
+"""
+Values of the missing shakeup probability calculated from the existing shakeup transitions
+"""
+#Value of the averaged missing shakeoff probability calculated from the existing shakeoff transitions
+#These value is added to the shakeoff probability to fullfill 100% total spectral intensity
+missing_shakeoff_exc: List[float] = [0.0]
+"""
+Values of the missing shakeoff probability calculated from the existing shakeoff transitions
+"""
+
+#Dictionary to control the total shake-up probabilities present in the simulation
+control_shakeup_exc = [{}]
+"""
+Dictionary to control the total shake-up probabilities present in the simulation.
+Mainly used for debug
+"""
+#Dictionary to control the total shake-off probabilities present in the simulation
+control_shakeoff_exc = [{}]
+"""
+Dictionary to control the total shake-off probabilities present in the simulation.
+Mainly used for debug
+"""
+
+# Variable to store the realtionships between shake probabilities for each shell
+# This is used to manintain the relationships during the shake fitting algorithm
+shake_relations_exc = [{}]
+"""
+Variable to store the realtionships between shake probabilities for each shell.
+This is used to manintain the relationships during the shake fitting algorithm
+"""
+
+# Variable to hold the existing shakeups in the spectrum
+existing_shakeups_exc = [{}]
+"""
+Variable to hold the existing shakeups in the spectrum
+"""
+# Variable to hold the existing shakeoffs in the spectrum
+existing_shakeoffs_exc = [{}]
+"""
+Variable to hold the existing shakeoffs in the spectrum
+"""
+
+#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
+shakeUPSplines_exc = [{}]
+"""
+Splines for the shake-up probabilities as a function of the excited orbital n
+"""
+
 # endregion
 
 # SHAKE DATA (QUANTIFICATION)
@@ -407,6 +585,12 @@ Variable to hold the existing shakeups in the spectrum
 existing_shakeoffs_quant = {}
 """
 Variable to hold the existing shakeoffs in the spectrum
+"""
+
+#Dictionary to hold the splines for the shake-up probabilities as a function of the excited orbital n
+shakeUPSplines_quant = {}
+"""
+Splines for the shake-up probabilities as a function of the excited orbital n
 """
 
 # endregion
@@ -487,6 +671,9 @@ total_weight: float = 0.0
 # --------------------------------------------- #
 # region
 
+# IONIZATION
+# region
+
 #Final y of the simulated spectrum (Rad or Aug, no satellite) for each transition
 yfinal: List[List[float]] | npt.NDArray[np.float64] = []
 """
@@ -538,6 +725,65 @@ xfinal: npt.NDArray[np.float64] = np.array([])
 Final x values calculated for the simulation
 """
 
+# endregion
+
+# EXCITATION
+# region
+
+#Final y of the simulated spectrum (Rad or Aug, no satellite) for each transition
+yfinal_exc: List[List[float]] | npt.NDArray[np.float64] = []
+"""
+Final y values calculated for each of the simulated transitions
+"""
+#Total y of the simulated spectrum summed over all simulated lines
+ytot_exc: List[float] | npt.NDArray[np.float64] = []
+"""
+Final total y values for all simulated transitions
+"""
+#Total y of the simulated spectrum summed over all simulated diagram lines
+ydiagtot_exc: List[float] | npt.NDArray[np.float64] = []
+"""
+Final total y values for all simulated diagram transitions
+"""
+#Total y of the simulated spectrum summed over all simulated satellite lines
+ysattot_exc: List[float] | npt.NDArray[np.float64] = []
+"""
+Final total y values for all simulated satellite transitions
+"""
+#Total y of the simulated spectrum summed over all simulated shake-off lines
+yshkofftot_exc: List[float] | npt.NDArray[np.float64] = []
+"""
+Final total y values for all simulated shake-off transitions
+"""
+#Total y of the simulated spectrum summed over all simulated shake-up lines
+yshkuptot_exc: List[float] | npt.NDArray[np.float64] = []
+"""
+Final total y values for all simulated shake-up transitions
+"""
+#Final y of the simulated satellite lines for each Rad transition
+yfinals_exc: List[List[List[float]]] | npt.NDArray[np.float64] = []
+"""
+Final y values calculated for each of the possible satellite transitions in each of the simulated diagram transitions
+"""
+#Total y of each extra component for fitting
+yextras_exc: npt.NDArray[np.float64] = np.array([np.array([])])
+"""
+Final total y of each extra component for fitting
+"""
+#Total y of all extra fitting components
+yextrastot_exc: npt.NDArray[np.float64] = np.array([])
+"""
+Final total y of all extra fitting components
+"""
+#Final x of the simulated spectrum for each transition
+xfinal_exc: npt.NDArray[np.float64] = np.array([])
+"""
+Final x values calculated for the simulation
+"""
+
+# endregion
+
+
 #Currently plotted baseline used for quantification, in the same grid as the plotted experimental spectrum
 currentBaseline: List[float] = []
 """
@@ -578,6 +824,9 @@ Loaded experimental y error values
 # --------------------------------------------- #
 # region
 
+# IONS
+# region
+
 #File names of the radiative transitions for each charge state found
 radiative_files: List[str] = []
 """
@@ -593,6 +842,30 @@ sat_files: List[str] = []
 """
 Names of the satellite rates files for each charge state found
 """
+
+# endregion
+
+
+# EXCITATIONS
+# region
+
+#File names of the radiative transitions for each excitation found
+radiative_exc_files: List[str] = []
+"""
+Names of the radiative rates files for each excitation found
+"""
+#File names of the auger transitions for each excitation found
+auger_exc_files: List[str] = []
+"""
+Names of the auger rates files for each excitation found
+"""
+#File names of the satellite transitions for each excitation found
+sat_exc_files: List[str] = []
+"""
+Names of the satellite rates files for each excitation found
+"""
+
+# endregion
 
 # endregion
 
@@ -640,6 +913,23 @@ Flag for if the NIST database file was found.
 NIST_clusters_exists = False
 """
 Flag for if the clustered NIST database file was found.
+"""
+
+# endregion
+
+# EXCITATIONS
+# region
+
+#Flag to check if a file containing the meanRs data for MRBEB cross section exists
+meanR_exists_exc: List[bool] = [False]
+"""
+Flag for if a meanRs file was found. Disables MRBEB cross section option
+"""
+
+#Flag to check if a file containing the shake-up data exists
+Shakeup_exists_exc: List[bool] = [False]
+"""
+Flag for if the shake-up file was found. Disables shake-up and uses full shake probabilities for shake-off lines
 """
 
 # endregion
@@ -731,6 +1021,17 @@ List of labels corresponding to the shake probabilities we want to fit
 
 # endregion
 
+# SHAKES (EXCITATIONS)
+# region
+
+#Variable to store the labels read from the shake weights file
+label1_exc: List[List[str]] = []
+"""
+Shake labels read from file
+"""
+
+# endregion
+
 # SHAKES (QUANTIFICATION)
 # region
 
@@ -779,6 +1080,22 @@ List with the order that the positive charge states were read for the satellite 
 sat_NCS: List[str] = []
 """
 List with the order that the negative charge states were read for the satellite rates
+"""
+
+# endregion
+
+# EXCITATIONS
+# region
+
+#List with the available radiative excitations for this element
+rad_EXC: List[str] = []
+"""
+List with the available radiative excitations for this element
+"""
+#List with the available satellite excitations for this element
+sat_EXC: List[str] = []
+"""
+List with the available satellite excitations for this element
 """
 
 # endregion
@@ -1294,5 +1611,16 @@ per_table: List[List[float | str]] = [[1, 1.0079, ' Hydrogen ', ' H ', 0.09, 'gr
 """
 Values to initialize the periodic table (First window)
 """
+
+# endregion
+
+# --------------------------------------------- #
+#                                               #
+#             PACKAGE USER OVERRIDES            #
+#                                               #
+# --------------------------------------------- #
+# region
+
+userLine: type[Line] | None = None
 
 # endregion

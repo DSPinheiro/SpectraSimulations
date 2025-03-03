@@ -285,7 +285,7 @@ def setupVars(p: Tk):
     guiVars.JJ_colors = BooleanVar(value=False)
  
 # Setup the buttons in the button area
-def setupButtonArea(dir_path: Path, buttons_frame: Frame, buttons_frame2: Frame, buttons_frame3: Frame, buttons_frame4: Frame, quantify: bool = False):
+def setupButtonArea(dir_path: Path, buttons_frame: Frame, buttons_frame2: Frame, buttons_frame3: Frame, buttons_frame4: Frame, excitation: bool = False, quantify: bool = False):
     """
     Function to setup the buttons in the button area
         
@@ -350,7 +350,7 @@ def setupButtonArea(dir_path: Path, buttons_frame: Frame, buttons_frame2: Frame,
     
     # Calculate button
     ttk.Style().configure('red/black.TButton', foreground='red', background='black')
-    ttk.Button(master=buttons_frame3, text=("Calculate" if not quantify else "Fit"), command=lambda: simulate(dir_path, guiVars._parent, guiVars._f, guiVars._a, quantify), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0)) # type: ignore
+    ttk.Button(master=buttons_frame3, text=("Calculate" if not quantify else "Fit"), command=lambda: simulate(dir_path, guiVars._parent, guiVars._f, guiVars._a, excitation, quantify), style='red/black.TButton').pack(side=RIGHT, padx=(30, 0)) # type: ignore
     # yoffset
     ttk.Entry(buttons_frame3, width=7, textvariable=guiVars.yoffset).pack(side=RIGHT) # type: ignore
     ttk.Label(buttons_frame3, text="y Offset").pack(side=RIGHT)
@@ -381,7 +381,7 @@ def setupButtonArea(dir_path: Path, buttons_frame: Frame, buttons_frame2: Frame,
     ttk.Progressbar(buttons_frame4, variable=guiVars.progress_var, maximum=100).pack(fill=X, expand=1) # type: ignore
 
 # Setup the dropdown menus on the top toolbar
-def setupMenus(root: Tk, CS_exists: bool, quantify: bool = False):
+def setupMenus(root: Tk, CS_exists: bool, Exc_exists: bool, quantify: bool = False):
     """
     Function to setup the dropdown menus on the top toolbar
         
@@ -458,7 +458,17 @@ def setupMenus(root: Tk, CS_exists: bool, quantify: bool = False):
     transition_type_menu.add_checkbutton(label='Satellites', variable=guiVars.satelite_var, onvalue='Satellites', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis)) # type: ignore
     transition_type_menu.add_checkbutton(label='Diagram + Satellites', variable=guiVars.satelite_var, onvalue='Diagram + Satellites', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis)) # type: ignore
     if not quantify:
+        transition_type_menu.add_checkbutton(label='Excitation', variable=guiVars.satelite_var, onvalue='Excitation', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis), state='disabled') # type: ignore
+        transition_type_menu.add_checkbutton(label='Excitation + Satellites', variable=guiVars.satelite_var, onvalue='Excitation + ESat', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis), state='disabled') # type: ignore
+        transition_type_menu.add_checkbutton(label='Excitation + Diagram', variable=guiVars.satelite_var, onvalue='Excitation + Diagram', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis), state='disabled') # type: ignore
+        transition_type_menu.add_checkbutton(label='Excitation + Diagram + Satellites', variable=guiVars.satelite_var, onvalue='Excitation + ESat + Diagram + Satellites', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis), state='disabled') # type: ignore
         transition_type_menu.add_checkbutton(label='Auger', variable=guiVars.satelite_var, onvalue='Auger', offvalue='', command=lambda: update_transition_dropdown(cascade_analysis)) # type: ignore
+    
+        if Exc_exists:
+            transition_type_menu.entryconfigure(3, state=NORMAL)
+            transition_type_menu.entryconfigure(4, state=NORMAL)
+            transition_type_menu.entryconfigure(5, state=NORMAL)
+            transition_type_menu.entryconfigure(6, state=NORMAL)
     
     if not quantify:
         # ---------------------------------------------------------------------------------------------------------------

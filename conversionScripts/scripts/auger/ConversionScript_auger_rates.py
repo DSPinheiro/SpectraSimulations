@@ -63,7 +63,11 @@ def readLine(line):
     
     Energies = values[13].strip()
     Rate = values[14].strip()
-    Width = float(Rate[-1]) * h
+    try:
+        Width = float(Rate[-1]) * h
+    except:
+        Width = 0.0
+    
     TotRateIS = values[15].strip()
     BranchingRatio = values[16].strip()
     
@@ -102,6 +106,7 @@ with open(output_dir + "/" + output_rates, "w") as output:
         # Convert each line and write the new format to the output
         # This way we can convert any size file without worrying about RAM
         for i, line in enumerate(lines):
+            # print(line)
             print("Processing transition: " + str(i + 1) + "/" + str(transition_num), end='\r')
             
             Shelli, LowerConfigi, JJi, Eigeni, Configi, Percentagei, Shellf, LowerConfigf, \

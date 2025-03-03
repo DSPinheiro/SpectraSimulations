@@ -26,18 +26,18 @@ from simulation.auger import stick_auger
 
 # preprocessing functions to determine x, y, w lists
 from simulation.preprocessors import process_simulation, process_quantify_simu, process_Msimulation, \
-                                        process_excitation_data
+                                        process_ionization_shake_data
 
 
 # Bad selection reporting functions
 from utils.experimental.detector import initialize_detectorEfficiency
 
 from simulation.ycalc import y_calculator, normalizer, add_fitting_components
-from simulation.bounds import calculate_xfinal
+from simulation.bounds import calculate_xfinal, mergeXFinals
 from simulation.fitting import calculateResidues, execute_autofit,execute_autofit_minuit
 
 
-from interface.plotters import simu_plot, Msimu_plot, Qsimu_plot, format_legend
+from interface.plotters import simu_plot, Esimu_plot, Msimu_plot, Qsimu_plot, format_legend
 from interface.experimental import initialize_expElements, unpackExpSpectrum, update_expElements
 
 
@@ -141,7 +141,7 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
             for el_idx, el in enumerate(guiVars.elementList):
                 print(f'{el}: {x[(el_idx * len(generalVars.the_dictionary)):((el_idx + 1) * len(generalVars.the_dictionary))]}')
     else:
-        x, y, w, xs, ys, ws, bad_selection = process_simulation()
+        x, y, w, xs, ys, ws, bad_selection, xe, ye, we, xse, yse, wse, bad_selection_e = process_simulation(prompt=plotSimu)
     
     # -------------------------------------------------------------------------------------------
     # Get the values from interface entries
@@ -175,7 +175,17 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
     # ---------------------------------------------------------------------------------------------------------------
     # Calculate the xfinal set of x values to use in the simulation
 
-    generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, bad_selection, quantify)
+    if 'Diagram' in sat or 'Satellites' in sat or 'Auger' in sat:
+        generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, bad_selection, quantify)
+    if 'Excitation' in sat or 'ESat' in sat:
+        # print(generalVars.xfinal)
+        xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, bad_selection, quantify)
+        
+        if 'Diagram' in sat or 'Satellites' in sat or 'Auger' in sat:
+            generalVars.xfinal = mergeXFinals(generalVars.xfinal, xfinal)
+            # print(generalVars.xfinal)
+        else:
+            generalVars.xfinal = xfinal
     
     if generalVars.verbose >= 3:
         print(bounds)
@@ -193,10 +203,19 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
         generalVars.weightFractions = [[0.5 if generalVars.the_dictionary[tr]["selected_state"] else 0.0 for tr in generalVars.the_dictionary] for _ in guiVars.elementList]
         # generalVars.weightFractions = [[0.5] * len(generalVars.the_dictionary)] * len(guiVars.elementList)
     else:
-        generalVars.weightFractions = [[1.0 for _ in generalVars.the_dictionary]]
+        if len(generalVars.rad_EXC) > 0:
+            generalVars.weightFractions = [[1.0 for _ in generalVars.the_dictionary] for _ in generalVars.rad_EXC]
+        else:
+            generalVars.weightFractions = [[1.0 for _ in generalVars.the_dictionary]]
     
     # ---------------------------------------------------------------------------------------------------------------
     # Calculate the final y values
+    if 'Excitation' in sat or 'ESat' in sat:
+        generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
+        generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
+            y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+    
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
         generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = \
             y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, \
@@ -204,6 +223,7 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
     
     # Add the extra fitting components
     if len(generalVars.extra_fitting_functions) > 0:
+        # TODO: Add extra fitting function to the excitation lines (not really needed right now)
         generalVars.yextras.resize((len(generalVars.extra_fitting_functions), len(generalVars.xfinal)))
         print(generalVars.extra_fitting_functions)
         for i, key in enumerate(generalVars.extra_fitting_functions):
@@ -216,7 +236,7 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
                 generalVars.yextras[i] = add_fitting_components(generalVars.xfinal, function, pars['xParVal'], pars['ampParVal'] * max(generalVars.ytot), 0.0, pars['LwidthParVal'])
             elif function == 'Voigt':
                 generalVars.yextras[i] = add_fitting_components(generalVars.xfinal, function, pars['xParVal'], pars['ampParVal'] * max(generalVars.ytot), pars['GwidthParVal'], pars['LwidthParVal'])
-        
+    
     # ---------------------------------------------------------------------------------------------------------------
     # Calculate the normalization multiplyer
     if load != 'No':
@@ -227,14 +247,21 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
         else:
             eff_y = np.array(generalVars.exp_y)
         
-        normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot))
+        if 'Excitation' in sat or 'ESat' in sat:
+            normalization_var = normalizer(y0, max(eff_y), max(max(generalVars.ytot), max(generalVars.ytot_exc)))
+        else:
+            normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot))
     else:
         # If we try to normalize without an experimental spectrum
         if guiVars.normalizevar.get() == 'ExpMax': # type: ignore
             messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")
             # Reset the normalizer to the default
             guiVars.normalizevar.set('No') # type: ignore
-        normalization_var = normalizer(y0, 1, max(generalVars.ytot))
+        
+        if 'Excitation' in sat or 'ESat' in sat:
+            normalization_var = normalizer(y0, 1, max(max(generalVars.ytot), max(generalVars.ytot_exc)))
+        else:
+            normalization_var = normalizer(y0, 1, max(generalVars.ytot))
     
     # ---------------------------------------------------------------------------------------------------------------
     # Autofit:
@@ -246,7 +273,8 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
             y0, res, ytot_max, normalization_var, extra_pars = \
                 execute_autofit(sim, sat, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, \
                     y0, res, num_of_points, peak, x, y, w, xs, ys, ws, energy_values, \
-                    efficiency_values, time_of_click, quantify)
+                    efficiency_values, time_of_click, quantify, \
+                    xe, ye, we, xse, yse, wse)
         else:
             messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
     elif guiVars.autofitvar.get() == 'iminuit': # type: ignore
@@ -256,7 +284,8 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
             y0, res, ytot_max, normalization_var, extra_pars = \
                 execute_autofit_minuit(sim, sat, enoffset, sat_enoffset, shkoff_enoffset, \
                     shkup_enoffset, y0, res, num_of_points, peak, x, y, w, xs, ys, ws, \
-                    energy_values, efficiency_values, time_of_click, quantify)
+                    energy_values, efficiency_values, time_of_click, quantify, \
+                    xe, ye, we, xse, yse, wse)
         else:
             messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
     
@@ -266,7 +295,8 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
         graph_area = Qsimu_plot(guiVars.elementList, sat, guiVars.graph_area, normalization_var, y0, plotSimu, quantify) # type: ignore
     else:
         graph_area = simu_plot(sat, graph_area, normalization_var, y0, plotSimu) # type: ignore
-    
+        if 'Excitation' in sat or 'ESat' in sat:
+            graph_area = Esimu_plot(generalVars.rad_EXC, sat, graph_area, normalization_var, y0, plotSimu)
     # ------------------------------------------------------------------------------------------------------------------------
     # Calculate the residues
     if load != 'No':
@@ -401,7 +431,7 @@ def make_Msimulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: 
     """
     sat = guiVars.satelite_var.get() # type: ignore
 
-    x, y, w, xs, ys, ws, bad_selection = process_Msimulation()
+    x, y, w, xs, ys, ws, bad_selection, ploted_cs = process_Msimulation()
     
     # -------------------------------------------------------------------------------------------
     # Calculate the xfinal set of x values to use in the simulation
@@ -516,7 +546,7 @@ def make_Msimulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: 
 
 
 # Profile plotter. Plots each transition, applying the selected profile
-def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, quantify: bool = False):
+def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitation: bool = False, quantify: bool = False):
     """
     Profile plotter function. Plots each transition, applying the selected profile
         
@@ -562,9 +592,8 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, quantif
     spectype = guiVars.choice_var.get() # type: ignore
     
     # Setup shake and cross section data
-    process_excitation_data(quantify)
+    process_ionization_shake_data(excitation, quantify)
     
-
     # --------------------------------------------------------------------------------------------------------------------------
     if spectype == 'Stick':
         graph_area = make_stick(sim, graph_area)
@@ -573,14 +602,16 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, quantif
         graph_area = make_Mstick(sim, graph_area)
     # --------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'Simulation':
-        graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify)
+        # graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify)
         # CODE FOR AUTOMATIC BEAM ENERGY INCREMENTATION
-        # import numpy as np
-        #for energ in np.linspace(8970, 10500, 5100, endpoint=True):
+        import numpy as np
+        for energ in np.linspace(8975, 10500, 5100 - 17, endpoint=True):
         #for energ in np.linspace(9955, 10045, 300, endpoint=True):
         # for energ in [10010, 10800, 11000]:
-            # guiVars.excitation_energy.set(energ) # type: ignore
-            # graph_area = make_simulation(sim, f, graph_area, time_of_click, False)
+        # for energ in np.linspace(8960, 10500, int(10318 / 2), endpoint=True):
+        # for energ in np.linspace(8960, 9010, 335, endpoint=True):
+            guiVars.excitation_energy.set(energ) # type: ignore
+            graph_area = make_simulation(sim, f, graph_area, time_of_click, False)
     # --------------------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'M_Simulation':
         graph_area = make_Msimulation(sim, f, graph_area, time_of_click)

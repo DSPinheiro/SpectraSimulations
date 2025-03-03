@@ -31,6 +31,8 @@ dir_path = Path(str(os.getcwd()) + '/')
 Full path of the directory where the program is running
 """
 
+_userLine = None
+
 # ---------------------------------------------------------------------------------------------------------------
 # Configurate the window that apears after the periodic table where we choose the atomic parameters we want
 def PTable(dir_path: Path, root: Tk, ap: int = -1):
@@ -79,7 +81,7 @@ def PTable(dir_path: Path, root: Tk, ap: int = -1):
     Label4.grid(row=10, column=1, columnspan=2)
 
     for i, element in enumerate(per_table):
-        Button(subelem, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: calculate(dir_path, ((i + 1), per_table[i][2]), ap, root)).grid(row=element[6], column=element[7]) # type: ignore
+        Button(subelem, text=element[3], width=5, height=2, bg=element[5], command=lambda i=i: calculate(dir_path, ((i + 1), per_table[i][2]), ap, root, _userLine)).grid(row=element[6], column=element[7]) # type: ignore
     
     
     # Configure padding around the buttons
@@ -163,10 +165,13 @@ class App(Tk):
         self.mainloop()
 
 
-def main():
+def main(userLine = None):
     """
     Main function entry point where we instantiate the application.
     """
+    global _userLine
+    _userLine = userLine
+    
     a = App()
 
 
