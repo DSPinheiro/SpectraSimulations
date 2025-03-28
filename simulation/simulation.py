@@ -602,16 +602,20 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitat
         graph_area = make_Mstick(sim, graph_area)
     # --------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'Simulation':
-        # graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify)
-        # CODE FOR AUTOMATIC BEAM ENERGY INCREMENTATION
-        import numpy as np
-        for energ in np.linspace(8975, 10500, 5100 - 17, endpoint=True):
-        #for energ in np.linspace(9955, 10045, 300, endpoint=True):
-        # for energ in [10010, 10800, 11000]:
-        # for energ in np.linspace(8960, 10500, int(10318 / 2), endpoint=True):
-        # for energ in np.linspace(8960, 9010, 335, endpoint=True):
-            guiVars.excitation_energy.set(energ) # type: ignore
-            graph_area = make_simulation(sim, f, graph_area, time_of_click, False)
+        make_grid = True
+        
+        if not make_grid:
+            graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify)
+        else:
+            # CODE FOR AUTOMATIC BEAM ENERGY INCREMENTATION
+            import numpy as np
+            # for energ in np.linspace(8975, 10500, 5100 - 17, endpoint=True):
+
+            # for energ in np.linspace(8975, 9737.5, 5100, endpoint=True):
+            for energ in np.linspace(8975, 10500, 10318, endpoint=True):
+                # if energ > 9019.411648957104:
+                guiVars.excitation_energy.set(energ) # type: ignore
+                graph_area = make_simulation(sim, f, graph_area, time_of_click, False)
     # --------------------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'M_Simulation':
         graph_area = make_Msimulation(sim, f, graph_area, time_of_click)

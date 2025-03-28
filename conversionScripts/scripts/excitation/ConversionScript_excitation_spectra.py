@@ -6,18 +6,22 @@ Configs = []
 input_dir = '../../input/'
 output_dir = '../../output/'
 
-if len(sys.argv) != 5:
-    print("Expected 4 arguments:")
+if len(sys.argv) != 5 and len(sys.argv) != 4:
+    print("Expected 3 or 4 arguments:")
     print("filename for the spectra file with the original format;")
-    print("filename for the rates file with the original format;")
+    print("filename for the rates file with the original format (optional);")
     print("filename for the output file which contains the conversion between formats;")
     print("filename for the spectra file with the new format.")
     exit(-1)
 
 input_spectra = sys.argv[1]
-input_rates = sys.argv[2]
-conversion_file = sys.argv[3]
-output_spectra = sys.argv[4]
+if len(sys.argv) == 5:
+    input_rates = sys.argv[2]
+    conversion_file = sys.argv[3]
+    output_spectra = sys.argv[4]
+else:
+    conversion_file = sys.argv[2]
+    output_spectra = sys.argv[3]
 
 # Read the conversion file
 with open(output_dir + "/" + conversion_file, "r") as levels:
@@ -41,29 +45,30 @@ def convertShell(shell, jj, eigv):
 
 brDict = {}
 
-with open(input_dir + "/" + input_rates, "r") as rates:
-    header = rates.readline().strip() #header line
-    header = rates.readline().strip() #header line
-    
-    for i, line in enumerate(rates):
-        values = line.strip().split("\t")
+if len(sys.argv) == 5:
+    with open(input_dir + "/" + input_rates, "r") as rates:
+        header = rates.readline().strip() #header line
+        header = rates.readline().strip() #header line
         
-        Shelli = values[1].strip()
-        JJi = values[3].strip()
-        Eigeni = values[4].strip()
-        Shellf = values[7].strip()
-        JJf = values[9].strip()
-        Eigenf = values[10].strip()
-        Energies = values[13].strip()
-        
-        if Energies != '0.0':
-            BranchingRatio = values[17].strip()
-        else:
-            BranchingRatio = values[16].strip()
-        
-        key = Shelli + "_" + JJi + "_" + Eigeni + "->" + Shellf + "_" + JJf + "_" + Eigenf
-        
-        brDict[key] = BranchingRatio
+        for i, line in enumerate(rates):
+            values = line.strip().split("\t")
+            
+            Shelli = values[1].strip()
+            JJi = values[3].strip()
+            Eigeni = values[4].strip()
+            Shellf = values[7].strip()
+            JJf = values[9].strip()
+            Eigenf = values[10].strip()
+            Energies = values[13].strip()
+            
+            if Energies != '0.0':
+                BranchingRatio = values[17].strip()
+            else:
+                BranchingRatio = values[16].strip()
+            
+            key = Shelli + "_" + JJi + "_" + Eigeni + "->" + Shellf + "_" + JJf + "_" + Eigenf
+            
+            brDict[key] = BranchingRatio
 
 
 def readLine(line):
@@ -95,7 +100,7 @@ def readLine(line):
     if key in brDict:
         BranchingRatio = brDict[key]
     else:
-        BranchingRatio = "0.0"
+        BranchingRatio = 0.0
     
     LevelRadYield = "0.0"
     Intensity = values[15].strip()

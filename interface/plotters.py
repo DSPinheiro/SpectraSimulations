@@ -218,8 +218,8 @@ def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, p
                     label = generalVars.the_dictionary[key]["latex_name"]
                     graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=label, gid=key, color=select_color())  # Plot the simulation of all lines
     if 'Satellites' in sat:
-        totalShakeoffInt = []
-        totalShakeupInt = []
+        totalShakeoffInt = {}
+        totalShakeupInt = {}
         totalShakeoffInt_2p = []
         totalShakeupInt_2p = []
         for index, key in enumerate(generalVars.the_dictionary):
@@ -227,24 +227,26 @@ def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, p
                 for l, m in enumerate(generalVars.yfinals[index]):
                     # Dont plot the satellites that have a max y value of 0
                     if max(m) != 0:
+                        label = str(generalVars.the_dictionary[key]["latex_name"])
                         if l < len(generalVars.label1):
                             if "2p" in generalVars.labeldict[generalVars.label1[l]]:
                                 totalShakeoffInt_2p.append(sum(m))
-                            totalShakeoffInt.append(sum(m))
+                            totalShakeoffInt[label + ' - ' + generalVars.labeldict[generalVars.label1[l]]] = sum(m)
                         else:
                             if "2p" in generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]]:
                                 totalShakeupInt_2p.append(sum(m))
-                            totalShakeupInt.append(sum(m))
+                            totalShakeupInt[label + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up'] = sum(m)
                         if plotSimu:
                             # Plot the selected transition
-                            label = str(generalVars.the_dictionary[key]["latex_name"])
                             if l < len(generalVars.label1):
                                 graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
                             else:
                                 graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', color=select_color())  # Plot the simulation of all lines
-        print(str(guiVars.excitation_energy.get()) + "; " + str(sum(totalDiagInt)) + "; " + str(sum(totalShakeoffInt)) + "; " + str(sum(totalShakeupInt)) + "; " + str(sum(totalShakeoffInt_2p)) + "; " + str(sum(totalShakeupInt_2p))) # type: ignore
-        with open("spectraInts_Level.txt", "a") as intsFile:
-            intsFile.write(str(guiVars.excitation_energy.get()) + "; Diagram: " + str(sum(totalDiagInt)) + "; ShakeOff: " + str(sum(totalShakeoffInt)) + "; ShakeUp: " + str(sum(totalShakeupInt)) + "\n") # type: ignore
+        shkoff = '; '.join([key + ": " + str(totalShakeoffInt[key]) for key in totalShakeoffInt])
+        shkup = '; '.join([key + ": " + str(totalShakeupInt[key]) for key in totalShakeupInt])
+        print(str(guiVars.excitation_energy.get()) + "; " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup) # type: ignore
+        with open("spectraInts_modOvrlp_sameWidth.txt", "a") as intsFile:
+            intsFile.write(str(guiVars.excitation_energy.get()) + "; Diagram: " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup + "\n") # type: ignore
     if sat == 'Auger':
         for index, key in enumerate(generalVars.the_aug_dictionary):
             if generalVars.the_aug_dictionary[key]["selected_state"]:
@@ -310,7 +312,7 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
         for exc_index, exc_orb in enumerate(exc):
             for index, key in enumerate(generalVars.the_dictionary):
                 if generalVars.the_dictionary[key]["selected_state"]:
-                    label = str(generalVars.the_dictionary[key]["readable_name"])
+                    label = str(generalVars.the_dictionary[key]["latex_name"])
                     totalDiagInt[exc_orb + ' ' + label] = sum(generalVars.yfinal_exc[exc_index * len(generalVars.the_dictionary) + index])
                     # print(generalVars.yfinal_exc[exc_index * len(generalVars.the_dictionary) + index])
                     if plotSimu:
@@ -325,7 +327,7 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
                     for l, m in enumerate(generalVars.yfinals_exc[exc_index * len(generalVars.the_dictionary) + index]):
                         # Dont plot the satellites that have a max y value of 0
                         if max(m) != 0:
-                            label = str(generalVars.the_dictionary[key]["readable_name"])
+                            label = str(generalVars.the_dictionary[key]["latex_name"])
                             totalSatInt[exc_orb + " " + label + " - " + generalVars.labeldict[generalVars.label1[l]]] = sum(generalVars.yfinals_exc[exc_index * len(generalVars.the_dictionary) + index][l])
                             if plotSimu:
                                 # Plot the selected transition
@@ -335,8 +337,8 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
     diags = '; '.join([key + ": " + str(totalDiagInt[key]) for key in totalDiagInt])
     sats = '; '.join([key + ": " + str(totalSatInt[key]) for key in totalSatInt])
     print(str(guiVars.excitation_energy.get()) + "; " + diags + "; " + sats) # type: ignore
-    with open("spectraInts.txt", "a") as intsFile:
-        intsFile.write(str(guiVars.excitation_energy.get()) + "; " + diags + "; " + sats + "\n") # type: ignore
+    with open("spectraInts_excitation_widthMod.txt", "a") as intsFile:
+        intsFile.write(str(guiVars.excitation_energy.get()) + "; " + diags + ("; " if len(sats) > 0 else "") + sats + "\n") # type: ignore
     
     if sat == 'Auger':
         for exc_index, exc_orb in enumerate(exc):

@@ -4,16 +4,20 @@ import re
 
 h = 4.135667696 * 10**(-15)
 
-ground_config = "1s2 2s2 2p*2 2p4 3s2 3p*2 3p4 3d*4 3d6 4s1"
+ground_config = "1s2 2s2 2p*2 2p4 3s2 3p*2 3p4 3d*4 3d6" # <- Cu(I)
+# ground_config = "1s2 2s2 2p*2 2p4 3s2 3p*2 3p4 3d*4 3d5" # <- Cu(II)
+# ground_config = "1s2 2s2 2p*2 2p4 3s2 3p*2 3p4 3d*4 3d6 4s1"
 # ground_config = "1s2 2s2 2p*2 2p4 3s2 3p*2 3p4 3d*4 3d6 4s2 4p*2 4p4 4d*4 4d6 5s2"
 # ground_energy = -155311.29670 # <- Cd(err) | Cu -> -44961.88335
-ground_energy = -44961.88335
+# ground_energy = -44961.88335
+# ground_energy = -44938.04443 # <- Cu(II)
+ground_energy = -44955.26947 # <- Cu(I)
 Z = 29
 
 input_dir = '../input/'
 output_dir = '../output/'
 
-eig_keywrd = "eig_"
+eig_keywrd = "eigv_"
 eig_offset = 0
 
 header_count = 1

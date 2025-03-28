@@ -270,8 +270,10 @@ class Line():
             diagramMult = 1.0
         
         if exc_index == -1:
-            shakeoffMult = self.diagramOverlap * get_shakeoff(key, shakeoff_lines) if boost_type == 'satellite' else 1.0
-            shakeupMult = self.diagramOverlap * generalVars.totalShakeOrbRatios[self.Shelli[4:]] * get_shakeup(key, self.Shelli[4:], self.jji, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
+            # shakeoffMult = self.diagramOverlap * get_shakeoff(key, shakeoff_lines) if boost_type == 'satellite' else 1.0
+            # shakeupMult = self.diagramOverlap * generalVars.totalShakeOrbRatios[self.Shelli[4:]] * get_shakeup(key, self.Shelli[4:], self.jji, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
+            shakeoffMult = get_shakeoff(key, shakeoff_lines) if boost_type == 'satellite' else 1.0
+            shakeupMult = generalVars.totalShakeOrbRatios[self.Shelli[4:]] * get_shakeup(key, self.Shelli[4:], self.jji, shakeup_splines, shake_missing) if boost_type == 'shakeup' else 1.0
         else:
             # shakeoffMult = self.diagramOverlap * get_shakeoff_exc(key, exc_index, shakeoff_lines) if boost_type == 'satellite' else 1.0
             shakeoffMult = 1.0

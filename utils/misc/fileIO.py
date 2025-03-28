@@ -859,7 +859,7 @@ def readExcitations(files: List[str], dir_path: Path, z: int):
                 linerates.append([processLine(line=x) for x in rates.readlines()[3:]])
                 
                 # Append the charge state value to identify the rates we just appended
-                EXC.append(file.split('_')[-1].split('.')[0])
+                EXC.append(file.split('_', 1)[-1].split('.')[0])
         except FileNotFoundError:
             messagebox.showwarning("Error", "Excitation File is not Avaliable: " + file)
     

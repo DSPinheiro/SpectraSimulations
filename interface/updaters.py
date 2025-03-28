@@ -6,6 +6,8 @@ Module with dedicated updater functions for specific interface elements.
 from tkinter import * # type: ignore
 from tkinter import ttk
 
+from tkinter import messagebox
+
 
 import data.variables as generalVars
 
@@ -168,6 +170,17 @@ def select_all_transitions():
         
         min_x = min(xe)
         max_x = max(xe)
+    else:
+        if guiVars.x_min.get() != "Auto": # type: ignore
+            min_x = float(guiVars.x_min.get()) # type: ignore
+        else:
+            messagebox.showerror("Error", "Minimum value for the x axis is not set")
+            return
+        if guiVars.x_max.get() != "Auto": # type: ignore
+            max_x = float(guiVars.x_max.get()) # type: ignore
+        else:
+            messagebox.showerror("Error", "Maximum value for the x axis is not set")
+            return
     
     sat: str = guiVars.satelite_var.get() # type: ignore
     beam: float = guiVars.excitation_energy.get() # type: ignore
@@ -178,19 +191,19 @@ def select_all_transitions():
             _, low_level, high_level, diag_sim_val, sat_sim_val = updateRadTransitionVals(transition, 0, beam, FWHM)
             
             x, y, w = [], [], []
-            xs, ys, ws = [], [], []
+            xs, ws = [], []
             if 'Diagram' in sat:
                 # Store the values in a list containing all the transitions to simulate
                 x, y, w = simu_diagram(diag_sim_val, beam, FWHM)
             if 'Satellites' in sat:
                 # Store the values in a list containing all the transitions to simulate
-                xs, ys, ws = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM)
+                xs, _, ws = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, calc_int=False)
             
             xs = [x1 for x in xs for x1 in x]
             ws = [w1 for w in ws for w1 in w]
-            ys = [y1 for y in ys for y1 in y]
+            # ys = [y1 for y in ys for y1 in y]
             
-            if any([len(i) > 0 for i in [x, y, w, xs, ys, ws]]):
+            if any([len(i) > 0 for i in [x, y, w, xs, ws]]):
                 if any([x1 - w1 / 2 <= max_x and x1 + w1 / 2 > min_x for x1, w1 in zip(x, w)]) or \
                     any([x1 - w1 / 2 <= max_x and x1 + w1 / 2 > min_x for x1, w1 in zip(xs, ws)]):
                     dict_updater(transition)

@@ -133,13 +133,19 @@ def updateSatTransitionVals(low_level: str, high_level: str, key: str, sat_stick
         sat_stick_val_ind4 = [line for line in sat_stick_val if line.filterLevel(key + low_level, high_level + key, strict='na')]
     else:
         # Filter the satellite rates data for the combinations of selected levels
+        # --------------------------------------------- #
+        # ------------------ WARNING ------------------ #
+        #    This is only used to trick the filter to   #
+        # simulate all transitions in a spectral window #
+        # without having to select them in the interface#
+        # --------------------------------------------- #
         sat_stick_val_ind1 = [line for line in sat_stick_val if low_level + key in line.Shelli]
         sat_stick_val_ind2 = [line for line in sat_stick_val if low_level + key in line.Shelli]
         sat_stick_val_ind3 = [line for line in sat_stick_val if key + low_level in line.Shelli]
         sat_stick_val_ind4 = [line for line in sat_stick_val if key + low_level in line.Shelli]
     
     sat_stick_val_ind = sat_stick_val_ind1 + sat_stick_val_ind2 + sat_stick_val_ind3 + sat_stick_val_ind4
-    
+
     return sat_stick_val_ind
 
 

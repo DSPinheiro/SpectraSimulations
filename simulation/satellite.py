@@ -126,7 +126,7 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
 
 def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                    beam: float, FWHM: float, shake_amps: dict = {}, element: str = '',
-                   exc_index: int = -1):
+                   exc_index: int = -1, calc_int: bool = True):
     """
     Function to check and send the data to the stick plotter function for sattelite transitions.
     
@@ -165,28 +165,30 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
             x1s = [row.energy for row in sat_sim_val_ind if len(row.Shelli) <= 4]
             w1s = [row.totalWidth for row in sat_sim_val_ind if len(row.Shelli) <= 4]
             
-            if guiVars.exc_mech_var.get() == 'EII': # type: ignore
-                crossSection = generalVars.elementMRBEB
-            elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
-                #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
-                #TODO: Find a way to calculate this for every orbital, maybe R-matrix
-                crossSection = 1.0
-            else:
-                crossSection = 1.0
-            
-            if element == '':
-                y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                              'satellite', key, shake_amps, exc_index=exc_index) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
-            else:
-                y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                              'satellite', key, shake_amps,
-                                              shakeoff_lines=generalVars.shakeoff_quant[element],
-                                              shakeup_lines=generalVars.shakeup_quant[element],
-                                              shakeup_splines=generalVars.shakeUPSplines_quant[element],
-                                              shake_missing=generalVars.missing_shakeup_quant[element]) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
+            if calc_int:
+                if guiVars.exc_mech_var.get() == 'EII': # type: ignore
+                    crossSection = generalVars.elementMRBEB
+                elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
+                    #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
+                    #TODO: Find a way to calculate this for every orbital, maybe R-matrix
+                    crossSection = 1.0
+                else:
+                    crossSection = 1.0
+                
+                if element == '':
+                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
+                                                'satellite', key, shake_amps, exc_index=exc_index) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
+                else:
+                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
+                                                'satellite', key, shake_amps,
+                                                shakeoff_lines=generalVars.shakeoff_quant[element],
+                                                shakeup_lines=generalVars.shakeup_quant[element],
+                                                shakeup_splines=generalVars.shakeUPSplines_quant[element],
+                                                shake_missing=generalVars.missing_shakeup_quant[element]) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
+                
+                ys_inds.append(y1s)
             
             xs_inds.append(x1s)
-            ys_inds.append(y1s)
             ws_inds.append(w1s)
         else:
             xs_inds.append([])
@@ -207,28 +209,30 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                 x1s = [row.energy for row in sat_sim_val_ind if len(row.Shelli) > 4]
                 w1s = [row.totalWidth for row in sat_sim_val_ind if len(row.Shelli) > 4]
                 
-                if guiVars.exc_mech_var.get() == 'EII': # type: ignore
-                    crossSection = generalVars.elementMRBEB
-                elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
-                    #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
-                    #TODO: Find a way to calculate this for every orbital, maybe R-matrix
-                    crossSection = 1.0
-                else:
-                    crossSection = 1.0
-                
-                if element == '':
-                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, False,
-                                                  'shakeup', key, shake_amps) for row in sat_sim_val_ind if len(row.Shelli) > 4]
-                else:
-                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, False,
-                                                  'shakeup', key, shake_amps,
-                                                  shakeoff_lines=generalVars.shakeoff_quant[element],
-                                                  shakeup_lines=generalVars.shakeup_quant[element],
-                                                  shakeup_splines=generalVars.shakeUPSplines_quant[element],
-                                                  shake_missing=generalVars.missing_shakeup_quant[element]) for row in sat_sim_val_ind if len(row.Shelli) > 4]
+                if calc_int:
+                    if guiVars.exc_mech_var.get() == 'EII': # type: ignore
+                        crossSection = generalVars.elementMRBEB
+                    elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
+                        #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
+                        #TODO: Find a way to calculate this for every orbital, maybe R-matrix
+                        crossSection = 1.0
+                    else:
+                        crossSection = 1.0
+                    
+                    if element == '':
+                        y1s = [row.effectiveIntensity(beam, FWHM, crossSection, False,
+                                                    'shakeup', key, shake_amps) for row in sat_sim_val_ind if len(row.Shelli) > 4]
+                    else:
+                        y1s = [row.effectiveIntensity(beam, FWHM, crossSection, False,
+                                                    'shakeup', key, shake_amps,
+                                                    shakeoff_lines=generalVars.shakeoff_quant[element],
+                                                    shakeup_lines=generalVars.shakeup_quant[element],
+                                                    shakeup_splines=generalVars.shakeUPSplines_quant[element],
+                                                    shake_missing=generalVars.missing_shakeup_quant[element]) for row in sat_sim_val_ind if len(row.Shelli) > 4]
+                    
+                    ys_inds.append(y1s)
                 
                 xs_inds.append(x1s)
-                ys_inds.append(y1s)
                 ws_inds.append(w1s)
             else:
                 xs_inds.append([])

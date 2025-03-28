@@ -41,29 +41,34 @@ def get_overlap(line: Line, beam: float, FWHM: float) -> float:
     
     if len(line.Shelli) <= 4:
         if len(line.Shelli) == 2:
-            formationEnergy = generalVars.formationEnergies['diagram'][line.keyI()]
             pWidth = generalVars.partialWidths['diagram'][line.keyI()]
+            formationEnergy = generalVars.formationEnergies['diagram'][line.keyI()] + pWidth
         else:
-            formationEnergy = generalVars.formationEnergies['satellite'][line.keyI()]
             pWidth = generalVars.partialWidths['satellite'][line.keyI()]
+            formationEnergy = generalVars.formationEnergies['satellite'][line.keyI()] + pWidth
     else:
-        formationEnergy = generalVars.formationEnergies['shakeup'][line.keyI()]
+        # pWidth = FWHM
         pWidth = max(generalVars.partialWidths['shakeup'][line.keyI()], 1E-100)
+        formationEnergy = generalVars.formationEnergies['shakeup'][line.keyI()] + pWidth
     
     
     def integrand(x):
-        l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
+        x1 = x[x > beam]
+        x2 = x[x <= beam]
         
-        if x > beam:
-            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
-        else:
-            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+        l1 = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.ones(len(x1))
+        l2 = (0.5 * pWidth / np.pi) / (np.power((x2 - formationEnergy), 2) + (0.5 * pWidth) ** 2)
+        g1 = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-np.power(((x1 - beam) / FWHM), 2) * np.log(2))
+        g2 = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.ones(len(x2))
         
-        return min(l, g)
+        r1 = np.minimum(l1, g1)
+        r2 = np.minimum(l2, g2)
+        
+        return np.concatenate((r2, r1))
     
     x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
     
-    return integrate.simpson([integrand(x1) for x1 in x], x)
+    return integrate.simpson(integrand(x), x)
     # if formationEnergy > beam:
     #     return np.exp(-((formationEnergy - beam) / FWHM) ** 2 * np.log(2))
     # else:
@@ -90,7 +95,9 @@ def get_overlap_exc(line: Line, beam: float, FWHM: float, exc_index: int) -> flo
     
     if len(line.Shelli) <= 4:
         if len(line.Shelli) == 2:
-            # print(f'{generalVars.rad_EXC[exc_index]} -> {line.keyI()}')
+            if line.keyI() not in generalVars.formationEnergies_exc[exc_index]['diagram']:
+                print(f'{generalVars.rad_EXC[exc_index]} -> {line.keyI()}')
+            
             formationEnergy = generalVars.formationEnergies_exc[exc_index]['diagram'][line.keyI()]
             pWidth = generalVars.partialWidths_exc[exc_index]['diagram'][line.keyI()]
             pWidth = max(pWidth, 1E-100)
@@ -103,15 +110,17 @@ def get_overlap_exc(line: Line, beam: float, FWHM: float, exc_index: int) -> flo
         formationEnergy = generalVars.formationEnergies_exc[exc_index]['shakeup'][line.keyI()]
         pWidth = max(generalVars.partialWidths_exc[exc_index]['shakeup'][line.keyI()], 1E-100)
     
+    pWidth /= 2.0
+    pWidth *= 0.75
     
     def integrand(x):
-        l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
-        g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
+        l = (0.5 * pWidth / np.pi) / (np.power((x - formationEnergy), 2) + (0.5 * pWidth) ** 2)
+        g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-np.power(((x - beam) / FWHM), 2) * np.log(2))
         
-        return min(l, g)
+        return np.minimum(l, g)
     
     x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
-    return integrate.simpson([integrand(x1) for x1 in x], x)
+    return integrate.simpson(integrand(x), x)
 
 
 # Calculate the total yields and ratios for each existing excitation and level
@@ -134,6 +143,10 @@ def get_ExcRatio(line: Line, exc_index: int) -> float:
         avgDirectDecay: float = totalDirectDecays / sum([line.keyI()[:2] in key for key in generalVars.level_decayrates_exc[exc_index]])
         level_ratio: float = avgDirectDecay / sum(generalVars.level_decayrates_exc[exc_index][key] for key in generalVars.level_decayrates_exc[exc_index] if line.keyI()[:2] in key)
     else:
+        if line.keyI() not in generalVars.level_decayrates_exc[exc_index]:
+            print(f'{generalVars.rad_EXC[exc_index]} -> {line.keyI()}')
+            print(generalVars.level_decayrates_exc[exc_index])
+
         level_ratio: float = generalVars.level_decayrates_exc[exc_index][line.keyI()] / sum(generalVars.level_decayrates_exc[exc_index][key] for key in generalVars.level_decayrates_exc[exc_index] if line.keyI()[:2] in key)
     
     return excitation_ratio * level_ratio
