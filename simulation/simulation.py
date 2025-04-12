@@ -1,6 +1,8 @@
 """
 Module with functions that group the data to be simulated and send it to the plotters in the correct format.
 """
+from __future__ import annotations
+
 
 import data.variables as generalVars
 import interface.variables as guiVars
@@ -51,6 +53,9 @@ from matplotlib.figure import Figure
 
 from tkinter import Toplevel
 
+from typing import Dict, Any
+
+
 # ---------------------------------------------------------------------- #
 #                                                                        #
 #  FUNCTIONS TO PREPARE THE SIMULATION DATA AND SEND IT TO THE PLOTERS   #
@@ -58,7 +63,7 @@ from tkinter import Toplevel
 # ---------------------------------------------------------------------- #
 
 
-def make_stick(sim: Toplevel, graph_area: Axes):
+def make_stick(sim: Toplevel | None, graph_area: Axes | None):
     """
     Function to calculate the values that will be sent to the stick plotter function.
         
@@ -108,8 +113,9 @@ def make_stick(sim: Toplevel, graph_area: Axes):
                 bad_selection, graph_area = stick_auger(graph_area, aug_stick_val, transition, bad_selection)
     
     # Set the labels for the axis
-    graph_area.set_xlabel('Energy (eV)')
-    graph_area.set_ylabel('Intensity (arb. units)')
+    if graph_area:
+        graph_area.set_xlabel('Energy (eV)')
+        graph_area.set_ylabel('Intensity (arb. units)')
 
     if num_of_transitions == 0:
         messagebox.showerror("No Transition", "No transition was chosen")
@@ -119,7 +125,9 @@ def make_stick(sim: Toplevel, graph_area: Axes):
     return graph_area
 
 
-def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: datetime, plotSimu: bool = True, quantify: bool = False):
+def make_simulation(sim: Toplevel | None, f: Figure | None, graph_area: Axes | None,
+                    time_of_click: datetime, plotSimu: bool = True, quantify: bool = False,
+                    headless_config: Dict[str, Any] = {}):
     """
     Function to calculate the values that will be sent to the plot function.
         
@@ -132,7 +140,31 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
         Returns:
             Nothing, the simulation is performed, the transitions are plotted and the interface is updated
     """
-    sat = guiVars.satelite_var.get() # type: ignore
+    if sim:
+        sat = guiVars.satelite_var.get() # type: ignore
+    else:
+        if len(headless_config) == 0:
+            print("Error running headless mode: No configuration passed to headless_config parameter.")
+            print("Stopping....")
+            exit(-1)
+        else:
+            if 'satelite_var' in headless_config:
+                sat = headless_config['satelite_var']
+            else:
+                print("Error: No transition type chosen.")
+                print("Please define the value for the satelite_var in the headless_config dictionary.")
+                print("Stopping....")
+                exit(-1)
+    
+    print("Transitions to Simulate:")
+    if 'Auger' not in sat:
+        for transition in generalVars.the_dictionary:
+            if generalVars.the_dictionary[transition]['selected_state']:
+                print(generalVars.the_dictionary[transition]['readable_name'])
+    else:
+        for transition in generalVars.the_dictionary:
+            if generalVars.the_aug_dictionary[transition]['selected_state']:
+                print(generalVars.the_aug_dictionary[transition]['readable_name'])
     
     if quantify:
         x, y, w, xs, ys, ws, bad_selection = process_quantify_simu()
@@ -141,23 +173,149 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
             for el_idx, el in enumerate(guiVars.elementList):
                 print(f'{el}: {x[(el_idx * len(generalVars.the_dictionary)):((el_idx + 1) * len(generalVars.the_dictionary))]}')
     else:
-        x, y, w, xs, ys, ws, bad_selection, xe, ye, we, xse, yse, wse, bad_selection_e = process_simulation(prompt=plotSimu)
+        x, y, w, xs, ys, ws, bad_selection, xe, ye, we, xse, yse, wse, \
+        bad_selection_e = process_simulation(prompt=plotSimu, headless_config=headless_config)
     
     # -------------------------------------------------------------------------------------------
     # Get the values from interface entries
-    num_of_points = guiVars.number_points.get() # type: ignore
-    x_mx = guiVars.x_max.get() # type: ignore
-    x_mn = guiVars.x_min.get() # type: ignore
-    enoffset = guiVars.energy_offset.get() # type: ignore
-    sat_enoffset = guiVars.sat_energy_offset.get() # type: ignore
-    shkoff_enoffset = guiVars.shkoff_energy_offset.get() # type: ignore
-    shkup_enoffset = guiVars.shkup_energy_offset.get() # type: ignore
-    res = guiVars.exp_resolution.get() # type: ignore
-    
-    load = guiVars.loadvar.get() # type: ignore
-    effic_file_name = guiVars.effic_var.get() # type: ignore
-    peak = guiVars.type_var.get() # type: ignore
-    y0 = guiVars.yoffset.get() # type: ignore
+    if sim:
+        num_of_points = guiVars.number_points.get() # type: ignore
+        x_mx = guiVars.x_max.get() # type: ignore
+        x_mn = guiVars.x_min.get() # type: ignore
+        enoffset = guiVars.energy_offset.get() # type: ignore
+        sat_enoffset = guiVars.sat_energy_offset.get() # type: ignore
+        sep_offsets = guiVars.separate_offsets.get() # type: ignore
+        shkoff_enoffset = guiVars.shkoff_energy_offset.get() # type: ignore
+        shkup_enoffset = guiVars.shkup_energy_offset.get() # type: ignore
+        res = guiVars.exp_resolution.get() # type: ignore
+        
+        load = guiVars.loadvar.get() # type: ignore
+        effic_file_name = guiVars.effic_var.get() # type: ignore
+        peak = guiVars.type_var.get() # type: ignore
+        y0 = guiVars.yoffset.get() # type: ignore
+        
+        norm = None
+        autofit = guiVars.autofitvar.get() # type: ignore
+        
+        beam = None
+    else:
+        if 'number_points' in headless_config:
+            num_of_points = headless_config['number_points']
+        else:
+            print("Error: No number of simulation points chosen.")
+            print("Please define the value for the number_points in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'x_max' in headless_config:
+            x_mx = headless_config['x_max']
+        else:
+            print("Error: No maximum simulation x value chosen.")
+            print("Please define the value for the x_max in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'x_min' in headless_config:
+            x_mn = headless_config['x_min']
+        else:
+            print("Error: No minimum simulation x value chosen.")
+            print("Please define the value for the x_min in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'energy_offset' in headless_config:
+            enoffset = headless_config['energy_offset']
+        else:
+            print("Error: No simulation energy offset chosen.")
+            print("Please define the value for the energy_offset in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'sat_energy_offset' in headless_config:
+            sat_enoffset = headless_config['sat_energy_offset']
+        else:
+            print("Error: No energy offset for all satelites chosen.")
+            print("Please define the value for the sat_energy_offset in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'seperate_offsets' in headless_config:
+            sep_offsets = headless_config['seperate_offsets']
+        else:
+            print("Error: No flag for separating the energy satelite offsets chosen.")
+            print("Please define the value for the seperate_offsets in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'shkoff_energy_offset' in headless_config:
+            shkoff_enoffset = headless_config['shkoff_energy_offset']
+        else:
+            print("Error: No energy offset for shake-off chosen.")
+            print("Please define the value for the shkoff_energy_offset in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'shkup_energy_offset' in headless_config:
+            shkup_enoffset = headless_config['shkup_energy_offset']
+        else:
+            print("Error: No energy offset for shake-up chosen.")
+            print("Please define the value for the shkup_energy_offset in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'exp_resolution' in headless_config:
+            res = headless_config['exp_resolution']
+        else:
+            print("Error: No simulated experimental broadening chosen.")
+            print("Please define the value for the exp_resolution in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+
+        
+        if 'loadvar' in headless_config:
+            load = headless_config['loadvar']
+        else:
+            print("Error: No path to experimental spectrum chosen.")
+            print("Please define the value for the loadvar in the headless_config dictionary (use 'No' for no spectrum).")
+            print("Stopping....")
+            exit(-1)
+        if 'effic_var' in headless_config:
+            effic_file_name = headless_config['effic_var']
+        else:
+            print("Error: No path to detector efficiency function chosen.")
+            print("Please define the value for the effic_var in the headless_config dictionary (use 'No' for no function).")
+            print("Stopping....")
+            exit(-1)
+        if 'type_var' in headless_config:
+            peak = headless_config['type_var']
+        else:
+            print("Error: No transition line profile chosen.")
+            print("Please define the value for the type_var in the headless_config dictionary (available: 'Voigt', 'Lorentzian', 'Gaussian').")
+            print("Stopping....")
+            exit(-1)
+        if 'yoffset' in headless_config:
+            y0 = headless_config['yoffset']
+        else:
+            print("Error: No intensity offset chosen.")
+            print("Please define the value for the yoffset in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        
+        
+        if 'normalizevar' in headless_config:
+            norm = headless_config['normalizevar']
+        else:
+            print("Error: No normalization type was chosen.")
+            print("Please define the value for the normalizevar in the headless_config dictionary (available: 'ExpMax', 'One', 'No').")
+            print("Stopping....")
+            exit(-1)
+        if 'autofitvar' in headless_config:
+            autofit = headless_config['autofitvar']
+        else:
+            print("Error: No flag for autofitting was chosen.")
+            print("Please define the value for the autofitvar in the headless_config dictionary (available: 'LMFit', 'iminuit').")
+            print("Stopping....")
+            exit(-1)
+        if 'excitation_energy' in headless_config:
+            beam = headless_config['excitation_energy']
+        else:
+            print("Error: No excitation energy chosen.")
+            print("Please define the value for the excitation_energy in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+
     
     # ---------------------------------------------------------------------------------------------------------------
     # Load and plot the experimental spectrum
@@ -178,7 +336,6 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
     if 'Diagram' in sat or 'Satellites' in sat or 'Auger' in sat:
         generalVars.xfinal, bounds = calculate_xfinal(sat, x, w, xs, ws, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, bad_selection, quantify)
     if 'Excitation' in sat or 'ESat' in sat:
-        # print(generalVars.xfinal)
         xfinal, bounds = calculate_xfinal(sat, xe, we, xse, wse, x_mx, x_mn, res, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, num_of_points, bad_selection, quantify)
         
         if 'Diagram' in sat or 'Satellites' in sat or 'Auger' in sat:
@@ -214,12 +371,14 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
         generalVars.ytot_exc, generalVars.ydiagtot_exc, generalVars.ysattot_exc, generalVars.yshkofftot_exc, \
         generalVars.yshkuptot_exc, generalVars.yfinal_exc, generalVars.yfinals_exc = \
             y_calculator(sim, sat, peak, generalVars.xfinal, xe, ye, we, xse, yse, wse, res, \
-                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset,
+                separate_offsets=sep_offsets, effic_var=effic_file_name)
     
     generalVars.ytot, generalVars.ydiagtot, generalVars.ysattot, generalVars.yshkofftot, \
         generalVars.yshkuptot, generalVars.yfinal, generalVars.yfinals = \
             y_calculator(sim, sat, peak, generalVars.xfinal, x, y, w, xs, ys, ws, res, \
-                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
+                energy_values, efficiency_values, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset,
+                separate_offsets=sep_offsets, effic_var=effic_file_name)
     
     # Add the extra fitting components
     if len(generalVars.extra_fitting_functions) > 0:
@@ -248,25 +407,29 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
             eff_y = np.array(generalVars.exp_y)
         
         if 'Excitation' in sat or 'ESat' in sat:
-            normalization_var = normalizer(y0, max(eff_y), max(max(generalVars.ytot), max(generalVars.ytot_exc)))
+            normalization_var = normalizer(y0, max(eff_y), max(max(generalVars.ytot), max(generalVars.ytot_exc)),
+                                           normalizevar=norm)
         else:
-            normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot))
+            normalization_var = normalizer(y0, max(eff_y), max(generalVars.ytot),
+                                           normalizevar=norm)
     else:
-        # If we try to normalize without an experimental spectrum
-        if guiVars.normalizevar.get() == 'ExpMax': # type: ignore
-            messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")
-            # Reset the normalizer to the default
-            guiVars.normalizevar.set('No') # type: ignore
-        
+        if sim:
+            # If we try to normalize without an experimental spectrum
+            if guiVars.normalizevar.get() == 'ExpMax': # type: ignore
+                messagebox.showwarning("No experimental spectrum is loaded", "Choose different normalization option")
+                # Reset the normalizer to the default
+                guiVars.normalizevar.set('No') # type: ignore
+            
         if 'Excitation' in sat or 'ESat' in sat:
-            normalization_var = normalizer(y0, 1, max(max(generalVars.ytot), max(generalVars.ytot_exc)))
+            normalization_var = normalizer(y0, 1, max(max(generalVars.ytot), max(generalVars.ytot_exc)),
+                                           normalizevar=norm)
         else:
-            normalization_var = normalizer(y0, 1, max(generalVars.ytot))
+            normalization_var = normalizer(y0, 1, max(generalVars.ytot), normalizevar=norm)
     
     # ---------------------------------------------------------------------------------------------------------------
     # Autofit:
     number_of_fit_variables = 0
-    if guiVars.autofitvar.get() == 'LMFit': # type: ignore
+    if autofit == 'LMFit':
         # We can only fit if we have an experimental spectrum
         if load != 'No':
             number_of_fit_variables, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, \
@@ -276,8 +439,9 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
                     efficiency_values, time_of_click, quantify, \
                     xe, ye, we, xse, yse, wse)
         else:
-            messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
-    elif guiVars.autofitvar.get() == 'iminuit': # type: ignore
+            if sim:
+                messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
+    elif autofit == 'iminuit':
         # We can only fit if we have an experimental spectrum
         if load != 'No':
             number_of_fit_variables, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, \
@@ -287,22 +451,24 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
                     energy_values, efficiency_values, time_of_click, quantify, \
                     xe, ye, we, xse, yse, wse)
         else:
-            messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
+            if sim:
+                messagebox.showerror("Error", "Autofit is only avaliable if an experimental spectrum is loaded")
     
     # ------------------------------------------------------------------------------------------------------------------------
     # Plot the selected lines
     if quantify:
         graph_area = Qsimu_plot(guiVars.elementList, sat, guiVars.graph_area, normalization_var, y0, plotSimu, quantify) # type: ignore
     else:
-        graph_area = simu_plot(sat, graph_area, normalization_var, y0, plotSimu) # type: ignore
+        graph_area = simu_plot(sat, graph_area, normalization_var, y0, plotSimu, excitation_energy=beam)
         if 'Excitation' in sat or 'ESat' in sat:
-            graph_area = Esimu_plot(generalVars.rad_EXC, sat, graph_area, normalization_var, y0, plotSimu)
+            graph_area = Esimu_plot(generalVars.rad_EXC, sat, graph_area, normalization_var, y0, plotSimu,
+                                    excitation_energy=beam)
     # ------------------------------------------------------------------------------------------------------------------------
     # Calculate the residues
     if load != 'No':
         calculateResidues(generalVars.exp_x, generalVars.exp_y, generalVars.exp_sigma, generalVars.xfinal, normalization_var, guiVars.normalizevar.get(), y0, number_of_fit_variables, guiVars._residues_graph) # type: ignore
     
-    if plotSimu:
+    if plotSimu and graph_area:
         # ------------------------------------------------------------------------------------------------------------------------
         # Set the axis labels
         graph_area.set_ylabel('Intensity (arb. units)')
@@ -318,7 +484,7 @@ def make_simulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: d
 
 
 
-def make_Mstick(sim: Toplevel, graph_area: Axes):
+def make_Mstick(sim: Toplevel | None, graph_area: Axes | None):
     """
     Function to calculate the values that will be sent to the stick plotter function when simulating a mixture of charge states.
         
@@ -405,8 +571,9 @@ def make_Mstick(sim: Toplevel, graph_area: Axes):
                         bad_selection, graph_area = stick_auger(graph_area, aug_stick_val, transition, bad_selection, cs)
 
     # Set the labels for the axis
-    graph_area.set_xlabel('Energy (eV)')
-    graph_area.set_ylabel('Intensity (arb. units)')
+    if graph_area:
+        graph_area.set_xlabel('Energy (eV)')
+        graph_area.set_ylabel('Intensity (arb. units)')
 
     if num_of_transitions == 0:
         messagebox.showerror("No Transition", "No transition was chosen")
@@ -416,7 +583,7 @@ def make_Mstick(sim: Toplevel, graph_area: Axes):
     return graph_area
 
 
-def make_Msimulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: datetime):
+def make_Msimulation(sim: Toplevel | None, f: Figure | None, graph_area: Axes | None, time_of_click: datetime):
     """
     Function to calculate the values that will be sent to the plot function.
         
@@ -523,30 +690,33 @@ def make_Msimulation(sim: Toplevel, f: Figure, graph_area: Axes, time_of_click: 
     
     # ------------------------------------------------------------------------------------------------------------------------
     # Plot the selected lines
-    graph_area = Msimu_plot(ploted_cs, sat, graph_area, normalization_var, y0) # type: ignore
-    
+    if graph_area:
+        graph_area = Msimu_plot(ploted_cs, sat, graph_area, normalization_var, y0) # type: ignore
+
     # ------------------------------------------------------------------------------------------------------------------------
     # Calculate the residues
     if load != 'No':
         calculateResidues(generalVars.exp_x, generalVars.exp_y, generalVars.exp_sigma, generalVars.xfinal, normalization_var, guiVars.normalizevar.get(), y0, number_of_fit_variables, guiVars._residues_graph) # type: ignore
     
-    # ------------------------------------------------------------------------------------------------------------------------
-    # Set the axis labels
-    graph_area.set_ylabel('Intensity (arb. units)')
-    graph_area.legend(title=generalVars.element_name, title_fontsize='large')
-    if load == 'No':
-        graph_area.set_xlabel('Energy (eV)')
-    
-    # ------------------------------------------------------------------------------------------------------------------------
-    # Automatic legend formating
-    format_legend(graph_area)
+    if graph_area:
+        # ------------------------------------------------------------------------------------------------------------------------
+        # Set the axis labels
+        graph_area.set_ylabel('Intensity (arb. units)')
+        graph_area.legend(title=generalVars.element_name, title_fontsize='large')
+        if load == 'No':
+            graph_area.set_xlabel('Energy (eV)')
+        
+        # ------------------------------------------------------------------------------------------------------------------------
+        # Automatic legend formating
+        format_legend(graph_area)
     
     return graph_area
 
 
 
 # Profile plotter. Plots each transition, applying the selected profile
-def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitation: bool = False, quantify: bool = False):
+def simulate(dir_path: Path, sim: Toplevel | None, f: Figure | None, graph_area: Axes | None,
+             excitation: bool = False, quantify: bool = False, headless_config: Dict[str, Any] = {}):
     """
     Profile plotter function. Plots each transition, applying the selected profile
         
@@ -558,6 +728,13 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitat
         Returns:
             Nothing, the simulation is performed, the transitions are plotted and the interface is updated
     """
+    if not sim or not f or not graph_area:
+        print("Simulation started with tk gui handles as None. Running headless mode.")
+        if len(headless_config) == 0:
+            print("Error starting headless mode: No configuration passed to headless_config parameter.")
+            print("Stopping....")
+            exit(-1)
+    
     if quantify:
         UpdateElementsMCDFData(dir_path, guiVars.elementList)
         guiVars.choice_var.set('Simulation') # type: ignore
@@ -578,18 +755,27 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitat
     List of experimental spectrum intensities
     """
     
-    # Reset the plot with the configurations selected
-    graph_area.clear()
-    if guiVars.yscale_log.get() == 'Ylog': # type: ignore
-        graph_area.set_yscale('log')
-    if guiVars.xscale_log.get() == 'Xlog': # type: ignore
-        graph_area.set_xscale('log')
-    
-    graph_area.legend(title=generalVars.element_name)
+    if graph_area:
+        # Reset the plot with the configurations selected
+        graph_area.clear()
+        if guiVars.yscale_log.get() == 'Ylog': # type: ignore
+            graph_area.set_yscale('log')
+        if guiVars.xscale_log.get() == 'Xlog': # type: ignore
+            graph_area.set_xscale('log')
+        
+        graph_area.legend(title=generalVars.element_name)
     
     number_of_fit_variables = 0
     
-    spectype = guiVars.choice_var.get() # type: ignore
+    if sim:
+        spectype = guiVars.choice_var.get() # type: ignore
+    elif 'choice_var' in headless_config:
+        spectype = headless_config['choice_var']
+    else:
+        print("Error: No simulation type chosen in the headless_config dictionary.")
+        print("Please define the key 'choice_var' in this parameter.")
+        print("Stopping....")
+        exit(-1)
     
     # Setup shake and cross section data
     process_ionization_shake_data(excitation, quantify)
@@ -602,23 +788,57 @@ def simulate(dir_path: Path, sim: Toplevel, f: Figure, graph_area: Axes, excitat
         graph_area = make_Mstick(sim, graph_area)
     # --------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'Simulation':
-        make_grid = True
+        if sim:
+            make_grid = False
+        else:
+            if 'make_grid' in headless_config:
+                make_grid = headless_config['make_grid']
+            else:
+                print("Error: No flag for making a simulation grid was chosen.")
+                print("Please define the key make_grid in the headless_config parameter.")
+                print("Stopping....")
+                exit(-1)
         
         if not make_grid:
-            graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify)
+            graph_area = make_simulation(sim, f, graph_area, time_of_click, quantify=quantify,
+                                         headless_config=headless_config)
         else:
             # CODE FOR AUTOMATIC BEAM ENERGY INCREMENTATION
             import numpy as np
-            # for energ in np.linspace(8975, 10500, 5100 - 17, endpoint=True):
-
-            # for energ in np.linspace(8975, 9737.5, 5100, endpoint=True):
-            for energ in np.linspace(8975, 10500, 10318, endpoint=True):
-                # if energ > 9019.411648957104:
-                guiVars.excitation_energy.set(energ) # type: ignore
-                graph_area = make_simulation(sim, f, graph_area, time_of_click, False)
+            
+            if sim:
+                threads = 4
+                offset = 0
+            else:
+                if 'threads' in headless_config:
+                    threads = headless_config['threads']
+                else:
+                    print("Error: Simulation grid was chosen but no thread count was chosen.")
+                    print("Please define the key threads in the headless_config parameter.")
+                    print("Stopping....")
+                    exit(-1)
+                if 'offset' in headless_config:
+                    offset = headless_config['offset']
+                else:
+                    print("Error: Simulation grid was chosen but no instance offset was chosen.")
+                    print("Please define the key offset in the headless_config parameter.")
+                    print("Stopping....")
+                    exit(-1)
+            
+            for i, energ in enumerate(np.linspace(8975, 10500, int(10318 / 2.0), endpoint=True)):
+                if (i + offset) % threads == 0:
+                    if sim:
+                        guiVars.excitation_energy.set(energ) # type: ignore
+                    else:
+                        headless_config['excitation_energy'] = energ
+                    
+                    graph_area = make_simulation(sim, f, graph_area, time_of_click, False,
+                                                 headless_config=headless_config)
+    
     # --------------------------------------------------------------------------------------------------------------------------------------
     elif spectype == 'M_Simulation':
         graph_area = make_Msimulation(sim, f, graph_area, time_of_click)
     
-    f.canvas.draw()
+    if f:
+        f.canvas.draw()
 

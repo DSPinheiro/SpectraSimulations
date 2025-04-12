@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import interface.variables as guiVars
 import data.variables as generalVars
 
@@ -25,7 +27,7 @@ from simulation.shake import setupShake, setupShakeExc
 #Excitation yield ratios (from decays)
 from simulation.mults import setupExcitationYields
 
-from typing import List
+from typing import List, Dict, Any
 
 
 def process_ionization_shake_data(excitation: bool, quantify: bool):
@@ -85,10 +87,36 @@ def process_ionization_shake_data(excitation: bool, quantify: bool):
                                     generalVars.ionizationsshakeup_quant[element[1]])
 
 
-def process_simulation(shake_amps: dict = {}, prompt: bool = True):
-    sat: str = guiVars.satelite_var.get() # type: ignore
-    beam: float = guiVars.excitation_energy.get() # type: ignore
-    FWHM: float = guiVars.excitation_energyFWHM.get() # type: ignore
+def process_simulation(shake_amps: dict = {}, prompt: bool = True,
+                       headless_config: Dict[str, Any] = {}):
+    if len(headless_config) == 0:
+        sat: str = guiVars.satelite_var.get() # type: ignore
+        beam: float = guiVars.excitation_energy.get() # type: ignore
+        FWHM: float = guiVars.excitation_energyFWHM.get() # type: ignore
+    else:
+        if 'satelite_var' in headless_config:
+            sat: str = headless_config['satelite_var']
+        else:
+            print("Error: No transition type chosen.")
+            print("Please define the value for the satelite_var in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        
+        if 'excitation_energy' in headless_config:
+            beam: float = headless_config['excitation_energy']
+        else:
+            print("Error: No excitation energy chosen.")
+            print("Please define the value for the excitation_energy in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        
+        if 'excitation_energyFWHM' in headless_config:
+            FWHM: float = headless_config['excitation_energyFWHM']
+        else:
+            print("Error: No FWHM chosen for the excitation energy beam.")
+            print("Please define the value for the excitation_energyFWHM in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
     
     # Initialize the x, y and w arrays for both the non satellites and satellites (xs, ys, ws) transitions
     x, y, w, xs, ys, ws = initialize_XYW('Radiative')
@@ -98,10 +126,29 @@ def process_simulation(shake_amps: dict = {}, prompt: bool = True):
     bad_selection = 0
     bad_selection_e = 0
     
+    
+    include_cascades: bool | None = None
+    exc_mech_var: str = ''
+    
+    if len(headless_config) > 0:
+        if 'include_cascades' in headless_config:
+            include_cascades=headless_config['include_cascades']
+        else:
+            print("Error: No flag chosen for including cascades in the simulation.")
+            print("Please define the value for the include_cascades in the headless_config dictionary.")
+            print("Stopping....")
+            exit(-1)
+        if 'exc_mech_var' in headless_config:
+            exc_mech_var=headless_config['exc_mech_var']
+        else:
+            print("Error: No excitation mechanism chosen for the simulation.")
+            print("Please define the value for the exc_mech_var in the headless_config dictionary (available: 'EII', 'PIon', 'None').")
+            print("Stopping....")
+            exit(-1)
+    
     # Radiative and Auger code has to be split due to the different dictionaries used for the transitions
     if sat != 'Auger':
         if 'Diagram' in sat or 'Satellites' in sat:
-            
             # Read the selected transitions
             # In this case we first store all the values for the transitions and then we calculate the y values to be plotted according to a profile
             for index, transition in enumerate(generalVars.the_dictionary):
@@ -111,10 +158,14 @@ def process_simulation(shake_amps: dict = {}, prompt: bool = True):
                     
                     if 'Diagram' in sat:
                         # Store the values in a list containing all the transitions to simulate
-                        x[index], y[index], w[index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps)
+                        x[index], y[index], w[index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps,
+                                                                    include_cascades=include_cascades,
+                                                                    exc_mech_var=exc_mech_var)
                     if 'Satellites' in sat:
                         # Store the values in a list containing all the transitions to simulate
-                        xs[index], ys[index], ws[index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps)
+                        xs[index], ys[index], ws[index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps,
+                                                                    include_cascades=include_cascades,
+                                                                    exc_mech_var=exc_mech_var)
             
             # -------------------------------------------------------------------------------------------
             # Check if there are any transitions with missing rates
@@ -136,10 +187,14 @@ def process_simulation(shake_amps: dict = {}, prompt: bool = True):
                         
                         if 'Excitation' in sat:
                             # Store the values in a list containing all the transitions and charge states to simulate
-                            xe[exc_index * len(generalVars.the_dictionary) + index], ye[exc_index * len(generalVars.the_dictionary) + index], we[exc_index * len(generalVars.the_dictionary) + index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps, exc_index=exc_index)
+                            xe[exc_index * len(generalVars.the_dictionary) + index], ye[exc_index * len(generalVars.the_dictionary) + index], we[exc_index * len(generalVars.the_dictionary) + index] = simu_diagram(diag_sim_val, beam, FWHM, shake_amps, exc_index=exc_index,
+                                                                                                                                                                                                                     include_cascades=include_cascades,
+                                                                                                                                                                                                                     exc_mech_var=exc_mech_var)
                         if 'ESat' in sat:
                             # Store the values in a list containing all the charge states and transitions to simulate
-                            xse[exc_index * len(generalVars.the_dictionary) + index], yse[exc_index * len(generalVars.the_dictionary) + index], wse[exc_index * len(generalVars.the_dictionary) + index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps, exc_index=exc_index)
+                            xse[exc_index * len(generalVars.the_dictionary) + index], yse[exc_index * len(generalVars.the_dictionary) + index], wse[exc_index * len(generalVars.the_dictionary) + index] = simu_sattelite(sat_sim_val, low_level, high_level, beam, FWHM, shake_amps, exc_index=exc_index,
+                                                                                                                                                                                                                            include_cascades=include_cascades,
+                                                                                                                                                                                                                            exc_mech_var=exc_mech_var)
                 # -------------------------------------------------------------------------------------------
                 # Check if there are any transitions with missing rates
                 bad_selection_e, bad_lines_e = Msimu_check_bads(exc_index, exc, xe, xse, True)

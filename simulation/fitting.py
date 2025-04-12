@@ -634,7 +634,7 @@ def fetchFittedParams_minuit(result: Minuit, quantify: bool = False) -> Tuple[fl
 
 
 # Create the function to be minimized for the fitting
-def func2min(params: Parameters, sim: Toplevel,
+def func2min(params: Parameters, sim: Toplevel | None,
              exp_x: List[float], exp_y: List[float], num_of_points: int,
              sat: str, peak: str,
              x: List[List[float]], y: List[List[float]], w: List[List[float]],
@@ -891,7 +891,7 @@ def func2min(params: Parameters, sim: Toplevel,
 
 
 # Create the function to be minimized for the fitting
-def func2min_minuit(params: tuple, name: tuple, sim: Toplevel,
+def func2min_minuit(params: tuple, name: tuple, sim: Toplevel | None,
              exp_x: List[float], exp_y: List[float], num_of_points: int,
              sat: str, peak: str,
              x: List[List[float]], y: List[List[float]], w: List[List[float]],
@@ -1163,7 +1163,7 @@ def report_minuit(result,num_data,num_var):
     
     return report
 
-def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: float,
+def execute_autofit(sim: Toplevel | None, sat: str, enoffset: float, sat_enoffset: float,
                     shkoff_enoffset: float, shkup_enoffset: float, y0: float, res: float,
                     num_of_points: int, peak: str, x: List[List[float]], y: List[List[float]],
                     w: List[List[float]], xs: List[List[List[float]]], ys: List[List[List[float]]],
@@ -1310,7 +1310,7 @@ def execute_autofit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: floa
     return number_of_fit_variables, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset, y0, res, ytot_max, normalization_var, extra_pars
 
 
-def execute_autofit_minuit(sim: Toplevel, sat: str, enoffset: float, sat_enoffset: float,
+def execute_autofit_minuit(sim: Toplevel | None, sat: str, enoffset: float, sat_enoffset: float,
                     shkoff_enoffset: float, shkup_enoffset: float, y0: float, res: float,
                     num_of_points: int, peak: str, x: List[List[float]], y: List[List[float]],
                     w: List[List[float]], xs: List[List[List[float]]], ys: List[List[List[float]]],

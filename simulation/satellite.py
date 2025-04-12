@@ -1,6 +1,8 @@
 """
 Module with functions that prepare satellite transtion data.
 """
+from __future__ import annotations
+
 
 import interface.variables as guiVars
 
@@ -31,7 +33,7 @@ import copy
 #                                                                        #
 # ---------------------------------------------------------------------- #
 
-def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], transition: str, low_level: str, high_level: str, bad_selection: int, cs: str = ''):
+def stick_satellite(sim: Toplevel | None, graph_area: Axes | None, sat_stick_val: List[Line], transition: str, low_level: str, high_level: str, bad_selection: int, cs: str = ''):
     """
     Function to check and send the data to the stick plotter function for sattelite transitions.
     
@@ -111,22 +113,25 @@ def stick_satellite(sim: Toplevel, graph_area: Axes, sat_stick_val: List[Line], 
                 
                 print(sat_stick_val)
             
-            graph_area = stem_ploter(graph_area, x, sy_points, JJ,
-                                     transition if cs == '' else cs + ' ' + transition,
-                                     'Satellites' if cs == '' else 'Satellites_CS',
-                                     ind, key, x_up, sy_points_up, JJ_up)
+            if graph_area:
+                graph_area = stem_ploter(graph_area, x, sy_points, JJ,
+                                        transition if cs == '' else cs + ' ' + transition,
+                                        'Satellites' if cs == '' else 'Satellites_CS',
+                                        ind, key, x_up, sy_points_up, JJ_up)
         
         # Update the progress bar
         b1 += 100 / len(generalVars.label1)
         guiVars.progress_var.set(b1) # type: ignore
-        sim.update_idletasks()
+        if sim:
+            sim.update_idletasks()
     
     return bad, graph_area
 
 
 def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                    beam: float, FWHM: float, shake_amps: dict = {}, element: str = '',
-                   exc_index: int = -1, calc_int: bool = True):
+                   exc_index: int = -1, calc_int: bool = True,
+                   include_cascades: bool | None = None, exc_mech_var: str = ''):
     """
     Function to check and send the data to the stick plotter function for sattelite transitions.
     
@@ -148,10 +153,19 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
     ys_inds: List[List[float]] = []
     ws_inds: List[List[float]] = []
     
-    if guiVars.include_cascades.get(): # type: ignore
+    if include_cascades is None:
+        casc: bool = guiVars.include_cascades.get() # type: ignore
+    else:
+        casc: bool = include_cascades
+    
+    if exc_mech_var == '':
+        exc_mech: str = guiVars.exc_mech_var.get() # type: ignore
+    else:
+        exc_mech: str = exc_mech_var
+    
+    if casc:
         if len(generalVars.satBoostMatrixDict) == 0:
             get_cascadeBoost('satellite')
-    
     
     # SHAKE-OFF
     # Loop the shake labels read from the shake weights file
@@ -166,9 +180,9 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
             w1s = [row.totalWidth for row in sat_sim_val_ind if len(row.Shelli) <= 4]
             
             if calc_int:
-                if guiVars.exc_mech_var.get() == 'EII': # type: ignore
+                if exc_mech == 'EII':
                     crossSection = generalVars.elementMRBEB
-                elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
+                elif exc_mech == 'PIon':
                     #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
                     #TODO: Find a way to calculate this for every orbital, maybe R-matrix
                     crossSection = 1.0
@@ -176,11 +190,11 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                     crossSection = 1.0
                 
                 if element == '':
-                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                                'satellite', key, shake_amps, exc_index=exc_index) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
+                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, casc, 'satellite',
+                                                  key, shake_amps, exc_index=exc_index) for row in sat_sim_val_ind if len(row.Shelli) <= 4]
                 else:
-                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                                'satellite', key, shake_amps,
+                    y1s = [row.effectiveIntensity(beam, FWHM, crossSection, casc, 'satellite',
+                                                key, shake_amps,
                                                 shakeoff_lines=generalVars.shakeoff_quant[element],
                                                 shakeup_lines=generalVars.shakeup_quant[element],
                                                 shakeup_splines=generalVars.shakeUPSplines_quant[element],
@@ -210,9 +224,9 @@ def simu_sattelite(sat_sim_val: List[Line], low_level: str, high_level: str,
                 w1s = [row.totalWidth for row in sat_sim_val_ind if len(row.Shelli) > 4]
                 
                 if calc_int:
-                    if guiVars.exc_mech_var.get() == 'EII': # type: ignore
+                    if exc_mech == 'EII':
                         crossSection = generalVars.elementMRBEB
-                    elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
+                    elif exc_mech == 'PIon':
                         #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
                         #TODO: Find a way to calculate this for every orbital, maybe R-matrix
                         crossSection = 1.0

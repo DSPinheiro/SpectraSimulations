@@ -275,7 +275,7 @@ def update_offsets(buttons_frame: Frame):
         buttons_frame.nametowidget('shkup_offsetLabel').config(state='disabled') # type: ignore
 
 # Update the selection state of a transition in the correct dictionary
-def dict_updater(transition: str):
+def dict_updater(transition: str, satelite_var: str = ''):
     """
     Function to update the selection state of a transition in the correct dictionary
         
@@ -285,7 +285,12 @@ def dict_updater(transition: str):
         Returns:
             Nothing, the transition is updated in the dictionaries
     """
-    if guiVars.satelite_var.get() != 'Auger': # type: ignore
+    if satelite_var == '':
+        sat: str = guiVars.satelite_var.get() # type: ignore
+    else:
+        sat: str = satelite_var
+    
+    if sat != 'Auger':
         # Toggle the current state of the transition
         generalVars.the_dictionary[transition]["selected_state"] = not generalVars.the_dictionary[transition]["selected_state"]
     else:

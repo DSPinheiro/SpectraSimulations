@@ -1,6 +1,8 @@
 """
 Module with the plotting functions.
 """
+from __future__ import annotations
+
 
 import data.variables as generalVars
 
@@ -194,7 +196,8 @@ def stem_ploter(a: Axes, x: List[float], y: List[float], JJ: List[int], transiti
     return a
 
 # Profile simulation plotter. Plots the transitions with a line profile shape
-def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, plotSimu: bool = True):
+def simu_plot(sat: str, graph_area: Axes | None, normalization_var: float, y0: float,
+              plotSimu: bool = True, excitation_energy: float | None = None):
     """
     Function to plot the simulation values according to the selected transition types.
     
@@ -208,6 +211,11 @@ def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, p
             graph_area. The updated interface graph_area object.
     """
     
+    if excitation_energy:
+        exc_energ: float = excitation_energy
+    else:
+        exc_energ: float = guiVars.excitation_energy.get() # type: ignore
+    
     totalDiagInt = []
     if 'Diagram' in sat:
         for index, key in enumerate(generalVars.the_dictionary):
@@ -216,7 +224,8 @@ def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, p
                 if plotSimu:
                     # Plot the selected transition
                     label = generalVars.the_dictionary[key]["latex_name"]
-                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=label, gid=key, color=select_color())  # Plot the simulation of all lines
+                    if graph_area:
+                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=label, gid=key, color=select_color())  # Plot the simulation of all lines
     if 'Satellites' in sat:
         totalShakeoffInt = {}
         totalShakeupInt = {}
@@ -238,60 +247,71 @@ def simu_plot(sat: str, graph_area: Axes, normalization_var: float, y0: float, p
                             totalShakeupInt[label + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up'] = sum(m)
                         if plotSimu:
                             # Plot the selected transition
-                            if l < len(generalVars.label1):
-                                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
-                            else:
-                                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', color=select_color())  # Plot the simulation of all lines
+                            if graph_area:
+                                if l < len(generalVars.label1):
+                                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
+                                else:
+                                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[index][l]) * normalization_var) + y0, label=label + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', gid=key + ' - ' + generalVars.labeldict[generalVars.label1[l - len(generalVars.label1)]] + ' - shake-up', color=select_color())  # Plot the simulation of all lines
         shkoff = '; '.join([key + ": " + str(totalShakeoffInt[key]) for key in totalShakeoffInt])
         shkup = '; '.join([key + ": " + str(totalShakeupInt[key]) for key in totalShakeupInt])
-        print(str(guiVars.excitation_energy.get()) + "; " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup) # type: ignore
-        with open("spectraInts_modOvrlp_sameWidth.txt", "a") as intsFile:
-            intsFile.write(str(guiVars.excitation_energy.get()) + "; Diagram: " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup + "\n") # type: ignore
+        print(str(exc_energ) + "; " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup) # type: ignore
+        with open("spectraInts_modOvrlp_1.0d_3.4637off_0.4719up.txt", "a") as intsFile:
+            intsFile.write(str(exc_energ) + "; Diagram: " + str(sum(totalDiagInt)) + "; " + shkoff + "; " + shkup + "\n") # type: ignore
     if sat == 'Auger':
         for index, key in enumerate(generalVars.the_aug_dictionary):
             if generalVars.the_aug_dictionary[key]["selected_state"]:
                 if plotSimu:
                     # Plot the selected transition
                     label = generalVars.the_dictionary[key]["latex_name"]
-                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=label, gid=key, color=select_color())  # Plot the simulation of all lines
+                    if graph_area:
+                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[index]) * normalization_var) + y0, label=label, gid=key, color=select_color())  # Plot the simulation of all lines
     
-    if plotSimu:
+    if plotSimu and graph_area:
         if guiVars.totalvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot) * normalization_var) + y0, label='Total', gid='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot) * normalization_var) + y0, label='Total', gid='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
         if guiVars.totaldiagvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot) * normalization_var) + y0, label='Total Diagram', gid='Total Diagram', ls='--', lw=2, color='r')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot) * normalization_var) + y0, label='Total Diagram', gid='Total Diagram', ls='--', lw=2, color='r')  # Plot the simulation of all lines
         if guiVars.totalsatvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot) * normalization_var) + y0, label='Total Satellite', gid='Total Satellite', ls='--', lw=2, color='b')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot) * normalization_var) + y0, label='Total Satellite', gid='Total Satellite', ls='--', lw=2, color='b')  # Plot the simulation of all lines
         if guiVars.totalshkoffvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot) * normalization_var) + y0, label='Total Shake-off', gid='Total Shake-off', ls='--', lw=2, color='g')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot) * normalization_var) + y0, label='Total Shake-off', gid='Total Shake-off', ls='--', lw=2, color='g')  # Plot the simulation of all lines
         if guiVars.totalshkupvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot) * normalization_var) + y0, label='Total Shake-up', gid='Total Shake-up', ls='--', lw=2, color='m')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot) * normalization_var) + y0, label='Total Shake-up', gid='Total Shake-up', ls='--', lw=2, color='m')  # Plot the simulation of all lines
         
         if len(generalVars.yextras) > 0:
             for i, key in enumerate(generalVars.extra_fitting_functions):
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var) + y0, label=key, gid=key, ls=':', lw=2, color=select_color())
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var) + y0, label=key, gid=key, ls=':', lw=2, color=select_color())
             
             if guiVars.totalextrafitvar.get() == 'Total': # type: ignore
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var) + y0, label='Total Extra Fit', gid='Total Extra Fit', ls='--', lw=2, color='y')
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var) + y0, label='Total Extra Fit', gid='Total Extra Fit', ls='--', lw=2, color='y')
         
-        lines = graph_area.get_lines()
+        if graph_area:
+            lines = graph_area.get_lines()
+            
+            cursor = mplcursors.cursor(lines, hover=True)
+            cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
         
-        cursor = mplcursors.cursor(lines, hover=True)
-        cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
-    
-        graph_area.legend()
+            graph_area.legend()
     
     return graph_area
 
 
 # Profile simulation plotter for charge state mixtures. Plots the transitions with a line profile shape
-def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
-               normalization_var: float, y0: float, plotSimu: bool = True):
+def Esimu_plot(exc: List[str], sat: str, graph_area: Axes | None,
+               normalization_var: float, y0: float, plotSimu: bool = True,
+               excitation_energy: float | None = None):
     """
     Function to plot the simulation values according to the selected transition types.
     
@@ -307,6 +327,11 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
             Nothing. The interface is updated with the new simulation data.
     """
     
+    if excitation_energy:
+        exc_energ: float = excitation_energy
+    else:
+        exc_energ: float = guiVars.excitation_energy.get() # type: ignore
+    
     totalDiagInt = {}
     if 'Excitation' in sat:
         for exc_index, exc_orb in enumerate(exc):
@@ -318,7 +343,8 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
                     if plotSimu:
                         # Plot the selected transition
                         label = str(generalVars.the_dictionary[key]["latex_name"])
-                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal_exc[exc_index * len(generalVars.the_dictionary) + index]) * normalization_var) + y0, label=exc_orb + ' ' + label, gid=exc_orb + ' ' + key, color=select_color())  # Plot the simulation of all lines
+                        if graph_area:
+                            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal_exc[exc_index * len(generalVars.the_dictionary) + index]) * normalization_var) + y0, label=exc_orb + ' ' + label, gid=exc_orb + ' ' + key, color=select_color())  # Plot the simulation of all lines
     totalSatInt = {}
     if 'ESat' in sat:
         for exc_index, exc_orb in enumerate(exc):
@@ -333,12 +359,13 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
                                 # Plot the selected transition
                                 label = str(generalVars.the_dictionary[key]["latex_name"])
                                 # graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals_exc[exc_index * len(generalVars.the_dictionary) + index][l]) * normalization_var) + y0, label=exc_orb + ' ' + label + ' - ' + generalVars.labeldict[generalVars.label1_exc[exc_index][l]], gid=exc_orb + ' ' + key + ' - ' + generalVars.labeldict[generalVars.label1_exc[exc_index][l]], color=select_color())  # Plot the simulation of all lines
-                                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals_exc[exc_index * len(generalVars.the_dictionary) + index][l]) * normalization_var) + y0, label=exc_orb + ' ' + label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=exc_orb + ' ' + key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
+                                if graph_area:
+                                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals_exc[exc_index * len(generalVars.the_dictionary) + index][l]) * normalization_var) + y0, label=exc_orb + ' ' + label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=exc_orb + ' ' + key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
     diags = '; '.join([key + ": " + str(totalDiagInt[key]) for key in totalDiagInt])
     sats = '; '.join([key + ": " + str(totalSatInt[key]) for key in totalSatInt])
-    print(str(guiVars.excitation_energy.get()) + "; " + diags + "; " + sats) # type: ignore
-    with open("spectraInts_excitation_widthMod.txt", "a") as intsFile:
-        intsFile.write(str(guiVars.excitation_energy.get()) + "; " + diags + ("; " if len(sats) > 0 else "") + sats + "\n") # type: ignore
+    print(str(exc_energ) + "; " + diags + "; " + sats) # type: ignore
+    with open("spectraInts_excitation_1.02.txt", "a") as intsFile:
+        intsFile.write(str(exc_energ) + "; " + diags + ("; " if len(sats) > 0 else "") + sats + "\n") # type: ignore
     
     if sat == 'Auger':
         for exc_index, exc_orb in enumerate(exc):
@@ -347,38 +374,47 @@ def Esimu_plot(exc: List[str], sat: str, graph_area: Axes,
                     if plotSimu:
                         # Plot the selected transition
                         label = str(generalVars.the_dictionary[key]["latex_name"])
-                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal_exc[exc_index * len(generalVars.the_aug_dictionary) + index]) * normalization_var) + y0, label=exc_orb + ' ' + label, gid=exc_orb + ' ' + key, color=select_color())  # Plot the simulation of all lines
+                        if graph_area:
+                            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal_exc[exc_index * len(generalVars.the_aug_dictionary) + index]) * normalization_var) + y0, label=exc_orb + ' ' + label, gid=exc_orb + ' ' + key, color=select_color())  # Plot the simulation of all lines
     
-    if plotSimu:
+    if plotSimu and graph_area:
         if guiVars.totalvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot_exc) * normalization_var) + y0, label='Total', gid='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot_exc) * normalization_var) + y0, label='Total', gid='Total', ls='--', lw=2, color='k')  # Plot the simulation of all lines
         if guiVars.totaldiagvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot_exc) * normalization_var) + y0, label='Total Diagram', gid='Total Diagram', ls='--', lw=2, color='r')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot_exc) * normalization_var) + y0, label='Total Diagram', gid='Total Diagram', ls='--', lw=2, color='r')  # Plot the simulation of all lines
         if guiVars.totalsatvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot_exc) * normalization_var) + y0, label='Total Satellite', gid='Total Satellite', ls='--', lw=2, color='b')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot_exc) * normalization_var) + y0, label='Total Satellite', gid='Total Satellite', ls='--', lw=2, color='b')  # Plot the simulation of all lines
         if guiVars.totalshkoffvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot_exc) * normalization_var) + y0, label='Total Shake-off', gid='Total Shake-off', ls='--', lw=2, color='g')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot_exc) * normalization_var) + y0, label='Total Shake-off', gid='Total Shake-off', ls='--', lw=2, color='g')  # Plot the simulation of all lines
         if guiVars.totalshkupvar.get() == 'Total': # type: ignore
             # Plot the selected transition
-            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot_exc) * normalization_var) + y0, label='Total Shake-up', gid='Total Shake-up', ls='--', lw=2, color='m')  # Plot the simulation of all lines
+            if graph_area:
+                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot_exc) * normalization_var) + y0, label='Total Shake-up', gid='Total Shake-up', ls='--', lw=2, color='m')  # Plot the simulation of all lines
         
         if len(generalVars.yextras) > 0:
             for i, key in enumerate(generalVars.extra_fitting_functions):
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var) + y0, label=key, gid=key, ls=':', lw=2, color=select_color())
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var) + y0, label=key, gid=key, ls=':', lw=2, color=select_color())
             
             if guiVars.totalextrafitvar.get() == 'Total': # type: ignore
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var) + y0, label='Total Extra Fit', gid='Total Extra Fit', ls='--', lw=2, color='y')
-    
-        lines = graph_area.get_lines()
-        
-        cursor = mplcursors.cursor(lines, hover=True)
-        cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
-        
-        graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var) + y0, label='Total Extra Fit', gid='Total Extra Fit', ls='--', lw=2, color='y')
+
+        if graph_area:
+            lines = graph_area.get_lines()
+            
+            cursor = mplcursors.cursor(lines, hover=True)
+            cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
+            
+            graph_area.legend()
     
     return graph_area
 
@@ -462,7 +498,7 @@ def Msimu_plot(ploted_cs: List[str], sat: str, graph_area: Axes,
     return graph_area
 
 # Profile simulation plotter for charge state mixtures. Plots the transitions with a line profile shape
-def Qsimu_plot(elementList: List[str], sat: str, graph_area: Axes,
+def Qsimu_plot(elementList: List[str], sat: str, graph_area: Axes | None,
                normalization_var: float, y0: float, plotSimu: bool = True, baseline: bool = True):
     """
     Function to plot the simulation values according to the selected transition types.
@@ -492,8 +528,8 @@ def Qsimu_plot(elementList: List[str], sat: str, graph_area: Axes,
                     if plotSimu:
                         # Plot the selected transition
                         label = str(generalVars.the_dictionary[key]["latex_name"])
-                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[el_index * len(generalVars.the_dictionary) + index]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=el[1] + ' ' + key, color=select_color())  # Plot the simulation of all lines
-                        graph_area.legend()
+                        if graph_area:
+                            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[el_index * len(generalVars.the_dictionary) + index]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=el[1] + ' ' + key, color=select_color())  # Plot the simulation of all lines
     if 'Satellites' in sat:
         for index, key in enumerate(generalVars.the_dictionary):
             for el_index, el in enumerate(elementList):
@@ -504,8 +540,8 @@ def Qsimu_plot(elementList: List[str], sat: str, graph_area: Axes,
                             # Plot the selected transition
                             if plotSimu:
                                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[el_index * len(generalVars.the_dictionary) + index][l]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=el[1] + ' ' + key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
-                                graph_area.legend()
+                                if graph_area:
+                                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinals[el_index * len(generalVars.the_dictionary) + index][l]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label + ' - ' + generalVars.labeldict[generalVars.label1[l]], gid=el[1] + ' ' + key + ' - ' + generalVars.labeldict[generalVars.label1[l]], color=select_color())  # Plot the simulation of all lines
     if sat == 'Auger':
         for index, key in enumerate(generalVars.the_aug_dictionary):
             for el_index, el in enumerate(elementList):
@@ -513,59 +549,63 @@ def Qsimu_plot(elementList: List[str], sat: str, graph_area: Axes,
                     if plotSimu:
                         # Plot the selected transition
                         label = str(generalVars.the_dictionary[key]["latex_name"])
-                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[el_index * len(generalVars.the_aug_dictionary) + index]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=el[1] + ' ' + key, color=select_color())  # Plot the simulation of all lines
-                        graph_area.legend()
+                        if graph_area:
+                            graph_area.plot(generalVars.xfinal, (np.array(generalVars.yfinal[el_index * len(generalVars.the_aug_dictionary) + index]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=el[1] + ' ' + key, color=select_color())  # Plot the simulation of all lines
     
     for el_index, el in enumerate(elementList):
         if guiVars.totalvar.get() == 'Total': # type: ignore
             # Plot the selected transition
             if plotSimu:
                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot) * normalization_var + to_add) + y0, label='Total ' + el[1], gid='Total ' + el[1], ls='--', lw=2, color='k')  # Plot the simulation of all lines
-                graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.ytot) * normalization_var + to_add) + y0, label='Total ' + el[1], gid='Total ' + el[1], ls='--', lw=2, color='k')  # Plot the simulation of all lines
+        
         if guiVars.totaldiagvar.get() == 'Total': # type: ignore
             # Plot the selected transition
             if plotSimu:
                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot) * normalization_var + to_add) + y0, label='Total Diagram ' + el[1], gid='Total Diagram ' + el[1], ls='--', lw=2, color='r')  # Plot the simulation of all lines
-                graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.ydiagtot) * normalization_var + to_add) + y0, label='Total Diagram ' + el[1], gid='Total Diagram ' + el[1], ls='--', lw=2, color='r')  # Plot the simulation of all lines
         if guiVars.totalsatvar.get() == 'Total': # type: ignore
             # Plot the selected transition
             if plotSimu:
                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot) * normalization_var + to_add) + y0, label='Total Satellite ' + el[1], gid='Total Satellite ' + el[1], ls='--', lw=2, color='b')  # Plot the simulation of all lines
-                graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.ysattot) * normalization_var + to_add) + y0, label='Total Satellite ' + el[1], gid='Total Satellite ' + el[1], ls='--', lw=2, color='b')  # Plot the simulation of all lines
         if guiVars.totalshkoffvar.get() == 'Total': # type: ignore
             # Plot the selected transition
             if plotSimu:
                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot) * normalization_var + to_add) + y0, label='Total Shake-off ' + el[1], gid='Total Shake-off ' + el[1], ls='--', lw=2, color='g')  # Plot the simulation of all lines
-                graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkofftot) * normalization_var + to_add) + y0, label='Total Shake-off ' + el[1], gid='Total Shake-off ' + el[1], ls='--', lw=2, color='g')  # Plot the simulation of all lines
         if guiVars.totalshkupvar.get() == 'Total': # type: ignore
             # Plot the selected transition
             if plotSimu:
                 label = str(generalVars.the_dictionary[key]["latex_name"])
-                graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot) * normalization_var + to_add) + y0, label='Total Shake-up ' + el[1], gid='Total Shake-up ' + el[1], ls='--', lw=2, color='m')  # Plot the simulation of all lines
-                graph_area.legend()
+                if graph_area:
+                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yshkuptot) * normalization_var + to_add) + y0, label='Total Shake-up ' + el[1], gid='Total Shake-up ' + el[1], ls='--', lw=2, color='m')  # Plot the simulation of all lines
         
         if len(generalVars.yextras) > 0:
             for i, key in enumerate(generalVars.extra_fitting_functions):
                 if plotSimu:
                     label = str(generalVars.the_dictionary[key]["latex_name"])
-                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=key, ls=':', lw=2, color=select_color())
-                    graph_area.legend()
+                    if graph_area:
+                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextras[i]) * normalization_var + to_add) + y0, label=el[1] + ' ' + label, gid=key, ls=':', lw=2, color=select_color())
             
             if guiVars.totalextrafitvar.get() == 'Total': # type: ignore
                 if plotSimu:
                     label = str(generalVars.the_dictionary[key]["latex_name"])
-                    graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var + to_add) + y0, label='Total Extra Fit ' + el[1], gid='Total Extra Fit', ls='--', lw=2, color='y')
-                    graph_area.legend()
-
-    lines = graph_area.get_lines()
-    cursor = mplcursors.cursor(lines, hover=True)
-    cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
+                    if graph_area:
+                        graph_area.plot(generalVars.xfinal, (np.array(generalVars.yextrastot) * normalization_var + to_add) + y0, label='Total Extra Fit ' + el[1], gid='Total Extra Fit', ls='--', lw=2, color='y')
     
-    graph_area.figure.canvas.draw_idle()
+    if graph_area:
+        lines = graph_area.get_lines()
+        cursor = mplcursors.cursor(lines, hover=True)
+        cursor.connect('add', lambda sel: sel.annotation.set_text(sel.artist.get_label()))
+        
+        graph_area.figure.canvas.draw_idle()
+        
+        graph_area.legend()
     
     return graph_area
 

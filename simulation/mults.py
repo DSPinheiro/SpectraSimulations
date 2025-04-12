@@ -44,11 +44,11 @@ def get_overlap(line: Line, beam: float, FWHM: float) -> float:
             pWidth = generalVars.partialWidths['diagram'][line.keyI()]
             formationEnergy = generalVars.formationEnergies['diagram'][line.keyI()] + pWidth
         else:
-            pWidth = generalVars.partialWidths['satellite'][line.keyI()]
+            pWidth = 3.4637 * generalVars.partialWidths['satellite'][line.keyI()]
             formationEnergy = generalVars.formationEnergies['satellite'][line.keyI()] + pWidth
     else:
         # pWidth = FWHM
-        pWidth = max(generalVars.partialWidths['shakeup'][line.keyI()], 1E-100)
+        pWidth = 0.4719 * max(generalVars.partialWidths['shakeup'][line.keyI()], 1E-100)
         formationEnergy = generalVars.formationEnergies['shakeup'][line.keyI()] + pWidth
     
     
@@ -66,9 +66,27 @@ def get_overlap(line: Line, beam: float, FWHM: float) -> float:
         
         return np.concatenate((r2, r1))
     
-    x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
+    def integrand_quad(x):
+        if x > beam:
+            l = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+        else:
+            l = (0.5 * pWidth / np.pi) / ((x - formationEnergy) ** 2 + (0.5 * pWidth) ** 2)
+        
+        if x > beam:
+            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2) * np.exp(-((x - beam) / FWHM) ** 2 * np.log(2))
+        else:
+            g = (0.5 * pWidth / np.pi) / ((0.5 * pWidth) ** 2)
+        
+        return min(g, l)
     
-    return integrate.simpson(integrand(x), x)
+    quad_res = integrate.quad(integrand_quad,
+                              formationEnergy - 50 * pWidth,
+                              formationEnergy + 50 * pWidth, full_output=1)
+    if len(quad_res) == 3:
+        return quad_res[0]
+    else:
+        x = np.linspace(formationEnergy - 50 * pWidth, formationEnergy + 50 * pWidth, 20001, endpoint=True)
+        return integrate.simpson(integrand(x), x)
     # if formationEnergy > beam:
     #     return np.exp(-((formationEnergy - beam) / FWHM) ** 2 * np.log(2))
     # else:
@@ -111,7 +129,7 @@ def get_overlap_exc(line: Line, beam: float, FWHM: float, exc_index: int) -> flo
         pWidth = max(generalVars.partialWidths_exc[exc_index]['shakeup'][line.keyI()], 1E-100)
     
     pWidth /= 2.0
-    pWidth *= 0.75
+    pWidth *= 1.02
     
     def integrand(x):
         l = (0.5 * pWidth / np.pi) / (np.power((x - formationEnergy), 2) + (0.5 * pWidth) ** 2)
@@ -119,7 +137,7 @@ def get_overlap_exc(line: Line, beam: float, FWHM: float, exc_index: int) -> flo
         
         return np.minimum(l, g)
     
-    x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 3001, endpoint=True)
+    x = np.linspace(formationEnergy - 100 * pWidth, formationEnergy + 100 * pWidth, 10001, endpoint=True)
     return integrate.simpson(integrand(x), x)
 
 

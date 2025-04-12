@@ -51,24 +51,29 @@ def setupExpPlot(f: Figure, load: str, element_name: str):
     """
     
     # Clear the plot
-    f.clf()
-    # Split the figure plot into two with the first having 3 times the height
-    gs = gridspec.GridSpec(2, 1, height_ratios=np.array([3, 1]))
-    # Add the first subplot to the figure
-    graph_area = f.add_subplot(gs[0])
-    
-    # Set the logarithmic axes if needed
-    if guiVars.yscale_log.get() == 'Ylog': # type: ignore
-        graph_area.set_yscale('log')
-    if guiVars.xscale_log.get() == 'Xlog': # type: ignore
-        graph_area.set_xscale('log')
-    # Add the name of the plot
-    graph_area.legend(title=element_name)
-    # Add the second subplot for the residues
-    residues_graph = f.add_subplot(gs[1])
-    # Set the axes labels
-    residues_graph.set_xlabel('Energy (eV)')
-    residues_graph.set_ylabel('Residues (arb. units)')
+    if f:
+        f.clf()
+        # Split the figure plot into two with the first having 3 times the height
+        gs = gridspec.GridSpec(2, 1, height_ratios=np.array([3, 1]))
+        # Add the first subplot to the figure
+
+        graph_area = f.add_subplot(gs[0])
+        # Set the logarithmic axes if needed
+        if guiVars.yscale_log.get() == 'Ylog': # type: ignore
+            graph_area.set_yscale('log')
+        if guiVars.xscale_log.get() == 'Xlog': # type: ignore
+            graph_area.set_xscale('log')
+        # Add the name of the plot
+        graph_area.legend(title=element_name)
+
+        # Add the second subplot for the residues
+        residues_graph = f.add_subplot(gs[1])
+        # Set the axes labels
+        residues_graph.set_xlabel('Energy (eV)')
+        residues_graph.set_ylabel('Residues (arb. units)')
+    else:
+        graph_area = None    
+        residues_graph = None
     
     # Read and load the experimental spectrum file
     exp_spectrum = loadExp(load)
@@ -120,8 +125,10 @@ def initialize_expElements(f: Figure, load: str, enoffset: float, sat_enoffset: 
     generalVars.exp_x, generalVars.exp_y, generalVars.exp_sigma = getBoundedExp(xe, ye, sigma_exp, enoffset + max([sat_enoffset, shkoff_enoffset, shkup_enoffset]), num_of_points, x_mx, x_mn)
     # Calculate the final energy values
     generalVars.xfinal = np.array(np.linspace(min(generalVars.exp_x) + enoffset + max([sat_enoffset, shkoff_enoffset, shkup_enoffset]), max(generalVars.exp_x) + enoffset + max([sat_enoffset, shkoff_enoffset, shkup_enoffset]), num=num_of_points))
-    # plot the experimental spectrum and residues graph
-    plotExp(graph_area, residues_graph, generalVars.exp_x, generalVars.exp_y, generalVars.exp_sigma, normalize)
+    
+    if graph_area and residues_graph:
+        # plot the experimental spectrum and residues graph
+        plotExp(graph_area, residues_graph, generalVars.exp_x, generalVars.exp_y, generalVars.exp_sigma, normalize)
     
     if quantify:
         base, bkg = background_SNIP(generalVars.exp_x, generalVars.exp_y,
@@ -129,9 +136,10 @@ def initialize_expElements(f: Figure, load: str, enoffset: float, sat_enoffset: 
             guiVars.number_points.get()) # type: ignore
         base_type = "SNIP"
         
-        plotBaseline(graph_area,
-                     np.linspace(min(generalVars.exp_x), max(generalVars.exp_x), guiVars.number_points.get()), # type: ignore
-                     list(base), base_type)
+        if graph_area:
+            plotBaseline(graph_area,
+                        np.linspace(min(generalVars.exp_x), max(generalVars.exp_x), guiVars.number_points.get()), # type: ignore
+                        list(base), base_type)
     
     return graph_area, residues_graph, exp_spectrum
 

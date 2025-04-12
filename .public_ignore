@@ -141,5 +141,8 @@ plotChannelOpen.py
 # Element Data files
 [0-9]*/
 
+# Test Spectra Intensity files
+spectraInts*
+
 # Multi-remote ignore
 git_push

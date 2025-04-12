@@ -71,7 +71,9 @@ def file_namer(simulation_or_fit: str, fit_time: datetime, extension: str):
     return file_name
 
 # Function to save the simulation data into an excel file
-def write_to_xls(type_t: str, enoffset: float, sat_enoffset: float, shkoff_enoffset: float, shkup_enoffset: float, beam_ener: float, beam_FWHM: float, y0: float, residues_graph: Axes):
+def write_to_xls(type_t: str, enoffset: float, sat_enoffset: float, shkoff_enoffset: float,
+                 shkup_enoffset: float, beam_ener: float, beam_FWHM: float, y0: float,
+                 residues_graph: Axes, gui: bool = True):
     """
     Function to save the current simulation data into an excel file
         
@@ -444,7 +446,8 @@ def write_to_xls(type_t: str, enoffset: float, sat_enoffset: float, shkoff_enoff
                 w1.writerow(matrix[i])
     
     # Prompt that the data was saved
-    messagebox.showinfo("File Saved", "Data file has been saved")
+    if gui:
+        messagebox.showinfo("File Saved", "Data file has been saved")
 
 # Function to save the fit report to file
 def exportFit(time_of_click: datetime, report: str):
@@ -482,7 +485,7 @@ def saveMatrixHtml(fig: Figure, title: str):
 # ----------------------------------------------------- #
 
 # Function to request the file with the experimental spectrum and save the file path
-def load(loadvar = None, set: bool = True, title: str = "Choose an Experimental Spectrum File"):
+def load(loadvar = None, set: bool = True, title: str = "Choose an Experimental Spectrum File", gui: bool = True):
     """
     Function to request the file with the experimental spectrum
         
@@ -506,7 +509,8 @@ def load(loadvar = None, set: bool = True, title: str = "Choose an Experimental 
                     if len(spectra[0]) >= 2:
                         finalNames.append(name)
                 except:
-                    messagebox.showwarning("Formating error", "Experimental spectrum '" + name + "' could not be loaded due to incorrect formatting.")
+                    if gui:
+                        messagebox.showwarning("Formating error", "Experimental spectrum '" + name + "' could not be loaded due to incorrect formatting.")
     
     if fnames != '':
         # Save the path to the loadvar variable
@@ -518,7 +522,7 @@ def load(loadvar = None, set: bool = True, title: str = "Choose an Experimental 
         return ''
 
 
-def add_spectra(title: str = "Choose an Experimental Spectrum File"):
+def add_spectra(title: str = "Choose an Experimental Spectrum File", gui: bool = True):
     # Lauch a file picker interface
     fnames = askopenfilenames(title=title, filetypes=(("Spectra files", "*.csv *.txt"), ("All files", "*.*")))
     
@@ -529,7 +533,8 @@ def add_spectra(title: str = "Choose an Experimental Spectrum File"):
                 if len(spectra[0]) >= 2:
                     generalVars.currentSpectraList.append(name)
             except:
-                messagebox.showwarning("Formating error", "Experimental spectrum '" + name + "' could not be loaded due to incorrect formatting.")
+                if gui:
+                    messagebox.showwarning("Formating error", "Experimental spectrum '" + name + "' could not be loaded due to incorrect formatting.")
 
     guiVars.drop_spectra['values'] = [spectra.split("/")[-1] for spectra in generalVars.currentSpectraList] # type: ignore
 
@@ -584,7 +589,7 @@ def loadEfficiency(file: str):
 # ----------------------------------------------------- #
 
 # Read the rates file and return a list with the data
-def readRates(rates_file: Path):
+def readRates(rates_file: Path, gui: bool = True):
     """
     Function to read the rates file
         
@@ -600,11 +605,12 @@ def readRates(rates_file: Path):
             return [processLine(line=x) for x in rates.readlines()[3:]]
 
     except FileNotFoundError:
-        messagebox.showwarning("Error", "Rates File is not Avaliable: " + str(rates_file))
+        if gui:
+            messagebox.showwarning("Error", "Rates File is not Avaliable: " + str(rates_file))
         return []
 
 # Read the ionization energies file and return a list with the data
-def readIonizationEnergies(ioniz_file: Path):
+def readIonizationEnergies(ioniz_file: Path, gui: bool = True):
     """
     Function to read the ionization energies file
         
@@ -620,11 +626,12 @@ def readIonizationEnergies(ioniz_file: Path):
             return [processLine(line=x) for x in ioniz.readlines()[3:]]
             
     except FileNotFoundError:
-        messagebox.showwarning("Error", "Ionization Energies File is not Avaliable: " + str(ioniz_file))
+        if gui:
+            messagebox.showwarning("Error", "Ionization Energies File is not Avaliable: " + str(ioniz_file))
         return []
 
 # Read the widths file and return a list with the data
-def readWidths(widthsfile: Path):
+def readWidths(widthsfile: Path, gui: bool = True):
     """
     Function to read the diagram widths file
         
@@ -640,12 +647,13 @@ def readWidths(widthsfile: Path):
             return [processLine(line=x) for x in widths.readlines()[3:]]
             
     except FileNotFoundError:
-        messagebox.showwarning("Error", "Widths File is not Avaliable: " + str(widthsfile))
+        if gui:
+            messagebox.showwarning("Error", "Widths File is not Avaliable: " + str(widthsfile))
         return []
 
 
 # Read the mean radius file and return a list with the data
-def readMeanR(meanR_file: Path):
+def readMeanR(meanR_file: Path, gui: bool = True):
     """
     Function to read the mean radius file
         
@@ -669,12 +677,13 @@ def readMeanR(meanR_file: Path):
             return meanRs
     except FileNotFoundError:
         generalVars.meanR_exists = False
-        messagebox.showwarning("Error", "Mean Radius File is not Avaliable: " + str(meanR_file))
+        if gui:
+            messagebox.showwarning("Error", "Mean Radius File is not Avaliable: " + str(meanR_file))
         return [['']]
 
 
 # Read the shake up/off file and return a list with the data
-def readShake(shake_file: Path):
+def readShake(shake_file: Path, gui: bool = True):
     """
     Function to read the shake-up/off file
         
@@ -697,7 +706,8 @@ def readShake(shake_file: Path):
             
             return shake_prob, label1
     except FileNotFoundError:
-        messagebox.showwarning("Error", "Shake Probabilities File is not Avaliable: " + str(shake_file))
+        if gui:
+            messagebox.showwarning("Error", "Shake Probabilities File is not Avaliable: " + str(shake_file))
         
         return [['']], ['']
 
@@ -731,7 +741,7 @@ def searchChargeStates(dir_path: Path, z: int, identifyer: str):
 
 # Read the rates files in the files list and return a list with the data split by positive and negative charge states.
 # Also return a list with the order in which the data was stored in the lists
-def readChargeStates(files: List[str], dir_path: Path, z: int):
+def readChargeStates(files: List[str], dir_path: Path, z: int, gui: bool = True):
     """
     Function to read the rates files in the files list
         
@@ -771,12 +781,13 @@ def readChargeStates(files: List[str], dir_path: Path, z: int):
                     # Append the charge state value to identify the rates we just appended
                     NCS.append('-' + file.split('-')[1].split('.')[0])
         except FileNotFoundError:
-            messagebox.showwarning("Error", "Charge State File is not Avaliable: " + file)
+            if gui:
+                messagebox.showwarning("Error", "Charge State File is not Avaliable: " + file)
     
     return linerates_PCS, linerates_NCS, PCS, NCS
 
 # Read the ion population file and return a list with the raw data
-def readIonPop(ionpop_file: Path):
+def readIonPop(ionpop_file: Path, gui: bool = True):
     """
     Function to read the ion population file
         
@@ -796,7 +807,8 @@ def readIonPop(ionpop_file: Path):
         
         return True, ionpopdata
     except FileNotFoundError:
-        messagebox.showwarning("Error", "Ion Population File is not Avaliable")
+        if gui:
+            messagebox.showwarning("Error", "Ion Population File is not Avaliable")
         
         return False, [['']]
 
@@ -832,7 +844,7 @@ def searchExcitations(dir_path: Path, z: int, identifyer: str):
 
 # Read the rates files in the files list and return a list with the data split by positive and negative charge states.
 # Also return a list with the order in which the data was stored in the lists
-def readExcitations(files: List[str], dir_path: Path, z: int):
+def readExcitations(files: List[str], dir_path: Path, z: int, gui: bool = True):
     """
     Function to read the rates files in the files list
         
@@ -861,7 +873,8 @@ def readExcitations(files: List[str], dir_path: Path, z: int):
                 # Append the charge state value to identify the rates we just appended
                 EXC.append(file.split('_', 1)[-1].split('.')[0])
         except FileNotFoundError:
-            messagebox.showwarning("Error", "Excitation File is not Avaliable: " + file)
+            if gui:
+                messagebox.showwarning("Error", "Excitation File is not Avaliable: " + file)
     
     return linerates, EXC
 
@@ -888,7 +901,7 @@ def findElements(dir_path: Path):
     return Zs
 
 # Read the ELAM database file and return the list with the data for the selected element
-def readELAMelement(ELAM_file: Path, z: int):
+def readELAMelement(ELAM_file: Path, z: int, gui: bool = True):
     """
     Function to read the ELAM database file
         
@@ -920,10 +933,11 @@ def readELAMelement(ELAM_file: Path, z: int):
     except FileNotFoundError:
         generalVars.ELAM_exists = False
         
-        messagebox.showwarning("Error", "ELAM database File is not Avaliable: " + str(ELAM_file))
+        if gui:
+            messagebox.showwarning("Error", "ELAM database File is not Avaliable: " + str(ELAM_file))
     
 
-def readNISTXrayLines(NIST_file: Path, do_cluster: bool = False):
+def readNISTXrayLines(NIST_file: Path, do_cluster: bool = False, gui: bool = True):
     """
     Function to read the Full NIST Xray lines database file
         
@@ -972,10 +986,11 @@ def readNISTXrayLines(NIST_file: Path, do_cluster: bool = False):
     except FileNotFoundError:
         generalVars.NIST_exists = False
         
-        messagebox.showwarning("Error", "NIST database File is not Avaliable: " + str(NIST_file))
+        if gui:
+            messagebox.showwarning("Error", "NIST database File is not Avaliable: " + str(NIST_file))
 
 
-def readNISTClusterLines(NIST_file: Path):
+def readNISTClusterLines(NIST_file: Path, gui: bool = True):
     try:
         with open(NIST_file, 'r') as NIST:
             lines: List[List[str]] = []
@@ -993,7 +1008,8 @@ def readNISTClusterLines(NIST_file: Path):
     except FileNotFoundError:
         generalVars.NIST_clusters_exists = False
         
-        messagebox.showwarning("Error", "NIST database File is not Avaliable: " + str(NIST_file))
+        if gui:
+            messagebox.showwarning("Error", "NIST database File is not Avaliable: " + str(NIST_file))
 
 
 def loadQuantConfigs(config_dir: Path):

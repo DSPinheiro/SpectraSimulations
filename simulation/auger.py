@@ -1,6 +1,8 @@
 """
 Module with functions that prepare auger transtion data.
 """
+from __future__ import annotations
+
 
 import data.variables as generalVars
 
@@ -28,7 +30,7 @@ from matplotlib.pyplot import Axes
 # ---------------------------------------------------------------------- #
 
 
-def stick_auger(graph_area: Axes, aug_stick_val: List[Line], transition: str, bad_selection: int, cs: str = ''):
+def stick_auger(graph_area: Axes | None, aug_stick_val: List[Line], transition: str, bad_selection: int, cs: str = ''):
     """
     Function to check and send the data to the stick plotter function for auger transitions.
     
@@ -75,9 +77,10 @@ def stick_auger(graph_area: Axes, aug_stick_val: List[Line], transition: str, ba
     
     JJ = [row.jji for row in aug_stick_val]
     
-    graph_area = stem_ploter(graph_area, x, y, JJ,
-                transition if cs == '' else cs + '' + transition,
-                'Auger' if cs == '' else 'Auger_CS')
+    if graph_area:
+        graph_area = stem_ploter(graph_area, x, y, JJ,
+                    transition if cs == '' else cs + '' + transition,
+                    'Auger' if cs == '' else 'Auger_CS')
     
     return bad, graph_area
 

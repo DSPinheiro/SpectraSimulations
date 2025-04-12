@@ -28,13 +28,14 @@ from tkinter import Toplevel
 # --------------------------------------------------------- #
 
 # Calculate the simulated y values applying the selected line profile, detector efficiency, resolution and energy offset
-def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
+def y_calculator(sim: Toplevel | None, transition_type: str, fit_type: str,
                  xfinal: npt.NDArray[np.float64], x: List[List[float]],
                  y: List[List[float]], w: List[List[float]],
                  xs: List[List[List[float]]],
                  ys: List[List[List[float]]], ws: List[List[List[float]]],
                  res: float, energy_values: List[float], efficiency_values: List[float],
-                 enoffset: float, sat_enoffset: float, shkoff_enoffset: float, shkup_enoffset: float) -> \
+                 enoffset: float, sat_enoffset: float, shkoff_enoffset: float, shkup_enoffset: float,
+                 separate_offsets: bool | None = None, effic_var: str | None = None) -> \
                     Tuple[npt.NDArray[np.float64], npt.NDArray[np.float64], npt.NDArray[np.float64],
                         npt.NDArray[np.float64], npt.NDArray[np.float64], npt.NDArray[np.float64],
                         npt.NDArray[np.float64]]:
@@ -148,23 +149,32 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
                 
                 # Add a proportionate amount of progress to the current progress value
                 b1 += b1max / (len(y) * len(k))
-                # Set the progress on the interface
-                guiVars.progress_var.set(b1) # type: ignore
-                # Update the interface to show the progress
-                sim.update_idletasks()
+                
+                if sim:
+                    # Set the progress on the interface
+                    guiVars.progress_var.set(b1) # type: ignore
+                    # Update the interface to show the progress
+                    sim.update_idletasks()
             
             # If the transition rates list is not empty then add the y values for this transition into the total y values for all transitions
             if k != []:
                 generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinal[j])
                 generalVars.ydiagtot = np.add(generalVars.ydiagtot, generalVars.yfinal[j])
         
-        # Set and update the progress and progress bar to 100%
-        b1 = b1max
-        guiVars.progress_var.set(b1) # type: ignore
-        sim.update_idletasks()
+        if sim:
+            # Set and update the progress and progress bar to 100%
+            b1 = b1max
+            guiVars.progress_var.set(b1) # type: ignore
+            sim.update_idletasks()
     
     if 'Satellites' in transition_type or 'ESat' in transition_type:
         b1 = 0 if b1max == 100 else b1max
+        
+        if separate_offsets is None:
+            sep: bool = guiVars.separate_offsets.get() # type: ignore
+        else:
+            sep: bool = separate_offsets
+        
         # Similar to the diagram transitions but we need an extra for loop to get the rates of each satellite in each diagram transition
         for j, k in enumerate(ys):
             el_idx: int = j // len(generalVars.the_dictionary)
@@ -174,7 +184,7 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
                 # print(str(l) + " -> " + generalVars.label1[l])
                 # print(str(xs[j][l]) + "; " + str(ys[j][l]) + "; " + str(ws[j][l]))
                 for i, n in enumerate(m):
-                    if guiVars.separate_offsets.get(): # type: ignore
+                    if sep:
                         if l < len(generalVars.label1):
                             generalVars.yfinals[j][l] = np.add(generalVars.yfinals[j][l],
                                                                 profile(xfinal,
@@ -197,9 +207,10 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
                                                                     res,
                                                                     ws[j][l][i]))
 
-                    b1 += b1max / (len(ys) * len(generalVars.label1) * len(m))
-                    guiVars.progress_var.set(b1) # type: ignore
-                    sim.update_idletasks()
+                    if sim:
+                        b1 += b1max / (len(ys) * len(generalVars.label1) * len(m))
+                        guiVars.progress_var.set(b1) # type: ignore
+                        sim.update_idletasks()
                 
                 if m != []:
                     generalVars.ytot = np.add(generalVars.ytot, generalVars.yfinals[j][l])
@@ -210,13 +221,18 @@ def y_calculator(sim: Toplevel, transition_type: str, fit_type: str,
                         generalVars.yshkuptot = np.add(generalVars.yshkuptot, generalVars.yfinals[j][l])
         
         b1 = 100
-        guiVars.progress_var.set(b1) # type: ignore
-        sim.update_idletasks()
+        if sim:
+            guiVars.progress_var.set(b1) # type: ignore
+            sim.update_idletasks()
 
     
+    if not effic_var:
+        eff: str = guiVars.effic_var.get() # type: ignore
+    else:
+        eff: str = effic_var
     
     # If detector efficiency data was loaded the appropriate weights are applied to the y values
-    if guiVars.effic_var.get() != 'No': # type: ignore
+    if eff != 'No':
         # Get the efficiency values for the x values simulated
         detector_effi, detector_effi_sat, detector_effi_shkoff, detector_effi_shkup = detector_efficiency(energy_values, efficiency_values, xfinal, enoffset, sat_enoffset, shkoff_enoffset, shkup_enoffset)
         # Modify the y values by the effiency weights
@@ -255,7 +271,7 @@ def add_baseline(transition_type: str):
     
 
 # Normalization function
-def normalizer(y0: float, expy_max: float, ytot_max: float) -> float:
+def normalizer(y0: float, expy_max: float, ytot_max: float, normalizevar: str | None = None) -> float:
     """ 
     Function to normalize the simulated intensity values
         
@@ -268,7 +284,10 @@ def normalizer(y0: float, expy_max: float, ytot_max: float) -> float:
             normalization_var: value of the normalization multiplyer for the requested normalization
     """
     # Get the type of normalization selected on the interface
-    normalize = guiVars.normalizevar.get() # type: ignore
+    if not normalizevar:
+        normalize = guiVars.normalizevar.get() # type: ignore
+    else:
+        normalize = normalizevar
     """
     Value of the normalization type selected in the interface (No, to Experimental Maximum, to Unity)
     """

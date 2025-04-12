@@ -1,6 +1,8 @@
 """
 Module with functions that prepare diagram transtion data.
 """
+from __future__ import annotations
+
 
 from interface.plotters import stem_ploter
 
@@ -26,7 +28,7 @@ from matplotlib.pyplot import Axes
 #                                                                        #
 # ---------------------------------------------------------------------- #
 
-def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str, bad_selection: int, cs: str = ''):
+def stick_diagram(graph_area: Axes | None, diag_stick_val: List[Line], transition: str, bad_selection: int, cs: str = ''):
     """
     Function to check and send the data to the stick plotter function for diagram transitions.
     
@@ -78,15 +80,17 @@ def stick_diagram(graph_area: Axes, diag_stick_val: List[Line], transition: str,
         
         print(JJ)
     
-    graph_area = stem_ploter(graph_area, x, y, JJ,
-                             transition if cs == '' else cs + ' ' + transition,
-                             'Diagram' if cs == '' else 'Diagram_CS')
+    if graph_area:
+        graph_area = stem_ploter(graph_area, x, y, JJ,
+                                transition if cs == '' else cs + ' ' + transition,
+                                'Diagram' if cs == '' else 'Diagram_CS')
     
     return bad, graph_area
 
 
 def simu_diagram(diag_sim_val: List[Line], beam: float, FWHM: float,
-                 shake_amps: dict = {}, element: str = '', exc_index: int = -1):
+                 shake_amps: dict = {}, element: str = '', exc_index: int = -1,
+                 include_cascades: bool | None = None, exc_mech_var: str = ''):
     """
     Function to organize the data to be sent to the plotter function for diagram transitions.
     
@@ -104,13 +108,24 @@ def simu_diagram(diag_sim_val: List[Line], beam: float, FWHM: float,
     x1 = [row.energy for row in diag_sim_val]
     w1 = [row.totalWidth for row in diag_sim_val]
     
-    if guiVars.include_cascades.get(): # type: ignore
+    if include_cascades is None:
+        casc: bool = guiVars.include_cascades.get() # type: ignore
+    else:
+        casc: bool = include_cascades
+    
+    if exc_mech_var == '':
+        exc_mech: str = guiVars.exc_mech_var.get() # type: ignore
+    else:
+        exc_mech: str = exc_mech_var
+    
+    
+    if casc:
         if len(generalVars.radBoostMatrixDict) == 0:
             get_cascadeBoost('diagram')
     
-    if guiVars.exc_mech_var.get() == 'EII': # type: ignore
+    if exc_mech == 'EII': # type: ignore
         crossSection = generalVars.elementMRBEB
-    elif guiVars.exc_mech_var.get() == 'PIon': # type: ignore
+    elif exc_mech == 'PIon': # type: ignore
         #We have the elam photospline but it would make no diference as it would be the same value for all orbitals of the same element
         #TODO: Find a way to calculate this for every orbital, maybe R-matrix
         crossSection = 1.0
@@ -118,11 +133,11 @@ def simu_diagram(diag_sim_val: List[Line], beam: float, FWHM: float,
         crossSection = 1.0
     
     if element == '':
-        y1 = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                    'diagram', shake_amps = shake_amps, exc_index=exc_index) for row in diag_sim_val]
+        y1 = [row.effectiveIntensity(beam, FWHM, crossSection, casc, 'diagram',
+                                     shake_amps = shake_amps, exc_index=exc_index) for row in diag_sim_val]
     else:
-        y1 = [row.effectiveIntensity(beam, FWHM, crossSection, guiVars.include_cascades.get(), # type: ignore
-                                    'diagram', shake_amps = shake_amps,
+        y1 = [row.effectiveIntensity(beam, FWHM, crossSection, casc, 'diagram',
+                                    shake_amps = shake_amps,
                                     shakeoff_lines=generalVars.shakeoff_quant[element],
                                     shakeup_lines=generalVars.shakeup_quant[element],
                                     shakeup_splines=generalVars.shakeUPSplines_quant[element],
