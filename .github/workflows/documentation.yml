@@ -30,7 +30,7 @@ jobs:
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - run: |
             cd ..
-            pdoc -o SpectraSimulations/documentation SpectraSimulations !SpectraSimulations.conversionScripts.scripts
+            pdoc -o SpectraSimulations/documentation SpectraSimulations !SpectraSimulations.conversionScripts.scripts !SpectraSimulations.setup
 
       - uses: actions/upload-pages-artifact@v3
         with:
