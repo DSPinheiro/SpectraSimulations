@@ -26,11 +26,11 @@ jobs:
       # ADJUST THIS: install all dependencies (including pdoc)
       - run: pip install -r requirements.txt
       - run: pip install pdoc
-      - run: cd ..
-      - run: ls
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: pdoc -o SpectraSimulations/documentation SpectraSimulations !SpectraSimulations.conversionScripts.scripts
+      - run: |
+            cd ..
+            pdoc -o SpectraSimulations/documentation SpectraSimulations !SpectraSimulations.conversionScripts.scripts
 
       - uses: actions/upload-pages-artifact@v3
         with:
