@@ -1,5 +1,5 @@
 """
-Application entry point.
+GUI Application entry point.
 The first window with the periodic table is defined here, as well as the following window where we select the atomic parameters to simulate.
 We make use of Tkinter for the application interface, and several other modules for data manipulation and plotting.
 """
